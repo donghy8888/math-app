@@ -284,6 +284,25 @@ details summary{color:var(--ink)}
 .mpill{padding:6px 10px;border-radius:99px;background:var(--card2);font-size:13px;font-weight:700;color:var(--sub);border:2px solid transparent;min-height:36px}
 .mpill.on.ok{background:var(--ok-soft);color:var(--ok-ink);border-color:var(--ok)}.mpill.on.bad{background:var(--bad-soft);color:var(--bad-ink);border-color:var(--bad)}.mpill.on.warn{background:var(--warn-soft);color:var(--warn-ink);border-color:var(--warn)}
 .themeseg button{min-height:46px}
+.spk{width:36px;height:36px;border-radius:12px;background:var(--pri-soft);color:var(--pri-ink);display:inline-grid;place-items:center;font-size:16px;flex:none;border:1px solid transparent}
+.spk:active{transform:scale(.94)}
+.spk.sm{width:30px;height:30px;border-radius:10px;font-size:14px;background:var(--card)}
+.fb .spk{width:30px;height:30px;font-size:14px;background:var(--card)}
+.remind{display:flex;align-items:center;gap:8px;margin:8px 0 2px;padding:10px 12px;border-radius:16px;background:var(--ok-soft);border:1px solid var(--ok-line);color:var(--ok-ink);font-size:14.5px;font-weight:600;line-height:1.5}
+.remind .ri{font-size:18px}
+.remind .rx{width:28px;height:28px;border-radius:9px;color:var(--sub);font-size:18px;flex:none}
+#speakbar{white-space:nowrap;position:fixed;left:50%;top:calc(16px + env(safe-area-inset-top));transform:translateX(-50%) translateY(-12px);opacity:0;pointer-events:none;z-index:30;display:flex;align-items:center;gap:10px;padding:8px 8px 8px 14px;border-radius:99px;background:var(--toast-bg);color:var(--toast-ink);font-size:14px;font-weight:600;box-shadow:0 4px 16px rgba(0,0,0,.18);transition:all .2s}
+#speakbar.show{opacity:1;transform:translateX(-50%) translateY(0);pointer-events:auto}
+#speakbar .wave{display:inline-flex;gap:2px;align-items:flex-end;height:14px}
+#speakbar .wave i{width:3px;background:currentColor;border-radius:2px;animation:wv 1s infinite ease-in-out;opacity:.8}
+#speakbar .wave i:nth-child(2){animation-delay:.15s}#speakbar .wave i:nth-child(3){animation-delay:.3s}
+@keyframes wv{0%,100%{height:4px}50%{height:14px}}
+#speakbar button{min-height:34px;padding:0 12px;border-radius:99px;background:var(--bg);color:var(--ink);font-weight:700;font-size:13.5px}
+.tgl{width:52px;height:30px;border-radius:99px;background:var(--track);position:relative;flex:none;transition:background .2s;border:1px solid var(--line)}
+.tgl i{position:absolute;top:2px;left:2px;width:24px;height:24px;border-radius:50%;background:var(--card);box-shadow:0 1px 3px rgba(0,0,0,.2);transition:left .2s}
+.tgl.on{background:var(--pri);border-color:var(--pri)}
+.tgl.on i{left:24px}
+.switch{gap:12px;padding:4px 0}
 /* 深色下 emoji 稍微降低亮度 */
 :root[data-theme="dark"] .qcard .big,:root[data-theme="dark"] .flame,:root[data-theme="dark"] .badge.got .e{filter:brightness(.88)}
 </style>
@@ -292,6 +311,7 @@ details summary{color:var(--ink)}
 <div id="app"></div>
 <nav class="tabbar"><div class="in" id="tabs"></div></nav>
 <div id="toast"></div>
+<div id="speakbar" role="status" aria-live="polite"><span class="wave"><i></i><i></i><i></i></span>正在朗读…<button data-act="hush">⏸ 停止</button></div>
 <div id="modal"></div>
 <script type="application/json" id="demo-pack">
 {
@@ -549,6 +569,184 @@ details summary{color:var(--ink)}
 4. 看不清的题请在 original 里注明“（看不清，已按推测补全）”。
 </script>
 <script>
+/* ========== 语音：数学转口语 + Web Speech 朗读引擎 ========== */
+var MQSpeech = (function(){
+'use strict';
+var SYM_OP = {times:'乘',cdot:'乘',div:'除以',pm:'正负',mp:'负正',le:'小于等于',leq:'小于等于',leqslant:'小于等于',ge:'大于等于',geq:'大于等于',geqslant:'大于等于',
+  ne:'不等于',neq:'不等于',lt:'小于',gt:'大于',approx:'约等于',equiv:'恒等于',Rightarrow:'，推出，',Longrightarrow:'，推出，',implies:'，推出，',Leftrightarrow:'，等价于，',
+  therefore:'所以',because:'因为',in:'属于',notin:'不属于',parallel:'平行于',perp:'垂直于',sim:'相似于',cong:'全等于',to:'到',rightarrow:'到',colon:'比'};
+var SYM_ATOM = {pi:'派',angle:'角',triangle:'三角形',circ:'度',degree:'度',cdots:'……',ldots:'……',dots:'……',infty:'无穷大',square:'方框',Box:'方框',
+  Delta:'德尔塔',delta:'德尔塔',alpha:'阿尔法',beta:'贝塔',gamma:'伽马',theta:'西塔',lambda:'兰姆达',mu:'缪',odot:'圆',sin:'sin',cos:'cos',tan:'tan',
+  prime:'撇',checkmark:'对',star:'星'};
+var TEXT_CMDS = {text:1,mathrm:1,textbf:1,mathbf:1,operatorname:1,mbox:1,textrm:1,mathit:1,textit:1,boldsymbol:1};
+var ACCENT = {dot:'',ddot:'',overline:'',bar:'',underline:'',hat:'',vec:'向量',overrightarrow:'向量',widehat:'弧',overset:''};
+var COMPOUND = /加|减|乘|除以/;
+function wrapC(x){ return COMPOUND.test(x) ? '括号'+x+'括号' : x; }
+function A(s){ return {k:'a', s:s}; }
+function O(s){ return {k:'o', s:s}; }
+function join(items){ return items.map(function(x){ return x.s; }).join(''); }
+function supWord(content){
+  var c = String(content).trim();
+  if(c==='2') return '的平方'; if(c==='3') return '的立方';
+  if(c==='\\circ' || c==='°' || c==='o') return '度'; if(c==='\\prime' || c==="'") return '撇';
+  return '的' + latex(c) + '次方';
+}
+function latex(src){
+  src = String(src||'').replace(/\\left|\\right|\\big|\\Big|\\displaystyle/g,'').replace(/\\[dt]frac/g,'\\frac').replace(/\\(?:quad|qquad)/g,' ');
+  var i = 0, n = src.length;
+  function ws(){ while(i<n && /\s/.test(src[i])) i++; }
+  function rawGroup(){ ws(); if(src[i]!=='{'){ var ch = src[i]||''; if(ch==='\\'){ var m=/^\\([a-zA-Z]+|.)/.exec(src.slice(i)); i+=m[0].length; return m[0]; } i++; return ch; }
+    var d=0, s=i; for(; i<n; i++){ if(src[i]==='{') d++; else if(src[i]==='}'){ d--; if(d===0){ i++; return src.slice(s+1,i-1); } } } return src.slice(s+1); }
+  function groupSpeech(){ return latex(rawGroup()); }
+  function one(){ var tmp=[]; ws(); var guard=0; while(i<n && !tmp.some(function(x){return x.k==='a';}) && guard++<20) step(tmp, null); return join(tmp); }
+  function cmd(name, out){
+    if(name==='frac'){ var a=groupSpeech(), b=groupSpeech(); out.push(A(wrapC(b)+'分之'+wrapC(a))); return; }
+    if(name==='sqrt'){ ws(); var k=''; if(src[i]==='['){ var e=src.indexOf(']',i); k=src.slice(i+1,e); i=e+1; }
+      var r=groupSpeech(); out.push(A((k? (k.trim()==='3'?'三次':latex(k)+'次') : '')+(COMPOUND.test(r)?'根号下'+r+'，':'根号'+r))); return; }
+    if(TEXT_CMDS[name]){ out.push(A(plain(rawGroup()))); return; }
+    if(name in ACCENT){ out.push(A(ACCENT[name]+groupSpeech())); return; }
+    if(name==='begin'){ rawGroup(); out.push(O('，')); return; }
+    if(name==='end'){ rawGroup(); return; }
+    if(name==='\\'){ out.push(O('；')); return; }
+    if(name==='%'){ var p=out.pop(); out.push(A('百分之'+(p?p.s:''))); return; }
+    if(name==='|'){ out.push(O('')); return; }
+    if(SYM_OP[name]){ out.push(O(SYM_OP[name])); return; }
+    if(SYM_ATOM[name]){ if(name==='circ'||name==='degree'){ var l=out.pop(); out.push(A((l?l.s:'')+'度')); } else out.push(A(SYM_ATOM[name])); return; }
+    /* 其它未知命令（含 \, \; \! 等）静默忽略 */
+  }
+  function step(out, stop){
+    var c = src[i];
+    if(/\s/.test(c)){ i++; return; }
+    if(c==='\\'){ var m=/^\\([a-zA-Z]+|.)/.exec(src.slice(i)); i+=m[0].length; cmd(m[1], out); return; }
+    if(c==='{'){ i++; var r=seq('}'); i++; out.push(A(join(r))); return; }
+    if(c==='}'){ i++; return; }
+    if(c==='^'){ i++; ws(); var g; if(src[i]==='{') g=rawGroup(); else if(src[i]==='\\'){ var mm=/^\\([a-zA-Z]+|.)/.exec(src.slice(i)); i+=mm[0].length; g=mm[0]; } else { g=src[i]; i++; }
+      var last=out.pop(); out.push(A((last?last.s:'')+supWord(g))); return; }
+    if(c==='_'){ i++; var sub=latex(rawGroup()); var l2=out.pop(); out.push(A((l2?l2.s:'')+sub)); return; }
+    if(c==='('||c==='['||c==='（'){ i++; var close=c==='('?')':c==='['?']':'）'; var inner=seq(close); i++;
+      var simple = inner.length===1 && inner[0].k==='a' || (inner.length===2 && inner[0].s==='负' && inner[1].k==='a');
+      out.push(A(simple ? join(inner) : '括号'+join(inner)+'括号')); return; }
+    if(c==='|'){ i++; var ab=seq('|'); i++; out.push(A(join(ab)+'的绝对值')); return; }
+    if(c==='/'){ i++; var nx=one(); var pv=out.pop(); out.push(A(nx+'分之'+(pv?pv.s:''))); return; }
+    if(/[0-9.]/.test(c)){ var mn=/^[0-9]+(?:\.[0-9]*)?|^\.[0-9]*/.exec(src.slice(i)); i+=mn[0].length; out.push(A(mn[0])); return; }
+    if(c==='+'){ i++; out.push(O('加')); return; }
+    if(c==='-'||c==='−'||c==='－'){ i++; var lt=out[out.length-1]; out.push(O(!lt||lt.k==='o' ? '负' : '减')); return; }
+    if(c==='='){ i++; out.push(O('等于')); return; }
+    if(c==='<'){ i++; out.push(O('小于')); return; }
+    if(c==='>'){ i++; out.push(O('大于')); return; }
+    if(c===','||c==='，'){ i++; out.push(O('，')); return; }
+    if(c===';'||c==='；'){ i++; out.push(O('；')); return; }
+    if(c===':'){ i++; out.push(O('比')); return; }
+    if(c==='&'){ i++; out.push(O(' ')); return; }
+    if(c==='%'){ i++; var pp=out.pop(); out.push(A('百分之'+(pp?pp.s:''))); return; }
+    if(c==='!'){ i++; return; }
+    if(c==='*'){ i++; out.push(O('乘')); return; }
+    if(c==="'"){ i++; var lp=out.pop(); out.push(A((lp?lp.s:'')+'撇')); return; }
+    var u = UNI[c]; if(u){ i++; u(out); return; }
+    if(stop && c===stop){ return; }
+    if(c===')'||c===']'||c==='）'){ i++; return; }
+    if(/[a-zA-Z]/.test(c)){ var ml=/^[a-zA-Z]+/.exec(src.slice(i)); i+=ml[0].length; out.push(A(ml[0])); return; }
+    var mo=/^[^\\{}^_()[\]|/0-9.+\-−=<>,，;；:&%!*'a-zA-Z\s√²³≤≥≠±×÷·π∠△°]+/.exec(src.slice(i));
+    if(mo){ i+=mo[0].length; out.push(A(mo[0])); } else { i++; }
+  }
+  var UNI = {
+    '√': function(out){ var r=one(); out.push(A('根号'+r)); },
+    '²': function(out){ var l=out.pop(); out.push(A((l?l.s:'')+'的平方')); },
+    '³': function(out){ var l=out.pop(); out.push(A((l?l.s:'')+'的立方')); },
+    '°': function(out){ var l=out.pop(); out.push(A((l?l.s:'')+'度')); },
+    '≤': function(out){ out.push(O('小于等于')); }, '≥': function(out){ out.push(O('大于等于')); }, '≠': function(out){ out.push(O('不等于')); },
+    '±': function(out){ out.push(O('正负')); }, '×': function(out){ out.push(O('乘')); }, '÷': function(out){ out.push(O('除以')); }, '·': function(out){ out.push(O('乘')); },
+    'π': function(out){ out.push(A('派')); }, '∠': function(out){ out.push(A('角')); }, '△': function(out){ out.push(A('三角形')); }
+  };
+  function seq(stop){ var out=[]; while(i<n){ if(stop && src[i]===stop) break; step(out, stop); } return out; }
+  return join(seq(null));
+}
+function plain(t){
+  var s = String(t||'');
+  s = s.replace(/\*\*([^*]+)\*\*/g,'$1');
+  s = s.replace(/[（(][\s\u3000]*[）)]/g,'（空）').replace(/_{2,}|＿{2,}/g,'（横线）');
+  s = s.replace(/[−－]/g,'-');
+  s = s.replace(/√\s*(\d+(?:\.\d+)?|[a-zA-Z]|\([^)]*\)|（[^）]*）)/g, function(m,a){ return '根号'+a.replace(/^[（(]|[）)]$/g,''); });
+  s = s.replace(/\|([^|\n]{1,16})\|/g,'$1的绝对值');
+  s = s.replace(/(^|[^0-9.])(-?)(\d+(?:\.\d+)?)\s*\/\s*(\d+(?:\.\d+)?)(?![0-9])/g, function(m,p,neg,a,b){ return p+(neg?'负':'')+b+'分之'+a; });
+  s = s.replace(/([0-9a-zA-Z)）])\s*(\^\s*2|²)/g,'$1的平方').replace(/([0-9a-zA-Z)）])\s*(\^\s*3|³)/g,'$1的立方').replace(/\^\s*\{?(-?\w+)\}?/g,'的$1次方');
+  s = s.replace(/(^|[\s（(，,：:=、])-(?=\s*[0-9a-zA-Z(（])/g,'$1负');
+  s = s.replace(/([0-9a-zA-Z)）方])\s*-\s*(?=[0-9a-zA-Z(（根])/g,'$1减').replace(/([0-9a-zA-Z)）方])\s*\+\s*(?=[0-9a-zA-Z(（根])/g,'$1加');
+  s = s.replace(/≤/g,'小于等于').replace(/≥/g,'大于等于').replace(/≠/g,'不等于').replace(/±/g,'正负').replace(/×/g,'乘').replace(/÷/g,'除以').replace(/·/g,'乘')
+       .replace(/π/g,'派').replace(/∠/g,'角').replace(/△/g,'三角形').replace(/°/g,'度').replace(/\s*[→⇒]\s*/g,'，').replace(/∵/g,'因为').replace(/∴/g,'所以')
+       .replace(/\s*=\s*/g,'等于').replace(/\s*<\s*/g,'小于').replace(/\s*>\s*/g,'大于').replace(/\*/g,'乘');
+  return s;
+}
+function toSpeech(str){
+  var parts = String(str==null?'':str).split(/(\$\$[\s\S]+?\$\$|\$[^$]+?\$)/g);
+  var out = parts.map(function(p){
+    if(/^\$\$[\s\S]+\$\$$/.test(p)) return latex(p.slice(2,-2));
+    if(/^\$[^$]+\$$/.test(p)) return latex(p.slice(1,-1));
+    return plain(p);
+  }).join('');
+  out = out.replace(/[\u{1F300}-\u{1FAFF}\u{2600}-\u{27BF}\u{2B00}-\u{2BFF}\u{FE0F}\u{200D}]/gu,'').replace(/[\\{}$^_]/g,'').replace(/[ \t]+/g,' ').replace(/\n+/g,'。').replace(/([，；。])\s*[，；]+/g,'$1').replace(/^[，；\s]+/,'').trim();
+  return out;
+}
+
+/* ---------- 朗读引擎 ---------- */
+var synth = (typeof window!=='undefined' && window.speechSynthesis && typeof window.SpeechSynthesisUtterance!=='undefined') ? window.speechSynthesis : null;
+var voice = null, token = 0, pending = 0, listeners = [];
+function scoreVoice(v){
+  var lang = String(v.lang||'').replace('_','-').toLowerCase(), name = String(v.name||'');
+  var s = 0;
+  if(lang==='zh-cn' || lang==='cmn-cn' || lang==='zh-hans-cn') s += 100;
+  else if(lang.indexOf('zh-hans')===0 || lang.indexOf('cmn')===0) s += 80;
+  else if(lang==='zh-tw') s += 40; else if(lang==='zh-hk' || lang.indexOf('yue')===0) s += 20; else if(lang.indexOf('zh')===0) s += 30;
+  else return -1;
+  if(/xiaoxiao|xiaoyi|yunxi|natural|online|neural/i.test(name)) s += 15;
+  if(/tingting|ting-ting|lili|yu-shu|google/i.test(name)) s += 8;
+  if(/普通话|mandarin/i.test(name)) s += 6;
+  if(v.localService) s += 2;
+  return s;
+}
+function pickVoice(){
+  if(!synth) return null; var vs = []; try{ vs = synth.getVoices() || []; }catch(e){}
+  var best = null, bs = -1; vs.forEach(function(v){ var sc = scoreVoice(v); if(sc>bs){ bs = sc; best = v; } });
+  voice = bs>=0 ? best : null; return voice;
+}
+if(synth){ pickVoice(); try{ synth.addEventListener ? synth.addEventListener('voiceschanged', pickVoice) : (synth.onvoiceschanged = pickVoice); }catch(e){} }
+function notify(){ listeners.forEach(function(f){ try{ f(pending>0); }catch(e){} }); }
+function chunks(text){
+  var out = []; String(text).split(/(?<=[。！？；!?;])/).forEach(function(seg){
+    seg = seg.trim(); if(!seg || !/[\p{L}\p{N}]/u.test(seg)) return;
+    while(seg.length>110){ var cut = seg.lastIndexOf('，',110); if(cut<30) cut = 110; out.push(seg.slice(0,cut+1)); seg = seg.slice(cut+1); }
+    if(seg) out.push(seg);
+  }); return out;
+}
+function stop(){ token++; pending = 0; if(synth){ try{ synth.cancel(); }catch(e){} } notify(); }
+function speak(texts, opts){
+  if(!synth) return false;
+  opts = opts || {};
+  stop(); var my = token;
+  if(!voice) pickVoice();
+  var list = [].concat(texts).filter(Boolean).map(function(t){ return opts.raw ? String(t) : toSpeech(t); }).filter(function(t){ return t && t.trim(); });
+  var parts = []; list.forEach(function(t){ parts = parts.concat(chunks(t)); });
+  if(!parts.length) return false;
+  pending = parts.length; notify();
+  parts.forEach(function(p){
+    var u = new SpeechSynthesisUtterance(p);
+    u.lang = (voice && voice.lang) ? voice.lang.replace('_','-') : 'zh-CN'; if(voice) u.voice = voice;
+    u.rate = opts.rate || 0.9; u.pitch = 1; u.volume = 1;
+    var fired = false;
+    var done = function(){ if(fired || my!==token) return; fired = true; pending = Math.max(0, pending-1); if(!pending) notify(); };
+    u.onend = done; u.onerror = done;
+    setTimeout(done, 6000 + p.length*450/(opts.rate||0.9)); /* 看门狗：个别浏览器不触发 onend */
+    try{ synth.speak(u); }catch(e){ done(); }
+  });
+  try{ if(synth.paused) synth.resume(); }catch(e){}
+  return true;
+}
+return { toSpeech: toSpeech, latex: latex, plain: plain, supported: !!synth, speak: speak, stop: stop,
+  isSpeaking: function(){ return pending>0; }, onChange: function(f){ listeners.push(f); }, voiceName: function(){ return voice ? voice.name+' ('+voice.lang+')' : ''; }, pickVoice: pickVoice };
+})();
+if(typeof module!=='undefined') module.exports = MQSpeech;
+</script>
+<script>
 (function(){
 'use strict';
 /* ========== 基础工具 ========== */
@@ -602,7 +800,7 @@ function texBlock(latex){ return tex('$'+String(latex||'').replace(/\$/g,'')+'$'
 /* ========== 数据存储 ========== */
 const KEY = 'mathquest_data_v1';
 function defData(){
-  return {v:1, settings:{nickname:'小数学家', goalNew:3, goalReview:true}, packs:[], attempts:[], review:{}, checkins:{}, points:0, badges:{}, daily:{}, marks:{}, hadReview:false, created:Date.now()};
+  return {v:1, settings:{nickname:'小数学家', goalNew:3, goalReview:true, voice:true, autoRead:true, reminders:true, rate:'normal'}, packs:[], attempts:[], review:{}, checkins:{}, points:0, badges:{}, daily:{}, marks:{}, hadReview:false, created:Date.now()};
 }
 let D;
 function load(){
@@ -852,6 +1050,7 @@ function checkBadges(ctx){
 const S = { view:'home', tab:'home', packId:null, session:null, fTab:'f', fKp:'全部', flipped:{}, meTab:'weak' };
 const TABS = [['home','🏠','首页'],['packs','🎮','闯关'],['review','🔁','巩固'],['formulas','🧠','公式'],['me','🙋','我的']];
 function go(view, opts={}){
+  if(view!=='play') hush();
   S.view = view;
   if(TABS.some(t=>t[0]===view)) S.tab = view;
   if(view==='pack' || view==='marks') S.tab='packs';
@@ -1013,11 +1212,49 @@ function vMarks(){
 const MSG_OK = ['漂亮！✨','完全正确！','思路很清晰 👍','太棒了，继续保持！','稳！就是这样 💪','答对啦，你真行！'];
 const MSG_WRONG = ['差一点点！看看提示再试一次 💪','别急，错误是学习的一部分～','思路已经在路上了，再想想！','没关系，换个角度试试看 🌱','深呼吸，结合提示再来一次 😊'];
 const MSG_MISS = ['这一步有点难，我们一起看看解析 📖','没关系，弄懂比做对更重要！','记下这个小坑，下次就能轻松跨过 ✨','学会了就是赚到，继续加油！'];
+/* ---------- 语音朗读与温馨提醒 ---------- */
+const VS = (typeof MQSpeech!=='undefined') ? MQSpeech : {supported:false, speak(){return false;}, stop(){}, isSpeaking(){return false;}, onChange(){}, toSpeech:x=>x, voiceName(){return '';}};
+const RATES = {slow:0.75, normal:0.9, fast:1.1};
+const voiceOn = () => VS.supported && !!D.settings.voice;
+function say(texts){ if(!voiceOn()) return false; return VS.speak(texts, {rate: RATES[D.settings.rate] || 0.9}); }
+function hush(){ VS.stop(); }
+const REMIND = {
+  start:['先拿出草稿纸和笔，我们一步一步来。','深呼吸，坐端正，准备好草稿纸，我们开始吧。','别着急，先把题目完整读一遍，再动笔。','草稿纸准备好了吗？边想边写，思路会更清楚。','静下心来，一步一步走，你一定可以的。'],
+  calc:['在草稿纸上算一算再填。','这一步要计算，先在草稿纸上写下来哦。','慢慢算，每一步都写清楚，就不容易出错。','算完可以再验算一遍，更放心。','把算式列在草稿纸上，再填答案。'],
+  wrong:['没关系，深呼吸一下，静下心再想想。','错了也没关系，看看提示，换个角度试试。','别着急，回到题目里找找关键条件。','放松一下肩膀，我们再来一次。','每个错误都在帮你变得更厉害，再试试看。'],
+  idle:['不着急，把题目再读一遍，圈出关键条件。','卡住了也很正常，看看已知条件里有什么线索。','试着在草稿纸上画个图，或者列个式子。','想不出来的话，可以先回忆一下相关的公式。','停下来深呼吸，再从题目的第一句话开始读。'],
+  overtime:['时间到了也没关系，慢慢来，把它做完最重要。','不用着急，弄懂比做得快更重要。','超时没关系，静下心，按自己的节奏来。','别有压力，一步一步做完就是胜利。','时间只是参考，我们稳稳地做完它。'],
+  finish:['真棒！记得检查一下草稿纸上的计算。','完成啦！回头看看哪一步最关键。','做得好！把这道题的思路在心里复述一遍吧。','辛苦啦，休息一下眼睛，看看远处。','太好了！草稿纸上的过程也可以再检查一遍哦。']
+};
+const REMIND_ICON = {start:'📝', calc:'✏️', wrong:'🌱', idle:'🔍', overtime:'🍵', finish:'🌟'};
+const lastRemind = {}; let sessionQCount = 0;
+function remind(kind){
+  const ss = S.session; if(!D.settings.reminders || !ss) return null;
+  const arr = REMIND[kind]; let t; do { t = pick(arr); } while(arr.length>1 && t===lastRemind[kind]);
+  lastRemind[kind] = t; ss.remind = {kind, text:t, until: Date.now() + (kind==='idle'||kind==='overtime' ? 12000 : 9000)};
+  return t;
+}
+function remindHTML(){
+  const r = S.session && S.session.remind; if(!r || r.until < Date.now()) return '';
+  return `<div class="remind pop"><span class="ri">${REMIND_ICON[r.kind]||'🌱'}</span><span class="grow">${esc(r.text)}</span>${voiceOn()?'<button class="spk sm" data-act="say" data-w="remind" aria-label="朗读提醒">🔊</button>':''}<button class="rx" data-act="closeremind" aria-label="关闭">×</button></div>`;
+}
+function refreshRemind(){ const el = $('#remind'); if(el) el.innerHTML = remindHTML(); }
+const isCalcStep = st => st.type==='number' || /算|计算|求|化简|代入/.test(st.prompt);
+function stepSpeech(q, idx){
+  const st = q.steps[idx]; let t = `第${idx+1}步。` + st.prompt;
+  if(st.type==='choice' && st.options) t += '。选项：' + st.options.map((o,i)=>String.fromCharCode(65+i)+'，'+o).join('；') + '。';
+  return t;
+}
+const spk = (w, label) => voiceOn() ? `<button class="spk" data-act="say" data-w="${w}" aria-label="朗读${label||''}" title="朗读">🔊</button>` : '';
+
 function startQ(key, mode='normal', queue=null){
   const f = findQ(key); if(!f){ toast('找不到这道题'); return; }
   const isReview = mode==='review' || (D.review[key] && D.review[key].due<=today());
-  S.session = { key, mode: isReview?'review':'normal', queue: queue||null, stepIdx:0, tries:0, results:[], elapsed:0, overtime:false, phase:'answer', fb:null, draft:'', sel:null, points:0, startedAt:Date.now() };
+  hush();
+  S.session = { key, mode: isReview?'review':'normal', queue: queue||null, stepIdx:0, tries:0, results:[], elapsed:0, overtime:false, phase:'answer', fb:null, draft:'', sel:null, points:0, startedAt:Date.now(), lastAct:0, idleDone:false, remind:null };
+  const r = (sessionQCount===0 || Math.random()<0.5) ? remind('start') : null; sessionQCount++;
   go('play');
+  say([r, D.settings.autoRead ? stepSpeech(f.q, 0) : null]); // 在点击事件内同步调用，满足浏览器“需用户手势”的限制
 }
 function vPlay(){
   const ss = S.session; if(!ss){ S.view='packs'; return vPacks(); }
@@ -1027,10 +1264,10 @@ function vPlay(){
   const head = `<div class="playhead"><button class="iconbtn" data-act="quit">‹</button>
     <div class="grow"><div style="font-weight:800;font-size:15px">${ss.mode==='review'?'🔁 巩固复习':'第 '+esc(qLabel(q,qi-1))+' 题'} ${ss.queue?`<span class="muted small">(${ss.queue.indexOf(ss.key)+1}/${ss.queue.length})</span>`:''}</div><div class="small muted">难度 ${diffStr(q.difficulty)}</div></div>
     <div class="timer" id="timer">⏱ <span id="tval">--:--</span></div></div>
-    <div class="tbar" id="tbar"><i style="width:100%"></i></div>`;
+    <div class="tbar" id="tbar"><i style="width:100%"></i></div><div id="remind">${remindHTML()}</div>`;
   const curM = D.marks[ss.key];
   const markRow = `<div class="markrow"><span class="muted small">试卷初始结果</span><span class="grow"></span>${['ok','wrong','skip'].map(x=>`<button class="mpill ${curM===x?'on '+MARKS[x].cls:''}" data-act="setmark" data-k="${esc(ss.key)}" data-v="${x}">${MARKS[x].e} ${MARKS[x].n}</button>`).join('')}</div>`;
-  const orig = `<div class="card orig"><div class="lab">原题 · ${q.knowledgePoints.map(esc).join(' · ')}</div>${tex(q.original)}${markRow}</div>`;
+  const orig = `<div class="card orig"><div class="row between"><div class="lab">原题 · ${q.knowledgePoints.map(esc).join(' · ')}</div>${spk('orig','原题')}</div>${tex(q.original)}${markRow}</div>`;
   const dots = `<div class="stepdots">${q.steps.map((s,i)=>`<i class="${ss.results[i]?ss.results[i].status:(i===ss.stepIdx&&ss.phase!=='done'?'cur':'')}"></i>`).join('')}</div>`;
   const done = ss.results.map((r,i)=> (i<ss.stepIdx || ss.phase==='done') ? `<div class="donestep"><span class="b ${r.status==='missed'?'bad':'ok'}">${r.status==='missed'?'!':'✓'}</span><div class="grow"><div class="muted small">第 ${i+1} 步</div>${tex(q.steps[i].prompt)}<div class="small" style="margin-top:4px">答案：<b>${tex(answerText(q.steps[i]))}</b></div></div></div>` : '').join('');
   if(ss.phase==='done') return head + orig + dots + vResult(q, ss) + `<details class="card"><summary style="font-weight:700;cursor:pointer">查看全部步骤</summary>${done}</details>`;
@@ -1049,14 +1286,14 @@ function vPlay(){
   let fb = '';
   if(ss.fb){
     const F = ss.fb;
-    if(F.kind==='ok') fb = `<div class="fb ok pop"><b class="t">✅ ${esc(F.msg)} ${F.pts?`<span class="chip ok">+${F.pts} 积分</span>`:''}</b>${st.explanation?tex(st.explanation):''}</div>`;
-    else if(F.kind==='wrong') fb = `<div class="fb bad pop"><b class="t">🤔 ${esc(F.msg)}</b>还有 1 次机会</div><div class="fb hint pop"><b class="t">💡 提示</b>${tex(st.hint)}</div>`;
-    else if(F.kind==='miss') fb = `<div class="fb bad pop"><b class="t">🌱 ${esc(F.msg)}</b>正确答案：<b>${tex(answerText(st))}</b></div><div class="fb exp pop"><b class="t">📖 解析</b>${tex(st.explanation||'对照正确答案再想一想。')}</div>`;
+    if(F.kind==='ok') fb = `<div class="fb ok pop"><b class="t row between"><span>✅ ${esc(F.msg)} ${F.pts?`<span class="chip ok">+${F.pts} 积分</span>`:''}</span>${st.explanation?spk('exp','解析'):''}</b>${st.explanation?tex(st.explanation):''}</div>`;
+    else if(F.kind==='wrong') fb = `<div class="fb bad pop"><b class="t">🤔 ${esc(F.msg)}</b>还有 1 次机会</div><div class="fb hint pop"><b class="t row between">💡 提示 ${spk('hint','提示')}</b>${tex(st.hint)}</div>`;
+    else if(F.kind==='miss') fb = `<div class="fb bad pop"><b class="t">🌱 ${esc(F.msg)}</b>正确答案：<b>${tex(answerText(st))}</b></div><div class="fb exp pop"><b class="t row between">📖 解析 ${spk('exp','解析')}</b>${tex(st.explanation||'对照正确答案再想一想。')}</div>`;
   }
   const actions = locked
     ? `<button class="btn block ${ss.stepIdx===n-1?'ok':''}" data-act="next" style="margin-top:14px">${ss.stepIdx===n-1?'🏁 完成本题':'下一步 →'}</button>`
     : `<button class="btn block" data-act="submit" style="margin-top:14px">提交答案</button>`;
-  return head + orig + dots + done + `<div class="card stepcard" id="stepcard"><span class="steplab">第 ${ss.stepIdx+1} / ${n} 步</span><div class="prompt">${tex(st.prompt)}</div>${input}${fb}${actions}</div>`;
+  return head + orig + dots + done + `<div class="card stepcard" id="stepcard"><div class="row between"><span class="steplab">第 ${ss.stepIdx+1} / ${n} 步</span>${spk('prompt','本步')}</div><div class="prompt">${tex(st.prompt)}</div>${input}${fb}${actions}</div>`;
 }
 function answerText(st){
   if(st.type==='choice'){ const i = choiceIndex(st, st.answer); return i>=0 ? String.fromCharCode(65+i)+'. '+st.options[i] : String(st.answer); }
@@ -1074,7 +1311,7 @@ function vResult(q, ss){
     ${r.newBadges.length?`<div class="fb ok">🏅 获得新徽章：${r.newBadges.map(id=>{const b=BADGES.find(x=>x.id===id);return b.e+' '+b.n;}).join('、')}</div>`:''}
   </div>
   <div class="card"><h3>✅ 最终答案</h3><div>${tex(q.finalAnswer||'—')}</div></div>
-  ${q.method?`<div class="card"><h3>🧭 解题思路</h3><div>${tex(q.method)}</div></div>`:''}
+  ${q.method?`<div class="card"><h3>🧭 解题思路 <span class="grow"></span>${spk('method','解题思路')}</h3><div>${tex(q.method)}</div></div>`:''}
   ${q.formulas.length?`<div class="card"><h3>📐 用到的公式</h3>${q.formulas.map(fm=>`<div class="formula"><b>${esc(fm.name)}</b><div style="margin:4px 0;overflow-x:auto">${texBlock(fm.latex)}</div><div class="muted small">${tex(fm.tip)}</div></div>`).join('')}</div>`:''}
   <div class="row" style="gap:10px">
     <button class="btn ghost grow" data-act="retry">🔄 再做一次</button>
@@ -1092,7 +1329,7 @@ function afterPlay(){
   updateTimer();
   const inp = $('#ans');
   if(inp && S.session.phase==='answer'){
-    inp.addEventListener('input', e=>{ S.session.draft = e.target.value; });
+    inp.addEventListener('input', e=>{ S.session.draft = e.target.value; S.session.lastAct = S.session.elapsed; });
     inp.addEventListener('keydown', e=>{ if(e.key==='Enter'){ e.preventDefault(); act.submit(); } });
     if(window.matchMedia('(hover:hover)').matches) setTimeout(()=>inp.focus({preventScroll:true}),50);
   }
@@ -1108,13 +1345,21 @@ function updateTimer(){
   else { tv.textContent = '超时 +'+fmtTime(-left); el.className='timer over'; tb.className='tbar over'; tb.firstElementChild.style.width='100%'; }
   if(ss.phase==='done') el.classList.remove('over');
 }
+setInterval(()=>{ const ss = S.session; if(ss && ss.remind && ss.remind.until < Date.now()){ ss.remind = null; refreshRemind(); } }, 1000);
 setInterval(()=>{
   const now = Date.now(); const dt = lastTick ? Math.min(now-lastTick, 2000) : 0; lastTick = now;
   const ss = S.session;
   if(!ss || S.view!=='play' || ss.phase==='done' || document.hidden) return;
   ss.elapsed += dt;
   const f = findQ(ss.key); if(!f) return;
-  if(!ss.overtime && ss.elapsed/1000 > f.q.timeLimitSec){ ss.overtime = true; toast('⏳ 时间到啦！不过别着急，慢慢把它做完'); }
+  if(!ss.overtime && ss.elapsed/1000 > f.q.timeLimitSec){
+    ss.overtime = true;
+    const r = remind('overtime');
+    if(r){ refreshRemind(); if(!VS.isSpeaking()) say([r]); } else toast('⏳ 时间到啦！不过别着急，慢慢把它做完');
+  }
+  if(ss.phase==='answer' && !ss.idleDone && ss.elapsed - (ss.lastAct||0) > 60000){
+    ss.idleDone = true; const r = remind('idle'); if(r){ refreshRemind(); if(!VS.isSpeaking()) say([r]); }
+  }
   updateTimer();
 }, 250);
 
@@ -1153,6 +1398,7 @@ function finishQ(){
   ss.phase = 'done';
   render(); window.scrollTo({top:0, behavior:'smooth'});
   confetti(stars===3 ? 220 : 140);
+  hush(); const fr = remind('finish'); if(fr){ refreshRemind(); say([fr]); }
   setTimeout(()=>{
     if(g.done && !goalBefore){ toast('🎯 今日目标达成！给自己鼓个掌 👏'); confetti(160); }
     else if(autoChk) toast(`🔥 已自动打卡，连续 ${streak()} 天！`);
@@ -1230,7 +1476,14 @@ function vMe(){
   const badgeSec = `<div class="card"><h3>🏅 我的徽章 <span class="muted small">${Object.keys(D.badges).length}/${BADGES.length}</span></h3><div class="badges">${BADGES.map(b=>`<div class="badge ${D.badges[b.id]?'got':'lock'}"><div class="e">${b.e}</div><div class="n">${b.n}</div><div class="d">${D.badges[b.id]?'已获得 '+dstr(new Date(D.badges[b.id])).slice(5):b.d}</div></div>`).join('')}</div></div>
   <div class="card"><h3>📅 打卡日历 <span class="grow"></span><span class="muted small">连续 ${streak()} 天 · 最长 ${bestStreak()} 天 · 共 ${Object.keys(D.checkins).length} 天</span></h3>${heatmap(20)}</div>`;
   const curTheme = getTheme();
-  const setSec = `<div class="card"><h3>🎨 外观主题</h3>
+  const tg = (k,label,desc) => `<div class="switch"><div class="grow"><b style="font-size:14px">${label}</b>${desc?`<div class="muted small">${desc}</div>`:''}</div><button class="tgl ${D.settings[k]?'on':''}" data-act="vset" data-k="${k}" role="switch" aria-checked="${!!D.settings[k]}" aria-label="${label}"><i></i></button></div>`;
+  const voiceSec = `<div class="card"><h3>🔊 语音与提醒</h3>
+    ${VS.supported ? tg('voice','语音朗读','用普通话读出题目、步骤和提示') + (D.settings.voice ? tg('autoRead','自动朗读','每一步出现时自动读题（首次需点一下开始做题）') : '') : '<div class="muted small" style="margin-bottom:6px">当前浏览器不支持语音朗读，温馨提醒会以文字气泡显示。</div>'}
+    ${tg('reminders','温馨提醒','拿草稿纸、静心思考等温柔小提示')}
+    ${VS.supported && D.settings.voice ? `<div class="field"><label>语速</label><div class="seg">${[['slow','🐢 慢'],['normal','🙂 正常'],['fast','🐇 快']].map(([v,n])=>`<button class="${D.settings.rate===v?'on':''}" data-act="vrate" data-v="${v}">${n}</button>`).join('')}</div></div>
+    <div class="row between"><span class="muted small">${VS.voiceName()?'声音：'+esc(VS.voiceName()):'将使用系统默认中文语音'}</span><button class="btn sm ghost" data-act="vtest">▶ 试听</button></div>` : ''}
+  </div>`;
+  const setSec = voiceSec + `<div class="card"><h3>🎨 外观主题</h3>
     <div class="seg themeseg">${[['eye','🌿 护眼'],['dark','🌙 深色'],['system','📱 跟随系统']].map(([v,n])=>`<button class="${curTheme===v?'on':''}" data-act="theme" data-v="${v}">${n}</button>`).join('')}</div>
     <div class="muted small">「护眼」使用暖纸色低眩光背景；「跟随系统」会随手机的深色模式自动切换。</div></div>
   <div class="card"><h3>⚙️ 设置</h3>
@@ -1301,26 +1554,33 @@ const act = {
   openpack(d){ S.packId=d.v; go('pack'); },
   start(d){ if(!d.k){ go('packs'); return; } startQ(d.k, d.mode||'normal'); },
   startreview(){ const q = dueKeys(); if(q.length) startQ(q[0],'review',q); },
-  quit(){ const ss=S.session; if(ss && ss.phase==='done'){ act.backlist(); return; } const f = ss && findQ(ss.key); S.view = ss&&ss.mode==='review'?'review':'pack'; if(f) S.packId=f.pack.id; S.tab = S.view==='review'?'review':'packs'; render(); toast('进度已保留，可随时回来继续'); },
-  backlist(){ const ss=S.session; const f=ss&&findQ(ss.key); const rv = ss&&ss.mode==='review'; S.session=null; if(rv) go('review'); else { if(f) S.packId=f.pack.id; go('pack'); } },
+  quit(){ hush(); const ss=S.session; if(ss && ss.phase==='done'){ act.backlist(); return; } const f = ss && findQ(ss.key); S.view = ss&&ss.mode==='review'?'review':'pack'; if(f) S.packId=f.pack.id; S.tab = S.view==='review'?'review':'packs'; render(); toast('进度已保留，可随时回来继续'); },
+  backlist(){ hush(); const ss=S.session; const f=ss&&findQ(ss.key); const rv = ss&&ss.mode==='review'; S.session=null; if(rv) go('review'); else { if(f) S.packId=f.pack.id; go('pack'); } },
   retry(){ const k=S.session.key; startQ(k, S.session.mode); },
   nextq(d){ const ss=S.session; startQ(d.k, ss.queue?'review':'normal', ss.queue); },
-  sel(d){ const ss=S.session; if(ss.phase!=='answer') return; ss.sel=+d.v; document.querySelectorAll('.opt').forEach((b,i)=>b.classList.toggle('sel', i===ss.sel)); },
-  key(d){ const inp=$('#ans'); if(!inp) return; const s=inp.selectionStart??inp.value.length, e=inp.selectionEnd??s; inp.value = inp.value.slice(0,s)+d.v+inp.value.slice(e); S.session.draft=inp.value; inp.focus(); const p=s+d.v.length; try{inp.setSelectionRange(p,p);}catch(_){} },
+  sel(d){ const ss=S.session; if(ss.phase!=='answer') return; ss.sel=+d.v; ss.lastAct=ss.elapsed; document.querySelectorAll('.opt').forEach((b,i)=>b.classList.toggle('sel', i===ss.sel)); },
+  key(d){ const inp=$('#ans'); if(!inp) return; S.session.lastAct=S.session.elapsed; const s=inp.selectionStart??inp.value.length, e=inp.selectionEnd??s; inp.value = inp.value.slice(0,s)+d.v+inp.value.slice(e); S.session.draft=inp.value; inp.focus(); const p=s+d.v.length; try{inp.setSelectionRange(p,p);}catch(_){} },
   submit(){
     const ss=S.session; if(!ss||ss.phase!=='answer') return; const {q} = findQ(ss.key); const st=q.steps[ss.stepIdx];
     let val; if(st.type==='choice'){ if(ss.sel===null){ toast('先选一个答案吧 😊'); return; } val=ss.sel; } else { val = ($('#ans')||{}).value||ss.draft; if(!norm(val)){ toast('先写下你的答案吧 ✍️'); return; } ss.draft=val; }
+    ss.lastAct = ss.elapsed; let speech = [];
     if(checkAnswer(st,val)){
       const pts = ss.tries===0?10:5; ss.points+=pts; ss.results[ss.stepIdx]={status:ss.tries===0?'first':'second', tries:ss.tries};
       ss.phase='feedback'; ss.fb={kind:'ok', msg:pick(MSG_OK), pts, fresh:true};
+      ss.remind = null; if(D.settings.autoRead) speech = [ss.fb.msg];
     } else {
       ss.tries++;
-      if(ss.tries>=2){ ss.results[ss.stepIdx]={status:'missed', tries:ss.tries}; ss.phase='feedback'; ss.fb={kind:'miss', msg:pick(MSG_MISS), fresh:true}; }
-      else { ss.fb={kind:'wrong', msg:pick(MSG_WRONG), fresh:true}; if(st.type==='choice') ss.sel=null; }
+      if(ss.tries>=2){ ss.results[ss.stepIdx]={status:'missed', tries:ss.tries}; ss.phase='feedback'; ss.fb={kind:'miss', msg:pick(MSG_MISS), fresh:true};
+        if(D.settings.autoRead) speech = [ss.fb.msg, '正确答案是：'+answerText(st)+'。', st.explanation ? '解析：'+st.explanation : null]; }
+      else { ss.fb={kind:'wrong', msg:pick(MSG_WRONG), fresh:true}; if(st.type==='choice') ss.sel=null;
+        const r = Math.random()<0.6 ? remind('wrong') : null;
+        speech = [r, D.settings.autoRead ? '提示：'+st.hint : null]; }
     }
-    render();
+    render(); hush(); say(speech);
   },
-  next(){ const ss=S.session; const {q}=findQ(ss.key); if(ss.stepIdx>=q.steps.length-1){ finishQ(); return; } ss.stepIdx++; ss.tries=0; ss.fb=null; ss.draft=''; ss.sel=null; ss.phase='answer'; render(); const sc=$('#stepcard'); if(sc) sc.scrollIntoView({behavior:'smooth',block:'center'}); },
+  next(){ hush(); const ss=S.session; const {q}=findQ(ss.key); if(ss.stepIdx>=q.steps.length-1){ finishQ(); return; } ss.stepIdx++; ss.tries=0; ss.fb=null; ss.draft=''; ss.sel=null; ss.phase='answer'; ss.lastAct=ss.elapsed; ss.idleDone=false;
+    ss.remind = null; const r = (isCalcStep(q.steps[ss.stepIdx]) && Math.random()<0.35) ? remind('calc') : null;
+    render(); say([r, D.settings.autoRead ? stepSpeech(q, ss.stepIdx) : null]); const sc=$('#stepcard'); if(sc) sc.scrollIntoView({behavior:'smooth',block:'center'}); },
   checkin(){ const t=today(); if(D.checkins[t]) return; D.checkins[t]=Date.now(); const nb=checkBadges(); save(); render(); confetti(90); toast(`🔥 打卡成功！已连续 ${streak()} 天`+(nb.length?' · 获得新徽章':'')); },
   import(){ importModal(); },
   copyprompt(){ copyText(AI_PROMPT); },
@@ -1335,6 +1595,18 @@ const act = {
   cyclemark(d){ const cur = D.marks[d.k]||null; const m = MARK_CYCLE[(MARK_CYCLE.indexOf(cur)+1)%MARK_CYCLE.length]; setMark(d.k, m); render(); },
   markrest(d){ const p = allPacks().find(x=>x.id===d.v); if(!p) return; p.questions.forEach(q=>{ const k=qk(p.id,q.id); if(!D.marks[k]) D.marks[k]='ok'; }); save(); render(); toast('✅ 已把未标记的题设为“对”'); },
   theme(d){ try{ localStorage.setItem(THEME_KEY, d.v); }catch(e){} D.settings.theme = d.v; save(); applyTheme(d.v); render(); toast(d.v==='eye'?'🌿 已切换到护眼模式':d.v==='dark'?'🌙 已切换到深色模式':'📱 已设为跟随系统'); },
+  say(d){
+    const ss = S.session; const f = ss && findQ(ss.key);
+    if(d.w==='remind'){ if(ss && ss.remind) say([ss.remind.text]); return; }
+    if(!f) return; const q = f.q, st = q.steps[ss.stepIdx];
+    const map = { orig: '原题：'+q.original, prompt: stepSpeech(q, ss.stepIdx), hint: st && '提示：'+st.hint, exp: st && ('正确答案是：'+answerText(st)+'。'+(st.explanation?'解析：'+st.explanation:'')), method: '解题思路：'+q.method };
+    say([map[d.w]]);
+  },
+  hush(){ hush(); },
+  closeremind(){ if(S.session) S.session.remind = null; refreshRemind(); },
+  vset(d){ D.settings[d.k] = !D.settings[d.k]; save(); if(d.k==='voice' && !D.settings.voice) hush(); render(); },
+  vrate(d){ D.settings.rate = d.v; save(); render(); say(['这是现在的语速。我们一步一步来，你一定可以的。']); },
+  vtest(){ say(['你好，我会陪你一起做题。比如：$\\sqrt{3}$，$x^2$，$\\dfrac{3}{4}$，$|x|\\le 2$。']); },
   ftab(d){ S.fTab=d.v; render(); },
   fkp(d){ S.fKp=d.v; if(S.view!=='formulas'){ go('formulas'); } else render(); },
   flip(d,el){ S.flipped[d.v]=!S.flipped[d.v]; el.classList.toggle('on'); },
@@ -1357,6 +1629,7 @@ document.addEventListener('click', e=>{
   const fn = act[el.dataset.act]; if(!fn) return;
   if(el.tagName==='BUTTON' || el.dataset.act==='flip' || el.dataset.act==='maskclose'){ fn(el.dataset, el, e); }
 });
+VS.onChange(sp=>{ const b=$('#speakbar'); if(b) b.classList.toggle('show', !!sp && voiceOn()); });
 window.addEventListener('storage', e=>{ if(e.key===KEY){ load(); render(); } });
 window.__mqKatexReady = () => render();
 render();
