@@ -242,3 +242,37 @@ App 能自动去掉 AI 回复里外层的 ```` ```json ```` 代码块，也能�
 ## 学习进度备份格式（供参考）
 
 「我的 → 设置 → 导出备份」得到 `{ "app": "mathquest", "version": 1, "exportedAt": "...", "data": { settings, packs, attempts, review, checkins, points, badges, daily } }`。它和题包是两种不同的文件，请在「导入备份」里导入。
+
+---
+
+## 内置普通话录音（`audio/`）
+
+为了让任何设备（包括系统默认是粤语声音的 iPad / 安卓）都读**普通话**，内置题目的朗读使用预先录好的 MP3，而不是系统语音。
+
+- 声音：微软 `zh-CN-XiaoxiaoNeural`（普通话），语速 -10%，单声道 24 kHz / 24 kbps MP3。
+- 文件名：`audio/<hash>.mp3`。`hash` 是“朗读文本”（经过 `MQSpeech.toSpeech` 把公式转成中文读法以后的文本）的 48 位哈希（12 位十六进制）。
+- 清单：`audio/manifest.json` = `{voice, rate, kbps, generated, clips: {hash: 朗读文本}}`。构建时清单会内嵌进 `index.html`；网页版还会再拉一次 `audio/manifest.json`，所以后来补生成的录音不必重新构建也能生效。
+- 覆盖内容：每道题每一步的题目提示、提示、答案+解析、原题、解题思路，所有鼓励语（每类 5 条），以及试听语句。
+- 播放规则：只用一个 `<audio>` 元素。iPad Safari 上第一次点击屏幕时会用它播放一段 0.15 秒静音来“解锁”，之后所有录音（包括计时器触发的提醒）都复用这个元素，不会被自动播放策略拦截。每段只播一次；切换步骤会立即停止上一段。
+- 没有录音的文本（例如新导入的题包）才回退到系统语音，而且只使用普通话（zh-CN）声音；设备上没有普通话声音时宁可不读，并提示一次如何下载。
+
+### 为新题包生成录音
+
+需要 Node.js、`edge-tts`（`pip install edge-tts`）和 `ffmpeg`。
+
+```bash
+# 为所有内置题包 + 固定语句生成（已存在的文件会跳过）
+node tools/gen-audio.js
+
+# 只为某个新题包生成
+node tools/gen-audio.js packs/新题包.json
+
+# 可选参数
+#   --voice zh-CN-XiaoxiaoNeural   只能是 zh-CN-* 普通话声音
+#   --rate -10%                    语速
+#   --kbps 24                      码率
+#   --out audio                    输出目录
+#   --only-prompts                 只生成步骤题目提示（体积更小）
+```
+
+生成后把 `audio/` 目录（含新的 `manifest.json`）和 `index.html` 一起上传即可；网页版会自动识别新录音。
