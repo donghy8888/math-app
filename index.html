@@ -1,0 +1,1284 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#6c5ce7">
+<title>数学闯关岛 · 初中数学练习</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" crossorigin="anonymous" onerror="this.remove()">
+<style>
+:root{
+  --bg:#f3f5fb; --card:#fff; --ink:#24264a; --sub:#6b7095; --line:#e7e9f4;
+  --pri:#6c5ce7; --pri2:#4f8cff; --pri-soft:#efecff;
+  --ok:#14b88a; --ok-soft:#e3f8f0; --bad:#ff6b6b; --bad-soft:#fff0f0;
+  --warn:#ff9f43; --warn-soft:#fff4e6; --gold:#ffc23d;
+  --r:20px; --shadow:0 6px 20px rgba(60,64,140,.08);
+  --tabh:64px;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;padding:0}
+body{background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","Noto Sans CJK SC","Source Han Sans SC",sans-serif;font-size:16px;line-height:1.55;min-height:100vh}
+button{font:inherit;color:inherit;border:0;background:none;cursor:pointer}
+input,textarea,select{font:inherit;color:inherit}
+#app{max-width:520px;margin:0 auto;min-height:100vh;padding:0 16px calc(var(--tabh) + 28px + env(safe-area-inset-bottom));position:relative}
+.topbar{display:flex;align-items:center;gap:10px;padding:18px 2px 10px}
+.topbar h1{font-size:22px;margin:0;font-weight:800;letter-spacing:.5px}
+.topbar .sp{flex:1}
+.iconbtn{width:42px;height:42px;border-radius:14px;background:#fff;box-shadow:var(--shadow);display:grid;place-items:center;font-size:20px}
+.card{background:var(--card);border-radius:var(--r);box-shadow:var(--shadow);padding:16px;margin:12px 0}
+.card h3{margin:0 0 10px;font-size:17px;display:flex;align-items:center;gap:8px}
+.muted{color:var(--sub);font-size:14px}
+.small{font-size:13px}
+.row{display:flex;align-items:center;gap:10px}
+.between{justify-content:space-between}
+.grow{flex:1;min-width:0}
+.wrap{flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:48px;padding:0 20px;border-radius:16px;font-weight:700;background:var(--pri);color:#fff;box-shadow:0 6px 16px rgba(108,92,231,.28);transition:transform .08s}
+.btn:active{transform:scale(.97)}
+.btn.block{display:flex;width:100%}
+.btn.ghost{background:var(--pri-soft);color:var(--pri);box-shadow:none}
+.btn.ok{background:var(--ok);box-shadow:0 6px 16px rgba(20,184,138,.28)}
+.btn.warn{background:var(--warn);box-shadow:0 6px 16px rgba(255,159,67,.3)}
+.btn.danger{background:var(--bad-soft);color:#d84848;box-shadow:none}
+.btn.white{background:#fff;color:var(--pri);box-shadow:none}
+.btn:disabled{opacity:.5}
+.btn.sm{min-height:38px;padding:0 14px;border-radius:12px;font-size:14px}
+.chip{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:99px;background:var(--pri-soft);color:var(--pri);font-size:12.5px;font-weight:600;white-space:nowrap}
+.chip.ok{background:var(--ok-soft);color:#0e936d}.chip.bad{background:var(--bad-soft);color:#d84848}.chip.warn{background:var(--warn-soft);color:#d9771b}.chip.gray{background:#eef0f6;color:var(--sub)}
+.chips{display:flex;gap:6px;flex-wrap:wrap}
+.hero{background:linear-gradient(135deg,#6c5ce7 0%,#4f8cff 100%);color:#fff;border-radius:24px;padding:18px;margin-top:14px;position:relative;overflow:hidden;box-shadow:0 10px 26px rgba(79,108,255,.3)}
+.hero:after{content:"";position:absolute;right:-40px;top:-40px;width:160px;height:160px;border-radius:50%;background:rgba(255,255,255,.12)}
+.hero:before{content:"";position:absolute;right:40px;bottom:-60px;width:120px;height:120px;border-radius:50%;background:rgba(255,255,255,.08)}
+.hero .greet{font-size:14px;opacity:.9}
+.hero .name{font-size:24px;font-weight:800;margin:2px 0 12px}
+.stats3{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;position:relative;z-index:1}
+.stat{background:rgba(255,255,255,.16);border-radius:16px;padding:10px;text-align:center}
+.stat b{display:block;font-size:22px;line-height:1.2}
+.stat span{font-size:12px;opacity:.9}
+.goalwrap{display:flex;gap:16px;align-items:center}
+.ring{position:relative;width:96px;height:96px;flex:none}
+.ring svg{transform:rotate(-90deg)}
+.ring .lbl{position:absolute;inset:0;display:grid;place-items:center;text-align:center;font-weight:800;font-size:20px}
+.ring .lbl small{display:block;font-size:11px;color:var(--sub);font-weight:600}
+.goalitem{display:flex;align-items:center;gap:8px;font-size:14px;margin:4px 0}
+.goalitem .dot{width:22px;height:22px;border-radius:50%;display:grid;place-items:center;font-size:12px;background:#eef0f6}
+.goalitem .dot.done{background:var(--ok);color:#fff}
+.quick{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.qcard{border-radius:20px;padding:14px;color:#fff;min-height:104px;display:flex;flex-direction:column;justify-content:space-between;text-align:left;box-shadow:var(--shadow)}
+.qcard .big{font-size:28px;font-weight:800;line-height:1}
+.qcard .t{font-weight:700}
+.qcard .s{font-size:12px;opacity:.9}
+.g1{background:linear-gradient(135deg,#ff9f43,#ff6b8b)}
+.g2{background:linear-gradient(135deg,#14b88a,#3cc8d8)}
+.g3{background:linear-gradient(135deg,#8e7dff,#c06cf0)}
+.g4{background:linear-gradient(135deg,#4f8cff,#46c3ff)}
+.checkin{display:flex;align-items:center;gap:12px}
+.flame{font-size:34px;filter:drop-shadow(0 4px 6px rgba(255,120,40,.35))}
+.heat{display:grid;grid-auto-flow:column;grid-template-rows:repeat(7,1fr);gap:3px;overflow-x:auto;padding-bottom:4px}
+.heat i{width:14px;height:14px;border-radius:4px;background:#eceef6;display:block}
+.heat i.l1{background:#d8d2ff}.heat i.l2{background:#ab9cff}.heat i.l3{background:#7f6af0}.heat i.l4{background:#5a45d6}
+.heat i.today{outline:2px solid var(--warn);outline-offset:1px}
+.heat i.fut{background:transparent}
+.legend{display:flex;align-items:center;gap:3px;font-size:11px;color:var(--sub);justify-content:flex-end;margin-top:6px}
+.legend i{width:10px;height:10px;border-radius:3px;display:inline-block}
+.list .item{display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--line)}
+.list .item:last-child{border-bottom:0}
+.item .ic{width:44px;height:44px;border-radius:14px;display:grid;place-items:center;font-size:20px;flex:none;background:var(--pri-soft)}
+.item .tt{font-weight:700;overflow:hidden;text-overflow:ellipsis}
+.packcard{display:block;width:100%;text-align:left}
+.prog{height:8px;border-radius:99px;background:#eceef6;overflow:hidden}
+.prog > i{display:block;height:100%;border-radius:99px;background:linear-gradient(90deg,var(--pri),var(--pri2))}
+.qrow{display:flex;gap:12px;align-items:flex-start;width:100%;text-align:left;padding:14px;border-radius:18px;background:#fff;box-shadow:var(--shadow);margin:10px 0}
+.qnum{width:36px;height:36px;border-radius:12px;background:var(--pri-soft);color:var(--pri);display:grid;place-items:center;font-weight:800;flex:none}
+.qrow .txt{font-size:14.5px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.stars{color:var(--gold);letter-spacing:1px;font-size:13px}
+.stars .off{color:#dfe2ee}
+/* play */
+.playhead{display:flex;align-items:center;gap:10px;padding:14px 0 6px;position:sticky;top:0;background:var(--bg);z-index:5}
+.timer{display:inline-flex;align-items:center;gap:6px;padding:8px 14px;border-radius:99px;background:#fff;box-shadow:var(--shadow);font-weight:800;font-variant-numeric:tabular-nums;font-size:16px}
+.timer.low{color:var(--warn)}
+.timer.over{background:var(--bad);color:#fff;animation:pulse 1.4s infinite}
+@keyframes pulse{50%{transform:scale(1.05)}}
+.tbar{height:6px;border-radius:99px;background:#e6e8f3;overflow:hidden;margin:4px 0 2px}
+.tbar i{display:block;height:100%;background:linear-gradient(90deg,var(--ok),#7ad6b3);transition:width .25s linear}
+.tbar.low i{background:linear-gradient(90deg,var(--warn),#ffc27a)}
+.tbar.over i{background:var(--bad)}
+.orig{font-size:16.5px;line-height:1.8}
+.orig .lab{font-size:12px;font-weight:800;color:var(--pri);letter-spacing:1px}
+.stepdots{display:flex;gap:6px;margin:6px 0}
+.stepdots i{flex:1;height:8px;border-radius:99px;background:#e2e5f1}
+.stepdots i.cur{background:var(--pri)}
+.stepdots i.first,.stepdots i.second{background:var(--ok)}
+.stepdots i.missed{background:var(--bad)}
+.donestep{display:flex;gap:10px;align-items:flex-start;padding:10px 12px;border-radius:14px;background:#fff;margin:8px 0;font-size:14px;box-shadow:var(--shadow)}
+.donestep .b{width:24px;height:24px;border-radius:50%;display:grid;place-items:center;color:#fff;font-size:13px;flex:none;margin-top:1px}
+.stepcard{border:2px solid var(--pri-soft)}
+.steplab{display:inline-block;background:var(--pri);color:#fff;border-radius:10px;padding:2px 10px;font-size:12.5px;font-weight:800;margin-bottom:8px}
+.prompt{font-size:17px;font-weight:600;line-height:1.75;margin-bottom:12px}
+.opts{display:grid;gap:10px}
+.opt{display:flex;align-items:center;gap:12px;min-height:54px;padding:10px 14px;border-radius:16px;background:#f6f7fc;border:2px solid transparent;text-align:left;font-size:16px;transition:all .12s}
+.opt .k{width:30px;height:30px;border-radius:10px;background:#fff;display:grid;place-items:center;font-weight:800;color:var(--pri);flex:none}
+.opt.sel{border-color:var(--pri);background:var(--pri-soft)}
+.opt.right{border-color:var(--ok);background:var(--ok-soft)}
+.opt.wrong{border-color:var(--bad);background:var(--bad-soft)}
+.ans{width:100%;min-height:56px;border-radius:16px;border:2px solid var(--line);padding:0 16px;font-size:20px;font-weight:700;background:#f9faff;outline:none}
+.ans:focus{border-color:var(--pri);background:#fff}
+.keys{display:flex;gap:8px;margin-top:8px;flex-wrap:wrap}
+.keys button{min-width:46px;height:40px;border-radius:12px;background:#eef0f8;font-weight:800;font-size:17px}
+.fb{border-radius:16px;padding:12px 14px;margin-top:12px;font-size:15px}
+.fb.ok{background:var(--ok-soft)}.fb.bad{background:var(--bad-soft)}.fb.hint{background:var(--warn-soft)}.fb.exp{background:#f1f4ff}
+.fb b.t{display:block;margin-bottom:4px}
+.shake{animation:shake .4s}
+@keyframes shake{20%,60%{transform:translateX(-7px)}40%,80%{transform:translateX(7px)}}
+.pop{animation:pop .35s}
+@keyframes pop{0%{transform:scale(.92);opacity:.4}100%{transform:scale(1);opacity:1}}
+.result{text-align:center}
+.result .bigstars{font-size:44px;letter-spacing:6px;margin:6px 0}
+.result .bigstars .off{filter:grayscale(1);opacity:.25}
+.kv{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:12px 0}
+.kv div{background:#f6f7fc;border-radius:14px;padding:10px 4px}
+.kv b{display:block;font-size:20px}
+.kv span{font-size:12px;color:var(--sub)}
+.formula{background:#f7f6ff;border-radius:14px;padding:10px 12px;margin:8px 0}
+/* bars */
+.bar{margin:10px 0}
+.bar .top{display:flex;justify-content:space-between;font-size:14px;margin-bottom:4px}
+.bar .prog i.lo{background:linear-gradient(90deg,#ff6b6b,#ff9f8b)}
+.bar .prog i.mid{background:linear-gradient(90deg,#ff9f43,#ffc56f)}
+.bar .prog i.hi{background:linear-gradient(90deg,#14b88a,#5fd6b0)}
+.weakpill{display:flex;align-items:center;gap:10px;padding:12px;border-radius:16px;background:linear-gradient(135deg,#fff3ec,#fff);border:1px solid #ffe2cc;margin:8px 0}
+.weakpill .n{width:30px;height:30px;border-radius:10px;background:var(--warn);color:#fff;display:grid;place-items:center;font-weight:800}
+.badges{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.badge{text-align:center;padding:12px 6px;border-radius:16px;background:#f6f7fc}
+.badge .e{font-size:30px}
+.badge .n{font-weight:700;font-size:13px}
+.badge .d{font-size:11px;color:var(--sub)}
+.badge.lock .e{filter:grayscale(1);opacity:.3}
+.badge.lock{background:#f8f9fc}
+.badge.got{background:linear-gradient(135deg,#fff8e1,#fff);border:1px solid #ffe7a3}
+/* flash cards */
+.fgrid{display:grid;grid-template-columns:1fr;gap:12px}
+.flip{perspective:1000px;height:190px;cursor:pointer}
+.flip .in{position:relative;width:100%;height:100%;transition:transform .5s;transform-style:preserve-3d}
+.flip.on .in{transform:rotateY(180deg)}
+.flip .f,.flip .bk{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;border-radius:22px;padding:16px;display:flex;flex-direction:column;box-shadow:var(--shadow);overflow:auto}
+.flip .f{background:linear-gradient(135deg,#7b6cf6,#5f8dff);color:#fff;justify-content:center;align-items:center;text-align:center}
+.flip .f.m{background:linear-gradient(135deg,#ff9f43,#ff7a8a)}
+.flip .f .nm{font-size:21px;font-weight:800;margin:8px 0}
+.flip .f .tap{font-size:12px;opacity:.85}
+.flip .bk{background:#fff;transform:rotateY(180deg);justify-content:center}
+.flip .bk .ltx{font-size:20px;text-align:center;margin:6px 0 10px;overflow-x:auto}
+.seg{display:flex;background:#e9ebf5;border-radius:14px;padding:4px;gap:4px;margin:6px 0 10px}
+.seg button{flex:1;min-height:40px;border-radius:11px;font-weight:700;color:var(--sub)}
+.seg button.on{background:#fff;color:var(--pri);box-shadow:0 2px 8px rgba(0,0,0,.06)}
+.filter{display:flex;gap:8px;overflow-x:auto;padding:4px 0 8px;scrollbar-width:none}
+.filter::-webkit-scrollbar{display:none}
+.filter button{flex:none;padding:8px 14px;border-radius:99px;background:#fff;font-size:14px;font-weight:600;box-shadow:var(--shadow);color:var(--sub)}
+.filter button.on{background:var(--pri);color:#fff}
+/* tab bar */
+.tabbar{position:fixed;left:0;right:0;bottom:0;z-index:20;background:rgba(255,255,255,.96);backdrop-filter:blur(10px);border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom)}
+.tabbar .in{max-width:520px;margin:0 auto;display:grid;grid-template-columns:repeat(5,1fr);height:var(--tabh)}
+.tabbar button{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;font-size:11.5px;color:#9a9fbd;font-weight:600;position:relative}
+.tabbar button .e{font-size:22px;filter:grayscale(1);opacity:.65;transition:all .15s}
+.tabbar button.on{color:var(--pri)}
+.tabbar button.on .e{filter:none;opacity:1;transform:translateY(-2px) scale(1.08)}
+.tabbar .badge-n{position:absolute;top:6px;left:calc(50% + 6px);background:var(--bad);color:#fff;font-size:10px;min-width:17px;height:17px;border-radius:9px;display:grid;place-items:center;padding:0 4px;font-weight:800}
+/* modal & toast */
+.mask{position:fixed;inset:0;background:rgba(30,32,70,.45);z-index:50;display:flex;align-items:flex-end;justify-content:center;animation:fade .2s}
+.sheet{background:#fff;width:100%;max-width:520px;border-radius:26px 26px 0 0;padding:20px 18px calc(20px + env(safe-area-inset-bottom));max-height:88vh;overflow:auto;animation:up .25s}
+@media(min-width:600px){.mask{align-items:center}.sheet{border-radius:26px}}
+@keyframes up{from{transform:translateY(40px);opacity:.5}}
+@keyframes fade{from{opacity:0}}
+.sheet h2{margin:0 0 10px;font-size:20px}
+textarea.code{width:100%;min-height:180px;border-radius:14px;border:2px solid var(--line);padding:10px;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:13px;background:#f9faff;outline:none}
+textarea.code:focus{border-color:var(--pri)}
+.field{margin:12px 0}
+.field label{display:block;font-weight:700;font-size:14px;margin-bottom:6px}
+.field input[type=text],.field input[type=number],.field select{width:100%;min-height:48px;border-radius:14px;border:2px solid var(--line);padding:0 14px;background:#f9faff;outline:none}
+.switch{display:flex;align-items:center;justify-content:space-between;min-height:48px}
+#toast{position:fixed;left:50%;top:18px;transform:translateX(-50%) translateY(-120px);background:#24264a;color:#fff;padding:12px 18px;border-radius:16px;z-index:60;font-weight:600;font-size:15px;max-width:90vw;text-align:center;transition:transform .3s cubic-bezier(.2,1.4,.4,1);box-shadow:0 10px 30px rgba(0,0,0,.2)}
+#toast.show{transform:translateX(-50%) translateY(0)}
+.empty{text-align:center;padding:26px 10px;color:var(--sub)}
+.empty .e{font-size:44px}
+.mathfb{font-family:"Times New Roman",serif;font-style:italic}
+.katex{font-size:1.08em}
+.sec-title{font-size:15px;font-weight:800;color:var(--sub);margin:22px 4px 4px;letter-spacing:.5px}
+.banner{display:flex;align-items:center;gap:10px;padding:12px 14px;border-radius:16px;background:var(--warn-soft);color:#b8610f;font-weight:700;margin:10px 0;width:100%;text-align:left}
+.newbadge{text-align:center}
+.newbadge .e{font-size:70px;animation:pop .5s}
+a{color:var(--pri)}
+.mrow{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--line)}
+.mrow:last-child{border-bottom:0}
+.mnum{width:52px;height:52px;border-radius:16px;background:#f1f2f8;display:flex;flex-direction:column;align-items:center;justify-content:center;flex:none;font-weight:800;line-height:1.1;border:2px solid transparent}
+.mnum span{font-size:13px}.mnum i{font-style:normal;font-size:17px}
+.mnum.ok{background:var(--ok-soft);border-color:#9fe3cc}.mnum.bad{background:var(--bad-soft);border-color:#ffc0c0}.mnum.warn{background:var(--warn-soft);border-color:#ffd4a3}
+.mprev{font-size:13px;line-height:1.4;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.mseg{display:flex;gap:4px;flex:none}
+.mseg button{width:40px;height:44px;border-radius:12px;background:#f4f5fa;font-size:17px;filter:grayscale(.9);opacity:.55;border:2px solid transparent}
+.mseg button.on{filter:none;opacity:1}.mseg button.on.ok{background:var(--ok-soft);border-color:var(--ok)}.mseg button.on.bad{background:var(--bad-soft);border-color:var(--bad)}.mseg button.on.warn{background:var(--warn-soft);border-color:var(--warn)}
+.markrow{display:flex;align-items:center;gap:6px;margin-top:12px;padding-top:10px;border-top:1px dashed var(--line);flex-wrap:wrap}
+.mpill{padding:6px 10px;border-radius:99px;background:#f4f5fa;font-size:13px;font-weight:700;color:var(--sub);border:2px solid transparent;min-height:36px}
+.mpill.on.ok{background:var(--ok-soft);color:#0e936d;border-color:var(--ok)}.mpill.on.bad{background:var(--bad-soft);color:#d84848;border-color:var(--bad)}.mpill.on.warn{background:var(--warn-soft);color:#d9771b;border-color:var(--warn)}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<nav class="tabbar"><div class="in" id="tabs"></div></nav>
+<div id="toast"></div>
+<div id="modal"></div>
+<script type="application/json" id="demo-pack">
+{
+  "id": "demo-pack-v1",
+  "title": "示例题包 · 初一初二综合练习",
+  "date": "2026-10-17",
+  "questions": [
+    {
+      "id": "d1",
+      "original": "解方程：$3(x-2)=2x+1$",
+      "knowledgePoints": ["一元一次方程"],
+      "difficulty": 2,
+      "timeLimitSec": 120,
+      "steps": [
+        {
+          "prompt": "第一步先去括号：$3(x-2)$ 展开后等于多少？",
+          "type": "choice",
+          "options": ["$3x-6$", "$3x-2$", "$x-6$", "$3x+6$"],
+          "answer": "A",
+          "hint": "括号外的 $3$ 要分别乘括号里的每一项，别漏了 $-2$ 哦。",
+          "explanation": "$3(x-2)=3\\cdot x-3\\cdot 2=3x-6$，方程变为 $3x-6=2x+1$。"
+        },
+        {
+          "prompt": "移项：把含 $x$ 的项移到左边，常数项移到右边，得到 $3x-2x=1+\\square$。方框里填多少？",
+          "type": "number",
+          "answer": "6",
+          "hint": "$-6$ 从左边移到右边要变号。",
+          "explanation": "移项要变号：$-6$ 移到右边变成 $+6$，所以 $3x-2x=1+6$。"
+        },
+        {
+          "prompt": "合并同类项，求出 $x=$ ？",
+          "type": "number",
+          "answer": "7",
+          "hint": "左边 $3x-2x=x$，右边 $1+6=?$",
+          "explanation": "合并得 $x=7$。可以代回检验：左边 $3\\times(7-2)=15$，右边 $2\\times7+1=15$ ✔"
+        }
+      ],
+      "finalAnswer": "$x=7$",
+      "formulas": [
+        {"name": "去括号法则", "latex": "a(b+c)=ab+ac", "tip": "括号前是负号时，括号里每一项都要变号。"},
+        {"name": "移项变号", "latex": "x+a=b \\Rightarrow x=b-a", "tip": "从等号一边移到另一边，符号要改变。"}
+      ],
+      "method": "解一元一次方程的五步：去分母 → 去括号 → 移项 → 合并同类项 → 系数化为 1。最后记得代回原方程检验。"
+    },
+    {
+      "id": "d2",
+      "original": "计算：$-2^2+(-3)\\times\\left(-\\dfrac{1}{3}\\right)-|-5|$",
+      "knowledgePoints": ["有理数运算", "绝对值"],
+      "difficulty": 2,
+      "timeLimitSec": 150,
+      "steps": [
+        {
+          "prompt": "先算乘方：$-2^2=$ ？",
+          "type": "number",
+          "answer": "-4",
+          "hint": "注意：$-2^2$ 表示“$2^2$ 的相反数”，负号不参与乘方；它和 $(-2)^2$ 不一样。",
+          "explanation": "$-2^2=-(2\\times2)=-4$，而 $(-2)^2=4$，这是常考易错点！"
+        },
+        {
+          "prompt": "再算乘法：$(-3)\\times\\left(-\\dfrac{1}{3}\\right)=$ ？",
+          "type": "number",
+          "answer": "1",
+          "hint": "负负得正，$3$ 和 $\\dfrac13$ 互为倒数。",
+          "explanation": "同号相乘得正，$3\\times\\dfrac13=1$，所以结果是 $1$。"
+        },
+        {
+          "prompt": "绝对值：$|-5|=$ ？",
+          "type": "number",
+          "answer": "5",
+          "hint": "负数的绝对值是它的相反数。",
+          "explanation": "$|-5|=5$。"
+        },
+        {
+          "prompt": "最后合起来：$-4+1-5=$ ？",
+          "type": "number",
+          "answer": "-8",
+          "hint": "从左到右依次计算：$-4+1=-3$，再减 $5$。",
+          "explanation": "$-4+1-5=-3-5=-8$。"
+        }
+      ],
+      "finalAnswer": "$-8$",
+      "formulas": [
+        {"name": "运算顺序", "latex": "\\text{乘方} \\to \\text{乘除} \\to \\text{加减}", "tip": "有括号先算括号里的；同级运算从左到右。"},
+        {"name": "绝对值", "latex": "|a|=\\begin{cases}a,&a\\ge0\\\\-a,&a<0\\end{cases}", "tip": "绝对值一定是非负数。"}
+      ],
+      "method": "有理数混合运算：先确定运算顺序（乘方→乘除→加减），每一步先定符号再算数值。特别注意 $-a^n$ 与 $(-a)^n$ 的区别。"
+    },
+    {
+      "id": "d3",
+      "original": "在 $\\mathrm{Rt}\\triangle ABC$ 中，$\\angle C=90^\\circ$，两条直角边 $AC=6$，$BC=8$。求斜边 $AB$ 上的高 $CD$ 的长。",
+      "knowledgePoints": ["勾股定理", "三角形面积"],
+      "difficulty": 3,
+      "timeLimitSec": 180,
+      "steps": [
+        {
+          "prompt": "先用勾股定理求斜边：$AB=$ ？",
+          "type": "number",
+          "answer": "10",
+          "hint": "$AB^2=AC^2+BC^2=36+64$。",
+          "explanation": "$AB=\\sqrt{6^2+8^2}=\\sqrt{100}=10$。（$6,8,10$ 是常见勾股数）"
+        },
+        {
+          "prompt": "用两条直角边求 $\\triangle ABC$ 的面积：$S=$ ？",
+          "type": "number",
+          "answer": "24",
+          "hint": "直角三角形面积 = 两直角边乘积的一半。",
+          "explanation": "$S=\\dfrac12\\times6\\times8=24$。"
+        },
+        {
+          "prompt": "同一个三角形的面积也等于 $\\dfrac12\\times AB\\times CD$。所以 $CD=$ ？（可填小数或分数）",
+          "type": "number",
+          "answer": "4.8",
+          "acceptable": ["24/5"],
+          "hint": "$\\dfrac12\\times10\\times CD=24$，解这个方程。",
+          "explanation": "$CD=\\dfrac{2S}{AB}=\\dfrac{48}{10}=4.8$。这就是“等面积法”。"
+        }
+      ],
+      "finalAnswer": "$CD=4.8$",
+      "formulas": [
+        {"name": "勾股定理", "latex": "a^2+b^2=c^2", "tip": "只适用于直角三角形，$c$ 是斜边。"},
+        {"name": "直角三角形斜边上的高", "latex": "h=\\dfrac{ab}{c}", "tip": "等面积法：两直角边之积 = 斜边 × 斜边上的高。"}
+      ],
+      "method": "先用勾股定理求斜边，再用“等面积法”：同一个三角形用两种底和高表示面积，列等式求高。"
+    },
+    {
+      "id": "d4",
+      "original": "已知一次函数 $y=kx+b$ 的图像经过点 $(1,3)$ 和 $(-1,-1)$。(1) 求这个一次函数的解析式；(2) 求它的图像与 $x$ 轴交点的坐标。",
+      "knowledgePoints": ["一次函数", "二元一次方程组"],
+      "difficulty": 4,
+      "timeLimitSec": 240,
+      "steps": [
+        {
+          "prompt": "把两个点代入 $y=kx+b$，得到的方程组是哪一个？",
+          "type": "choice",
+          "options": ["$\\begin{cases}k+b=3\\\\-k+b=-1\\end{cases}$", "$\\begin{cases}k+b=3\\\\k-b=-1\\end{cases}$", "$\\begin{cases}3k+b=1\\\\-k+b=-1\\end{cases}$", "$\\begin{cases}k+3b=1\\\\-k-b=1\\end{cases}$"],
+          "answer": "A",
+          "hint": "点 $(1,3)$ 表示 $x=1$ 时 $y=3$，代入就是 $3=k\\cdot1+b$。",
+          "explanation": "代入 $(1,3)$：$k+b=3$；代入 $(-1,-1)$：$-k+b=-1$。"
+        },
+        {
+          "prompt": "两式相加消去 $k$，可以求出 $b=$ ？",
+          "type": "number",
+          "answer": "1",
+          "hint": "相加得 $2b=2$。",
+          "explanation": "$(k+b)+(-k+b)=3+(-1)$，即 $2b=2$，$b=1$。"
+        },
+        {
+          "prompt": "把 $b=1$ 代回 $k+b=3$，得 $k=$ ？",
+          "type": "number",
+          "answer": "2",
+          "hint": "$k=3-b$。",
+          "explanation": "$k=3-1=2$，所以解析式为 $y=2x+1$。"
+        },
+        {
+          "prompt": "图像与 $x$ 轴交点处 $y=0$。令 $2x+1=0$，交点的横坐标 $x=$ ？",
+          "type": "number",
+          "answer": "-1/2",
+          "acceptable": ["-0.5"],
+          "hint": "$2x=-1$，再两边同时除以 $2$。",
+          "explanation": "$x=-\\dfrac12$，所以交点坐标是 $\\left(-\\dfrac12,0\\right)$。"
+        }
+      ],
+      "finalAnswer": "(1) $y=2x+1$；(2) $\\left(-\\dfrac12,0\\right)$",
+      "formulas": [
+        {"name": "待定系数法", "latex": "y=kx+b\\ (k\\ne0)", "tip": "两个点确定一条直线：代入两点，解方程组求 $k$、$b$。"},
+        {"name": "与坐标轴交点", "latex": "x\\text{轴}: y=0;\\quad y\\text{轴}: x=0", "tip": "求与哪条轴的交点，就令另一个坐标为 0。"}
+      ],
+      "method": "待定系数法：设解析式 → 代入已知点 → 解方程组 → 写出解析式。求与 $x$ 轴交点就令 $y=0$。"
+    },
+    {
+      "id": "d5",
+      "original": "先化简，再求值：$(x+2)^2-(x+1)(x-1)$，其中 $x=-\\dfrac{1}{2}$。",
+      "knowledgePoints": ["整式乘法", "乘法公式"],
+      "difficulty": 3,
+      "timeLimitSec": 200,
+      "steps": [
+        {
+          "prompt": "用完全平方公式展开：$(x+2)^2=$ ？",
+          "type": "choice",
+          "options": ["$x^2+4x+4$", "$x^2+4$", "$x^2+2x+4$", "$x^2+4x+2$"],
+          "answer": "A",
+          "hint": "$(a+b)^2=a^2+2ab+b^2$，中间项是 $2\\cdot x\\cdot 2$。",
+          "explanation": "$(x+2)^2=x^2+2\\cdot x\\cdot2+2^2=x^2+4x+4$。千万别漏掉中间项！"
+        },
+        {
+          "prompt": "用平方差公式：$(x+1)(x-1)=$ ？（例如输入 x^2-1 或 x²-1）",
+          "type": "text",
+          "answer": "x^2-1",
+          "acceptable": ["-1+x^2"],
+          "hint": "$(a+b)(a-b)=a^2-b^2$。",
+          "explanation": "$(x+1)(x-1)=x^2-1^2=x^2-1$。"
+        },
+        {
+          "prompt": "相减并化简：$(x^2+4x+4)-(x^2-1)=$ ？",
+          "type": "text",
+          "answer": "4x+5",
+          "acceptable": ["5+4x"],
+          "hint": "去括号时，减号后面的括号里每一项都要变号：$-(x^2-1)=-x^2+1$。",
+          "explanation": "$x^2+4x+4-x^2+1=4x+5$。"
+        },
+        {
+          "prompt": "代入 $x=-\\dfrac12$，求值：$4x+5=$ ？",
+          "type": "number",
+          "answer": "3",
+          "hint": "$4\\times\\left(-\\dfrac12\\right)=-2$。",
+          "explanation": "$4\\times\\left(-\\dfrac12\\right)+5=-2+5=3$。"
+        }
+      ],
+      "finalAnswer": "化简得 $4x+5$，当 $x=-\\dfrac12$ 时，原式 $=3$",
+      "formulas": [
+        {"name": "完全平方公式", "latex": "(a\\pm b)^2=a^2\\pm2ab+b^2", "tip": "口诀：首平方，尾平方，二倍乘积放中央。"},
+        {"name": "平方差公式", "latex": "(a+b)(a-b)=a^2-b^2", "tip": "两数和乘两数差，等于它们的平方差。"}
+      ],
+      "method": "“先化简再求值”一定要先化简到最简形式再代入，计算量最小。展开时注意减号后面的括号要整体变号。"
+    }
+  ]
+}
+</script>
+<script type="application/json" id="builtin-pack-2">
+{"id": "grade8-unit2-2026-10-17", "title": "八年级数学单元学习巩固二（二次根式 · 一元二次方程）", "date": "2026-10-17", "questions": [{"id": "q1", "original": "在实数 $3.14$，$1.\\dot{2}\\dot{3}$，$\\sqrt8$，$1.1010010001\\cdots$（每两个 1 之间依次增加一个 0），$\\dfrac{\\pi}{2}$，$\\dfrac{22}{7}$，$\\sqrt{\\dfrac49}$ 中，无理数有（　）\nA. 0 个　B. 1 个　C. 2 个　D. 3 个", "knowledgePoints": ["无理数的概念", "实数的分类"], "difficulty": 2, "timeLimitSec": 90, "steps": [{"prompt": "$\\sqrt{\\dfrac49}$ 化简后等于多少？它是有理数还是无理数？", "type": "choice", "answer": "A", "hint": "$\\dfrac49$ 是哪个分数的平方？", "explanation": "$\\sqrt{\\dfrac49}=\\dfrac23$，是分数，所以是有理数。", "options": ["$\\dfrac23$，有理数", "$\\dfrac23$，无理数", "$\\dfrac49$，有理数", "开不尽，无理数"]}, {"prompt": "$1.\\dot2\\dot3$（无限循环小数）和 $\\dfrac{22}{7}$ 是有理数还是无理数？", "type": "choice", "answer": "A", "hint": "无限**循环**小数都能化成分数。", "explanation": "无限循环小数和分数都是有理数，$\\dfrac{22}{7}$ 只是 π 的近似值，本身是有理数。", "options": ["都是有理数", "都是无理数", "$1.\\dot2\\dot3$ 是无理数", "$\\dfrac{22}{7}$ 是无理数"]}, {"prompt": "数一数：无理数一共有几个？", "type": "number", "answer": "3", "hint": "无理数＝无限**不循环**小数：开方开不尽的数、含 π 的数、有规律但不循环的小数。", "explanation": "$\\sqrt8$、$1.1010010001\\cdots$、$\\dfrac\\pi2$ 共 3 个，选 D。"}], "finalAnswer": "D（3 个：$\\sqrt8$，$1.1010010001\\cdots$，$\\dfrac{\\pi}{2}$）", "formulas": [{"name": "无理数", "latex": "\\text{无理数}=\\text{无限不循环小数}", "tip": "常见三类：开方开不尽的数、含 π 的数、构造的不循环小数。"}], "method": "逐个判断：先把能化简的（如 $\\sqrt{4/9}$）化简，再看是不是无限不循环小数。分数、有限小数、循环小数都是有理数。"}, {"id": "q2", "original": "实数 $\\sqrt{64}$ 的平方根是（　）\nA. $\\pm8$　B. $\\pm4$　C. $4$　D. $\\pm\\sqrt8$", "knowledgePoints": ["平方根", "算术平方根"], "difficulty": 2, "timeLimitSec": 60, "steps": [{"prompt": "先算 $\\sqrt{64}=$ ？", "type": "number", "answer": "8", "hint": "哪个正数的平方是 64？", "explanation": "$\\sqrt{64}=8$（算术平方根只取正的）。"}, {"prompt": "那么题目其实是在问“8 的平方根”。8 的平方根是？", "type": "choice", "answer": "C", "hint": "正数的平方根有两个，互为相反数。", "explanation": "8 的平方根是 $\\pm\\sqrt8$（也就是 $\\pm2\\sqrt2$），选 D。", "options": ["$\\pm8$", "$\\pm4$", "$\\pm\\sqrt8$", "$\\sqrt8$"]}], "finalAnswer": "D", "formulas": [{"name": "平方根", "latex": "x^2=a\\ (a>0)\\Rightarrow x=\\pm\\sqrt a", "tip": "正数有两个平方根，算术平方根是其中正的那个。"}], "method": "陷阱题：先求 $\\sqrt{64}=8$，再求 8 的平方根 $\\pm\\sqrt8$，别直接回答 64 的平方根 ±8。"}, {"id": "q3", "original": "下列说法正确的是（　）\nA. 0 的平方根与立方根相同\nB. 对于实数 $a$，若 $\\sqrt{a^2}=a$，则 $a>0$\nC. 两个无理数的和还是无理数\nD. 无理数与数轴上的点一一对应", "knowledgePoints": ["平方根与立方根", "二次根式的性质", "实数与数轴"], "difficulty": 2, "timeLimitSec": 90, "steps": [{"prompt": "0 的平方根是 0，0 的立方根是多少？", "type": "number", "answer": "0", "hint": "$0^3=?$", "explanation": "0 的平方根和立方根都是 0，所以 A 正确。"}, {"prompt": "$\\sqrt{a^2}=a$ 成立时，$a$ 的范围应该是？", "type": "choice", "answer": "B", "hint": "$\\sqrt{a^2}=|a|$，什么时候 $|a|=a$？", "explanation": "$|a|=a\\iff a\\ge0$，$a=0$ 也可以，所以 B 中“$a>0$”错误。", "options": ["$a>0$", "$a\\ge0$", "$a<0$", "任意实数"]}, {"prompt": "$\\sqrt2+(-\\sqrt2)=$ ？这说明 C 对不对？", "type": "number", "answer": "0", "hint": "两个互为相反数的无理数相加。", "explanation": "和是 0，是有理数，所以 C 错。D 也错：与数轴上的点一一对应的是**实数**。答案 A。"}], "finalAnswer": "A", "formulas": [{"name": "二次根式的性质", "latex": "\\sqrt{a^2}=|a|=\\begin{cases}a,&a\\ge0\\\\-a,&a<0\\end{cases}", "tip": "开方出来先加绝对值，再根据正负去掉绝对值。"}], "method": "逐项判断，找反例：B 漏了 $a=0$；C 用互为相反数的无理数作反例；D 应为“实数与数轴上的点一一对应”。"}, {"id": "q4", "original": "下列二次根式中，最简二次根式有（　）个。\n① $\\sqrt{0.8}$，② $\\sqrt{\\dfrac15}$，③ $\\sqrt7$，④ $\\sqrt{\\dfrac{2x+1}{x}}$，⑤ $\\sqrt{a^2+b^2}$，⑥ $-\\dfrac2a\\sqrt{ab}$\nA. 1　B. 2　C. 3　D. 4", "knowledgePoints": ["最简二次根式"], "difficulty": 3, "timeLimitSec": 120, "steps": [{"prompt": "最简二次根式要满足两个条件，下面哪个是正确的？", "type": "choice", "answer": "A", "hint": "想想 $\\sqrt{\\dfrac15}$ 和 $\\sqrt{8}$ 为什么不是最简。", "explanation": "①被开方数不含分母；②被开方数不含能开得尽方的因数或因式。", "options": ["被开方数不含分母，且不含能开得尽方的因数（式）", "被开方数是整数就行", "根号前面不能有系数", "被开方数必须是质数"]}, {"prompt": "①$\\sqrt{0.8}$、②$\\sqrt{\\frac15}$、④$\\sqrt{\\frac{2x+1}{x}}$ 为什么都不是最简？", "type": "choice", "answer": "B", "hint": "小数可以化成分数。", "explanation": "$0.8=\\dfrac45$，三个被开方数都含分母，所以都不是最简。", "options": ["被开方数是负数", "被开方数含分母（小数也算）", "根号前没有系数", "它们都能开尽方"]}, {"prompt": "③$\\sqrt7$、⑤$\\sqrt{a^2+b^2}$、⑥$-\\dfrac2a\\sqrt{ab}$ 中的根号都满足条件吗？最简二次根式一共几个？", "type": "number", "answer": "3", "hint": "注意 $a^2+b^2$ 是**和**，不能开方成 $a+b$。", "explanation": "③⑤⑥ 的被开方数 $7$、$a^2+b^2$、$ab$ 都不含分母、不含开得尽方的因式，共 3 个，选 C。"}], "finalAnswer": "C（③⑤⑥）", "formulas": [{"name": "最简二次根式", "latex": "\\sqrt{a}\\ \\text{中 }a\\text{ 不含分母、不含能开尽方的因数}", "tip": "小数要先化成分数再判断；$\\sqrt{a^2+b^2}$ 不能化简。"}], "method": "按两条标准逐个检查被开方数：有没有分母（小数也算）、有没有平方因数。"}, {"id": "q5", "original": "若关于 $x$ 的方程 $\\dfrac12x^2-2kx-4k+1=0$ 有两个相等的实数根，则代数式 $2026-2k^2-4k$ 的值为（　）\nA. 2023　B. 2024　C. 2025　D. 2026", "knowledgePoints": ["根的判别式", "整体代入"], "difficulty": 3, "timeLimitSec": 150, "steps": [{"prompt": "“有两个相等的实数根”说明判别式 $\\Delta$ 满足什么？", "type": "choice", "answer": "B", "hint": "回忆 Δ 的三种情况。", "explanation": "两个相等实根 ⟺ $\\Delta=0$。", "options": ["$\\Delta>0$", "$\\Delta=0$", "$\\Delta<0$", "$\\Delta\\ge0$"]}, {"prompt": "这里 $a=\\dfrac12,\\ b=-2k,\\ c=-4k+1$。$\\Delta=b^2-4ac=4k^2+8k-2=0$，两边同除以 2，得 $2k^2+4k=$ ？", "type": "number", "answer": "1", "hint": "$4k^2+8k-2=0\\Rightarrow 2k^2+4k-1=0$。", "explanation": "$(-2k)^2-4\\times\\dfrac12\\times(-4k+1)=4k^2+8k-2=0$，所以 $2k^2+4k=1$。"}, {"prompt": "整体代入：$2026-2k^2-4k=2026-(2k^2+4k)=$ ？", "type": "number", "answer": "2025", "hint": "不用求出 k，把 $2k^2+4k$ 当作一个整体。", "explanation": "$2026-1=2025$，选 C。"}], "finalAnswer": "C（2025）", "formulas": [{"name": "根的判别式", "latex": "\\Delta=b^2-4ac", "tip": "Δ>0 两个不等实根；Δ=0 两个相等实根；Δ<0 没有实根。"}, {"name": "整体代入", "latex": "2026-2k^2-4k=2026-(2k^2+4k)", "tip": "求值题常常不需要解出字母，凑出整体直接代入。"}], "method": "由 Δ=0 得到关于 k 的等式 $2k^2+4k=1$，再把所求式变形为 $2026-(2k^2+4k)$ 整体代入。"}, {"id": "q6", "original": "若两个方程 $x^2+ax+b=0$ 和 $x^2+bx+a=0$ 只有一个公共根，则（　）\nA. $a=b$　B. $a+b=0$　C. $a+b=1$　D. $a+b=-1$", "knowledgePoints": ["一元二次方程的根", "公共根问题"], "difficulty": 4, "timeLimitSec": 180, "steps": [{"prompt": "设公共根为 $x_0$，把两个方程相减，得到 $(a-b)x_0+(b-a)=0$，也就是 $(a-b)(x_0-1)=0$。如果 $a=b$，两个方程会怎样？", "type": "choice", "answer": "A", "hint": "$a=b$ 时两个方程完全一样。", "explanation": "$a=b$ 时两个方程相同，公共根就不止一个（或者全部相同），与“只有一个公共根”矛盾，所以 $a\\ne b$。", "options": ["完全相同，公共根不止一个，不符合题意", "没有影响", "无解", "一定只有一个公共根"]}, {"prompt": "既然 $a\\ne b$，那么公共根 $x_0=$ ？", "type": "number", "answer": "1", "hint": "$(a-b)(x_0-1)=0$ 且 $a-b\\ne0$。", "explanation": "$x_0-1=0$，$x_0=1$。"}, {"prompt": "把 $x=1$ 代入 $x^2+ax+b=0$，得 $1+a+b=0$，所以 $a+b=$ ？", "type": "number", "answer": "-1", "hint": "移项。", "explanation": "$a+b=-1$，选 D。"}], "finalAnswer": "D", "formulas": [{"name": "方程的根", "latex": "x_0\\text{ 是方程的根}\\iff \\text{代入后等式成立}", "tip": "公共根同时满足两个方程，常用两式相减消去二次项。"}], "method": "设公共根代入两方程，相减消去 $x^2$，因式分解得 $(a-b)(x-1)=0$，排除 $a=b$ 后得公共根为 1，再代回。"}, {"id": "q7", "original": "已知 $a<0$，那么 $\\sqrt{9a^2}$ 可化简为______。", "knowledgePoints": ["二次根式的性质"], "difficulty": 2, "timeLimitSec": 60, "steps": [{"prompt": "$\\sqrt{9a^2}=3\\sqrt{a^2}=3|a|$。因为 $a<0$，$|a|=$ ？", "type": "choice", "answer": "B", "hint": "负数的绝对值是它的相反数。", "explanation": "$a<0$ 时 $|a|=-a$。", "options": ["$a$", "$-a$", "$\\pm a$", "$a^2$"]}, {"prompt": "所以 $\\sqrt{9a^2}=$ ？", "type": "choice", "answer": "C", "hint": "$3\\times(-a)$。", "explanation": "$\\sqrt{9a^2}=3|a|=-3a$（因为 $a<0$，$-3a$ 是正数，符合算术平方根非负）。", "options": ["$3a$", "$\\pm3a$", "$-3a$", "$9a$"]}], "finalAnswer": "$-3a$", "formulas": [{"name": "二次根式的性质", "latex": "\\sqrt{a^2}=|a|=\\begin{cases}a,&a\\ge0\\\\-a,&a<0\\end{cases}", "tip": "开方出来先加绝对值，再根据正负去掉绝对值。"}], "method": "$\\sqrt{a^2}=|a|$，再根据 $a<0$ 去绝对值。结果必须是非负的，可以用来检查。"}, {"id": "q8", "original": "比较大小：$-\\sqrt{15}$ ____ $-4$。（填“>”“=”或“<”）", "knowledgePoints": ["实数大小比较"], "difficulty": 1, "timeLimitSec": 45, "steps": [{"prompt": "先比较正数：$4=\\sqrt{?}$", "type": "number", "answer": "16", "hint": "$4^2=?$", "explanation": "$4=\\sqrt{16}$，而 $15<16$，所以 $\\sqrt{15}<4$。"}, {"prompt": "两个负数比较，绝对值大的反而小。$-\\sqrt{15}$ ___ $-4$？", "type": "choice", "answer": "A", "hint": "$\\sqrt{15}<4$，加负号后不等号方向改变。", "explanation": "$-\\sqrt{15}>-4$。", "options": [">", "=", "<"]}], "finalAnswer": "$>$", "formulas": [{"name": "负数比较", "latex": "a>b>0\\Rightarrow -a<-b", "tip": "两个负数，绝对值大的反而小。"}], "method": "把 4 写成 $\\sqrt{16}$，比较被开方数，再根据负数比较法则变号。"}, {"id": "q9", "original": "写出 $\\sqrt{3-a}$ 的一个有理化因式：______。", "knowledgePoints": ["有理化因式"], "difficulty": 2, "timeLimitSec": 45, "steps": [{"prompt": "什么叫有理化因式？两个含根号的式子相乘，结果______。", "type": "choice", "answer": "A", "hint": "比如 $\\sqrt2\\times\\sqrt2=2$。", "explanation": "相乘后不再含二次根式，就叫互为有理化因式。", "options": ["不含二次根式", "等于 1", "等于 0", "还是二次根式"]}, {"prompt": "$\\sqrt{3-a}$ 乘以下面哪个，结果不含根号？", "type": "choice", "answer": "C", "hint": "$\\sqrt{m}\\cdot\\sqrt m=m$。", "explanation": "$\\sqrt{3-a}\\cdot\\sqrt{3-a}=3-a$，所以 $\\sqrt{3-a}$ 本身就是它的一个有理化因式（答案不唯一）。", "options": ["$\\sqrt3$", "$\\sqrt3-\\sqrt a$", "$\\sqrt{3-a}$", "$3-a$"]}], "finalAnswer": "$\\sqrt{3-a}$（答案不唯一）", "formulas": [{"name": "有理化因式", "latex": "\\sqrt a\\cdot\\sqrt a=a,\\ (\\sqrt a+\\sqrt b)(\\sqrt a-\\sqrt b)=a-b", "tip": "单项根式的有理化因式是它本身；两项的用平方差。"}], "method": "整个 $3-a$ 在同一个根号下，是单项二次根式，乘它自己即可去掉根号。注意不要写成 $\\sqrt3+\\sqrt a$。"}, {"id": "q10", "original": "已知 $\\sqrt{x^3+4x^2}=-x\\sqrt{x+4}$，则 $x$ 的取值范围是______。", "knowledgePoints": ["二次根式的性质", "二次根式有意义的条件"], "difficulty": 3, "timeLimitSec": 120, "steps": [{"prompt": "左边：$\\sqrt{x^3+4x^2}=\\sqrt{x^2(x+4)}=|x|\\sqrt{x+4}$。要等于 $-x\\sqrt{x+4}$，需要 $|x|=-x$，即 $x$ ___ 0？", "type": "choice", "answer": "D", "hint": "什么时候绝对值等于相反数？", "explanation": "$|x|=-x\\iff x\\le0$。", "options": [">", "≥", "<", "≤"]}, {"prompt": "根号要有意义，$x+4\\ge0$，即 $x\\ge$ ？", "type": "number", "answer": "-4", "hint": "被开方数非负。", "explanation": "$x\\ge-4$。"}, {"prompt": "综合起来，$x$ 的范围是？", "type": "choice", "answer": "B", "hint": "把两个条件取公共部分。", "explanation": "$-4\\le x\\le0$。", "options": ["$x\\le0$", "$-4\\le x\\le0$", "$x\\ge-4$", "$-4<x<0$"]}], "finalAnswer": "$-4\\le x\\le0$", "formulas": [{"name": "二次根式的性质", "latex": "\\sqrt{a^2}=|a|=\\begin{cases}a,&a\\ge0\\\\-a,&a<0\\end{cases}", "tip": "开方出来先加绝对值，再根据正负去掉绝对值。"}, {"name": "有意义条件", "latex": "\\sqrt a\\ \\text{有意义}\\iff a\\ge0", "tip": "被开方数必须非负。"}], "method": "提出 $x^2$ 变成 $|x|\\sqrt{x+4}$，由 $|x|=-x$ 得 $x\\le0$，再加上 $x+4\\ge0$。"}, {"id": "q11", "original": "石墨烯是已知强度最高的材料之一，同时还具有很好的韧性，石墨烯的理论厚度为 $0.00000000034$ m，这个数据用科学记数法可表示为______。", "knowledgePoints": ["科学记数法"], "difficulty": 1, "timeLimitSec": 60, "steps": [{"prompt": "科学记数法写成 $a\\times10^n$，其中 $1\\le a<10$。这里 $a=$ ？", "type": "number", "answer": "3.4", "hint": "把小数点移到第一个非零数字后面。", "explanation": "$a=3.4$。"}, {"prompt": "小数点向右移动了几位？那么 $n=$ ？", "type": "number", "answer": "-10", "hint": "数一数：从原来的小数点到 3 后面一共移动了几位。", "explanation": "小数点向右移 10 位到 3 后面，所以 $n=-10$，结果 $3.4\\times10^{-10}$。"}], "finalAnswer": "$3.4\\times10^{-10}$ m", "formulas": [{"name": "科学记数法（小数）", "latex": "0.\\underbrace{0\\cdots0}_{k\\text{个}0}a=a\\times10^{-(k+1)}", "tip": "第一个非零数字前（含小数点前那个 0）有几个 0，指数就是负几。"}], "method": "绝对值小于 1 的数：$n$ 为负，$|n|$ 等于第一个非零数字前所有 0 的个数（含整数位的 0）。本题请孩子再对照原卷数一数 0 的个数。"}, {"id": "q12", "original": "如果 $\\sqrt{0.1521}=0.39$，$\\sqrt x=3.9$，那么 $x$ 的值是______。", "knowledgePoints": ["算术平方根", "被开方数与算术平方根的小数点移动规律"], "difficulty": 2, "timeLimitSec": 60, "steps": [{"prompt": "$3.9$ 是 $0.39$ 的几倍？", "type": "number", "answer": "10", "hint": "小数点向右移动了 1 位。", "explanation": "$3.9=0.39\\times10$。"}, {"prompt": "算术平方根扩大 10 倍，被开方数扩大多少倍？", "type": "number", "answer": "100", "hint": "$\\sqrt{100x}=10\\sqrt x$。", "explanation": "被开方数要扩大 $10^2=100$ 倍（小数点右移 2 位）。"}, {"prompt": "所以 $x=$ ？", "type": "number", "answer": "15.21", "hint": "$0.1521\\times100$。", "explanation": "$x=15.21$。"}], "finalAnswer": "$15.21$", "formulas": [{"name": "移位规律", "latex": "\\sqrt{100a}=10\\sqrt a", "tip": "被开方数小数点每移 2 位，算术平方根小数点同向移 1 位。"}], "method": "利用“被开方数移两位，平方根移一位”的规律。"}, {"id": "q13", "original": "关于 $x$ 的一元二次方程 $(m-3)x^2+x+(m^2-9)=0$ 的一个根是 0，则 $m$ 的值是______。", "knowledgePoints": ["一元二次方程的定义", "方程的根"], "difficulty": 2, "timeLimitSec": 90, "steps": [{"prompt": "把 $x=0$ 代入方程，得 $m^2-9=0$，所以 $m=$ ？", "type": "choice", "answer": "C", "hint": "平方等于 9 的数有两个。", "explanation": "$m^2=9\\Rightarrow m=\\pm3$。", "options": ["$3$", "$-3$", "$\\pm3$", "$9$"]}, {"prompt": "别忘了：是**一元二次**方程，二次项系数 $m-3$ 必须满足？", "type": "choice", "answer": "B", "hint": "二次项系数不能为 0。", "explanation": "$m-3\\ne0$，所以 $m\\ne3$。", "options": ["$m-3=0$", "$m-3\\ne0$", "$m-3>0$", "没有要求"]}, {"prompt": "综合起来 $m=$ ？", "type": "number", "answer": "-3", "hint": "从 $\\pm3$ 中去掉 3。", "explanation": "$m=-3$。"}], "finalAnswer": "$m=-3$", "formulas": [{"name": "一元二次方程定义", "latex": "ax^2+bx+c=0\\ (a\\ne0)", "tip": "题目说“一元二次方程”时一定要检查 $a\\ne0$。"}], "method": "代入根得 $m^2-9=0$，再用二次项系数不为 0 排除 $m=3$。"}, {"id": "q14", "original": "把 $(a-b)\\sqrt{-\\dfrac{1}{a-b}}$ 根号外面的因式移到根号里面，化成最简二次根式，正确的结果是______。", "knowledgePoints": ["二次根式有意义的条件", "二次根式的性质", "根号外因式移入根号"], "difficulty": 4, "timeLimitSec": 180, "steps": [{"prompt": "根号要有意义，$-\\dfrac1{a-b}\\ge0$（且分母不为 0），所以 $a-b$ ___ 0？", "type": "choice", "answer": "C", "hint": "负的分之一要非负，分母必须是负数。", "explanation": "$-\\dfrac{1}{a-b}>0\\Rightarrow a-b<0$。", "options": [">", "=", "<", "≥"]}, {"prompt": "$a-b<0$ 是负数，移进根号前要先把负号留在外面：$(a-b)=-\\sqrt{?}$", "type": "choice", "answer": "A", "hint": "负数 $=-|$负数$|$。", "explanation": "$a-b=-(b-a)=-\\sqrt{(b-a)^2}$。", "options": ["$(b-a)^2$", "$a-b$", "$b-a$", "$-(a-b)^2$"]}, {"prompt": "所以原式 $=-\\sqrt{(b-a)^2\\cdot\\dfrac{1}{b-a}}=$ ？", "type": "choice", "answer": "D", "hint": "$(b-a)^2\\div(b-a)=b-a$。", "explanation": "原式 $=-\\sqrt{b-a}$。", "options": ["$\\sqrt{b-a}$", "$\\sqrt{a-b}$", "$-\\sqrt{a-b}$", "$-\\sqrt{b-a}$"]}], "finalAnswer": "$-\\sqrt{b-a}$", "formulas": [{"name": "二次根式的性质", "latex": "\\sqrt{a^2}=|a|=\\begin{cases}a,&a\\ge0\\\\-a,&a<0\\end{cases}", "tip": "开方出来先加绝对值，再根据正负去掉绝对值。"}, {"name": "负因式移入根号", "latex": "a<0\\Rightarrow a\\sqrt m=-\\sqrt{a^2m}", "tip": "负号必须留在根号外面，只把正的部分平方移进去。"}], "method": "先由有意义条件判断 $a-b<0$，负号留在外面，再把 $(b-a)$ 平方后移入根号约分。"}, {"id": "q15", "original": "若 $n$ 为正整数，且满足 $n<3\\sqrt3<n+1$，则 $n=$______。", "knowledgePoints": ["无理数的估算"], "difficulty": 2, "timeLimitSec": 60, "steps": [{"prompt": "$3\\sqrt3=\\sqrt{?}$", "type": "number", "answer": "27", "hint": "把 3 移进根号要平方：$3=\\sqrt9$。", "explanation": "$3\\sqrt3=\\sqrt{9\\times3}=\\sqrt{27}$。"}, {"prompt": "$\\sqrt{25}<\\sqrt{27}<\\sqrt{36}$，所以 $n=$ ？", "type": "number", "answer": "5", "hint": "$\\sqrt{25}=5,\\sqrt{36}=6$。", "explanation": "$5<3\\sqrt3<6$，$n=5$。"}], "finalAnswer": "$5$", "formulas": [{"name": "估算", "latex": "\\sqrt{k^2}<\\sqrt m<\\sqrt{(k+1)^2}\\Rightarrow k<\\sqrt m<k+1", "tip": "找夹住被开方数的两个相邻完全平方数。"}], "method": "把系数移入根号变成 $\\sqrt{27}$，再找相邻完全平方数。"}, {"id": "q16", "original": "一元二次方程 $(3-x)=(3-x)^2$ 的解是______。", "knowledgePoints": ["因式分解法解一元二次方程"], "difficulty": 2, "timeLimitSec": 90, "steps": [{"prompt": "能不能两边同时除以 $(3-x)$？", "type": "choice", "answer": "B", "hint": "如果 $3-x=0$ 呢？", "explanation": "不能！$3-x$ 可能为 0，除掉会丢根。应移项后提公因式。", "options": ["可以", "不可以，会丢根"]}, {"prompt": "移项：$(3-x)-(3-x)^2=0$，提公因式得 $(3-x)(1-3+x)=0$，即 $(3-x)(x-2)=0$。较小的根是？", "type": "number", "answer": "2", "hint": "每个因式分别等于 0。", "explanation": "$x-2=0\\Rightarrow x=2$。"}, {"prompt": "较大的根是？", "type": "number", "answer": "3", "hint": "$3-x=0$。", "explanation": "$x_1=2,\\ x_2=3$。"}], "finalAnswer": "$x_1=2,\\ x_2=3$", "formulas": [{"name": "因式分解法", "latex": "AB=0\\Rightarrow A=0\\text{ 或 }B=0", "tip": "不要两边约去含未知数的式子，会丢根。"}], "method": "移项后提取公因式 $(3-x)$，转化为两个一次方程。"}, {"id": "q17", "original": "一元二次方程 $(2x-1)^2=(3-x)^2$ 的解是______。", "knowledgePoints": ["直接开平方法", "因式分解法解一元二次方程"], "difficulty": 3, "timeLimitSec": 120, "steps": [{"prompt": "由 $A^2=B^2$ 可得？", "type": "choice", "answer": "C", "hint": "平方相等的两个数，可能相等也可能互为相反数。", "explanation": "$A^2=B^2\\Rightarrow A=B$ 或 $A=-B$。", "options": ["只有 $A=B$", "只有 $A=-B$", "$A=B$ 或 $A=-B$", "$A=B=0$"]}, {"prompt": "情况一：$2x-1=3-x$，解得 $x=$ ？", "type": "number", "answer": "4/3", "hint": "移项得 $3x=4$。", "explanation": "$3x=4\\Rightarrow x=\\dfrac43$。（常见错误：算成 $x=4$，忘了除以 3）", "acceptable": ["4/3", "1又1/3"]}, {"prompt": "情况二：$2x-1=-(3-x)=x-3$，解得 $x=$ ？", "type": "number", "answer": "-2", "hint": "移项得 $2x-x=-3+1$。", "explanation": "$x=-2$。所以 $x_1=\\dfrac43,\\ x_2=-2$。"}], "finalAnswer": "$x_1=\\dfrac43,\\ x_2=-2$", "formulas": [{"name": "平方差因式分解", "latex": "A^2-B^2=(A+B)(A-B)", "tip": "也可以移项后用平方差：$(2x-1+3-x)(2x-1-3+x)=0$。"}], "method": "$A^2=B^2$ 转化为 $A=\\pm B$ 两个一次方程，解完代回检验。"}, {"id": "q18", "original": "有一件商品，由原售价连续两次降价，每次降价的百分率相同。已知原售价是 800 元，降价两次后的售价是 578 元，若每次下降的百分率是 $x$，由题意列出关于 $x$ 的方程：______。", "knowledgePoints": ["一元二次方程的应用", "增长率（降低率）问题"], "difficulty": 2, "timeLimitSec": 90, "steps": [{"prompt": "第一次降价后，售价是？", "type": "choice", "answer": "B", "hint": "降低 $x$，剩下原来的 $(1-x)$。", "explanation": "$800(1-x)$。", "options": ["$800x$", "$800(1-x)$", "$800-x$", "$800(1+x)$"]}, {"prompt": "第二次在新价格基础上再降 $x$，两次后的售价是？", "type": "choice", "answer": "A", "hint": "在 $800(1-x)$ 基础上再乘 $(1-x)$。", "explanation": "$800(1-x)^2$，所以方程为 $800(1-x)^2=578$。", "options": ["$800(1-x)^2$", "$800(1-2x)$", "$800-2x$", "$800(1-x^2)$"]}], "finalAnswer": "$800(1-x)^2=578$", "formulas": [{"name": "降低率公式", "latex": "a(1-x)^n=b", "tip": "$a$ 原量，$b$ 降低 $n$ 次后的量；增长率则用 $(1+x)$。"}], "method": "连续两次按相同百分率降低，用 $a(1-x)^2=b$。注意不是 $1-2x$。"}, {"id": "q19", "original": "若关于 $x$ 的一元二次方程 $(m-1)x^2-2mx+(m+2)=0$ 有两个不等的实数根，则 $m$ 的取值范围是______。", "knowledgePoints": ["根的判别式", "一元二次方程的定义"], "difficulty": 3, "timeLimitSec": 150, "steps": [{"prompt": "“两个不等的实数根”要求判别式满足？", "type": "choice", "answer": "A", "hint": "不需要用求根公式，只看 Δ。", "explanation": "$\\Delta>0$。", "options": ["$\\Delta>0$", "$\\Delta=0$", "$\\Delta<0$", "$\\Delta\\ge0$"]}, {"prompt": "$\\Delta=(-2m)^2-4(m-1)(m+2)=4m^2-4(m^2+m-2)=8-4m>0$，解得 $m<$ ？", "type": "number", "answer": "2", "hint": "$8-4m>0\\Rightarrow 4m<8$。", "explanation": "$m<2$。"}, {"prompt": "还要满足二次项系数 $m-1\\ne0$，即 $m\\ne$ ？", "type": "number", "answer": "1", "hint": "一元二次方程的 $a\\ne0$。", "explanation": "$m\\ne1$。所以答案是 $m<2$ 且 $m\\ne1$。"}], "finalAnswer": "$m<2$ 且 $m\\ne1$", "formulas": [{"name": "根的判别式", "latex": "\\Delta=b^2-4ac", "tip": "Δ>0 两个不等实根；Δ=0 两个相等实根；Δ<0 没有实根。"}, {"name": "一元二次方程定义", "latex": "a\\ne0", "tip": "求参数范围时，“判别式”和“二次项系数不为 0”两个条件都要写。"}], "method": "只需判别式 $\\Delta>0$ 加上 $m-1\\ne0$，不必代入求根公式。"}, {"id": "q20", "original": "已知 $m$、$n$ 是有理数，方程 $x^2+mx+n=0$ 有一个根是 $\\sqrt5-2$，则 $m+n$ 的值为______。", "knowledgePoints": ["方程的根", "有理数与无理数的性质"], "difficulty": 4, "timeLimitSec": 180, "steps": [{"prompt": "把 $x=\\sqrt5-2$ 代入：$(\\sqrt5-2)^2=$ ？", "type": "choice", "answer": "B", "hint": "$(a-b)^2=a^2-2ab+b^2$。", "explanation": "$(\\sqrt5-2)^2=5-4\\sqrt5+4=9-4\\sqrt5$。", "options": ["$1$", "$9-4\\sqrt5$", "$9+4\\sqrt5$", "$5-4\\sqrt5$"]}, {"prompt": "代入后整理：$(9-2m+n)+(m-4)\\sqrt5=0$。因为 $m,n$ 是有理数，$\\sqrt5$ 是无理数，必须 $m-4=0$，所以 $m=$ ？", "type": "number", "answer": "4", "hint": "有理数 + 有理数×√5 = 0，只能两部分都为 0。", "explanation": "$m=4$。"}, {"prompt": "再由 $9-2m+n=0$ 求 $n$，那么 $m+n=$ ？", "type": "number", "answer": "3", "hint": "$9-8+n=0$。", "explanation": "$n=-1$，$m+n=4+(-1)=3$。"}], "finalAnswer": "$3$", "formulas": [{"name": "有理数与无理数", "latex": "p+q\\sqrt5=0\\ (p,q\\in\\mathbb Q)\\Rightarrow p=q=0", "tip": "利用“有理部分、无理部分分别为 0”列方程。"}], "method": "代入根后按“有理部分 + 无理部分×√5”整理，利用 m、n 为有理数，令两部分都为 0。（另一法：$x+2=\\sqrt5$ 两边平方得 $x^2+4x-1=0$。）"}, {"id": "q21", "original": "已知关于 $x$ 的方程 $(a-1)x^2+2x-a-1=0$ 的根都是整数，那么符合条件的整数 $a$ 有______个。", "knowledgePoints": ["分类讨论", "因式分解法解一元二次方程", "整数根问题"], "difficulty": 5, "timeLimitSec": 240, "steps": [{"prompt": "先看特殊情况：$a=1$ 时方程变成 $2x-2=0$，根 $x=1$ 是整数吗？$a=1$ 符合吗？", "type": "choice", "answer": "A", "hint": "题目只说“方程”，没说“一元二次方程”。", "explanation": "$a=1$ 时是一元一次方程，根 $x=1$ 是整数，符合条件。", "options": ["符合", "不符合"]}, {"prompt": "$a\\ne1$ 时，因式分解：$(a-1)x^2+2x-(a+1)=[(a-1)x+(a+1)](x-1)=0$，一个根是 $x=1$，另一个根是 $x=-\\dfrac{a+1}{a-1}=-1-\\dfrac{2}{a-1}$。要使它是整数，$a-1$ 必须是哪个数的约数？", "type": "number", "answer": "2", "hint": "$\\dfrac{2}{a-1}$ 要是整数。", "explanation": "$a-1$ 是 2 的约数：$\\pm1,\\pm2$。"}, {"prompt": "$a-1=\\pm1,\\pm2$ 得 $a=2,0,3,-1$，再加上 $a=1$，共几个？", "type": "number", "answer": "5", "hint": "别漏了 $a=1$ 的情况。", "explanation": "$a=-1,0,1,2,3$，共 5 个。"}], "finalAnswer": "5 个（$a=-1,0,1,2,3$）", "formulas": [{"name": "十字相乘", "latex": "(a-1)x^2+2x-(a+1)=[(a-1)x+(a+1)](x-1)", "tip": "系数和为 0 时 $x=1$ 是一个根：$(a-1)+2-(a+1)=0$。"}], "method": "分 $a=1$（一次方程）和 $a\\ne1$（二次方程）讨论；二次时发现 $x=1$ 是根，分解后让另一根为整数，转化为约数问题。"}, {"id": "q22", "original": "我们在学习“有理数的小数形式”这一节课时，学习了如何将无限循环小数化成分数形式的方法，感受了“将无限化为有限”的思想，请类比同样的方法和思想，化简 $\\sqrt{42+\\sqrt{42+\\sqrt{42+\\cdots}}}=$______。", "knowledgePoints": ["整体思想", "一元二次方程的解法"], "difficulty": 4, "timeLimitSec": 150, "steps": [{"prompt": "设 $x=\\sqrt{42+\\sqrt{42+\\cdots}}$，注意根号里面的“$\\sqrt{42+\\cdots}$”也等于 $x$，所以 $x=$ ？", "type": "choice", "answer": "B", "hint": "无限嵌套，去掉最外层还是同样的东西。", "explanation": "$x=\\sqrt{42+x}$。", "options": ["$\\sqrt{42}$", "$\\sqrt{42+x}$", "$42+x$", "$x^2$"]}, {"prompt": "两边平方得 $x^2-x-42=0$，因式分解 $(x-7)(x+6)=0$。正的根是？", "type": "number", "answer": "7", "hint": "$x$ 是算术平方根，必须为正。", "explanation": "$x=7$（$x=-6$ 舍去）。"}], "finalAnswer": "$7$", "formulas": [{"name": "整体换元", "latex": "x=\\sqrt{a+x}\\Rightarrow x^2-x-a=0", "tip": "无限循环/嵌套的结构，设为 x 后用“自相似”列方程。"}], "method": "设整体为 x，利用自相似得 $x=\\sqrt{42+x}$，平方后解一元二次方程，舍去负根。"}, {"id": "q23-1", "original": "23.（1）化简与计算：$\\sqrt{75}-\\dfrac23\\sqrt{27}-(\\sqrt3-1)^0+\\dfrac{3}{\\sqrt3+1}$", "knowledgePoints": ["二次根式的化简", "零指数幂", "分母有理化", "二次根式的加减"], "difficulty": 3, "timeLimitSec": 240, "steps": [{"prompt": "$\\sqrt{75}=$ ？", "type": "number", "answer": "5√3", "hint": "$75=25\\times3$。", "explanation": "$\\sqrt{75}=5\\sqrt3$。", "acceptable": ["5sqrt(3)", "5*√3", "5√(3)"]}, {"prompt": "$\\dfrac23\\sqrt{27}=$ ？（$\\sqrt{27}=3\\sqrt3$）", "type": "number", "answer": "2√3", "hint": "$\\dfrac23\\times3\\sqrt3$。", "explanation": "$\\dfrac23\\times3\\sqrt3=2\\sqrt3$。", "acceptable": ["2sqrt(3)", "2*√3"]}, {"prompt": "$(\\sqrt3-1)^0=$ ？　$\\dfrac{3}{\\sqrt3+1}$ 分母有理化后等于？", "type": "choice", "answer": "A", "hint": "任何非零数的 0 次幂是 1；分子分母同乘 $\\sqrt3-1$。", "explanation": "$(\\sqrt3-1)^0=1$；$\\dfrac{3(\\sqrt3-1)}{(\\sqrt3+1)(\\sqrt3-1)}=\\dfrac{3\\sqrt3-3}{2}$。", "options": ["$1$；$\\dfrac{3\\sqrt3-3}{2}$", "$0$；$\\dfrac{3\\sqrt3-3}{2}$", "$1$；$3\\sqrt3-3$", "$0$；$\\dfrac{3\\sqrt3+3}{4}$"]}, {"prompt": "合并：$5\\sqrt3-2\\sqrt3-1+\\dfrac{3\\sqrt3-3}{2}=$ ？", "type": "choice", "answer": "C", "hint": "先通分成分母 2：$\\dfrac{6\\sqrt3-2+3\\sqrt3-3}{2}$。", "explanation": "$3\\sqrt3-1+\\dfrac{3\\sqrt3}{2}-\\dfrac32=\\dfrac{9\\sqrt3-5}{2}$。", "options": ["$\\dfrac{9\\sqrt3-3}{2}$", "$3\\sqrt3$", "$\\dfrac{9\\sqrt3-5}{2}$", "$\\dfrac{3\\sqrt3-5}{2}$"]}], "finalAnswer": "$\\dfrac{9\\sqrt3-5}{2}$", "formulas": [{"name": "分母有理化", "latex": "\\dfrac{1}{\\sqrt a+\\sqrt b}=\\dfrac{\\sqrt a-\\sqrt b}{a-b}", "tip": "分子分母同乘分母的“有理化因式”（平方差）。"}, {"name": "零指数幂", "latex": "a^0=1\\ (a\\ne0)", "tip": "$\\sqrt3-1\\ne0$，所以等于 1。"}, {"name": "二次根式的性质", "latex": "\\sqrt{a^2}=|a|=\\begin{cases}a,&a\\ge0\\\\-a,&a<0\\end{cases}", "tip": "开方出来先加绝对值，再根据正负去掉绝对值。"}], "method": "先把每一项化成最简二次根式、算零次幂、分母有理化，最后合并同类二次根式。"}, {"id": "q23-2", "original": "23.（2）化简与计算：$\\dfrac12x\\sqrt{4x}+6x\\sqrt{\\dfrac x9}-2x^2\\sqrt{\\dfrac1x}$", "knowledgePoints": ["二次根式的化简", "同类二次根式", "二次根式的加减"], "difficulty": 3, "timeLimitSec": 180, "steps": [{"prompt": "$\\dfrac12x\\sqrt{4x}=$ ？", "type": "choice", "answer": "A", "hint": "$\\sqrt{4x}=2\\sqrt x$。", "explanation": "$\\dfrac12x\\cdot2\\sqrt x=x\\sqrt x$。", "options": ["$x\\sqrt x$", "$2x\\sqrt x$", "$\\dfrac12x\\sqrt x$", "$x^2$"]}, {"prompt": "$6x\\sqrt{\\dfrac x9}=$ ？", "type": "choice", "answer": "B", "hint": "$\\sqrt{\\dfrac x9}=\\dfrac{\\sqrt x}{3}$。", "explanation": "$6x\\cdot\\dfrac{\\sqrt x}3=2x\\sqrt x$。", "options": ["$x\\sqrt x$", "$2x\\sqrt x$", "$6x\\sqrt x$", "$\\dfrac{2}{3}x\\sqrt x$"]}, {"prompt": "$2x^2\\sqrt{\\dfrac1x}=$ ？（由题意 $x>0$）", "type": "choice", "answer": "B", "hint": "$\\sqrt{\\dfrac1x}=\\dfrac{\\sqrt x}{x}$。", "explanation": "$2x^2\\cdot\\dfrac{\\sqrt x}{x}=2x\\sqrt x$。", "options": ["$2x^2\\sqrt x$", "$2x\\sqrt x$", "$\\dfrac{2x}{\\sqrt x}$", "$2\\sqrt x$"]}, {"prompt": "合并：$x\\sqrt x+2x\\sqrt x-2x\\sqrt x=$ ？", "type": "choice", "answer": "D", "hint": "都是 $x\\sqrt x$ 的同类项，系数相加。", "explanation": "$(1+2-2)x\\sqrt x=x\\sqrt x$。", "options": ["$5x\\sqrt x$", "$3x\\sqrt x$", "$0$", "$x\\sqrt x$"]}], "finalAnswer": "$x\\sqrt x$", "formulas": [{"name": "二次根式乘除", "latex": "\\sqrt{a}\\cdot\\sqrt{b}=\\sqrt{ab},\\ \\dfrac{\\sqrt a}{\\sqrt b}=\\sqrt{\\dfrac ab}\\ (a\\ge0,b>0)", "tip": "根号里的数可以合在一起乘除。"}, {"name": "化去分母", "latex": "\\sqrt{\\dfrac1x}=\\dfrac{\\sqrt x}{x}\\ (x>0)", "tip": "被开方数有分母时，分子分母同乘使分母成为完全平方。"}], "method": "每一项都化成最简二次根式（都变成 $x\\sqrt x$ 的倍数），再合并同类二次根式。"}, {"id": "q23-3", "original": "23.（3）化简与计算：$\\dfrac2b\\sqrt{ab}\\times\\left(-\\dfrac32\\sqrt{a^3b}\\right)\\div\\sqrt{\\dfrac{b}{9a}}\\ (a>0)$", "knowledgePoints": ["二次根式的乘除", "二次根式的化简"], "difficulty": 4, "timeLimitSec": 240, "steps": [{"prompt": "先算系数和根号的乘法：$\\dfrac2b\\times\\left(-\\dfrac32\\right)=-\\dfrac3b$，$\\sqrt{ab}\\cdot\\sqrt{a^3b}=\\sqrt{a^4b^2}=$ ？（由题意 $a>0,b>0$）", "type": "choice", "answer": "C", "hint": "$a^4b^2=(a^2b)^2$。", "explanation": "$\\sqrt{a^4b^2}=a^2b$，所以前两项相乘得 $-\\dfrac3b\\cdot a^2b=-3a^2$。", "options": ["$a^2\\sqrt b$", "$a^4b^2$", "$a^2b$", "$ab$"]}, {"prompt": "除以 $\\sqrt{\\dfrac b{9a}}$ 等于乘以 $\\sqrt{\\dfrac{9a}{b}}$，它化简为？", "type": "choice", "answer": "A", "hint": "$\\sqrt{\\dfrac{9a}{b}}=\\dfrac{3\\sqrt a}{\\sqrt b}$，分子分母同乘 $\\sqrt b$。", "explanation": "$\\sqrt{\\dfrac{9a}b}=\\dfrac{3\\sqrt{ab}}{b}$。", "options": ["$\\dfrac{3\\sqrt{ab}}{b}$", "$\\dfrac{9a}{b}$", "$3\\sqrt{ab}$", "$\\dfrac{\\sqrt{ab}}{3b}$"]}, {"prompt": "结果 $-3a^2\\cdot\\dfrac{3\\sqrt{ab}}{b}=$ ？", "type": "choice", "answer": "D", "hint": "系数 $-3\\times3$。", "explanation": "$-\\dfrac{9a^2\\sqrt{ab}}{b}$。", "options": ["$-9a^2\\sqrt{ab}$", "$\\dfrac{9a^2\\sqrt{ab}}{b}$", "$-\\dfrac{a^2\\sqrt{ab}}{b}$", "$-\\dfrac{9a^2\\sqrt{ab}}{b}$"]}], "finalAnswer": "$-\\dfrac{9a^2\\sqrt{ab}}{b}$", "formulas": [{"name": "二次根式乘除", "latex": "\\sqrt{a}\\cdot\\sqrt{b}=\\sqrt{ab},\\ \\dfrac{\\sqrt a}{\\sqrt b}=\\sqrt{\\dfrac ab}\\ (a\\ge0,b>0)", "tip": "根号里的数可以合在一起乘除。"}, {"name": "除法变乘法", "latex": "\\div\\sqrt{\\dfrac mn}=\\times\\sqrt{\\dfrac nm}", "tip": "除以一个根式等于乘它的倒数。"}], "method": "系数与系数相乘、被开方数与被开方数相乘；除法改成乘倒数；最后化成最简二次根式（分母中不含根号）。"}, {"id": "q23-4", "original": "23.（4）化简与计算：$\\left(\\sqrt{\\dfrac52}-\\sqrt{\\dfrac25}\\right)\\div\\left(\\dfrac1{\\sqrt2}-\\dfrac1{\\sqrt5}\\right)$", "knowledgePoints": ["二次根式的除法", "分母有理化"], "difficulty": 4, "timeLimitSec": 240, "steps": [{"prompt": "把被除式通分：$\\sqrt{\\dfrac52}-\\sqrt{\\dfrac25}=\\dfrac{\\sqrt5}{\\sqrt2}-\\dfrac{\\sqrt2}{\\sqrt5}=\\dfrac{5-2}{\\sqrt{10}}=$ ？", "type": "choice", "answer": "B", "hint": "通分的公分母是 $\\sqrt{10}$。", "explanation": "$\\dfrac{3}{\\sqrt{10}}$。", "options": ["$\\dfrac{3}{10}$", "$\\dfrac{3}{\\sqrt{10}}$", "$\\sqrt3$", "$\\dfrac{7}{\\sqrt{10}}$"]}, {"prompt": "除式通分：$\\dfrac1{\\sqrt2}-\\dfrac1{\\sqrt5}=$ ？", "type": "choice", "answer": "A", "hint": "公分母 $\\sqrt{10}$：$\\dfrac{\\sqrt5}{\\sqrt{10}}-\\dfrac{\\sqrt2}{\\sqrt{10}}$。", "explanation": "$\\dfrac{\\sqrt5-\\sqrt2}{\\sqrt{10}}$。", "options": ["$\\dfrac{\\sqrt5-\\sqrt2}{\\sqrt{10}}$", "$\\dfrac{\\sqrt2-\\sqrt5}{\\sqrt{10}}$", "$\\dfrac{1}{\\sqrt3}$", "$\\dfrac{3}{\\sqrt{10}}$"]}, {"prompt": "相除得 $\\dfrac{3}{\\sqrt5-\\sqrt2}$，分母有理化后等于？", "type": "choice", "answer": "C", "hint": "分子分母同乘 $\\sqrt5+\\sqrt2$，分母变成 $5-2=3$。", "explanation": "$\\dfrac{3(\\sqrt5+\\sqrt2)}{3}=\\sqrt5+\\sqrt2$。", "options": ["$\\sqrt5-\\sqrt2$", "$3(\\sqrt5+\\sqrt2)$", "$\\sqrt5+\\sqrt2$", "$1$"]}], "finalAnswer": "$\\sqrt5+\\sqrt2$", "formulas": [{"name": "分母有理化", "latex": "\\dfrac{1}{\\sqrt a+\\sqrt b}=\\dfrac{\\sqrt a-\\sqrt b}{a-b}", "tip": "分子分母同乘分母的“有理化因式”（平方差）。"}, {"name": "平方差公式", "latex": "(a+b)(a-b)=a^2-b^2", "tip": "含根号的和差相乘可以消掉根号。"}], "method": "两个括号分别通分（公分母 $\\sqrt{10}$），$\\sqrt{10}$ 约掉后再分母有理化。"}, {"id": "q24", "original": "解不等式：$\\sqrt2(x-\\sqrt2)<\\sqrt3(x+\\sqrt3)$", "knowledgePoints": ["一元一次不等式", "分母有理化"], "difficulty": 4, "timeLimitSec": 240, "steps": [{"prompt": "去括号：$\\sqrt2x-2<\\sqrt3x+3$，移项合并得 $(\\sqrt2-\\sqrt3)x<$ ？", "type": "number", "answer": "5", "hint": "把常数移到右边：$3+2$。", "explanation": "$(\\sqrt2-\\sqrt3)x<5$。"}, {"prompt": "$\\sqrt2-\\sqrt3$ 是正数还是负数？两边除以它时不等号方向怎么变？", "type": "choice", "answer": "B", "hint": "$\\sqrt2<\\sqrt3$。", "explanation": "$\\sqrt2-\\sqrt3<0$，除以负数不等号要改变方向：$x>\\dfrac{5}{\\sqrt2-\\sqrt3}$。", "options": ["正数，方向不变", "负数，方向改变", "负数，方向不变", "正数，方向改变"]}, {"prompt": "$\\dfrac{5}{\\sqrt2-\\sqrt3}$ 分母有理化后等于？", "type": "choice", "answer": "D", "hint": "分子分母同乘 $\\sqrt2+\\sqrt3$，分母 $2-3=-1$。", "explanation": "$\\dfrac{5(\\sqrt2+\\sqrt3)}{-1}=-5\\sqrt2-5\\sqrt3$，所以 $x>-5\\sqrt2-5\\sqrt3$。", "options": ["$5\\sqrt2+5\\sqrt3$", "$5\\sqrt3-5\\sqrt2$", "$-5$", "$-5\\sqrt2-5\\sqrt3$"]}], "finalAnswer": "$x>-5\\sqrt2-5\\sqrt3$", "formulas": [{"name": "不等式性质 3", "latex": "a<b,\\ c<0\\Rightarrow ac>bc", "tip": "两边乘或除以同一个负数，不等号方向改变。"}, {"name": "分母有理化", "latex": "\\dfrac{1}{\\sqrt a+\\sqrt b}=\\dfrac{\\sqrt a-\\sqrt b}{a-b}", "tip": "分子分母同乘分母的“有理化因式”（平方差）。"}], "method": "按解一元一次不等式的步骤做；关键是判断系数 $\\sqrt2-\\sqrt3$ 为负，除过去要变号，最后分母有理化。"}, {"id": "q25", "original": "用配方法解方程：$2x^2-3x-4=0$", "knowledgePoints": ["配方法"], "difficulty": 3, "timeLimitSec": 240, "steps": [{"prompt": "先把二次项系数化为 1 并移项：$x^2-\\dfrac32x=$ ？", "type": "number", "answer": "2", "hint": "两边同除以 2，常数项移到右边。", "explanation": "$x^2-\\dfrac32x=2$。"}, {"prompt": "两边加上一次项系数一半的平方，即 $\\left(\\dfrac34\\right)^2=$ ？", "type": "number", "answer": "9/16", "hint": "一次项系数 $-\\dfrac32$ 的一半是 $-\\dfrac34$。", "explanation": "加 $\\dfrac9{16}$，得 $\\left(x-\\dfrac34\\right)^2=2+\\dfrac9{16}=\\dfrac{41}{16}$。", "acceptable": ["0.5625"]}, {"prompt": "开平方解得 $x=$ ？", "type": "choice", "answer": "A", "hint": "$x-\\dfrac34=\\pm\\dfrac{\\sqrt{41}}{4}$。", "explanation": "$x_1=\\dfrac{3+\\sqrt{41}}4,\\ x_2=\\dfrac{3-\\sqrt{41}}4$。", "options": ["$\\dfrac{3\\pm\\sqrt{41}}{4}$", "$\\dfrac{3\\pm\\sqrt{41}}{2}$", "$\\dfrac{-3\\pm\\sqrt{41}}{4}$", "$\\dfrac34\\pm\\sqrt{41}$"]}], "finalAnswer": "$x_1=\\dfrac{3+\\sqrt{41}}{4},\\ x_2=\\dfrac{3-\\sqrt{41}}{4}$", "formulas": [{"name": "配方法", "latex": "x^2+px=q\\Rightarrow\\left(x+\\dfrac p2\\right)^2=q+\\dfrac{p^2}{4}", "tip": "先化二次项系数为 1，再两边同加“一次项系数一半的平方”。"}], "method": "化 1 → 移项 → 配方（加一次项系数一半的平方）→ 开平方 → 求解。"}, {"id": "q26", "original": "解关于 $x$ 的方程：$x^2-|x|-1=0$", "knowledgePoints": ["含绝对值的方程", "换元法", "公式法"], "difficulty": 4, "timeLimitSec": 240, "steps": [{"prompt": "因为 $x^2=|x|^2$，设 $t=|x|$，方程变成 $t^2-t-1=0$。$t$ 必须满足？", "type": "choice", "answer": "B", "hint": "绝对值是什么样的数？", "explanation": "$t=|x|\\ge0$。", "options": ["$t>1$", "$t\\ge0$", "$t<0$", "任意实数"]}, {"prompt": "用求根公式：$t=\\dfrac{1\\pm\\sqrt5}{2}$。哪个根要舍去？", "type": "choice", "answer": "B", "hint": "$\\sqrt5\\approx2.24$。", "explanation": "$\\dfrac{1-\\sqrt5}2<0$ 舍去，所以 $|x|=\\dfrac{1+\\sqrt5}{2}$。", "options": ["$\\dfrac{1+\\sqrt5}{2}$", "$\\dfrac{1-\\sqrt5}{2}$", "都不舍去"]}, {"prompt": "所以 $x=$ ？", "type": "choice", "answer": "C", "hint": "绝对值等于正数 $m$ 的数是 $\\pm m$。", "explanation": "$x_1=\\dfrac{1+\\sqrt5}{2},\\ x_2=-\\dfrac{1+\\sqrt5}{2}$。", "options": ["$\\dfrac{1+\\sqrt5}{2}$", "$\\dfrac{1\\pm\\sqrt5}{2}$", "$\\pm\\dfrac{1+\\sqrt5}{2}$", "$\\pm\\dfrac{1-\\sqrt5}{2}$"]}], "finalAnswer": "$x_1=\\dfrac{1+\\sqrt5}{2},\\ x_2=-\\dfrac{1+\\sqrt5}{2}$", "formulas": [{"name": "绝对值的平方", "latex": "x^2=|x|^2", "tip": "可以把 $|x|$ 当成新的未知数。"}, {"name": "求根公式", "latex": "x=\\dfrac{-b\\pm\\sqrt{b^2-4ac}}{2a}\\ (b^2-4ac\\ge0)", "tip": "先算 Δ，再代入公式。"}], "method": "把 $|x|$ 看成整体换元，解出后舍去负值，再由绝对值得到两个解。（也可分 $x\\ge0$、$x<0$ 讨论。）"}, {"id": "q27", "original": "解关于 $x$ 的方程：$(p+1)x^2-2px+p-2=0$", "knowledgePoints": ["分类讨论", "根的判别式", "公式法", "一元二次方程的定义"], "difficulty": 5, "timeLimitSec": 300, "steps": [{"prompt": "先讨论 $p+1=0$（即 $p=-1$）：方程变成 $2x-3=0$，$x=$ ？", "type": "number", "answer": "1.5", "hint": "$p=-1$ 时 $-2px=2x$，$p-2=-3$。", "explanation": "$x=\\dfrac32$。", "acceptable": ["3/2"]}, {"prompt": "$p\\ne-1$ 时是一元二次方程，$\\Delta=(-2p)^2-4(p+1)(p-2)=$ ？", "type": "choice", "answer": "A", "hint": "$4p^2-4(p^2-p-2)$。", "explanation": "$\\Delta=4p+8$。", "options": ["$4p+8$", "$8-4p$", "$4p-8$", "$8$"]}, {"prompt": "当 $\\Delta<0$ 即 $p<-2$ 时方程无实根；当 $p=-2$ 时 $\\Delta=0$，$x=\\dfrac{2p}{2(p+1)}=$ ？", "type": "number", "answer": "2", "hint": "代入 $p=-2$：$\\dfrac{-2}{-1}$。", "explanation": "$p=-2$ 时 $x_1=x_2=2$。"}, {"prompt": "当 $p>-2$ 且 $p\\ne-1$ 时，用求根公式得 $x=$ ？", "type": "choice", "answer": "C", "hint": "$x=\\dfrac{2p\\pm\\sqrt{4p+8}}{2(p+1)}$，$\\sqrt{4p+8}=2\\sqrt{p+2}$。", "explanation": "$x=\\dfrac{p\\pm\\sqrt{p+2}}{p+1}$。", "options": ["$\\dfrac{2p\\pm\\sqrt{p+2}}{p+1}$", "$\\dfrac{p\\pm\\sqrt{p-2}}{p+1}$", "$\\dfrac{p\\pm\\sqrt{p+2}}{p+1}$", "$\\dfrac{-p\\pm\\sqrt{p+2}}{p+1}$"]}], "finalAnswer": "$p=-1$ 时 $x=\\dfrac32$；$p<-2$ 时无实数根；$p=-2$ 时 $x_1=x_2=2$；$p>-2$ 且 $p\\ne-1$ 时 $x=\\dfrac{p\\pm\\sqrt{p+2}}{p+1}$", "formulas": [{"name": "根的判别式", "latex": "\\Delta=b^2-4ac", "tip": "Δ>0 两个不等实根；Δ=0 两个相等实根；Δ<0 没有实根。"}, {"name": "求根公式", "latex": "x=\\dfrac{-b\\pm\\sqrt{b^2-4ac}}{2a}\\ (b^2-4ac\\ge0)", "tip": "先算 Δ，再代入公式。"}], "method": "二次项系数含字母时必须分类：先讨论系数为 0（一次方程），再按 Δ 的正负/零讨论二次方程的根。"}, {"id": "q28", "original": "先化简，后求值：$\\dfrac{a-b}{\\sqrt a+\\sqrt b}-\\dfrac{a-4\\sqrt{ab}+4b}{2\\sqrt b-\\sqrt a}$，其中 $a=\\dfrac12$，$b=\\dfrac18$。", "knowledgePoints": ["二次根式的化简求值", "平方差公式", "完全平方公式"], "difficulty": 4, "timeLimitSec": 300, "steps": [{"prompt": "把 $a$ 看成 $(\\sqrt a)^2$，$b$ 看成 $(\\sqrt b)^2$：$\\dfrac{a-b}{\\sqrt a+\\sqrt b}=$ ？", "type": "choice", "answer": "B", "hint": "$a-b=(\\sqrt a+\\sqrt b)(\\sqrt a-\\sqrt b)$。", "explanation": "约分得 $\\sqrt a-\\sqrt b$。", "options": ["$\\sqrt a+\\sqrt b$", "$\\sqrt a-\\sqrt b$", "$a-b$", "$1$"]}, {"prompt": "$a-4\\sqrt{ab}+4b=(\\sqrt a-2\\sqrt b)^2=(2\\sqrt b-\\sqrt a)^2$，所以第二个分式 $=$ ？", "type": "choice", "answer": "A", "hint": "分子是分母的平方。", "explanation": "$\\dfrac{(2\\sqrt b-\\sqrt a)^2}{2\\sqrt b-\\sqrt a}=2\\sqrt b-\\sqrt a$。", "options": ["$2\\sqrt b-\\sqrt a$", "$\\sqrt a-2\\sqrt b$", "$\\sqrt a+2\\sqrt b$", "$1$"]}, {"prompt": "原式 $=(\\sqrt a-\\sqrt b)-(2\\sqrt b-\\sqrt a)=$ ？", "type": "choice", "answer": "D", "hint": "去括号要变号。", "explanation": "$2\\sqrt a-3\\sqrt b$。", "options": ["$-3\\sqrt b$", "$2\\sqrt a-\\sqrt b$", "$-\\sqrt b$", "$2\\sqrt a-3\\sqrt b$"]}, {"prompt": "代入 $\\sqrt a=\\sqrt{\\dfrac12}=\\dfrac{\\sqrt2}{2}$，$\\sqrt b=\\sqrt{\\dfrac18}=\\dfrac{\\sqrt2}{4}$，$2\\sqrt a-3\\sqrt b=$ ？", "type": "choice", "answer": "C", "hint": "$\\sqrt2-\\dfrac{3\\sqrt2}{4}$。", "explanation": "$\\sqrt2-\\dfrac{3\\sqrt2}4=\\dfrac{\\sqrt2}4$。⚠️ 细心的同学会发现：此时 $2\\sqrt b=\\dfrac{\\sqrt2}{2}=\\sqrt a$，原式第二个分母 $2\\sqrt b-\\sqrt a=0$，严格来说原式无意义，原卷数值可能有印刷问题，请以老师答案为准。", "options": ["$\\dfrac{\\sqrt2}{2}$", "$-\\dfrac{\\sqrt2}{2}$", "$\\dfrac{\\sqrt2}{4}$", "$\\dfrac{7\\sqrt2}{4}$"]}], "finalAnswer": "化简得 $2\\sqrt a-3\\sqrt b$，代入得 $\\dfrac{\\sqrt2}{4}$（注意：给定数值使原式分母 $2\\sqrt b-\\sqrt a=0$，严格说原式无意义，疑为题目数值有误）", "formulas": [{"name": "平方差公式", "latex": "(a+b)(a-b)=a^2-b^2", "tip": "含根号的和差相乘可以消掉根号。"}, {"name": "完全平方公式", "latex": "a\\mp2ab+b^2=(a\\mp b)^2", "tip": "$a-4\\sqrt{ab}+4b=(\\sqrt a-2\\sqrt b)^2$。"}], "method": "把 $a,b$ 看作 $(\\sqrt a)^2,(\\sqrt b)^2$，用平方差、完全平方分解后约分，化简成 $2\\sqrt a-3\\sqrt b$ 再代入。代入前应检查分母不为 0。"}]}
+</script>
+<script type="text/plain" id="ai-prompt">
+请你扮演初中数学老师。我会发给你一张试卷照片，请识别其中的数学题，并为每道题设计“分步引导”，然后只输出一个 JSON（不要输出其他文字），格式如下：
+{
+  "title": "试卷名称",
+  "date": "YYYY-MM-DD",
+  "questions": [
+    {
+      "id": "q1",
+      "original": "完整原题，数学式子用 $...$ 包裹的 LaTeX，例如 $3(x-2)=2x+1$",
+      "knowledgePoints": ["知识点，如 一元一次方程"],
+      "difficulty": 1到5的整数,
+      "timeLimitSec": 建议用时秒数,
+      "steps": [
+        {
+          "prompt": "一个小的引导问题",
+          "type": "choice 或 number 或 text",
+          "options": ["仅 choice 需要，选项文字"],
+          "answer": "正确答案（choice 填 A/B/C/D；number 填数字或分数如 -1/2；text 填简短式子如 4x+5）",
+          "acceptable": ["其它可接受的写法，可省略"],
+          "hint": "答错时给的温和提示，不直接说答案",
+          "explanation": "这一步的详细解析"
+        }
+      ],
+      "finalAnswer": "最终答案",
+      "formulas": [{"name": "公式名称", "latex": "LaTeX 公式（不加 $）", "tip": "记忆要点"}],
+      "method": "解题思路总结"
+    }
+  ]
+}
+要求：
+1. 每道题拆成 2~4 个步骤，每步只考一个小点，答案尽量是一个数字、一个选项或很短的式子；
+2. 优先用 number 或 choice 类型，text 类型请在 acceptable 里列出常见等价写法；
+3. JSON 字符串里的反斜杠要写成两个，例如 "\\frac{1}{2}"；
+4. 看不清的题请在 original 里注明“（看不清，已按推测补全）”。
+</script>
+<script>
+(function(){
+'use strict';
+/* ========== 基础工具 ========== */
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const pad = n => String(n).padStart(2,'0');
+const dstr = d => d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate());
+const today = () => dstr(new Date());
+const addDays = (ds,n) => { const [y,m,d] = ds.split('-').map(Number); const t = new Date(y,m-1,d+n); return dstr(t); };
+const dayDiff = (a,b) => { const [y1,m1,d1]=a.split('-').map(Number),[y2,m2,d2]=b.split('-').map(Number); return Math.round((new Date(y2,m2-1,d2)-new Date(y1,m1-1,d1))/864e5); };
+const fmtTime = sec => { sec=Math.max(0,Math.round(sec)); return pad(Math.floor(sec/60))+':'+pad(sec%60); };
+const pick = arr => arr[Math.floor(Math.random()*arr.length)];
+const INTERVALS = [1,2,4,7,15];
+const BUILTIN_RAW = [['demo-pack','内置示例'],['builtin-pack-2','试卷原题']].map(([id,tag])=>{ try{ const o = JSON.parse(document.getElementById(id).textContent); o.__tag = tag; return o; }catch(e){ return null; } }).filter(Boolean);
+let BUILTINS = [];
+function initBuiltins(){ BUILTINS = BUILTIN_RAW.map(o=>{ try{ const {pack} = validatePack(o); pack.builtin = true; pack.tag = o.__tag; pack.importedAt = 0; return pack; }catch(e){ console.warn('内置题包校验失败', e.message); return null; } }).filter(Boolean); }
+const DEMO = {id:'demo-pack-v1'};
+const AI_PROMPT = document.getElementById('ai-prompt').textContent.trim();
+
+/* ========== 数学渲染（KaTeX，离线降级为纯文本） ========== */
+function fallbackTex(t){
+  let s = t.replace(/\\cdots|\\ldots|\\dots/g,'…').replace(/\\left|\\right/g,'').replace(/\\[dt]frac/g,'\\frac');
+  for(let i=0;i<4;i++){
+    const w = x => /^[\w.]+$/.test(x) ? x : '('+x+')';
+    s = s.replace(/\\frac\{([^{}]*)\}\{([^{}]*)\}/g,(m,a,b)=>w(a)+'/'+w(b)).replace(/\\sqrt\{([^{}]*)\}/g,(m,a)=>'√'+w(a));
+  }
+  s = s.replace(/\\frac\s*(\\[a-zA-Z]+|\w)\s*(\\[a-zA-Z]+|\w)/g,'$1/$2').replace(/\\sqrt\s*(\\[a-zA-Z]+|\w)/g,'√$1');
+  s = s.replace(/\\begin\{cases\}/g,'{ ').replace(/\\end\{cases\}/g,'').replace(/\\\\/g,'； ').replace(/&/g,'')
+    .replace(/\\times/g,'×').replace(/\\div/g,'÷').replace(/\\cdot/g,'·').replace(/\\pm/g,'±').replace(/\\le(q)?(?![a-z])/g,'≤').replace(/\\ge(q)?(?![a-z])/g,'≥')
+    .replace(/\\ne(q)?(?![a-z])/g,'≠').replace(/\\angle/g,'∠').replace(/\\triangle/g,'△').replace(/\\circ/g,'°').replace(/\\pi/g,'π')
+    .replace(/\\Rightarrow/g,'⇒').replace(/\\to/g,'→').replace(/\\square/g,'□').replace(/\\cdots|\\ldots|\\dots/g,'…').replace(/\\dot\{?(\w)\}?/g,'$1\u0307').replace(/\\quad|\\qquad|\\[ ,;!]/g,' ')
+    .replace(/\\left|\\right/g,'').replace(/\\(mathrm|text|textbf|mathbf|operatorname)/g,'').replace(/\^2/g,'²').replace(/\^3/g,'³')
+    .replace(/\\([a-zA-Z]+)/g,'$1').replace(/[{}]/g,'');
+  return s;
+}
+function tex(str){
+  str = String(str ?? '');
+  const parts = str.split(/(\$\$[\s\S]+?\$\$|\$[^$]+?\$)/g);
+  return parts.map(p=>{
+    if(/^\$\$[\s\S]+\$\$$/.test(p) || /^\$[^$]+\$$/.test(p)){
+      const disp = p.startsWith('$$');
+      const body = disp ? p.slice(2,-2) : p.slice(1,-1);
+      if(window.katex){ try{ return katex.renderToString(body,{throwOnError:false,displayMode:disp,strict:'ignore'}); }catch(e){} }
+      return '<span class="mathfb">'+esc(fallbackTex(body))+'</span>';
+    }
+    return esc(p).replace(/\*\*([^*]+?)\*\*/g,'<b>$1</b>').replace(/\n/g,'<br>');
+  }).join('');
+}
+function texBlock(latex){ return tex('$'+String(latex||'').replace(/\$/g,'')+'$'); }
+
+/* ========== 数据存储 ========== */
+const KEY = 'mathquest_data_v1';
+function defData(){
+  return {v:1, settings:{nickname:'小数学家', goalNew:3, goalReview:true}, packs:[], attempts:[], review:{}, checkins:{}, points:0, badges:{}, daily:{}, marks:{}, hadReview:false, created:Date.now()};
+}
+let D;
+function load(){
+  try{ D = Object.assign(defData(), JSON.parse(localStorage.getItem(KEY)||'null')||{}); }catch(e){ D = defData(); }
+  D.settings = Object.assign(defData().settings, D.settings||{});
+  if(!D.marks || typeof D.marks!=='object') D.marks = {};
+}
+function save(){ try{ localStorage.setItem(KEY, JSON.stringify(D)); }catch(e){ toast('保存失败：存储空间可能已满'); } }
+load();
+initBuiltins();
+
+const allPacks = () => [...BUILTINS.map(b=>D.packs.find(p=>p.id===b.id)||b), ...D.packs.filter(p=>!BUILTINS.some(b=>b.id===p.id))];
+const isBuiltinId = id => BUILTINS.some(b=>b.id===id);
+const qk = (pid,qid) => pid+'::'+qid;
+function findQ(key){
+  const i = key.indexOf('::'); const pid = key.slice(0,i), qid = key.slice(i+2);
+  const pack = allPacks().find(p=>p.id===pid); if(!pack) return null;
+  const q = pack.questions.find(x=>String(x.id)===qid); return q ? {pack,q} : null;
+}
+function attemptsOf(key){ return D.attempts.filter(a=>a.key===key); }
+function lastAttempt(key){ for(let i=D.attempts.length-1;i>=0;i--) if(D.attempts[i].key===key) return D.attempts[i]; return null; }
+function dayRec(ds){ ds=ds||today(); return D.daily[ds] || (D.daily[ds]={newDone:[],reviewDone:[],points:0,questions:0}); }
+function dueKeys(){ const t=today(); return Object.keys(D.review).filter(k=>D.review[k].due<=t && findQ(k)); }
+
+/* ========== 答案判定（容错） ========== */
+function toHalf(s){ return s.replace(/[\uFF01-\uFF5E]/g,c=>String.fromCharCode(c.charCodeAt(0)-0xFEE0)).replace(/\u3000/g,' '); }
+function norm(s){
+  s = toHalf(String(s ?? '')).trim();
+  s = s.replace(/\$/g,'').replace(/\\left|\\right/g,'').replace(/\\cdot|\\times/g,'*').replace(/\\div/g,'/');
+  for(let i=0;i<3;i++) s = s.replace(/\\d?frac\{([^{}]*)\}\{([^{}]*)\}/g,'($1)/($2)').replace(/\\sqrt\{([^{}]*)\}/g,'√($1)');
+  s = s.replace(/[−–—﹣]/g,'-').replace(/[×✕·]/g,'*').replace(/÷/g,'/').replace(/²/g,'^2').replace(/³/g,'^3')
+       .replace(/，/g,',').replace(/。$/,'').replace(/\s+/g,'').toLowerCase();
+  s = s.replace(/(\d)\*([a-z(])/g,'$1$2').replace(/\{|\}/g,'');
+  return s;
+}
+function parseNum(raw){
+  let s = norm(raw);
+  if(!s) return null;
+  s = s.replace(/^[a-z]{1,3}(\d)?=/,'');
+  s = s.replace(/(cm|mm|km|m|kg|g|厘米|毫米|千米|米|度|°|个|元|人|天|岁)$/,'');
+  let neg = false;
+  if(/^-\(.*\)$/.test(s)){ neg = true; s = s.slice(1); }
+  if(/^\(([^()]*)\)$/.test(s)) s = s.slice(1,-1);
+  s = s.replace(/\(([^()]*)\)/g,'$1');
+  const NUM = '[+-]?(?:\\d+\\.?\\d*|\\.\\d+)';
+  let m, v = null;
+  if((m = s.match(new RegExp('^('+NUM+')%$')))) v = parseFloat(m[1])/100;
+  else if((m = s.match(new RegExp('^('+NUM+')/('+NUM+')$')))) v = parseFloat(m[1])/parseFloat(m[2]);
+  else if((m = s.match(/^([+-]?\d*\.?\d*)√(\d+\.?\d*)$/))){ const c = m[1]===''||m[1]==='+'?1:m[1]==='-'?-1:parseFloat(m[1]); v = c*Math.sqrt(parseFloat(m[2])); }
+  else if((m = s.match(new RegExp('^'+NUM+'$')))) v = parseFloat(s);
+  if(v===null || !isFinite(v)) return null;
+  return neg ? -v : v;
+}
+function decimals(raw){ const m = norm(raw).match(/\.(\d+)$/); return m ? m[1].length : 0; }
+function numEq(user, exp){
+  const a = parseNum(user), b = parseNum(exp);
+  if(a===null || b===null) return false;
+  if(Math.abs(a-b) <= 1e-9*Math.max(1,Math.abs(a),Math.abs(b))) return true;
+  const d = decimals(user);
+  if(d>=2){ const k=Math.pow(10,d); if(Math.abs(Math.round(b*k)/k-b)>1e-9 && Math.abs(a-b)<=0.5/k+1e-12) return true; } // 无限小数允许按位四舍五入
+  return false;
+}
+function choiceIndex(step, v){
+  const opts = step.options||[];
+  const ok = i => (i>=0 && i<opts.length) ? i : -1;
+  if(typeof v === 'number') return ok(v);
+  const s = String(v ?? '').trim();
+  if(/^[A-Ha-h]$/.test(s)) return ok(s.toUpperCase().charCodeAt(0)-65);
+  const n = norm(s); const i = opts.findIndex(o=>norm(o)===n);
+  if(i>=0) return i;
+  if(/^\d+$/.test(s) && +s < opts.length) return +s;
+  return -1;
+}
+function checkAnswer(step, input){
+  const cands = [step.answer, ...(step.acceptable||[])];
+  if(step.type==='choice'){ return cands.some(c=>choiceIndex(step,c)===input); }
+  const u = String(input ?? '');
+  if(!norm(u)) return false;
+  const stripVar = s => s.replace(/^[a-z]{1,3}=/,'');
+  return cands.some(c=>{
+    if(numEq(u,c)) return true;
+    const nu = norm(u), nc = norm(c);
+    if(nu===nc || stripVar(nu)===stripVar(nc)) return true;
+    return false;
+  });
+}
+window.__mqCheck = {norm, parseNum, checkAnswer, choiceIndex, allPacks: () => allPacks()}; // 便于调试
+
+/* ========== 题包校验与导入 ========== */
+function hash(s){ let h=5381; for(let i=0;i<s.length;i++) h=((h<<5)+h+s.charCodeAt(i))|0; return (h>>>0).toString(36); }
+function extractJSON(text){
+  let t = String(text||'').trim().replace(/^\uFEFF/,'');
+  const fence = t.match(/```(?:json)?\s*([\s\S]*?)```/i); if(fence) t = fence[1].trim();
+  try{ return JSON.parse(t); }catch(e){
+    const a = t.indexOf('{'), b = t.lastIndexOf('}');
+    if(a>=0 && b>a){ try{ return JSON.parse(t.slice(a,b+1)); }catch(e2){} }
+    throw new Error('JSON 格式有误：'+e.message);
+  }
+}
+function validatePack(p, idx){
+  const errs = [], warns = [];
+  const L = idx!=null ? `第${idx+1}个题包：` : '';
+  if(!p || typeof p!=='object') throw new Error(L+'不是有效的对象');
+  if(!Array.isArray(p.questions) || !p.questions.length) throw new Error(L+'缺少 questions 数组（至少 1 道题）');
+  const pack = { id: String(p.id || ('pk-'+hash((p.title||'')+'|'+(p.date||'')+'|'+p.questions.length+'|'+(p.questions[0]&&p.questions[0].original||'')))),
+    title: String(p.title || '未命名题包'), date: String(p.date || today()), questions: [], importedAt: Date.now() };
+  const ids = new Set();
+  p.questions.forEach((q,i)=>{
+    const QL = `${L}第${i+1}题`;
+    if(!q || typeof q!=='object'){ errs.push(QL+'格式错误'); return; }
+    if(!q.original) errs.push(QL+'缺少 original（原题）');
+    let id = String(q.id ?? ('q'+(i+1))); if(ids.has(id)) id = id+'_'+i; ids.add(id);
+    const steps = Array.isArray(q.steps) ? q.steps : [];
+    if(!steps.length) errs.push(QL+'缺少 steps（引导步骤）');
+    const st = steps.map((s,j)=>{
+      const SL = `${QL}第${j+1}步`;
+      let type = ['choice','number','text'].includes(s.type) ? s.type : (Array.isArray(s.options)&&s.options.length ? 'choice' : 'text');
+      if(s.answer===undefined || s.answer===null || s.answer==='') errs.push(SL+'缺少 answer');
+      if(!s.prompt) warns.push(SL+'缺少 prompt');
+      const o = {prompt:String(s.prompt||'请作答'), type, answer: s.answer, acceptable: Array.isArray(s.acceptable)?s.acceptable.map(String):[], hint:String(s.hint||'再仔细读一遍题目，想想用到了哪个知识点。'), explanation:String(s.explanation||'')};
+      if(type==='choice'){
+        o.options = Array.isArray(s.options) ? s.options.map(String) : [];
+        if(o.options.length<2) errs.push(SL+'是选择题但 options 少于 2 个');
+        else if(choiceIndex(o,o.answer)<0) errs.push(SL+'的 answer 不在 options 中（可用 "A"/"B" 或选项原文）');
+      }
+      if(typeof o.answer==='number') o.answer = type==='choice' ? o.answer : String(o.answer);
+      return o;
+    });
+    const tl = +q.timeLimitSec;
+    pack.questions.push({ id, original:String(q.original||''), knowledgePoints: (Array.isArray(q.knowledgePoints)&&q.knowledgePoints.length ? q.knowledgePoints : ['综合']).map(String),
+      difficulty: Math.min(5,Math.max(1,Math.round(+q.difficulty||2))), timeLimitSec: tl>0 ? Math.round(tl) : 180, steps: st,
+      finalAnswer: String(q.finalAnswer||''), formulas: (Array.isArray(q.formulas)?q.formulas:[]).filter(f=>f&&(f.name||f.latex)).map(f=>({name:String(f.name||'公式'),latex:String(f.latex||''),tip:String(f.tip||'')})),
+      method: String(q.method||'') });
+  });
+  if(errs.length) throw new Error(errs.slice(0,8).join('\n')+(errs.length>8?`\n…等共 ${errs.length} 处问题`:''));
+  return {pack, warns};
+}
+function importPacksFromText(text){
+  const obj = extractJSON(text);
+  let list = Array.isArray(obj) ? obj : (obj && Array.isArray(obj.packs) ? obj.packs : [obj]);
+  if(obj && obj.app==='mathquest' && obj.data) throw new Error('这是“学习进度备份”文件，请到「我的 → 数据备份」里导入。');
+  const results = list.map((p,i)=>validatePack(p, list.length>1?i:null));
+  let added=0, replaced=0, qn=0;
+  results.forEach(({pack})=>{
+    const i = D.packs.findIndex(x=>x.id===pack.id);
+    if(i>=0){ D.packs[i]=pack; replaced++; } else if(isBuiltinId(pack.id)){ D.packs.push(pack); replaced++; } else { D.packs.push(pack); added++; }
+    qn += pack.questions.length;
+  });
+  D.badges.importer = D.badges.importer || Date.now();
+  save();
+  return {added, replaced, qn, warns: results.flatMap(r=>r.warns), firstId: results[0].pack.id};
+}
+
+/* ========== 初始对错标记（家长手动标注试卷原始结果） ========== */
+const MARKS = { ok:{e:'✅',n:'对',cls:'ok'}, wrong:{e:'❌',n:'错',cls:'bad'}, skip:{e:'⭕',n:'没做',cls:'warn'} };
+const MARK_CYCLE = [null,'ok','wrong','skip'];
+const isMiss = m => m==='wrong' || m==='skip';
+function setMark(key, m){
+  if(!findQ(key)) return;
+  if(m) D.marks[key] = m; else delete D.marks[key];
+  const r = D.review[key], t = today();
+  if(isMiss(m)){
+    if(!r) D.review[key] = {level:0, due:t, count:1, reason:'initial', src:'mark', added:t};
+    else if(r.due>t){ r.due = t; r.level = 0; }
+    D.hadReview = true;
+  } else if(r && r.src==='mark'){ delete D.review[key]; }
+  save();
+}
+function markChip(key, prefix='初始'){ const m = MARKS[D.marks[key]]; return m ? `<span class="chip ${m.cls}">${prefix}${m.e}${m.n}</span>` : ''; }
+const qLabel = (q,i) => /^q\d+(-\d+)?$/i.test(String(q.id)) ? String(q.id).slice(1) : String(i+1);
+
+/* ========== 统计 ========== */
+function kpStats(){
+  const m = {};
+  D.attempts.forEach(a=>{
+    (a.kps||[]).forEach(kp=>{
+      const s = m[kp] || (m[kp] = {kp, att:0, steps:0, ok:0, clean:0, ot:0, time:0, pr:0, init:0});
+      s.att++; s.pr++; s.steps+=a.stepsTotal; s.ok+=a.stepsOk; if(!a.missed) s.clean++; if(a.overtime) s.ot++; s.time+=a.timeUsed;
+    });
+  });
+  Object.keys(D.marks).forEach(key=>{ // 试卷初始“错/没做”记为该知识点的一次失误
+    if(!isMiss(D.marks[key])) return; const f = findQ(key); if(!f) return;
+    f.q.knowledgePoints.forEach(kp=>{ const s = m[kp] || (m[kp] = {kp, att:0, steps:0, ok:0, clean:0, ot:0, time:0, pr:0, init:0}); s.att++; s.init++; s.steps += f.q.steps.length; });
+  });
+  return Object.values(m).map(s=>{
+    s.acc = s.steps ? s.ok/s.steps : 0; s.otRate = s.att ? s.ot/s.att : 0; s.avg = s.pr ? s.time/s.pr : 0;
+    s.weak = (1-s.acc) + 0.5*(1-s.clean/s.att) + 0.4*s.otRate;
+    return s;
+  }).sort((a,b)=>b.weak-a.weak);
+}
+function weakMap(){ const m={}; kpStats().forEach(s=>m[s.kp]=s.weak); return m; }
+function streak(){
+  let n=0, d=today();
+  if(!D.checkins[d]) d = addDays(d,-1);
+  while(D.checkins[d]){ n++; d = addDays(d,-1); }
+  return n;
+}
+function bestStreak(){
+  const ds = Object.keys(D.checkins).sort(); let best=0, cur=0, prev=null;
+  ds.forEach(d=>{ cur = prev && dayDiff(prev,d)===1 ? cur+1 : 1; best=Math.max(best,cur); prev=d; });
+  return best;
+}
+function goalInfo(){
+  const r = dayRec(); const due = dueKeys().length;
+  const rt = D.settings.goalReview ? r.reviewDone.length + due : 0;
+  const nt = Math.max(0, +D.settings.goalNew||0);
+  const rd = Math.min(r.reviewDone.length, rt), nd = Math.min(r.newDone.length, nt);
+  const total = rt+nt; const pct = total ? (rd+nd)/total : 1;
+  return {rt, nt, rd, nd, due, pct, done: total>0 && rd+nd>=total};
+}
+function totalStars(){ const best={}; D.attempts.forEach(a=>best[a.key]=Math.max(best[a.key]||0,a.stars)); return Object.values(best).reduce((x,y)=>x+y,0); }
+
+/* ========== 徽章 ========== */
+const BADGES = [
+  {id:'first', e:'🎉', n:'首次通关', d:'完成第一道题'},
+  {id:'perfect', e:'💯', n:'完美一题', d:'全部一次答对且不超时'},
+  {id:'hard', e:'🧗', n:'攻克难题', d:'无失误拿下难度≥4的题'},
+  {id:'speed', e:'⚡', n:'闪电侠', d:'用时不到限时一半且无失误'},
+  {id:'streak3', e:'🔥', n:'连续3天', d:'连续打卡 3 天'},
+  {id:'streak7', e:'🏆', n:'连续7天', d:'连续打卡 7 天'},
+  {id:'zero', e:'🧹', n:'错题清零', d:'把巩固队列全部攻克'},
+  {id:'ten', e:'📚', n:'勤学十题', d:'累计完成 10 次做题'},
+  {id:'goal', e:'🎯', n:'目标达成', d:'完成一次每日目标'},
+  {id:'p500', e:'💎', n:'积分达人', d:'累计获得 500 积分'},
+  {id:'importer', e:'📦', n:'题包收藏家', d:'导入第一个题包'},
+  {id:'review5', e:'🌱', n:'温故知新', d:'完成 5 次巩固复习'}
+];
+function checkBadges(ctx){
+  const got = [];
+  const give = id => { if(!D.badges[id]){ D.badges[id]=Date.now(); got.push(id); } };
+  if(D.attempts.length>=1) give('first');
+  if(D.attempts.length>=10) give('ten');
+  if(ctx){
+    if(ctx.stars===3) give('perfect');
+    if(ctx.difficulty>=4 && !ctx.missed) give('hard');
+    if(!ctx.missed && ctx.timeUsed <= ctx.limit/2) give('speed');
+  }
+  const st = streak(); if(st>=3) give('streak3'); if(st>=7) give('streak7');
+  if(D.hadReview && Object.keys(D.review).length===0) give('zero');
+  if(D.points>=500) give('p500');
+  if(goalInfo().done) give('goal');
+  if(D.attempts.filter(a=>a.mode==='review').length>=5) give('review5');
+  return got;
+}
+
+/* ========== 状态与路由 ========== */
+const S = { view:'home', tab:'home', packId:null, session:null, fTab:'f', fKp:'全部', flipped:{}, meTab:'weak' };
+const TABS = [['home','🏠','首页'],['packs','🎮','闯关'],['review','🔁','巩固'],['formulas','🧠','公式'],['me','🙋','我的']];
+function go(view, opts={}){
+  S.view = view;
+  if(TABS.some(t=>t[0]===view)) S.tab = view;
+  if(view==='pack' || view==='marks') S.tab='packs';
+  if(view==='play') S.tab = S.session && S.session.mode==='review' ? 'review' : 'packs';
+  render(); if(!opts.keepScroll) window.scrollTo(0,0);
+}
+function renderTabs(){
+  const due = dueKeys().length;
+  $('#tabs').innerHTML = TABS.map(([id,e,n])=>`<button data-act="tab" data-v="${id}" class="${S.tab===id?'on':''}" aria-label="${n}"><span class="e">${e}</span>${n}${id==='review'&&due?`<span class="badge-n">${due}</span>`:''}</button>`).join('');
+}
+function render(){
+  const v = S.view;
+  const html = v==='home'?vHome(): v==='packs'?vPacks(): v==='pack'?vPack(): v==='play'?vPlay(): v==='review'?vReview(): v==='formulas'?vFormulas(): v==='marks'?vMarks(): vMe();
+  $('#app').innerHTML = html;
+  renderTabs();
+  if(v==='play') afterPlay();
+}
+
+/* ========== 视图：首页 ========== */
+const greetWord = () => { const h=new Date().getHours(); return h<6?'夜深了，注意休息':h<11?'早上好':h<14?'中午好':h<18?'下午好':'晚上好'; };
+function ring(pct, size=96, stroke=10, color='url(#rg)'){
+  const r=(size-stroke)/2, c=2*Math.PI*r;
+  return `<svg width="${size}" height="${size}"><defs><linearGradient id="rg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#6c5ce7"/><stop offset="1" stop-color="#4fb8ff"/></linearGradient></defs>
+  <circle cx="${size/2}" cy="${size/2}" r="${r}" stroke="#eceef6" stroke-width="${stroke}" fill="none"/>
+  <circle cx="${size/2}" cy="${size/2}" r="${r}" stroke="${color}" stroke-width="${stroke}" fill="none" stroke-linecap="round" stroke-dasharray="${c}" stroke-dashoffset="${c*(1-Math.min(1,pct))}" style="transition:stroke-dashoffset .6s"/></svg>`;
+}
+function heatmap(weeks=16){
+  const t = today(); const [y,m,d] = t.split('-').map(Number); const now = new Date(y,m-1,d);
+  const dow = (now.getDay()+6)%7; // 周一=0
+  const start = addDays(t, -(weeks-1)*7 - dow);
+  let cells='';
+  for(let i=0;i<weeks*7;i++){
+    const ds = addDays(start,i);
+    if(ds>t){ cells+='<i class="fut"></i>'; continue; }
+    const q = (D.daily[ds]&&D.daily[ds].questions)||0; const ci = D.checkins[ds];
+    const l = q>=6?4: q>=4?3: q>=2?2: (q>=1||ci)?1:0;
+    cells += `<i class="l${l}${ds===t?' today':''}" title="${ds}：${q} 题${ci?' · 已打卡':''}"></i>`;
+  }
+  return `<div class="heat">${cells}</div><div class="legend">少 <i style="background:#eceef6"></i><i style="background:#d8d2ff"></i><i style="background:#ab9cff"></i><i style="background:#7f6af0"></i><i style="background:#5a45d6"></i> 多</div>`;
+}
+function nextRecommend(){
+  for(const p of allPacks()) for(const q of p.questions){ const k=qk(p.id,q.id); if(!lastAttempt(k)) return k; }
+  return null;
+}
+function vHome(){
+  const st = streak(), g = goalInfo(), checked = !!D.checkins[today()];
+  const weak = kpStats().filter(s=>s.weak>0.15).slice(0,3);
+  const rec = nextRecommend(); const recQ = rec && findQ(rec);
+  const sess = S.session && S.session.phase!=='done' ? findQ(S.session.key) : null;
+  return `
+  <div class="hero">
+    <div class="greet">${greetWord()}，</div>
+    <div class="name">${esc(D.settings.nickname)} 👋</div>
+    <div class="stats3">
+      <div class="stat"><b>${st}</b><span>连续打卡(天)</span></div>
+      <div class="stat"><b>${D.points}</b><span>积分</span></div>
+      <div class="stat"><b>${totalStars()}</b><span>⭐ 星星</span></div>
+    </div>
+  </div>
+  ${sess?`<button class="banner" data-act="resume">⏯️ <span class="grow">继续未完成的题：${esc(stripTex(sess.q.original).slice(0,18))}…</span>›</button>`:''}
+  <div class="card">
+    <div class="checkin">
+      <div class="flame">${checked?'🔥':'🕯️'}</div>
+      <div class="grow"><b>${checked?`今日已打卡，连续 ${st} 天！`:'今天还没打卡哦'}</b><div class="muted small">${checked?'坚持就是超能力 ✨':'做一道题会自动打卡，也可以直接点按钮'}</div></div>
+      <button class="btn sm ${checked?'ghost':'warn'}" data-act="checkin" ${checked?'disabled':''}>${checked?'已打卡':'打卡'}</button>
+    </div>
+  </div>
+  <div class="card">
+    <h3>🎯 今日目标</h3>
+    <div class="goalwrap">
+      <div class="ring">${ring(g.pct)}<div class="lbl"><div>${Math.round(g.pct*100)}%<small>${g.done?'已达成':'完成度'}</small></div></div></div>
+      <div class="grow">
+        ${D.settings.goalReview?`<div class="goalitem"><span class="dot ${g.rd>=g.rt?'done':''}">${g.rd>=g.rt?'✓':'🔁'}</span>完成今日巩固 <b>${g.rd}/${g.rt}</b></div>`:''}
+        <div class="goalitem"><span class="dot ${g.nd>=g.nt?'done':''}">${g.nd>=g.nt?'✓':'✏️'}</span>挑战新题 <b>${g.nd}/${g.nt}</b></div>
+        <div class="muted small" style="margin-top:6px">${g.done?'今天的目标完成啦，太厉害了！🎉':'一点一点来，你可以的 💪'}</div>
+      </div>
+    </div>
+  </div>
+  <div class="quick">
+    <button class="qcard g1" data-act="tab" data-v="review"><div class="big">${g.due}</div><div><div class="t">今日巩固</div><div class="s">${g.due?'错题和超时题待复习':'暂无待复习，真棒'}</div></div></button>
+    <button class="qcard g4" data-act="${rec?'start':'tab'}" data-k="${esc(rec||'')}" data-v="packs"><div class="big">✏️</div><div><div class="t">${rec?'推荐下一题':'去闯关'}</div><div class="s">${recQ?esc(recQ.q.knowledgePoints.join('、')):'所有题目都做过啦'}</div></div></button>
+    <button class="qcard g3" data-act="tab" data-v="formulas"><div class="big">🧠</div><div><div class="t">公式速记</div><div class="s">翻卡片，记得牢</div></div></button>
+    <button class="qcard g2" data-act="import"><div class="big">📥</div><div><div class="t">导入题包</div><div class="s">粘贴 AI 生成的 JSON</div></div></button>
+  </div>
+  ${weak.length?`<div class="card"><h3>🔍 需要加强 <span class="sp grow"></span><button class="chip" data-act="tab" data-v="me">查看分析 ›</button></h3>
+    ${weak.map((s,i)=>`<div class="weakpill"><span class="n">${i+1}</span><div class="grow"><b>${esc(s.kp)}</b><div class="muted small">正确率 ${Math.round(s.acc*100)}% · 超时 ${s.ot} 次</div></div><button class="btn sm white" data-act="fkp" data-v="${esc(s.kp)}">复习公式</button></div>`).join('')}</div>`:''}
+  <div class="card"><h3>📅 学习足迹 <span class="grow"></span><span class="muted small">最长连续 ${bestStreak()} 天</span></h3>${heatmap()}</div>`;
+}
+const stripTex = s => fallbackTex(String(s||'').replace(/\$/g,''));
+
+/* ========== 视图：题包列表 / 题目列表 ========== */
+function qStatus(key){
+  const a = lastAttempt(key); const mk = markChip(key);
+  if(!a) return {chip:(mk?mk+' ':'')+'<span class="chip gray">未练习</span>'+(D.review[key]?` <span class="chip">🔁 ${D.review[key].due<=today()?'今日复习':D.review[key].due.slice(5)+' 复习'}</span>`:''), stars:0};
+  const best = Math.max(...attemptsOf(key).map(x=>x.stars));
+  const chips = mk ? [mk] : [];
+  if(a.missed) chips.push('<span class="chip bad">✗ 错题</span>');
+  if(a.overtime) chips.push('<span class="chip warn">⏱ 超时</span>');
+  if(!a.missed && !a.overtime) chips.push('<span class="chip ok">✓ 已通关</span>');
+  if(D.review[key]) chips.push(`<span class="chip">🔁 ${D.review[key].due<=today()?'今日复习':D.review[key].due.slice(5)+' 复习'}</span>`);
+  return {chip:chips.join(' '), stars:best};
+}
+const starStr = (n,max=3) => '★'.repeat(n)+`<span class="off">${'★'.repeat(max-n)}</span>`;
+const diffStr = n => `<span class="stars">${'●'.repeat(n)}<span class="off">${'●'.repeat(5-n)}</span></span>`;
+function vPacks(){
+  const sess = S.session && S.session.phase!=='done' ? findQ(S.session.key) : null;
+  return `<div class="topbar"><h1>🎮 闯关做题</h1><span class="sp"></span><button class="btn sm" data-act="import">📥 导入题包</button></div>
+  ${sess?`<button class="banner" data-act="resume">⏯️ <span class="grow">继续未完成的题</span>›</button>`:''}
+  ${allPacks().map(p=>{
+    const keys = p.questions.map(q=>qk(p.id,q.id)); const done = keys.filter(k=>lastAttempt(k)).length;
+    const kps = [...new Set(p.questions.flatMap(q=>q.knowledgePoints))];
+    return `<div class="card"><button class="packcard" data-act="openpack" data-v="${esc(p.id)}">
+      <div class="row"><div class="ic" style="width:48px;height:48px;border-radius:16px;display:grid;place-items:center;font-size:24px;background:${p.tag==='试卷原题'||(!p.builtin)?'#e3f8f0':'#efecff'}">${p.tag==='内置示例'?'🌟':'📄'}</div>
+      <div class="grow"><div style="font-weight:800">${esc(p.title)}</div><div class="muted small">${esc(p.date)} · ${p.questions.length} 道题 ${p.builtin?'· '+esc(p.tag||'内置'):isBuiltinId(p.id)?'· 已更新':''}</div></div><span class="muted">›</span></div>
+      <div class="chips" style="margin:10px 0">${kps.slice(0,5).map(k=>`<span class="chip">${esc(k)}</span>`).join('')}</div>
+      <div class="row"><div class="prog grow"><i style="width:${done/p.questions.length*100}%"></i></div><span class="muted small">${done}/${p.questions.length}</span></div>
+    </button></div>`;}).join('')}
+  <div class="card" style="background:linear-gradient(135deg,#f3f0ff,#fff)">
+    <h3>📸 怎么添加新题？</h3>
+    <div class="muted small">1. 家长拍下试卷，连同“AI 提示词”一起发给 AI 助手；<br>2. AI 返回一段 JSON 题包；<br>3. 点「导入题包」粘贴或选择 .json 文件即可。</div>
+    <div class="row" style="margin-top:10px"><button class="btn sm ghost" data-act="copyprompt">📋 复制 AI 提示词</button></div>
+  </div>`;
+}
+function vPack(){
+  const p = allPacks().find(x=>x.id===S.packId); if(!p){ S.view='packs'; return vPacks(); }
+  return `<div class="topbar"><button class="iconbtn" data-act="tab" data-v="packs">‹</button><h1 class="grow" style="font-size:19px">${esc(p.title)}</h1></div>
+  <div class="muted small" style="padding:0 4px">${esc(p.date)} · 共 ${p.questions.length} 题 · 点击题目开始闯关</div>
+  ${markSummaryCard(p)}
+  ${p.questions.map((q,i)=>{ const k=qk(p.id,q.id), s=qStatus(k);
+    return `<button class="qrow" data-act="start" data-k="${esc(k)}"><div class="qnum" style="${qLabel(q,i).length>2?'font-size:12px':''}">${esc(qLabel(q,i))}</div><div class="grow">
+      <div class="txt">${tex(q.original)}</div>
+      <div class="row wrap" style="margin-top:8px;gap:6px">${q.knowledgePoints.map(x=>`<span class="chip gray">${esc(x)}</span>`).join('')}</div>
+      <div class="row between" style="margin-top:8px"><span class="small muted">难度 ${diffStr(q.difficulty)} · ⏱ ${fmtTime(q.timeLimitSec)}</span><span class="stars">${starStr(s.stars)}</span></div>
+      <div style="margin-top:6px">${s.chip}</div></div></button>`;}).join('')}
+  ${p.builtin?'':isBuiltinId(p.id)?`<button class="btn danger block" style="margin-top:16px" data-act="delpack" data-v="${esc(p.id)}">↩️ 恢复为内置版本</button>`:`<button class="btn danger block" style="margin-top:16px" data-act="delpack" data-v="${esc(p.id)}">🗑️ 删除这个题包</button>`}`;
+}
+
+function markCounts(p){ const c={ok:0,wrong:0,skip:0,none:0}; p.questions.forEach(q=>{ const m=D.marks[qk(p.id,q.id)]; c[m||'none']++; }); return c; }
+function markSummaryCard(p){
+  const c = markCounts(p);
+  return `<div class="card" style="background:linear-gradient(135deg,#fff8ef,#fff)"><div class="row between"><div><b>📝 试卷初始对错</b><div class="muted small">✅ ${c.ok} · ❌ ${c.wrong} · ⭕ ${c.skip} · 未标 ${c.none}</div></div><button class="btn sm warn" data-act="openmarks" data-v="${esc(p.id)}">批量标记</button></div>
+  <div class="muted small" style="margin-top:6px">标为 ❌错 / ⭕没做 的题会计入薄弱项，并从今天起进入每日巩固。</div></div>`;
+}
+function vMarks(){
+  const p = allPacks().find(x=>x.id===S.packId); if(!p){ S.view='packs'; return vPacks(); }
+  const c = markCounts(p);
+  return `<div class="topbar"><button class="iconbtn" data-act="openpack" data-v="${esc(p.id)}">‹</button><h1 class="grow" style="font-size:19px">📝 标记初始对错</h1></div>
+  <div class="muted small" style="padding:0 4px">${esc(p.title)}<br>对照孩子<b>原始作答</b>标记：点题号可循环切换（未标→✅→❌→⭕），或直接点右侧按钮；再点一次已选中的按钮即取消。</div>
+  <div class="card" style="position:sticky;top:6px;z-index:4;padding:12px 14px"><div class="row between"><div class="chips"><span class="chip ok">✅ ${c.ok}</span><span class="chip bad">❌ ${c.wrong}</span><span class="chip warn">⭕ ${c.skip}</span><span class="chip gray">未标 ${c.none}</span></div>
+  ${c.none?`<button class="btn sm ghost" data-act="markrest" data-v="${esc(p.id)}">未标的全设为✅</button>`:''}</div></div>
+  <div class="card" style="padding:4px 12px">${p.questions.map((q,i)=>{ const k=qk(p.id,q.id), m=D.marks[k];
+    return `<div class="mrow"><button class="mnum ${m?MARKS[m].cls:''}" data-act="cyclemark" data-k="${esc(k)}" aria-label="第${esc(qLabel(q,i))}题，点按切换"><span>${esc(qLabel(q,i))}</span><i>${m?MARKS[m].e:'·'}</i></button>
+      <div class="grow mprev">${esc(stripTex(q.original).replace(/\s+/g,' ').slice(0,60))}<div class="muted" style="font-size:11.5px">${q.knowledgePoints.map(esc).join('、')}</div></div>
+      <div class="mseg">${['ok','wrong','skip'].map(x=>`<button class="${m===x?'on '+MARKS[x].cls:''}" data-act="setmark" data-k="${esc(k)}" data-v="${x}" title="${MARKS[x].n}">${MARKS[x].e}</button>`).join('')}</div></div>`;}).join('')}</div>
+  <button class="btn block" data-act="openpack" data-v="${esc(p.id)}" style="margin-top:6px">完成</button>`;
+}
+
+/* ========== 视图：闯关做题 ========== */
+const MSG_OK = ['漂亮！✨','完全正确！','思路很清晰 👍','太棒了，继续保持！','稳！就是这样 💪','答对啦，你真行！'];
+const MSG_WRONG = ['差一点点！看看提示再试一次 💪','别急，错误是学习的一部分～','思路已经在路上了，再想想！','没关系，换个角度试试看 🌱','深呼吸，结合提示再来一次 😊'];
+const MSG_MISS = ['这一步有点难，我们一起看看解析 📖','没关系，弄懂比做对更重要！','记下这个小坑，下次就能轻松跨过 ✨','学会了就是赚到，继续加油！'];
+function startQ(key, mode='normal', queue=null){
+  const f = findQ(key); if(!f){ toast('找不到这道题'); return; }
+  const isReview = mode==='review' || (D.review[key] && D.review[key].due<=today());
+  S.session = { key, mode: isReview?'review':'normal', queue: queue||null, stepIdx:0, tries:0, results:[], elapsed:0, overtime:false, phase:'answer', fb:null, draft:'', sel:null, points:0, startedAt:Date.now() };
+  go('play');
+}
+function vPlay(){
+  const ss = S.session; if(!ss){ S.view='packs'; return vPacks(); }
+  const f = findQ(ss.key); if(!f){ S.session=null; S.view='packs'; return vPacks(); }
+  const {pack,q} = f; const n = q.steps.length;
+  const qi = pack.questions.indexOf(q)+1;
+  const head = `<div class="playhead"><button class="iconbtn" data-act="quit">‹</button>
+    <div class="grow"><div style="font-weight:800;font-size:15px">${ss.mode==='review'?'🔁 巩固复习':'第 '+esc(qLabel(q,qi-1))+' 题'} ${ss.queue?`<span class="muted small">(${ss.queue.indexOf(ss.key)+1}/${ss.queue.length})</span>`:''}</div><div class="small muted">难度 ${diffStr(q.difficulty)}</div></div>
+    <div class="timer" id="timer">⏱ <span id="tval">--:--</span></div></div>
+    <div class="tbar" id="tbar"><i style="width:100%"></i></div>`;
+  const curM = D.marks[ss.key];
+  const markRow = `<div class="markrow"><span class="muted small">试卷初始结果</span><span class="grow"></span>${['ok','wrong','skip'].map(x=>`<button class="mpill ${curM===x?'on '+MARKS[x].cls:''}" data-act="setmark" data-k="${esc(ss.key)}" data-v="${x}">${MARKS[x].e} ${MARKS[x].n}</button>`).join('')}</div>`;
+  const orig = `<div class="card orig"><div class="lab">原题 · ${q.knowledgePoints.map(esc).join(' · ')}</div>${tex(q.original)}${markRow}</div>`;
+  const dots = `<div class="stepdots">${q.steps.map((s,i)=>`<i class="${ss.results[i]?ss.results[i].status:(i===ss.stepIdx&&ss.phase!=='done'?'cur':'')}"></i>`).join('')}</div>`;
+  const done = ss.results.map((r,i)=> (i<ss.stepIdx || ss.phase==='done') ? `<div class="donestep"><span class="b" style="background:${r.status==='missed'?'var(--bad)':'var(--ok)'}">${r.status==='missed'?'!':'✓'}</span><div class="grow"><div class="muted small">第 ${i+1} 步</div>${tex(q.steps[i].prompt)}<div class="small" style="margin-top:4px">答案：<b>${tex(answerText(q.steps[i]))}</b></div></div></div>` : '').join('');
+  if(ss.phase==='done') return head + orig + dots + vResult(q, ss) + `<details class="card"><summary style="font-weight:700;cursor:pointer">查看全部步骤</summary>${done}</details>`;
+  const st = q.steps[ss.stepIdx];
+  let input = '';
+  const locked = ss.phase==='feedback';
+  if(st.type==='choice'){
+    const right = locked ? choiceIndex(st, st.answer) : -1;
+    input = `<div class="opts">${st.options.map((o,i)=>{
+      let cls = ss.sel===i?'sel':''; if(locked){ if(i===right) cls='right'; else if(ss.sel===i) cls='wrong'; }
+      return `<button class="opt ${cls}" data-act="sel" data-v="${i}" ${locked?'disabled':''}><span class="k">${String.fromCharCode(65+i)}</span><span class="grow">${tex(o)}</span></button>`;}).join('')}</div>`;
+  } else {
+    input = `<input id="ans" class="ans" type="text" autocomplete="off" autocapitalize="off" spellcheck="false" ${st.type==='number'?'inputmode="text"':''} placeholder="${st.type==='number'?'输入数字，可写分数如 3/4':'输入你的答案'}" value="${esc(ss.draft)}" ${locked?'disabled':''}>
+    ${locked?'':`<div class="keys">${(st.type==='number'?['-','/','.','√']:['x','y','^2','+','-','(',')']).map(k=>`<button data-act="key" data-v="${esc(k)}">${k==='^2'?'x²':esc(k)}</button>`).join('')}</div>`}`;
+  }
+  let fb = '';
+  if(ss.fb){
+    const F = ss.fb;
+    if(F.kind==='ok') fb = `<div class="fb ok pop"><b class="t">✅ ${esc(F.msg)} ${F.pts?`<span class="chip ok">+${F.pts} 积分</span>`:''}</b>${st.explanation?tex(st.explanation):''}</div>`;
+    else if(F.kind==='wrong') fb = `<div class="fb bad pop"><b class="t">🤔 ${esc(F.msg)}</b>还有 1 次机会</div><div class="fb hint pop"><b class="t">💡 提示</b>${tex(st.hint)}</div>`;
+    else if(F.kind==='miss') fb = `<div class="fb bad pop"><b class="t">🌱 ${esc(F.msg)}</b>正确答案：<b>${tex(answerText(st))}</b></div><div class="fb exp pop"><b class="t">📖 解析</b>${tex(st.explanation||'对照正确答案再想一想。')}</div>`;
+  }
+  const actions = locked
+    ? `<button class="btn block ${ss.stepIdx===n-1?'ok':''}" data-act="next" style="margin-top:14px">${ss.stepIdx===n-1?'🏁 完成本题':'下一步 →'}</button>`
+    : `<button class="btn block" data-act="submit" style="margin-top:14px">提交答案</button>`;
+  return head + orig + dots + done + `<div class="card stepcard" id="stepcard"><span class="steplab">第 ${ss.stepIdx+1} / ${n} 步</span><div class="prompt">${tex(st.prompt)}</div>${input}${fb}${actions}</div>`;
+}
+function answerText(st){
+  if(st.type==='choice'){ const i = choiceIndex(st, st.answer); return i>=0 ? String.fromCharCode(65+i)+'. '+st.options[i] : String(st.answer); }
+  return String(st.answer);
+}
+function vResult(q, ss){
+  const r = ss.result;
+  const title = r.stars===3?'完美通关！':r.missed?'完成啦，收获满满！':r.overtime?'完成啦，下次再快一点！':'干得漂亮！';
+  const sub = r.missed ? '这道题已加入「每日巩固」，过几天再来挑战它 💪' : r.overtime ? '已加入巩固，再做一次争取不超时 ⏱' : (r.reviewNote || '继续保持这个状态！');
+  const nextKey = nextInFlow(ss);
+  return `<div class="card result pop">
+    <div class="bigstars">${'⭐'.repeat(r.stars)}<span class="off">${'⭐'.repeat(3-r.stars)}</span></div>
+    <h2 style="margin:4px 0">${title}</h2><div class="muted small">${sub}</div>
+    <div class="kv"><div><b>${r.stepsOk}/${r.stepsTotal}</b><span>步骤正确</span></div><div><b style="color:${r.overtime?'var(--bad)':'var(--ok)'}">${fmtTime(r.timeUsed)}</b><span>${r.overtime?'超时 ⏱':'限时内 ⚡'}</span></div><div><b>+${r.points}</b><span>积分</span></div></div>
+    ${r.newBadges.length?`<div class="fb ok">🏅 获得新徽章：${r.newBadges.map(id=>{const b=BADGES.find(x=>x.id===id);return b.e+' '+b.n;}).join('、')}</div>`:''}
+  </div>
+  <div class="card"><h3>✅ 最终答案</h3><div>${tex(q.finalAnswer||'—')}</div></div>
+  ${q.method?`<div class="card"><h3>🧭 解题思路</h3><div>${tex(q.method)}</div></div>`:''}
+  ${q.formulas.length?`<div class="card"><h3>📐 用到的公式</h3>${q.formulas.map(fm=>`<div class="formula"><b>${esc(fm.name)}</b><div style="margin:4px 0;overflow-x:auto">${texBlock(fm.latex)}</div><div class="muted small">${tex(fm.tip)}</div></div>`).join('')}</div>`:''}
+  <div class="row" style="gap:10px">
+    <button class="btn ghost grow" data-act="retry">🔄 再做一次</button>
+    ${nextKey?`<button class="btn grow" data-act="nextq" data-k="${esc(nextKey)}">下一题 →</button>`:`<button class="btn grow" data-act="backlist">${ss.mode==='review'?'完成巩固 🎉':'返回列表'}</button>`}
+  </div>`;
+}
+function nextInFlow(ss){
+  if(ss.queue){ const i = ss.queue.indexOf(ss.key); return ss.queue[i+1] || null; }
+  const f = findQ(ss.key); if(!f) return null; const qs = f.pack.questions; const i = qs.indexOf(f.q);
+  return qs[i+1] ? qk(f.pack.id, qs[i+1].id) : null;
+}
+function afterPlayMarkToast(m){ toast(isMiss(m) ? `已标记为 ${MARKS[m].e}${MARKS[m].n}，已计入薄弱项并加入今日巩固` : m ? '已标记为 ✅ 对' : '已清除初始标记'); }
+let lastTick = 0;
+function afterPlay(){
+  updateTimer();
+  const inp = $('#ans');
+  if(inp && S.session.phase==='answer'){
+    inp.addEventListener('input', e=>{ S.session.draft = e.target.value; });
+    inp.addEventListener('keydown', e=>{ if(e.key==='Enter'){ e.preventDefault(); act.submit(); } });
+    if(window.matchMedia('(hover:hover)').matches) setTimeout(()=>inp.focus({preventScroll:true}),50);
+  }
+  const sc = $('#stepcard'); if(sc && S.session.fb){ if(S.session.fb.kind!=='ok') sc.classList.toggle('shake', S.session.fb.fresh); S.session.fb.fresh=false; setTimeout(()=>sc.scrollIntoView({behavior:'smooth',block:'nearest'}),30); }
+}
+function updateTimer(){
+  const ss = S.session; if(!ss || S.view!=='play') return;
+  const f = findQ(ss.key); if(!f) return;
+  const lim = f.q.timeLimitSec, used = (ss.phase==='done' ? ss.result.timeUsed : ss.elapsed/1000);
+  const el = $('#timer'), tv = $('#tval'), tb = $('#tbar'); if(!el) return;
+  const left = lim - used;
+  if(left>=0){ tv.textContent = fmtTime(left); el.className = 'timer'+(left<=lim*0.2?' low':''); tb.className='tbar'+(left<=lim*0.2?' low':''); tb.firstElementChild.style.width = (left/lim*100)+'%'; }
+  else { tv.textContent = '超时 +'+fmtTime(-left); el.className='timer over'; tb.className='tbar over'; tb.firstElementChild.style.width='100%'; }
+  if(ss.phase==='done') el.classList.remove('over');
+}
+setInterval(()=>{
+  const now = Date.now(); const dt = lastTick ? Math.min(now-lastTick, 2000) : 0; lastTick = now;
+  const ss = S.session;
+  if(!ss || S.view!=='play' || ss.phase==='done' || document.hidden) return;
+  ss.elapsed += dt;
+  const f = findQ(ss.key); if(!f) return;
+  if(!ss.overtime && ss.elapsed/1000 > f.q.timeLimitSec){ ss.overtime = true; toast('⏳ 时间到啦！不过别着急，慢慢把它做完'); }
+  updateTimer();
+}, 250);
+
+function finishQ(){
+  const ss = S.session; const {pack,q} = findQ(ss.key); const t = today();
+  const stepsTotal = q.steps.length, missed = ss.results.filter(r=>r.status==='missed').length, stepsOk = stepsTotal - missed;
+  const firstAll = ss.results.every(r=>r.status==='first');
+  const timeUsed = Math.round(ss.elapsed/1000), overtime = ss.overtime || timeUsed > q.timeLimitSec;
+  const stars = missed ? 1 : (firstAll && !overtime) ? 3 : 2;
+  let pts = ss.points + 5; if(!overtime) pts += 20; if(stars===3) pts += 15;
+  const wasDue = D.review[ss.key] && D.review[ss.key].due<=t;
+  const mode = (ss.mode==='review' || wasDue) ? 'review' : 'normal';
+  D.attempts.push({key:ss.key, packId:pack.id, qid:q.id, ts:Date.now(), date:t, kps:q.knowledgePoints.slice(), difficulty:q.difficulty, stepsTotal, stepsOk, missed, overtime, timeUsed, limit:q.timeLimitSec, stars, points:pts, mode});
+  // 间隔复习
+  let reviewNote = '';
+  const prev = D.review[ss.key];
+  if(missed || overtime){
+    D.review[ss.key] = {level:0, due:addDays(t,INTERVALS[0]), count:(prev?prev.count:0)+1, reason: missed?'wrong':'overtime', added: prev?prev.added:t};
+    D.hadReview = true;
+  } else if(prev && prev.due<=t){
+    const lv = prev.level+1;
+    if(lv>=INTERVALS.length){ delete D.review[ss.key]; reviewNote = '🎓 这道题已经彻底掌握，移出巩固队列！'; }
+    else { D.review[ss.key] = Object.assign({}, prev, {level:lv, due:addDays(t,INTERVALS[lv])}); reviewNote = `👍 巩固成功！下次复习：${INTERVALS[lv]} 天后`; }
+  }
+  // 每日记录
+  const r = dayRec(t); r.questions++; r.points += pts;
+  if(mode==='review'){ if(!r.reviewDone.includes(ss.key)) r.reviewDone.push(ss.key); }
+  else if(!r.newDone.includes(ss.key)) r.newDone.push(ss.key);
+  D.points += pts;
+  let autoChk = false; if(!D.checkins[t]){ D.checkins[t] = Date.now(); autoChk = true; }
+  const goalBefore = r.goalDone;
+  const newBadges = checkBadges({stars, difficulty:q.difficulty, missed, timeUsed, limit:q.timeLimitSec});
+  const g = goalInfo(); if(g.done && !goalBefore){ r.goalDone = true; }
+  save();
+  ss.result = {stars, missed, stepsOk, stepsTotal, overtime, timeUsed, points:pts, newBadges, reviewNote};
+  ss.phase = 'done';
+  render(); window.scrollTo({top:0, behavior:'smooth'});
+  confetti(stars===3 ? 220 : 140);
+  setTimeout(()=>{
+    if(g.done && !goalBefore){ toast('🎯 今日目标达成！给自己鼓个掌 👏'); confetti(160); }
+    else if(autoChk) toast(`🔥 已自动打卡，连续 ${streak()} 天！`);
+  }, 900);
+}
+
+/* ========== 视图：每日巩固 ========== */
+function vReview(){
+  const due = dueKeys(); const t = today();
+  const later = Object.entries(D.review).filter(([k,v])=>v.due>t && findQ(k)).sort((a,b)=>a[1].due.localeCompare(b[1].due));
+  const r = dayRec();
+  const item = (k, right) => { const f=findQ(k); const v=D.review[k];
+    return `<div class="item"><div class="ic" style="background:${v.reason==='overtime'?'var(--warn-soft)':'var(--bad-soft)'}">${v.reason==='wrong'?'✗':v.reason==='initial'?'📝':'⏱'}</div>
+    <div class="grow"><div class="tt small">${tex(f.q.original)}</div><div class="muted small">${f.q.knowledgePoints.map(esc).join('、')} · 第 ${v.level+1}/${INTERVALS.length} 轮 ${v.reason==='initial'?'· 试卷'+(MARKS[D.marks[k]]?MARKS[D.marks[k]].n:'错题'):''}</div></div>${right}</div>`; };
+  return `<div class="topbar"><h1>🔁 每日巩固</h1></div>
+  <div class="hero" style="background:linear-gradient(135deg,#ff9f43,#ff6b8b)">
+    <div class="greet">今日待复习</div><div class="name" style="font-size:40px;margin:0">${due.length} <span style="font-size:16px">道</span></div>
+    <div class="small" style="opacity:.92;position:relative;z-index:1">今天已复习 ${r.reviewDone.length} 道 · 间隔 1→2→4→7→15 天，答对且不超时就升级，失误则从头开始</div>
+  </div>
+  ${due.length?`<button class="btn block warn" style="margin:14px 0" data-act="startreview">▶ 开始今日巩固（${due.length} 道）</button>
+    <div class="card list">${due.map(k=>item(k,`<button class="btn sm ghost" data-act="start" data-k="${esc(k)}" data-mode="review">做</button>`)).join('')}</div>`
+  :`<div class="card empty"><div class="e">${Object.keys(D.review).length?'🌈':'🎈'}</div><b>今天没有要复习的题</b><div class="small">${Object.keys(D.review).length?'按计划，过几天再来巩固下面的题目吧':'做错或超时的题会自动出现在这里'}</div></div>`}
+  ${later.length?`<div class="sec-title">📆 复习计划</div><div class="card list">${later.map(([k,v])=>item(k,`<span class="chip">${dayDiff(t,v.due)===1?'明天':dayDiff(t,v.due)+' 天后'}</span>`)).join('')}</div>`:''}`;
+}
+
+/* ========== 视图：公式速记 ========== */
+function collectCards(){
+  const fm = new Map(), methods = [];
+  allPacks().forEach(p=>p.questions.forEach(q=>{
+    q.formulas.forEach(f=>{ const id = f.name+'|'+f.latex; const c = fm.get(id) || {type:'f', id:'f'+hash(id), name:f.name, latex:f.latex, tip:f.tip, kps:new Set()}; q.knowledgePoints.forEach(k=>c.kps.add(k)); fm.set(id,c); });
+    if(q.method) methods.push({type:'m', id:'m'+hash(p.id+q.id), name:stripTex(q.original).slice(0,40), original:q.original, method:q.method, kps:new Set(q.knowledgePoints)});
+  }));
+  return {f:[...fm.values()], m:methods};
+}
+function vFormulas(){
+  const {f,m} = collectCards(); const wm = weakMap();
+  const list = S.fTab==='f' ? f : m;
+  const allKp = [...new Set([...f,...m].flatMap(c=>[...c.kps]))].sort((a,b)=>(wm[b]||0)-(wm[a]||0));
+  const score = c => Math.max(0,...[...c.kps].map(k=>wm[k]||0));
+  const shown = list.filter(c=>S.fKp==='全部' || c.kps.has(S.fKp)).sort((a,b)=>score(b)-score(a));
+  return `<div class="topbar"><h1>🧠 公式速记</h1></div>
+  <div class="seg"><button class="${S.fTab==='f'?'on':''}" data-act="ftab" data-v="f">📐 公式卡 (${f.length})</button><button class="${S.fTab==='m'?'on':''}" data-act="ftab" data-v="m">🧭 思路卡 (${m.length})</button></div>
+  <div class="filter">${['全部',...allKp].map(k=>`<button class="${S.fKp===k?'on':''}" data-act="fkp" data-v="${esc(k)}">${(wm[k]||0)>0.15?'🔥':''}${esc(k)}</button>`).join('')}</div>
+  <div class="muted small" style="margin:0 4px 8px">点卡片翻面 · 🔥 = 你的薄弱知识点，已排在前面</div>
+  <div class="fgrid">${shown.length?shown.map(c=>{
+    const weak = score(c)>0.15;
+    return `<div class="flip ${S.flipped[c.id]?'on':''}" data-act="flip" data-v="${c.id}"><div class="in">
+      <div class="f ${c.type==='m'?'m':''}"><div class="chips" style="justify-content:center">${[...c.kps].map(k=>`<span class="chip" style="background:rgba(255,255,255,.22);color:#fff">${esc(k)}</span>`).join('')}${weak?'<span class="chip" style="background:#fff;color:#ff6b3d">🔥 薄弱</span>':''}</div>
+        <div class="nm">${c.type==='f'?esc(c.name):'这道题怎么想？'}</div>${c.type==='m'?`<div class="small" style="opacity:.92;max-height:56px;overflow:hidden">${tex(c.original)}</div>`:''}<div class="tap">👆 点击翻面</div></div>
+      <div class="bk">${c.type==='f'?`<div style="font-weight:800;color:var(--pri)">${esc(c.name)}</div><div class="ltx">${texBlock(c.latex)}</div><div class="muted small">💡 ${tex(c.tip)}</div>`
+        :`<div style="font-weight:800;color:#ff7a3d;margin-bottom:6px">🧭 解题思路</div><div style="font-size:15px">${tex(c.method)}</div>`}</div>
+    </div></div>`;}).join(''):`<div class="card empty"><div class="e">🗂️</div>这个知识点下暂时没有卡片</div>`}</div>`;
+}
+
+/* ========== 视图：我的（薄弱项分析 / 徽章 / 设置） ========== */
+function vMe(){
+  const ks = kpStats(); const tot = D.attempts.length;
+  const stepsT = D.attempts.reduce((a,b)=>a+b.stepsTotal,0), stepsO = D.attempts.reduce((a,b)=>a+b.stepsOk,0);
+  const latest = {}; D.attempts.forEach(a=>latest[a.key]=a);
+  const wrongs = Object.values(latest).filter(a=>a.missed && findQ(a.key));
+  const initMiss = Object.keys(D.marks).filter(k=>isMiss(D.marks[k]) && !latest[k] && findQ(k));
+  const overs = Object.values(latest).filter(a=>a.overtime && findQ(a.key));
+  const allKps = [...new Set(allPacks().flatMap(p=>p.questions.flatMap(q=>q.knowledgePoints)))];
+  const untried = allKps.filter(k=>!ks.some(s=>s.kp===k));
+  const top = ks.filter(s=>s.weak>0.15).slice(0,3);
+  const qline = (a, chip) => { const f=findQ(a.key); return `<div class="item"><div class="grow"><div class="tt small">${tex(f.q.original)}</div><div class="muted small">${f.q.knowledgePoints.map(esc).join('、')} · ${a.date.slice(5)} · 用时 ${fmtTime(a.timeUsed)}/${fmtTime(a.limit)}</div></div>${chip}<button class="btn sm ghost" data-act="start" data-k="${esc(a.key)}">重做</button></div>`; };
+  const weakSec = `
+  <div class="card"><h3>📊 总体表现</h3>
+    <div class="kv" style="margin:0"><div><b>${tot}</b><span>做题次数</span></div><div><b>${stepsT?Math.round(stepsO/stepsT*100):0}%</b><span>步骤正确率</span></div><div><b>${tot?Math.round(D.attempts.filter(a=>!a.overtime).length/tot*100):0}%</b><span>按时完成率</span></div></div></div>
+  <div class="card"><h3>🔥 最需要加强</h3>${top.length?top.map((s,i)=>`<div class="weakpill"><span class="n">${i+1}</span><div class="grow"><b>${esc(s.kp)}</b><div class="muted small">正确率 ${Math.round(s.acc*100)}% · 失误 ${s.att-s.clean}/${s.att} 次${s.init?`（含试卷 ${s.init}）`:''} · 超时 ${s.ot} 次</div></div><button class="btn sm white" data-act="fkp" data-v="${esc(s.kp)}">看公式</button></div>`).join(''):`<div class="empty" style="padding:10px"><div class="e">🌟</div>${tot?'目前没有明显的薄弱点，继续保持！':'做几道题后，这里会显示你的薄弱知识点'}</div>`}</div>
+  <div class="card"><h3>🧩 知识点正确率</h3>${ks.length?ks.slice().sort((a,b)=>a.acc-b.acc).map(s=>{const p=Math.round(s.acc*100);return `<div class="bar"><div class="top"><b>${esc(s.kp)}</b><span class="muted small">${p}% · ${s.pr} 次练习${s.init?` · 试卷错 ${s.init}`:''}${s.pr?` · 平均 ${fmtTime(s.avg)}`:''}${s.ot?` · <span style="color:var(--bad)">超时${s.ot}</span>`:''}</span></div><div class="prog"><i class="${p<60?'lo':p<85?'mid':'hi'}" style="width:${Math.max(4,p)}%"></i></div></div>`;}).join(''):'<div class="muted small">暂无数据</div>'}
+    ${untried.length?`<div class="muted small" style="margin-top:10px">还没练过：${untried.map(esc).join('、')}</div>`:''}</div>
+  <div class="card list"><h3>❌ 错题本 <span class="chip bad">${wrongs.length+initMiss.length}</span></h3>${wrongs.length+initMiss.length?wrongs.map(a=>qline(a,markChip(a.key))).join('')+initMiss.map(k=>{const f=findQ(k);return `<div class="item"><div class="grow"><div class="tt small">${tex(f.q.original)}</div><div class="muted small">${f.q.knowledgePoints.map(esc).join('、')} · 试卷初始结果，尚未练习</div></div>${markChip(k)}<button class="btn sm ghost" data-act="start" data-k="${esc(k)}">去练</button></div>`;}).join(''):'<div class="muted small">没有错题，棒！</div>'}</div>
+  <div class="card list"><h3>⏱ 超时题 <span class="chip warn">${overs.length}</span></h3>${overs.length?overs.map(a=>qline(a,'')).join(''):'<div class="muted small">没有超时题，速度很稳！</div>'}</div>`;
+  const badgeSec = `<div class="card"><h3>🏅 我的徽章 <span class="muted small">${Object.keys(D.badges).length}/${BADGES.length}</span></h3><div class="badges">${BADGES.map(b=>`<div class="badge ${D.badges[b.id]?'got':'lock'}"><div class="e">${b.e}</div><div class="n">${b.n}</div><div class="d">${D.badges[b.id]?'已获得 '+dstr(new Date(D.badges[b.id])).slice(5):b.d}</div></div>`).join('')}</div></div>
+  <div class="card"><h3>📅 打卡日历 <span class="grow"></span><span class="muted small">连续 ${streak()} 天 · 最长 ${bestStreak()} 天 · 共 ${Object.keys(D.checkins).length} 天</span></h3>${heatmap(20)}</div>`;
+  const setSec = `<div class="card"><h3>⚙️ 设置</h3>
+    <div class="field"><label>昵称</label><input type="text" id="setName" maxlength="12" value="${esc(D.settings.nickname)}"></div>
+    <div class="field"><label>每日新题目标（道）</label><input type="number" id="setGoal" min="0" max="30" value="${D.settings.goalNew}"></div>
+    <div class="switch"><b style="font-size:14px">每日目标包含“完成今日巩固”</b><input type="checkbox" id="setRev" ${D.settings.goalReview?'checked':''} style="width:24px;height:24px"></div>
+    <button class="btn block" data-act="savesettings" style="margin-top:8px">保存设置</button></div>
+  <div class="card"><h3>💾 数据备份</h3><div class="muted small">学习记录只保存在这台设备的浏览器里。换设备或清理浏览器前，记得导出备份。</div>
+    <div class="row" style="margin-top:12px;gap:10px"><button class="btn ghost grow" data-act="export">⬇️ 导出备份</button><button class="btn ghost grow" data-act="importbk">⬆️ 导入备份</button></div>
+    <button class="btn danger block" style="margin-top:12px" data-act="reset">🗑️ 清空所有数据</button></div>
+  <div class="muted small" style="text-align:center;margin:16px 0">数学闯关岛 · 离线可用 · 数据保存在本机</div>`;
+  return `<div class="topbar"><h1>🙋 ${esc(D.settings.nickname)}</h1><span class="sp"></span><span class="chip">💰 ${D.points} 积分</span><span class="chip">⭐ ${totalStars()}</span></div>
+  <div class="seg"><button class="${S.meTab==='weak'?'on':''}" data-act="metab" data-v="weak">📊 薄弱项</button><button class="${S.meTab==='badge'?'on':''}" data-act="metab" data-v="badge">🏅 成就</button><button class="${S.meTab==='set'?'on':''}" data-act="metab" data-v="set">⚙️ 设置</button></div>
+  ${S.meTab==='weak'?weakSec:S.meTab==='badge'?badgeSec:setSec}`;
+}
+
+/* ========== 弹窗 / 提示 / 撒花 ========== */
+let toastT;
+function toast(msg){ const t=$('#toast'); t.textContent=msg; t.classList.add('show'); clearTimeout(toastT); toastT=setTimeout(()=>t.classList.remove('show'),2600); }
+function modal(html){ $('#modal').innerHTML = `<div class="mask" data-act="maskclose"><div class="sheet">${html}</div></div>`; }
+function closeModal(){ $('#modal').innerHTML=''; }
+function confetti(n=150){
+  const c = document.createElement('canvas'); c.style.cssText='position:fixed;inset:0;pointer-events:none;z-index:70';
+  const W = c.width = innerWidth*devicePixelRatio, H = c.height = innerHeight*devicePixelRatio; c.style.width='100%'; c.style.height='100%';
+  document.body.appendChild(c); const x = c.getContext('2d');
+  const cols = ['#6c5ce7','#4f8cff','#ff9f43','#ff6b8b','#14b88a','#ffc23d','#c06cf0'];
+  const ps = Array.from({length:n},()=>({x:W/2+(Math.random()-.5)*W*.3, y:H*.35, vx:(Math.random()-.5)*W*.022, vy:-Math.random()*H*.022-H*.006, s:(Math.random()*8+5)*devicePixelRatio, r:Math.random()*6, vr:(Math.random()-.5)*.3, c:pick(cols), sh:Math.random()<.5}));
+  const t0 = performance.now();
+  (function f(t){
+    x.clearRect(0,0,W,H); const age = (t-t0)/1000;
+    ps.forEach(p=>{ p.vy += H*.0006; p.vx *= .99; p.x+=p.vx; p.y+=p.vy; p.r+=p.vr; x.save(); x.translate(p.x,p.y); x.rotate(p.r); x.globalAlpha=Math.max(0,1-age/3); x.fillStyle=p.c;
+      if(p.sh) x.fillRect(-p.s/2,-p.s/4,p.s,p.s/2); else { x.beginPath(); x.arc(0,0,p.s/3,0,7); x.fill(); } x.restore(); });
+    if(age<3.2) requestAnimationFrame(f); else c.remove();
+  })(t0);
+}
+function copyText(text){
+  const fb = () => { const ta=document.createElement('textarea'); ta.value=text; ta.style.position='fixed'; ta.style.opacity='0'; document.body.appendChild(ta); ta.select(); let ok=false; try{ ok=document.execCommand('copy'); }catch(e){} ta.remove(); return ok; };
+  if(navigator.clipboard && window.isSecureContext){ navigator.clipboard.writeText(text).then(()=>toast('📋 已复制'),()=>toast(fb()?'📋 已复制':'复制失败，请手动选择文字复制')); }
+  else toast(fb()?'📋 已复制':'复制失败，请手动选择文字复制');
+}
+function download(name, text){
+  const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([text],{type:'application/json'})); a.download = name; document.body.appendChild(a); a.click(); setTimeout(()=>{URL.revokeObjectURL(a.href); a.remove();},500);
+}
+function importModal(){
+  modal(`<h2>📥 导入题包</h2><div class="muted small">把 AI 助手返回的 JSON 粘贴到下面（带 \`\`\`json 代码块也没关系），或选择 .json 文件。</div>
+  <textarea class="code" id="packText" placeholder='{"title":"期中测试","date":"2026-10-17","questions":[...]}' style="margin-top:10px"></textarea>
+  <div class="row" style="margin-top:8px;gap:8px"><label class="btn sm ghost" style="cursor:pointer">📂 选择文件<input type="file" id="packFile" accept=".json,.txt,application/json,text/plain" hidden></label><button class="btn sm ghost" data-act="copyprompt">📋 复制 AI 提示词</button></div>
+  <div id="impMsg" class="small" style="white-space:pre-wrap;margin-top:10px"></div>
+  <div class="row" style="margin-top:12px;gap:10px"><button class="btn ghost grow" data-act="close">取消</button><button class="btn grow" data-act="doimport">校验并导入</button></div>`);
+  $('#packFile').addEventListener('change', e=>{ const f=e.target.files[0]; if(!f) return; const r=new FileReader(); r.onload=()=>{ $('#packText').value=r.result; act.doimport(); }; r.readAsText(f,'utf-8'); });
+}
+
+/* ========== 交互 ========== */
+const act = {
+  tab(d){ if(S.view==='play' && S.session && S.session.phase==='done') S.session=null; go(d.v); },
+  resume(){ go('play'); },
+  openpack(d){ S.packId=d.v; go('pack'); },
+  start(d){ if(!d.k){ go('packs'); return; } startQ(d.k, d.mode||'normal'); },
+  startreview(){ const q = dueKeys(); if(q.length) startQ(q[0],'review',q); },
+  quit(){ const ss=S.session; if(ss && ss.phase==='done'){ act.backlist(); return; } const f = ss && findQ(ss.key); S.view = ss&&ss.mode==='review'?'review':'pack'; if(f) S.packId=f.pack.id; S.tab = S.view==='review'?'review':'packs'; render(); toast('进度已保留，可随时回来继续'); },
+  backlist(){ const ss=S.session; const f=ss&&findQ(ss.key); const rv = ss&&ss.mode==='review'; S.session=null; if(rv) go('review'); else { if(f) S.packId=f.pack.id; go('pack'); } },
+  retry(){ const k=S.session.key; startQ(k, S.session.mode); },
+  nextq(d){ const ss=S.session; startQ(d.k, ss.queue?'review':'normal', ss.queue); },
+  sel(d){ const ss=S.session; if(ss.phase!=='answer') return; ss.sel=+d.v; document.querySelectorAll('.opt').forEach((b,i)=>b.classList.toggle('sel', i===ss.sel)); },
+  key(d){ const inp=$('#ans'); if(!inp) return; const s=inp.selectionStart??inp.value.length, e=inp.selectionEnd??s; inp.value = inp.value.slice(0,s)+d.v+inp.value.slice(e); S.session.draft=inp.value; inp.focus(); const p=s+d.v.length; try{inp.setSelectionRange(p,p);}catch(_){} },
+  submit(){
+    const ss=S.session; if(!ss||ss.phase!=='answer') return; const {q} = findQ(ss.key); const st=q.steps[ss.stepIdx];
+    let val; if(st.type==='choice'){ if(ss.sel===null){ toast('先选一个答案吧 😊'); return; } val=ss.sel; } else { val = ($('#ans')||{}).value||ss.draft; if(!norm(val)){ toast('先写下你的答案吧 ✍️'); return; } ss.draft=val; }
+    if(checkAnswer(st,val)){
+      const pts = ss.tries===0?10:5; ss.points+=pts; ss.results[ss.stepIdx]={status:ss.tries===0?'first':'second', tries:ss.tries};
+      ss.phase='feedback'; ss.fb={kind:'ok', msg:pick(MSG_OK), pts, fresh:true};
+    } else {
+      ss.tries++;
+      if(ss.tries>=2){ ss.results[ss.stepIdx]={status:'missed', tries:ss.tries}; ss.phase='feedback'; ss.fb={kind:'miss', msg:pick(MSG_MISS), fresh:true}; }
+      else { ss.fb={kind:'wrong', msg:pick(MSG_WRONG), fresh:true}; if(st.type==='choice') ss.sel=null; }
+    }
+    render();
+  },
+  next(){ const ss=S.session; const {q}=findQ(ss.key); if(ss.stepIdx>=q.steps.length-1){ finishQ(); return; } ss.stepIdx++; ss.tries=0; ss.fb=null; ss.draft=''; ss.sel=null; ss.phase='answer'; render(); const sc=$('#stepcard'); if(sc) sc.scrollIntoView({behavior:'smooth',block:'center'}); },
+  checkin(){ const t=today(); if(D.checkins[t]) return; D.checkins[t]=Date.now(); const nb=checkBadges(); save(); render(); confetti(90); toast(`🔥 打卡成功！已连续 ${streak()} 天`+(nb.length?' · 获得新徽章':'')); },
+  import(){ importModal(); },
+  copyprompt(){ copyText(AI_PROMPT); },
+  doimport(){
+    const m=$('#impMsg'); try{ const r = importPacksFromText($('#packText').value); closeModal(); S.packId=r.firstId; go('pack');
+      toast(`✅ 导入成功：${r.added?`新增 ${r.added} 个题包`:''}${r.replaced?`更新 ${r.replaced} 个题包`:''}，共 ${r.qn} 道题`); }
+    catch(e){ m.style.color='#d84848'; m.textContent='❌ '+e.message; }
+  },
+  delpack(d){ const bi = isBuiltinId(d.v); if(!confirm(bi?'恢复为内置版本吗？（做题记录和标记会保留）':'确定删除这个题包吗？（做题记录会保留）')) return; D.packs=D.packs.filter(p=>p.id!==d.v); if(!bi) Object.keys(D.review).forEach(k=>{ if(k.startsWith(d.v+'::')) delete D.review[k]; }); save(); go('packs'); toast('已删除'); },
+  openmarks(d){ S.packId=d.v; go('marks'); },
+  setmark(d){ const cur = D.marks[d.k]; const m = cur===d.v ? null : d.v; setMark(d.k, m); render(); if(S.view==='play') afterPlayMarkToast(m); },
+  cyclemark(d){ const cur = D.marks[d.k]||null; const m = MARK_CYCLE[(MARK_CYCLE.indexOf(cur)+1)%MARK_CYCLE.length]; setMark(d.k, m); render(); },
+  markrest(d){ const p = allPacks().find(x=>x.id===d.v); if(!p) return; p.questions.forEach(q=>{ const k=qk(p.id,q.id); if(!D.marks[k]) D.marks[k]='ok'; }); save(); render(); toast('✅ 已把未标记的题设为“对”'); },
+  ftab(d){ S.fTab=d.v; render(); },
+  fkp(d){ S.fKp=d.v; if(S.view!=='formulas'){ go('formulas'); } else render(); },
+  flip(d,el){ S.flipped[d.v]=!S.flipped[d.v]; el.classList.toggle('on'); },
+  metab(d){ S.meTab=d.v; render(); },
+  savesettings(){ D.settings.nickname = ($('#setName').value.trim()||'小数学家').slice(0,12); D.settings.goalNew = Math.max(0,Math.min(30,parseInt($('#setGoal').value)||0)); D.settings.goalReview = $('#setRev').checked; save(); render(); toast('✅ 设置已保存'); },
+  export(){ const txt = JSON.stringify({app:'mathquest', version:1, exportedAt:new Date().toISOString(), data:D}, null, 2); download(`数学闯关岛备份-${today()}.json`, txt);
+    modal(`<h2>⬇️ 导出备份</h2><div class="muted small">已尝试下载文件。如果手机上没有下载成功，可以复制下面的内容保存到备忘录。</div><textarea class="code" readonly style="margin-top:10px">${esc(txt)}</textarea><div class="row" style="gap:10px;margin-top:10px"><button class="btn ghost grow" data-act="copybk">📋 复制</button><button class="btn grow" data-act="close">完成</button></div>`); S._bk=txt; },
+  copybk(){ copyText(S._bk||''); },
+  importbk(){ modal(`<h2>⬆️ 导入备份</h2><div class="muted small" style="color:#d84848">导入会覆盖当前设备上的全部学习记录。</div><textarea class="code" id="bkText" placeholder="粘贴备份 JSON" style="margin-top:10px"></textarea><div class="row" style="margin-top:8px"><label class="btn sm ghost" style="cursor:pointer">📂 选择备份文件<input type="file" id="bkFile" accept=".json,.txt,application/json" hidden></label></div><div id="bkMsg" class="small" style="margin-top:8px;color:#d84848"></div><div class="row" style="gap:10px;margin-top:12px"><button class="btn ghost grow" data-act="close">取消</button><button class="btn grow" data-act="dobk">导入</button></div>`);
+    $('#bkFile').addEventListener('change',e=>{ const f=e.target.files[0]; if(!f) return; const r=new FileReader(); r.onload=()=>{ $('#bkText').value=r.result; }; r.readAsText(f,'utf-8'); }); },
+  dobk(){ try{ const o = extractJSON($('#bkText').value); const data = o && o.app==='mathquest' ? o.data : o; if(!data || !Array.isArray(data.attempts) || !data.settings) throw new Error('不是有效的备份文件');
+      if(!confirm('确定用备份覆盖当前数据吗？')) return; D = Object.assign(defData(), data); save(); closeModal(); go('home'); toast('✅ 备份已恢复'); }
+    catch(e){ $('#bkMsg').textContent='❌ '+e.message; } },
+  reset(){ if(!confirm('确定清空所有学习数据吗？导入的题包、做题记录、徽章都会被删除。')) return; if(!confirm('真的确定吗？此操作无法撤销。')) return; localStorage.removeItem(KEY); load(); S.session=null; go('home'); toast('已清空，重新出发吧！'); },
+  close(){ closeModal(); },
+  maskclose(d,el,e){ if(e.target===el) closeModal(); }
+};
+document.addEventListener('click', e=>{
+  const el = e.target.closest('[data-act]'); if(!el) return;
+  const fn = act[el.dataset.act]; if(!fn) return;
+  if(el.tagName==='BUTTON' || el.dataset.act==='flip' || el.dataset.act==='maskclose'){ fn(el.dataset, el, e); }
+});
+window.addEventListener('storage', e=>{ if(e.key===KEY){ load(); render(); } });
+window.__mqKatexReady = () => render();
+render();
+})();
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js" crossorigin="anonymous" onload="window.__mqKatexReady&&window.__mqKatexReady()"></script>
+</body>
+</html>
