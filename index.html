@@ -691,14 +691,16 @@ function toSpeech(str){
 /* ---------- 朗读引擎 ---------- */
 var synth = (typeof window!=='undefined' && window.speechSynthesis && typeof window.SpeechSynthesisUtterance!=='undefined') ? window.speechSynthesis : null;
 var voice = null, token = 0, pending = 0, listeners = [];
+var NON_MANDARIN = /粤|粵|廣東|广东|cantonese|yue|台灣|台湾|臺灣|taiwan|香港|hong\s?kong|\bhk\b|\btw\b|sin-?ji|mei-?jia|tracy|danny|hiugaai|hiumaan|wanlung|hsiaochen|hsiaoyu|yating|zhiwei|yunjhe/i;
+function isMandarinCN(v){
+  var lang = String(v.lang||'').replace(/_/g,'-').toLowerCase();
+  if(['zh-cn','cmn-cn','zh-hans-cn','cmn-hans-cn'].indexOf(lang)<0) return false;
+  return !NON_MANDARIN.test(String(v.name||''));
+}
 function scoreVoice(v){
-  var lang = String(v.lang||'').replace('_','-').toLowerCase(), name = String(v.name||'');
-  var s = 0;
-  if(lang==='zh-cn' || lang==='cmn-cn' || lang==='zh-hans-cn') s += 100;
-  else if(lang.indexOf('zh-hans')===0 || lang.indexOf('cmn')===0) s += 80;
-  else if(lang==='zh-tw') s += 40; else if(lang==='zh-hk' || lang.indexOf('yue')===0) s += 20; else if(lang.indexOf('zh')===0) s += 30;
-  else return -1;
-  if(/xiaoxiao|xiaoyi|yunxi|natural|online|neural/i.test(name)) s += 15;
+  if(!isMandarinCN(v)) return -1; /* 只接受中国大陆普通话（zh-CN），排除粤语、台湾/香港口音 */
+  var name = String(v.name||''), s = 100;
+  if(/xiaoxiao|xiaoyi|yunxi|yunyang|natural|online|neural/i.test(name)) s += 15;
   if(/tingting|ting-ting|lili|yu-shu|google/i.test(name)) s += 8;
   if(/普通话|mandarin/i.test(name)) s += 6;
   if(v.localService) s += 2;
@@ -718,27 +720,36 @@ function chunks(text){
     if(seg) out.push(seg);
   }); return out;
 }
-function stop(){ token++; pending = 0; if(synth){ try{ synth.cancel(); }catch(e){} } notify(); }
+function stop(){ token++; pending = 0; lastText = ''; if(synth){ try{ synth.cancel(); }catch(e){} } notify(); }
+var lastText = '';
 function speak(texts, opts){
   if(!synth) return false;
   opts = opts || {};
-  stop(); var my = token;
   if(!voice) pickVoice();
   var list = [].concat(texts).filter(Boolean).map(function(t){ return opts.raw ? String(t) : toSpeech(t); }).filter(function(t){ return t && t.trim(); });
   var parts = []; list.forEach(function(t){ parts = parts.concat(chunks(t)); });
   if(!parts.length) return false;
+  var joined = parts.join('|');
+  if(joined===lastText && pending>0) return true; /* 同一段话正在播放时不重复排队 */
+  var busy = pending>0 || synth.speaking || synth.pending;
+  stop(); var my = token; lastText = joined;
   pending = parts.length; notify();
-  parts.forEach(function(p){
-    var u = new SpeechSynthesisUtterance(p);
-    u.lang = (voice && voice.lang) ? voice.lang.replace('_','-') : 'zh-CN'; if(voice) u.voice = voice;
-    u.rate = opts.rate || 0.9; u.pitch = 1; u.volume = 1;
-    var fired = false;
-    var done = function(){ if(fired || my!==token) return; fired = true; pending = Math.max(0, pending-1); if(!pending) notify(); };
-    u.onend = done; u.onerror = done;
-    setTimeout(done, 6000 + p.length*450/(opts.rate||0.9)); /* 看门狗：个别浏览器不触发 onend */
-    try{ synth.speak(u); }catch(e){ done(); }
-  });
-  try{ if(synth.paused) synth.resume(); }catch(e){}
+  var run = function(){
+    if(my!==token) return;
+    parts.forEach(function(p){
+      var u = new SpeechSynthesisUtterance(p);
+      u.lang = 'zh-CN'; if(voice) u.voice = voice;   /* 始终普通话 */
+      u.rate = opts.rate || 0.9; u.pitch = 1; u.volume = 1;
+      var fired = false;
+      var done = function(){ if(fired || my!==token) return; fired = true; pending = Math.max(0, pending-1); if(!pending){ lastText=''; notify(); } };
+      u.onend = done; u.onerror = done;
+      setTimeout(done, 6000 + p.length*450/(opts.rate||0.9)); /* 看门狗只更新状态，绝不重新朗读 */
+      try{ synth.speak(u); }catch(e){ done(); }
+    });
+    /* 注意：不调用 resume()——在 iOS Safari / 安卓 Chrome 上它可能让已取消的语句重新播放 */
+  };
+  /* 安卓 Chrome 在 cancel() 后立即 speak() 偶尔会重放被取消的语句，因此正在播放时稍等再说；空闲时同步调用以保留用户手势 */
+  if(busy) setTimeout(run, 150); else run();
   return true;
 }
 return { toSpeech: toSpeech, latex: latex, plain: plain, supported: !!synth, speak: speak, stop: stop,
@@ -1240,10 +1251,11 @@ function remindHTML(){
 }
 function refreshRemind(){ const el = $('#remind'); if(el) el.innerHTML = remindHTML(); }
 const isCalcStep = st => st.type==='number' || /算|计算|求|化简|代入/.test(st.prompt);
-function stepSpeech(q, idx){
-  const st = q.steps[idx]; let t = `第${idx+1}步。` + st.prompt;
-  if(st.type==='choice' && st.options) t += '。选项：' + st.options.map((o,i)=>String.fromCharCode(65+i)+'，'+o).join('；') + '。';
-  return t;
+function stepSpeech(q, idx){ return q.steps[idx].prompt; } // 只读引导小问题，不读选项
+function autoStepSpeech(q, idx){ // 每次出现只自动朗读一次（按 题目key + 步骤序号 去重）
+  const ss = S.session; if(!ss || !D.settings.autoRead) return null;
+  const g = ss.key+'#'+idx; if(ss.spokenSteps[g]) return null; ss.spokenSteps[g] = true;
+  return stepSpeech(q, idx);
 }
 const spk = (w, label) => voiceOn() ? `<button class="spk" data-act="say" data-w="${w}" aria-label="朗读${label||''}" title="朗读">🔊</button>` : '';
 
@@ -1251,10 +1263,10 @@ function startQ(key, mode='normal', queue=null){
   const f = findQ(key); if(!f){ toast('找不到这道题'); return; }
   const isReview = mode==='review' || (D.review[key] && D.review[key].due<=today());
   hush();
-  S.session = { key, mode: isReview?'review':'normal', queue: queue||null, stepIdx:0, tries:0, results:[], elapsed:0, overtime:false, phase:'answer', fb:null, draft:'', sel:null, points:0, startedAt:Date.now(), lastAct:0, idleDone:false, remind:null };
+  S.session = { key, mode: isReview?'review':'normal', queue: queue||null, stepIdx:0, tries:0, results:[], elapsed:0, overtime:false, phase:'answer', fb:null, draft:'', sel:null, points:0, startedAt:Date.now(), lastAct:0, idleDone:false, remind:null, spokenSteps:{} };
   const r = (sessionQCount===0 || Math.random()<0.5) ? remind('start') : null; sessionQCount++;
   go('play');
-  say([r, D.settings.autoRead ? stepSpeech(f.q, 0) : null]); // 在点击事件内同步调用，满足浏览器“需用户手势”的限制
+  say([r, autoStepSpeech(f.q, 0)]); // 在点击事件内同步调用，满足浏览器“需用户手势”的限制
 }
 function vPlay(){
   const ss = S.session; if(!ss){ S.view='packs'; return vPacks(); }
@@ -1567,20 +1579,20 @@ const act = {
     if(checkAnswer(st,val)){
       const pts = ss.tries===0?10:5; ss.points+=pts; ss.results[ss.stepIdx]={status:ss.tries===0?'first':'second', tries:ss.tries};
       ss.phase='feedback'; ss.fb={kind:'ok', msg:pick(MSG_OK), pts, fresh:true};
-      ss.remind = null; if(D.settings.autoRead) speech = [ss.fb.msg];
+      ss.remind = null;
     } else {
       ss.tries++;
       if(ss.tries>=2){ ss.results[ss.stepIdx]={status:'missed', tries:ss.tries}; ss.phase='feedback'; ss.fb={kind:'miss', msg:pick(MSG_MISS), fresh:true};
-        if(D.settings.autoRead) speech = [ss.fb.msg, '正确答案是：'+answerText(st)+'。', st.explanation ? '解析：'+st.explanation : null]; }
+        /* 不自动朗读答案和解析，可点 🔊 手动收听 */ }
       else { ss.fb={kind:'wrong', msg:pick(MSG_WRONG), fresh:true}; if(st.type==='choice') ss.sel=null;
         const r = Math.random()<0.6 ? remind('wrong') : null;
-        speech = [r, D.settings.autoRead ? '提示：'+st.hint : null]; }
+        speech = [r]; /* 只读温馨提醒；不重读题目、不自动读提示 */ }
     }
-    render(); hush(); say(speech);
+    render(); if(speech.some(Boolean)){ hush(); say(speech); }
   },
   next(){ hush(); const ss=S.session; const {q}=findQ(ss.key); if(ss.stepIdx>=q.steps.length-1){ finishQ(); return; } ss.stepIdx++; ss.tries=0; ss.fb=null; ss.draft=''; ss.sel=null; ss.phase='answer'; ss.lastAct=ss.elapsed; ss.idleDone=false;
     ss.remind = null; const r = (isCalcStep(q.steps[ss.stepIdx]) && Math.random()<0.35) ? remind('calc') : null;
-    render(); say([r, D.settings.autoRead ? stepSpeech(q, ss.stepIdx) : null]); const sc=$('#stepcard'); if(sc) sc.scrollIntoView({behavior:'smooth',block:'center'}); },
+    render(); say([r, autoStepSpeech(q, ss.stepIdx)]); const sc=$('#stepcard'); if(sc) sc.scrollIntoView({behavior:'smooth',block:'center'}); },
   checkin(){ const t=today(); if(D.checkins[t]) return; D.checkins[t]=Date.now(); const nb=checkBadges(); save(); render(); confetti(90); toast(`🔥 打卡成功！已连续 ${streak()} 天`+(nb.length?' · 获得新徽章':'')); },
   import(){ importModal(); },
   copyprompt(){ copyText(AI_PROMPT); },
