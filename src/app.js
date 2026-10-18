@@ -51,7 +51,7 @@ function texBlock(latex){ return tex('$'+String(latex||'').replace(/\$/g,'')+'$'
 /* ========== 数据存储 ========== */
 const KEY = 'mathquest_data_v1';
 function defData(){
-  return {v:1, settings:{nickname:'小数学家', goalNew:3, goalReview:true, voice:true, autoRead:true, reminders:true, rate:'normal', voicePick:''}, packs:[], attempts:[], review:{}, checkins:{}, points:0, badges:{}, daily:{}, marks:{}, hadReview:false, created:Date.now()};
+  return {v:1, settings:{nickname:'小数学家', goalNew:3, goalReview:true, voice:true, autoRead:true, reminders:true, rate:'normal', voicePick:'', showAnalysis:true}, packs:[], attempts:[], review:{}, checkins:{}, points:0, badges:{}, daily:{}, marks:{}, hadReview:false, created:Date.now()};
 }
 let D;
 function load(){
@@ -184,7 +184,7 @@ function validatePack(p, idx){
     pack.questions.push({ id, original:String(q.original||''), knowledgePoints: (Array.isArray(q.knowledgePoints)&&q.knowledgePoints.length ? q.knowledgePoints : ['综合']).map(String),
       difficulty: Math.min(5,Math.max(1,Math.round(+q.difficulty||2))), timeLimitSec: tl>0 ? Math.round(tl) : 180, steps: st,
       finalAnswer: String(q.finalAnswer||''), formulas: (Array.isArray(q.formulas)?q.formulas:[]).filter(f=>f&&(f.name||f.latex)).map(f=>({name:String(f.name||'公式'),latex:String(f.latex||''),tip:String(f.tip||'')})),
-      method: String(q.method||'') });
+      method: String(q.method||''), analysis: normAnalysis(q.analysis) });
   });
   if(errs.length) throw new Error(errs.slice(0,8).join('\n')+(errs.length>8?`\n…等共 ${errs.length} 处问题`:''));
   return {pack, warns};
@@ -616,12 +616,101 @@ function startQ(key, mode='normal', queue=null){
   const isReview = mode==='review' || (D.review[key] && D.review[key].due<=today());
   hush();
   const aw = awardKind(key, isReview);
-  S.session = { key, award: aw.kind, factor: aw.factor, mode: isReview?'review':'normal', queue: queue||null, stepIdx:0, tries:0, results:[], elapsed:0, overtime:false, phase:'answer', fb:null, draft:'', sel:null, points:0, startedAt:Date.now(), lastAct:0, idleDone:false, remind:null, spokenSteps:{} };
+  const ses = { key, award: aw.kind, factor: aw.factor, mode: isReview?'review':'normal', queue: queue||null, stepIdx:0, tries:0, results:[], elapsed:0, overtime:false, phase:'answer', fb:null, draft:'', sel:null, points:0, startedAt:Date.now(), lastAct:0, idleDone:false, remind:null, spokenSteps:{} };
+  S.session = ses;
+  if(initAnalysis(ses, f.pack, f.q) && D.settings.showAnalysis!==false && !NO_AN) ses.stage = 'analysis';
   const r = (sessionQCount===0 || Math.random()<0.5) ? remind('start') : null; sessionQCount++;
   go('play');
   if(aw.kind==='same') setTimeout(()=>toast(SAME_DAY_NOTE), 300);
-  say([r, autoStepSpeech(f.q, 0)]); // 在点击事件内同步调用，满足浏览器“需用户手势”的限制
+  say([r, ses.stage==='analysis' ? null : autoStepSpeech(f.q, 0)]); // 在点击事件内同步调用；审题阶段不自动朗读，满足浏览器“需用户手势”的限制
 }
+/* ========== 审题分析 ========== */
+const NO_AN = /[?&]analysis=0\b/.test(location.search); /* 自动化测试用：?analysis=0 跳过审题阶段 */
+function normAnalysis(a){
+  if(!a || typeof a!=='object') return null;
+  const arr = x => Array.isArray(x) ? x : (x ? [x] : []);
+  const known = arr(a.known).map(k => typeof k==='string' ? {text:k, hidden:false, why:''} : (k && k.text ? {text:String(k.text), hidden:!!k.hidden, why:String(k.why||'')} : null)).filter(Boolean);
+  const associations = arr(a.associations).map(s => s && (s.recall||s.trigger) ? {trigger:String(s.trigger||''), recall:String(s.recall||''), latex:String(s.latex||''), why:String(s.why||'')} : null).filter(Boolean);
+  const thinkingPath = arr(a.thinkingPath).map(x=>String(x||'')).filter(Boolean);
+  const pitfalls = arr(a.pitfalls).map(x=>String(x||'')).filter(Boolean);
+  const goal = String(a.goal||'');
+  if(!known.length && !associations.length && !thinkingPath.length && !pitfalls.length && !goal) return null;
+  return {known, goal, associations, thinkingPath, pitfalls};
+}
+/* 题目的审题分析；若内置题包被旧版本覆盖（无分析），用内置版本的分析补上 */
+function qAnalysis(pack, q){
+  if(q.analysis) return q.analysis;
+  const b = BUILTINS.find(x=>x.id===pack.id); const bq = b && b.questions.find(x=>String(x.id)===String(q.id));
+  return bq && bq.analysis ? bq.analysis : null;
+}
+function seededShuffle(list, seed){ let h = 0; for(const c of String(seed)) h = Math.imul(h ^ c.charCodeAt(0), 16777619) >>> 0; const a = list.slice(); for(let i=a.length-1;i>0;i--){ h = Math.imul(h ^ (h>>>13), 0x5bd1e995) >>> 0; const j = h % (i+1); [a[i],a[j]]=[a[j],a[i]]; } return a; }
+/* “看到这个，你会想到什么？”：正确项 = 第一条联想；干扰项来自同题包其他联想/公式名称 */
+function buildQuiz(pack, q, an){
+  const first = an.associations[0]; if(!first || !first.recall) return null;
+  const right = first.recall, own = new Set(an.associations.map(s=>s.recall));
+  const pool = [];
+  allPacks().forEach(p=>p.questions.forEach(x=>{ const a = qAnalysis(p,x); if(a) a.associations.forEach(s=>{ if(s.recall && !own.has(s.recall)) pool.push(s.recall); }); (x.formulas||[]).forEach(f=>{ if(f.name && !own.has(f.name)) pool.push(f.name); }); }));
+  const same = [...new Set(pool.filter(r=>r!==right))];
+  const fromPack = same.filter(r=>pack.questions.some(x=>{ const a=qAnalysis(pack,x); return a && a.associations.some(s=>s.recall===r); }));
+  const pick = seededShuffle(fromPack.length>=3 ? fromPack : same, q.id+'|'+right).slice(0,3);
+  if(pick.length<2) return null;
+  return {trigger:first.trigger, right, opts: seededShuffle([right, ...pick], 'o|'+q.id), choice:null, ok:null};
+}
+function initAnalysis(ss, pack, q){
+  const an = qAnalysis(pack, q); if(!an) return false;
+  ss.an = {reveal: 0, quiz: buildQuiz(pack, q, an), quizDone: false, seen: false};
+  return true;
+}
+function leaveAnalysis(){
+  const ss = S.session; if(!ss) return; const f = findQ(ss.key); const first = !ss.an || !ss.an.seen;
+  ss.stage = null; if(ss.an) ss.an.seen = true; hush(); render(); window.scrollTo(0,0);
+  if(first && f && !ss.results.length) say([autoStepSpeech(f.q, ss.stepIdx)]);
+}
+const goalTxt = g => String(g).replace(/^求[:：]?\s*/,'');
+function knownCard(k, i){
+  return `<div class="kcard ${k.hidden?'hid':''} pop"><span class="kn">${i+1}</span><div class="grow">${k.hidden?'<span class="htag">🕵️ 隐藏条件</span> ':''}${tex(k.text)}${k.hidden&&k.why?`<div class="why">💡 ${tex(k.why)}</div>`:''}</div></div>`;
+}
+function assocList(an){ return an.associations.map(s=>`<div class="assoc"><div class="tr">👀 看到：${tex(s.trigger)}</div><div class="rc">💭 想到：<b>${tex(s.recall)}</b></div>${s.latex?`<div class="ltx">${texBlock(s.latex)}</div>`:''}${s.why?`<div class="why">${tex(s.why)}</div>`:''}</div>`).join(''); }
+function pathList(an){ return `<ol class="tpath">${an.thinkingPath.map(t=>`<li>${tex(t)}</li>`).join('')}</ol>`; }
+function pitBox(an){ return an.pitfalls.length ? `<div class="pitbox"><b>⚠️ 易错点</b><ul>${an.pitfalls.map(t=>`<li>${tex(t)}</li>`).join('')}</ul></div>` : ''; }
+/* 完整（静态）分析：用于结果页回顾 */
+function analysisFull(an){
+  return `<div class="anblk"><div class="anh">① 已知条件</div>${an.known.map(knownCard).join('')}${an.goal?`<div class="angoal">🎯 求：${tex(goalTxt(an.goal))}</div>`:''}</div>
+    ${an.associations.length?`<div class="anblk"><div class="anh">② 联想定理 / 公式</div>${assocList(an)}</div>`:''}
+    ${an.thinkingPath.length?`<div class="anblk"><div class="anh">③ 解题思路</div>${pathList(an)}</div>`:''}${pitBox(an)}`;
+}
+/* 做题前的互动审题阶段 */
+function vAnalysis(q, an, ss){
+  const A = ss.an, nK = an.known.length, all = A.reveal>=nK, Z = A.quiz;
+  const quizOpen = all && (!Z || A.quizDone);
+  const back = ss.stepIdx>0 || ss.results.length ? `回到第 ${ss.stepIdx+1} 步 →` : '开始做题 →';
+  let h = `<div class="card anal" id="anal"><div class="row between"><h3 style="margin:0">🔍 审题分析</h3><button class="btn sm ghost" data-act="anskip">${ss.an.seen?'返回做题':'直接做题'} ›</button></div>
+    <div class="muted small" style="margin:4px 0 10px">先想清楚“知道什么、要求什么、该想到什么”，再动笔。</div>
+    <div class="anblk"><div class="anh">① 已知条件 <span class="muted small">${Math.min(A.reveal,nK)}/${nK}</span><span class="grow"></span>${all?spk('ak','已知条件'):''}</div>
+    ${an.known.slice(0, A.reveal).map(knownCard).join('')}
+    ${!all?`<div class="row" style="gap:8px;margin-top:8px"><button class="btn sm" data-act="anext">${A.reveal?'下一个条件 ▸':'看第一个条件 ▸'}</button><button class="linkbtn" style="margin:0" data-act="anall">全部显示</button></div>`:''}
+    ${all&&an.goal?`<div class="angoal pop">🎯 求：${tex(goalTxt(an.goal))}</div>`:''}</div>`;
+  if(all && Z){
+    h += `<div class="anblk"><div class="anh">② 看到这个，你会想到什么？<span class="grow"></span>${A.quizDone?spk('aa','联想'):''}</div>
+      <div class="qtrig">题目里有：${tex(Z.trigger)}</div>
+      <div class="opts small">${Z.opts.map((o,i)=>{ let c=''; if(A.quizDone){ if(o===Z.right) c='right'; else if(Z.choice===i) c='wrong'; } return `<button class="opt ${c}" data-act="anq" data-v="${i}" ${A.quizDone?'disabled':''}><span class="k">${String.fromCharCode(65+i)}</span><span class="grow">${tex(o)}</span></button>`; }).join('')}</div>
+      ${!A.quizDone?`<button class="linkbtn" data-act="anq" data-v="-1">我还想不到，直接看看</button>`:`<div class="fb ${Z.ok?'ok':'hint'} pop"><b class="t">${Z.ok?'✅ 想得对！'+(Z.pts?` <span class="chip ok">+${Z.pts} 积分</span>`:''):'💡 应该联想到：'+tex(Z.right)}</b></div>${assocList(an)}`}</div>`;
+  } else if(all && an.associations.length){
+    h += `<div class="anblk"><div class="anh">② 联想定理 / 公式<span class="grow"></span>${spk('aa','联想')}</div>${assocList(an)}</div>`;
+  }
+  if(quizOpen){
+    if(an.thinkingPath.length) h += `<div class="anblk pop"><div class="anh">③ 解题思路<span class="grow"></span>${spk('ap','解题思路')}</div>${pathList(an)}</div>`;
+    if(an.pitfalls.length) h += `<div class="pop">${pitBox(an).replace('<b>⚠️ 易错点</b>', `<div class="row between"><b>⚠️ 易错点</b>${spk('aw','易错点')}</div>`)}</div>`;
+    h += `<button class="btn block" data-act="anstart" style="margin-top:14px">${back}</button>`;
+  }
+  return h + `</div>`;
+}
+/* 固定原题下方的小提示：求什么 + 隐藏条件（审题后显示） */
+function analysisSummary(an){
+  const hid = an.known.filter(k=>k.hidden);
+  return `<div class="osum">${an.goal?`<span>🎯 ${tex(an.goal)}</span>`:''}${hid.length?`<span class="hs">🕵️ ${hid.map(k=>tex(k.text)).join('；')}</span>`:''}</div>`;
+}
+
 function vPlay(){
   const ss = S.session; if(!ss){ S.view='packs'; return vPacks(); }
   const f = findQ(ss.key); if(!f){ S.session=null; S.view='packs'; return vPacks(); }
@@ -635,13 +724,16 @@ function vPlay(){
   const curM = D.marks[ss.key];
   const markRow = `<div class="markrow"><span class="muted small">试卷初始结果</span><span class="grow"></span>${['ok','wrong','skip'].map(x=>`<button class="mpill ${curM===x?'on '+MARKS[x].cls:''}" data-act="setmark" data-k="${esc(ss.key)}" data-v="${x}">${MARKS[x].e} ${MARKS[x].n}</button>`).join('')}</div>`;
   const col = pinCollapsed();
-  const orig = `<div class="card orig"><div class="ohead"><div class="lab grow">原题 · ${q.knowledgePoints.map(esc).join(' · ')}</div>${spk('orig','原题')}<button class="pintgl" data-act="pintoggle" aria-expanded="${col?'false':'true'}">${col?'展开 ▾':'收起 ▴'}</button></div><div class="obody" id="obody">${tex(q.original)}</div></div>`;
+  const an = qAnalysis(pack, q); const inAn = !!(an && ss.an && ss.stage==='analysis' && ss.phase!=='done');
+  const anBtn = an && ss.phase!=='done' && !inAn ? `<button class="anbtn" data-act="anopen" aria-label="审题分析">🔍 审题</button>` : '';
+  const orig = `<div class="card orig"><div class="ohead"><div class="lab grow">原题 · ${q.knowledgePoints.map(esc).join(' · ')}</div>${anBtn}${spk('orig','原题')}<button class="pintgl" data-act="pintoggle" aria-expanded="${col?'false':'true'}">${col?'展开 ▾':'收起 ▴'}</button></div><div class="obody" id="obody">${tex(q.original)}</div>${an && ss.an && ss.an.seen && !inAn && ss.phase!=='done' ? analysisSummary(an) : ''}</div>`;
   /* 原题（含计时器、🔊）固定在上方；步骤在下方随页面滚动。iPad 横屏改为左右两栏。 */
   const pin = `<div class="pin ${col?'collapsed':''}" id="pin">${head}${orig}</div>`;
   const wrap = (right) => `<div class="playgrid">${pin}<div class="stepspane" id="stepspane"><div id="remind">${remindHTML()}</div>${right}<div class="card markcard">${markRow}</div></div></div>`;
   const dots = `<div class="stepdots">${q.steps.map((s,i)=>`<i class="${ss.results[i]?ss.results[i].status:(i===ss.stepIdx&&ss.phase!=='done'?'cur':'')}"></i>`).join('')}</div>`;
   const done = ss.results.map((r,i)=> (i<ss.stepIdx || ss.phase==='done') ? `<div class="donestep"><span class="b ${r.status==='missed'?'bad':'ok'}">${r.status==='missed'?'!':'✓'}</span><div class="grow"><div class="muted small">第 ${i+1} 步</div>${tex(q.steps[i].prompt)}<div class="small" style="margin-top:4px">答案：<b>${tex(answerText(q.steps[i]))}</b></div></div></div>` : '').join('');
-  if(ss.phase==='done') return wrap(dots + vResult(q, ss) + `<details class="card"><summary style="font-weight:700;cursor:pointer">查看全部步骤</summary>${done}</details>`);
+  if(inAn) return wrap(vAnalysis(q, an, ss));
+  if(ss.phase==='done') return wrap(dots + vResult(q, ss) + (an?`<details class="card anrev"><summary style="font-weight:700;cursor:pointer">🔍 审题分析回顾</summary>${analysisFull(an)}</details>`:'') + `<details class="card"><summary style="font-weight:700;cursor:pointer">查看全部步骤</summary>${done}</details>`);
   const st = q.steps[ss.stepIdx];
   let input = '';
   const locked = ss.phase==='feedback';
@@ -746,6 +838,7 @@ setInterval(()=>{
   const now = Date.now(); const dt = lastTick ? Math.min(now-lastTick, 2000) : 0; lastTick = now;
   const ss = S.session;
   if(!ss || S.view!=='play' || ss.phase==='done' || document.hidden) return;
+  if(ss.stage==='analysis'){ ss.lastAct = ss.elapsed; return; } /* 审题时间不计入限时 */
   ss.elapsed += dt;
   const f = findQ(ss.key); if(!f) return;
   if(!ss.overtime && ss.elapsed/1000 > f.q.timeLimitSec){
@@ -828,29 +921,31 @@ function vReview(){
 
 /* ========== 视图：公式速记 ========== */
 function collectCards(){
-  const fm = new Map(), methods = [];
+  const fm = new Map(), am = new Map(), methods = [];
   allPacks().forEach(p=>p.questions.forEach(q=>{
     q.formulas.forEach(f=>{ const id = f.name+'|'+f.latex; const c = fm.get(id) || {type:'f', id:'f'+hash(id), name:f.name, latex:f.latex, tip:f.tip, kps:new Set()}; q.knowledgePoints.forEach(k=>c.kps.add(k)); fm.set(id,c); });
+    const an = qAnalysis(p, q); if(an) an.associations.forEach(s=>{ if(!s.recall) return; const id = s.trigger+'|'+s.recall; const c = am.get(id) || {type:'a', id:'a'+hash(id), trigger:s.trigger, recall:s.recall, latex:s.latex, why:s.why, kps:new Set()}; q.knowledgePoints.forEach(k=>c.kps.add(k)); am.set(id,c); });
     if(q.method) methods.push({type:'m', id:'m'+hash(p.id+q.id), name:stripTex(q.original).slice(0,40), original:q.original, method:q.method, kps:new Set(q.knowledgePoints)});
   }));
-  return {f:[...fm.values()], m:methods};
+  return {f:[...fm.values()], m:methods, a:[...am.values()]};
 }
 function vFormulas(){
-  const {f,m} = collectCards(); const wm = weakMap();
-  const list = S.fTab==='f' ? f : m;
-  const allKp = [...new Set([...f,...m].flatMap(c=>[...c.kps]))].sort((a,b)=>(wm[b]||0)-(wm[a]||0));
+  const {f,m,a} = collectCards(); const wm = weakMap();
+  const list = S.fTab==='f' ? f : S.fTab==='a' ? a : m;
+  const allKp = [...new Set([...f,...m,...a].flatMap(c=>[...c.kps]))].sort((a,b)=>(wm[b]||0)-(wm[a]||0));
   const score = c => Math.max(0,...[...c.kps].map(k=>wm[k]||0));
   const shown = list.filter(c=>S.fKp==='全部' || c.kps.has(S.fKp)).sort((a,b)=>score(b)-score(a));
   return `<div class="topbar"><h1>🧠 公式速记</h1></div>
-  <div class="seg"><button class="${S.fTab==='f'?'on':''}" data-act="ftab" data-v="f">📐 公式卡 (${f.length})</button><button class="${S.fTab==='m'?'on':''}" data-act="ftab" data-v="m">🧭 思路卡 (${m.length})</button></div>
+  <div class="seg"><button class="${S.fTab==='f'?'on':''}" data-act="ftab" data-v="f">📐 公式卡 (${f.length})</button><button class="${S.fTab==='m'?'on':''}" data-act="ftab" data-v="m">🧭 思路卡 (${m.length})</button><button class="${S.fTab==='a'?'on':''}" data-act="ftab" data-v="a">🔗 联想卡 (${a.length})</button></div>
   <div class="filter">${['全部',...allKp].map(k=>`<button class="${S.fKp===k?'on':''}" data-act="fkp" data-v="${esc(k)}">${(wm[k]||0)>0.15?'🔥':''}${esc(k)}</button>`).join('')}</div>
   <div class="muted small" style="margin:0 4px 8px">点卡片翻面 · 🔥 = 你的薄弱知识点，已排在前面</div>
   <div class="fgrid">${shown.length?shown.map(c=>{
     const weak = score(c)>0.15;
     return `<div class="flip ${S.flipped[c.id]?'on':''}" data-act="flip" data-v="${c.id}"><div class="in">
-      <div class="f ${c.type==='m'?'m':''}"><div class="chips" style="justify-content:center">${[...c.kps].map(k=>`<span class="chip">${esc(k)}</span>`).join('')}${weak?'<span class="chip hot">🔥 薄弱</span>':''}</div>
-        <div class="nm">${c.type==='f'?esc(c.name):'这道题怎么想？'}</div>${c.type==='m'?`<div class="small muted" style="max-height:56px;overflow:hidden">${tex(c.original)}</div>`:''}<div class="tap">👆 点击翻面</div></div>
+      <div class="f ${c.type==='m'?'m':c.type==='a'?'a':''}"><div class="chips" style="justify-content:center">${[...c.kps].map(k=>`<span class="chip">${esc(k)}</span>`).join('')}${weak?'<span class="chip hot">🔥 薄弱</span>':''}</div>
+        <div class="nm">${c.type==='f'?esc(c.name):c.type==='a'?'看到这个，想到什么？':'这道题怎么想？'}</div>${c.type==='a'?`<div class="atrig">${tex(c.trigger)}</div>`:''}${c.type==='m'?`<div class="small muted" style="max-height:56px;overflow:hidden">${tex(c.original)}</div>`:''}<div class="tap">👆 点击翻面</div></div>
       <div class="bk">${c.type==='f'?`<div class="ttl">${esc(c.name)}</div><div class="ltx">${texBlock(c.latex)}</div><div class="muted small">💡 ${tex(c.tip)}</div>`
+        :c.type==='a'?`<div class="ttl a">💭 ${tex(c.recall)}</div>${c.latex?`<div class="ltx">${texBlock(c.latex)}</div>`:''}<div class="muted small">${tex(c.why)}</div>`
         :`<div class="ttl m">🧭 解题思路</div><div style="font-size:15px">${tex(c.method)}</div>`}</div>
     </div></div>`;}).join(''):`<div class="card empty"><div class="e">🗂️</div>这个知识点下暂时没有卡片</div>`}</div>`;
 }
@@ -889,7 +984,7 @@ function vMe(){
     <div class="field"><label>语速</label><div class="seg">${[['slow','🐢 慢'],['normal','🙂 正常'],['fast','🐇 快']].map(([v,n])=>`<button class="${D.settings.rate===v?'on':''}" data-act="vrate" data-v="${v}">${n}</button>`).join('')}</div></div>
     <div class="row" style="justify-content:flex-end"><button class="btn sm ghost" data-act="vtest">▶ 试听</button></div>` : ''}
   </div>`;
-  const setSec = voiceSec + `<div class="card"><h3>🎨 外观主题</h3>
+  const setSec = `<div class="card"><h3>📖 学习方式</h3>${tg('showAnalysis','做题前显示审题分析','先看已知条件、隐藏条件、该联想的定理和解题思路，再分步做题；随时可点原题旁的「🔍 审题」')}</div>` + voiceSec + `<div class="card"><h3>🎨 外观主题</h3>
     <div class="seg themeseg">${[['eye','🌿 护眼'],['dark','🌙 深色'],['system','📱 跟随系统']].map(([v,n])=>`<button class="${curTheme===v?'on':''}" data-act="theme" data-v="${v}">${n}</button>`).join('')}</div>
     <div class="muted small">「护眼」使用暖纸色低眩光背景；「跟随系统」会随手机的深色模式自动切换。</div></div>
   <div class="card"><h3>⚙️ 设置</h3>
@@ -1025,6 +1120,13 @@ const act = {
   backlist(){ hush(); const ss=S.session; const f=ss&&findQ(ss.key); const rv = ss&&ss.mode==='review'; S.session=null; if(rv) go('review'); else { if(f) S.packId=f.pack.id; go('pack'); } },
   retry(){ const k=S.session.key; startQ(k, S.session.mode); },
   nextq(d){ const ss=S.session; startQ(d.k, ss.queue?'review':'normal', ss.queue); },
+  anext(){ const ss=S.session; if(!ss||!ss.an) return; ss.an.reveal++; render(); scrollBelowPin($('#anal .kcard:last-of-type')||$('#anal'),'nearest'); },
+  anall(){ const ss=S.session; if(!ss||!ss.an) return; ss.an.reveal=999; render(); },
+  anq(d){ const ss=S.session; const Z=ss&&ss.an&&ss.an.quiz; if(!Z||ss.an.quizDone) return; const i=+d.v; Z.choice=i; Z.ok = i>=0 && Z.opts[i]===Z.right; Z.pts = Z.ok ? 2 : 0; if(Z.ok){ ss.points += 2; } ss.an.quizDone=true; render(); if(Z.ok) confetti(40);
+    setTimeout(()=>scrollBelowPin($('#anal .assoc')||$('#anal'),'nearest'),30); },
+  anskip(){ leaveAnalysis(); },
+  anstart(){ leaveAnalysis(); },
+  anopen(){ const ss=S.session; if(!ss) return; if(!ss.an){ const f=findQ(ss.key); if(!f || !initAnalysis(ss, f.pack, f.q)) return; } hush(); ss.an.reveal=999; if(ss.an.quiz && !ss.an.quizDone && ss.an.seen) ss.an.quizDone=true; ss.stage='analysis'; render(); scrollBelowPin($('#anal'),'top'); },
   pintoggle(){ const v=!pinCollapsed(); setPinCollapsed(v); const pin=$('#pin'), b=pin&&pin.querySelector('.pintgl'); if(pin) pin.classList.toggle('collapsed', v); if(b){ b.textContent = v?'展开 ▾':'收起 ▴'; b.setAttribute('aria-expanded', v?'false':'true'); } const ob=$('#obody'); if(ob) ob.scrollTop=0; },
   sel(d){ const ss=S.session; if(ss.phase!=='answer') return; ss.sel=+d.v; ss.lastAct=ss.elapsed; document.querySelectorAll('.opt').forEach((b,i)=>b.classList.toggle('sel', i===ss.sel)); },
   key(d){ const inp=$('#ans'); if(!inp) return; S.session.lastAct=S.session.elapsed; const s=inp.selectionStart??inp.value.length, e=inp.selectionEnd??s; inp.value = inp.value.slice(0,s)+d.v+inp.value.slice(e); S.session.draft=inp.value; inp.focus(); const p=s+d.v.length; try{inp.setSelectionRange(p,p);}catch(_){} },
@@ -1068,6 +1170,7 @@ const act = {
     if(d.w==='remind'){ if(ss && ss.remind) say([ss.remind.text]); return; }
     if(!f) return; const q = f.q, st = q.steps[ss.stepIdx];
     if(['orig','prompt','hint','exp','method'].includes(d.w)) say([MQVoiceTexts.forQuestion(q, d.w, ss.stepIdx)]);
+    else if(['ak','aa','ap','aw'].includes(d.w)){ const an = qAnalysis(f.pack, q); if(an) say([MQVoiceTexts.forQuestion(Object.assign({}, q, {analysis: an}), d.w)]); }
   },
   hush(){ hush(); },
   closeremind(){ if(S.session) S.session.remind = null; refreshRemind(); },

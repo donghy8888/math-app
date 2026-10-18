@@ -17,7 +17,22 @@ function answerText(st){
   }
   return String(st.answer);
 }
-/* kind: prompt | hint | exp | orig | method */
+/* 审题分析朗读文本（ak 已知+求 / aa 联想 / ap 思路 / aw 易错点）；同时兼容原始 JSON 与校验后的格式 */
+var CN = ['一','二','三','四','五','六','七','八','九','十'];
+function trimEnd(t){ return String(t==null?'':t).replace(/[。；;，,\s]+$/,''); }
+function analysisText(a, kind){
+  if(!a) return '';
+  if(kind==='ak'){
+    var ks = (a.known||[]).map(function(k){ var t = trimEnd(typeof k==='string' ? k : (k && k.text)); if(!t) return ''; if(k && k.hidden) t = '隐藏条件：'+t+(k.why ? '，因为'+trimEnd(k.why) : ''); return t; }).filter(Boolean);
+    return (ks.length ? '已知：'+ks.join('；')+'。' : '') + (a.goal ? '要求的是：'+trimEnd(a.goal)+'。' : '');
+  }
+  if(kind==='aa') return (a.associations||[]).map(function(s){ return s ? '看到'+trimEnd(s.trigger)+'，想到'+trimEnd(s.recall)+(s.latex ? '：$'+s.latex+'$' : '')+'。'+(s.why ? trimEnd(s.why)+'。' : '') : ''; }).join('');
+  if(kind==='ap'){ var p = (a.thinkingPath||[]).map(trimEnd).filter(Boolean); return p.length ? '解题思路：'+p.map(function(t,i){ return '第'+(CN[i]||(i+1))+'步，'+t+'。'; }).join('') : ''; }
+  if(kind==='aw'){ var w = (a.pitfalls||[]).map(trimEnd).filter(Boolean); return w.length ? '易错点：'+w.join('；')+'。' : ''; }
+  return '';
+}
+var ANALYSIS_KINDS = ['ak','aa','ap','aw'];
+/* kind: prompt | hint | exp | orig | method | ak | aa | ap | aw */
 function forQuestion(q, kind, idx){
   var st = q.steps && q.steps[idx];
   if(kind==='prompt') return st ? st.prompt : '';                         // 只读引导小问题，不读选项
@@ -25,12 +40,14 @@ function forQuestion(q, kind, idx){
   if(kind==='exp') return st ? '正确答案是：'+answerText(st)+'。'+(st.explanation ? '解析：'+st.explanation : '') : '';
   if(kind==='orig') return '原题：'+q.original;
   if(kind==='method') return q.method ? '解题思路：'+q.method : '';
+  if(ANALYSIS_KINDS.indexOf(kind)>=0) return analysisText(q.analysis, kind);
   return '';
 }
 function allForPack(pack){
   var out = [];
   (pack.questions||[]).forEach(function(q){
     out.push(forQuestion(q,'orig'), forQuestion(q,'method'));
+    if(q.analysis) ANALYSIS_KINDS.forEach(function(k){ out.push(forQuestion(q,k)); });
     (q.steps||[]).forEach(function(st,i){ out.push(forQuestion(q,'prompt',i), forQuestion(q,'hint',i), forQuestion(q,'exp',i)); });
   });
   return out.filter(Boolean);
@@ -44,6 +61,6 @@ var CELEBRATE = {
   redeem: '兑换成功！快去找爸爸妈妈领取奖励吧！'
 };
 function fixed(){ var out = []; Object.keys(REMIND).forEach(function(k){ out = out.concat(REMIND[k]); }); out.push(EXTRA.ratePreview, EXTRA.test); out = out.concat(CELEBRATE.tier, [CELEBRATE.badge, CELEBRATE.kp, CELEBRATE.level, CELEBRATE.redeem]); return out; }
-return { REMIND: REMIND, EXTRA: EXTRA, CELEBRATE: CELEBRATE, answerText: answerText, forQuestion: forQuestion, allForPack: allForPack, fixed: fixed };
+return { analysisText: analysisText, ANALYSIS_KINDS: ANALYSIS_KINDS, REMIND: REMIND, EXTRA: EXTRA, CELEBRATE: CELEBRATE, answerText: answerText, forQuestion: forQuestion, allForPack: allForPack, fixed: fixed };
 })();
 if(typeof module!=='undefined') module.exports = MQVoiceTexts;

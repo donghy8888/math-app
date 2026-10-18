@@ -384,6 +384,39 @@ input.pin{letter-spacing:12px;font-size:24px;text-align:center}
 @media(min-width:700px){.badges{grid-template-columns:repeat(4,1fr)}}
 .kpgrid{display:grid;grid-template-columns:1fr;gap:0 10px}
 @media(min-width:700px){.kpgrid{grid-template-columns:1fr 1fr}}
+
+/* ===== 审题分析 ===== */
+.anbtn{flex:none;font-size:13px;font-weight:700;color:var(--pri-ink);background:var(--sky-soft);border-radius:99px;padding:5px 11px;min-height:32px;border:1px solid var(--line)}
+.osum{display:flex;flex-wrap:wrap;gap:4px 12px;margin-top:6px;padding-top:6px;border-top:1px dashed var(--line);font-size:13.5px;line-height:1.6;color:var(--sub)}
+.osum .hs{color:var(--ink)}
+.pin.collapsed .osum{display:none}
+.anal h3{font-size:17px}
+.anblk{margin-top:12px}
+.anh{display:flex;align-items:center;gap:6px;font-weight:800;font-size:14.5px;color:var(--pri-ink);margin-bottom:6px}
+.kcard{display:flex;gap:10px;align-items:flex-start;padding:10px 12px;border-radius:14px;background:var(--card2);margin-top:6px;border:1px solid transparent;font-size:15px;line-height:1.75}
+.kcard .kn{flex:none;width:22px;height:22px;border-radius:50%;background:var(--pri-soft);color:var(--pri-ink);font-size:12px;font-weight:800;display:grid;place-items:center;margin-top:3px}
+.kcard.hid{background:var(--lav-soft);border-color:var(--lav)}
+.kcard.hid .kn{background:var(--lav);color:var(--on-pri)}
+.htag{display:inline-block;font-size:12px;font-weight:800;color:var(--on-pri);background:var(--lav);border-radius:99px;padding:0 8px;margin-right:2px;line-height:20px;vertical-align:1px}
+.why{font-size:13.5px;color:var(--sub);margin-top:3px;line-height:1.6}
+.angoal{margin-top:8px;padding:10px 12px;border-radius:14px;background:var(--pri-soft);color:var(--pri-ink);font-weight:700;font-size:15px}
+.qtrig{padding:8px 12px;border-radius:12px;background:var(--sky-soft);color:var(--ink);font-size:15px;margin-bottom:8px}
+.opts.small .opt{min-height:46px;font-size:14.5px;padding:8px 12px}
+.assoc{padding:10px 12px;border-radius:14px;background:var(--card2);margin-top:8px;font-size:14.5px;line-height:1.7}
+.assoc .tr{color:var(--sub)}.assoc .rc b{color:var(--pri-ink)}
+.assoc .ltx{overflow-x:auto;margin:4px 0;font-size:16px}
+.tpath{margin:0;padding:0;list-style:none;counter-reset:tp}
+.tpath li{counter-increment:tp;position:relative;padding:8px 10px 8px 40px;margin-top:6px;border-radius:14px;background:var(--card2);font-size:14.5px;line-height:1.75}
+.tpath li::before{content:counter(tp);position:absolute;left:10px;top:10px;width:22px;height:22px;border-radius:50%;background:var(--pri);color:var(--on-pri);font-size:12px;font-weight:800;display:grid;place-items:center}
+.tpath li+li::after{content:"";position:absolute;left:20px;top:-8px;width:2px;height:10px;background:var(--pri2)}
+.pitbox{margin-top:12px;padding:10px 14px;border-radius:16px;background:var(--warn-soft);border:1px solid var(--warn-line);color:var(--warn-ink);font-size:14.5px;line-height:1.7}
+.pitbox ul{margin:4px 0 0;padding-left:20px}
+.pitbox .katex{color:inherit}
+.anrev .anblk:first-of-type{margin-top:10px}
+.flip .f.a{background:var(--sky-soft);border-left-color:var(--sky)}
+.flip .f.a .nm{color:var(--pri-ink)}
+.flip .atrig{font-size:15px;text-align:center;margin-top:6px;max-height:84px;overflow:hidden}
+.flip .bk .ttl.a{color:var(--pri-ink);margin-bottom:6px}
 </style>
 </head>
 <body>
