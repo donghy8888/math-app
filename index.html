@@ -417,6 +417,18 @@ input.pin{letter-spacing:12px;font-size:24px;text-align:center}
 .flip .f.a .nm{color:var(--pri-ink)}
 .flip .atrig{font-size:15px;text-align:center;margin-top:6px;max-height:84px;overflow:hidden}
 .flip .bk .ttl.a{color:var(--pri-ink);margin-bottom:6px}
+
+/* ===== 公式速记排序 ===== */
+.sortrow{display:flex;align-items:center;gap:8px;margin:-2px 0 2px}
+.sortrow .seg{flex:1;margin:0}
+.seg.sm button{min-height:34px;font-size:13px;padding:0 4px}
+.flip .f .freq{flex:none;margin-bottom:6px;font-size:12px;font-weight:800;border-radius:99px;padding:2px 9px;background:var(--card);color:var(--sub);border:1px solid var(--line)}
+.flip .f .freq.hot{background:var(--warn-soft);color:var(--warn-ink);border-color:var(--warn-line)}
+.flip .f .chips{max-height:58px;overflow:hidden}
+.flip .bk .srcs{margin-top:8px;font-size:12px;color:var(--sub);line-height:1.5}
+.flip .bk .ltx.alt{font-size:15px;margin:-4px 0 8px}
+@media (min-width:700px){.fgrid{grid-template-columns:1fr 1fr}}
+.kphead{grid-column:1/-1;font-weight:800;color:var(--pri-ink);font-size:14px;margin:6px 4px -4px}
 </style>
 </head>
 <body>
@@ -1271,6 +1283,107 @@ return { analysisText: analysisText, ANALYSIS_KINDS: ANALYSIS_KINDS, REMIND: REM
 if(typeof module!=='undefined') module.exports = MQVoiceTexts;
 </script>
 <script>
+/* 公式速记卡片排序：按“最近 14 天涉及频次”（越近权重越高），无练习记录时按最新试卷中的出现次数 */
+var MQCardRank = (function(){
+  const WINDOW = 14, MIN_W = 0.3;
+  const W = { practice: 2, miss: 3, mark: 2.5, appear: 0.5, kpShare: 0.25 };
+  const FALLBACK_MIN = 3;   // 14 天内练习/标记少于 3 次 → 视为“几乎没有练习记录”
+  const dnum = s => { const m = /^(\d{4})-(\d{1,2})-(\d{1,2})/.exec(String(s||'')); return m ? Date.UTC(+m[1], +m[2]-1, +m[3]) / 864e5 : NaN; };
+  const daysBetween = (from, to) => Math.round(dnum(to) - dnum(from));
+  const pad = n => String(n).padStart(2,'0');
+  const tsDay = ts => { const d = new Date(ts); return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate()); };
+  /* 衰减：今天 1.0，线性降到第 14 天 0.3，更早忽略 */
+  function decay(days){ if(!isFinite(days)) return 0; if(days < 0) days = 0; if(days > WINDOW) return 0; return 1 - (1 - MIN_W) * days / WINDOW; }
+  const fw = s => String(s||'').replace(/[\uFF01-\uFF5E]/g, c => String.fromCharCode(c.charCodeAt(0) - 0xFEE0)).replace(/\u3000/g,' ');
+  function normLatex(s){
+    return fw(s).replace(/\\(left|right|displaystyle|limits)\b/g,'').replace(/\\[dt]frac/g,'\\frac').replace(/\\[,;:! ]/g,'')
+      .replace(/\\iff\b|⇔/g,'\\Leftrightarrow').replace(/\\neq\b|≠/g,'\\ne').replace(/\\geq\b|≥/g,'\\ge').replace(/\\leq\b|≤/g,'\\le').replace(/\\times\b|×/g,'\\times').replace(/[−–]/g,'-')
+      .replace(/\s+/g,'').replace(/\{(\\?[A-Za-z0-9])\}/g,'$1').replace(/^\$+|\$+$/g,'');
+  }
+  const normText = s => fw(s).replace(/\$/g,'').replace(/[\s，。、：:,.；;！!？?“”"'（）()]/g,'').toLowerCase();
+  function packDay(p){
+    let best = /^\d{4}-\d{1,2}-\d{1,2}/.test(p.date||'') ? String(p.date).slice(0,10) : '';
+    if(p.importedAt){ const d = tsDay(p.importedAt); if(!best || dnum(d) > dnum(best)) best = d; }
+    return best;
+  }
+  /* opts: {packs, attempts, marks, review, today, analysisOf(p,q), isMiss(v)} */
+  function build(opts){
+    const packs = opts.packs || [], today = opts.today, isMiss = opts.isMiss || (v => v==='wrong' || v==='skip');
+    const anOf = opts.analysisOf || ((p,q) => q.analysis || null);
+    const qk = (p,q) => p.id + '::' + q.id;
+    const qinfo = new Map();   // key → {pack, q, act:[{days,w}], appear:[{days,w}]}
+    const pday = new Map();
+    packs.forEach(p => { pday.set(p.id, packDay(p)); p.questions.forEach(q => qinfo.set(qk(p,q), {p, q, act:[], appear:[]})); });
+    // 试卷初始结果 ❌/⭕：日期取复习队列中记录的标记日期，否则取题包日期；同时让题包的“最近标记日”变新
+    Object.keys(opts.marks || {}).forEach(k => {
+      const it = qinfo.get(k); if(!it) return;
+      const r = (opts.review || {})[k]; const d = r && r.src === 'mark' && r.added ? r.added : pday.get(it.p.id);
+      if(d && dnum(d) > dnum(pday.get(it.p.id) || '1970-01-01')) pday.set(it.p.id, d);
+      if(isMiss(opts.marks[k])) it.act.push({days: daysBetween(d, today), w: W.mark, kind:'mark'});
+    });
+    (opts.attempts || []).forEach(a => { const it = qinfo.get(a.key); if(!it) return; it.act.push({days: daysBetween(a.date || tsDay(a.ts), today), w: (a.missed || a.overtime) ? W.miss : W.practice, kind:'practice'}); });
+    qinfo.forEach(it => { const d = pday.get(it.p.id); if(d) it.appear.push({days: daysBetween(d, today), w: W.appear, kind:'appear'}); });
+    // 最新试卷：题包日期（导入日 / 试卷日期 / 最近标记日）最大的那一天的所有题包
+    let newestDay = ''; pday.forEach(d => { if(d && (!newestDay || dnum(d) > dnum(newestDay))) newestDay = d; });
+    const newestIds = new Set(); pday.forEach((d,id) => { if(d && d === newestDay) newestIds.add(id); });
+    let totalAct = 0; qinfo.forEach(it => it.act.forEach(e => { if(decay(e.days) > 0) totalAct++; }));
+    const mode = totalAct < FALLBACK_MIN ? 'fallback' : 'recent';
+
+    const fm = new Map(), am = new Map(), methods = []; let order = 0;
+    const addVar = (c, latex, n) => { if(!latex) return; const k = normLatex(latex); const v = c.variants.find(x => x.k === k); if(v) v.n += n; else c.variants.push({k, latex, n}); };
+    const touch = (c, it) => { const key = qk(it.p, it.q); if(!c.qs.includes(key)) c.qs.push(key); it.q.knowledgePoints.forEach(k => c.kps.add(k)); };
+    qinfo.forEach(it => {
+      const {p, q} = it;
+      (q.formulas || []).forEach(f => {
+        // 同一公式：规范化后的 LaTeX 相同，或名称相同，都合并成一张卡
+        const lk = normLatex(f.latex), nk = normText(f.name); if(!lk && !nk) return;
+        let c = (lk && fm.get('L:'+lk)) || (nk && fm.get('N:'+nk)), c2 = (nk && fm.get('N:'+nk));
+        if(c && c2 && c2 !== c){ // 两张已有卡片被这条公式连起来 → 合并
+          c2.qs.forEach(k => { if(!c.qs.includes(k)) c.qs.push(k); }); c2.kps.forEach(k => c.kps.add(k)); c2.variants.forEach(v => addVar(c, v.latex, v.n));
+          fm.forEach((v,k) => { if(v === c2) fm.set(k, c); }); c.order = Math.min(c.order, c2.order);
+        }
+        if(!c){ c = {type:'f', key: lk ? 'L:'+lk : 'N:'+nk, name:f.name, latex:f.latex, tip:f.tip, kps:new Set(), qs:[], variants:[], order:order++}; }
+        if(lk) fm.set('L:'+lk, c); if(nk) fm.set('N:'+nk, c);
+        if(!c.tip && f.tip) c.tip = f.tip; addVar(c, f.latex, 1); touch(c, it);
+      });
+      const an = anOf(p, q);
+      if(an && an.associations) an.associations.forEach(s => {
+        if(!s.recall) return; const key = normText(s.recall); if(!key) return;
+        let c = am.get(key); if(!c){ c = {type:'a', key, trigger:s.trigger, triggers:[], recall:s.recall, latex:s.latex, why:s.why, kps:new Set(), qs:[], order:order++}; am.set(key, c); }
+        if(s.trigger && !c.triggers.includes(s.trigger)) c.triggers.push(s.trigger); if(!c.latex && s.latex) c.latex = s.latex; if(!c.why && s.why) c.why = s.why; touch(c, it);
+      });
+      if(q.method) methods.push({type:'m', key:qk(p,q), original:q.original, method:q.method, kps:new Set(q.knowledgePoints), qs:[qk(p,q)], order:order++});
+    });
+    const score = (c, kpShare) => {
+      let s = 0, a7 = 0, a14 = 0, nw = 0;
+      c.qs.forEach(k => { const it = qinfo.get(k);
+        it.act.forEach(e => { const d = decay(e.days); if(d > 0){ s += e.w * d; a14++; if(e.days <= 7) a7++; } });
+        it.appear.forEach(e => { s += e.w * decay(e.days); });
+        if(newestIds.has(it.p.id)) nw++; });
+      if(kpShare){ // 思路卡：同知识点的其它题被练习，也算轻度涉及
+        qinfo.forEach((it, k) => { if(c.qs.includes(k) || !it.q.knowledgePoints.some(x => c.kps.has(x))) return;
+          it.act.forEach(e => { s += W.kpShare * e.w * decay(e.days); }); });
+      }
+      c.score = Math.round(s * 1000) / 1000; c.act7 = a7; c.act14 = a14; c.newest = nw; c.total = c.qs.length;
+      c.badge = a7 ? '近7天 ×' + a7 : a14 ? '近14天 ×' + a14 : (nw ? '新试卷 ×' + nw : '');
+      return c;
+    };
+    const fcards = [...new Set(fm.values())];
+    fcards.forEach(c => { const vs = c.variants.slice().sort((x,y) => y.n - x.n); if(vs.length){ c.latex = vs[0].latex; } c.alt = vs.slice(1).map(v => v.latex); delete c.variants; });
+    const f = fcards.map(c => score(c)), a = [...am.values()].map(c => score(c)), m = methods.map(c => score(c, true));
+    return {f: rank(f, mode), a: rank(a, mode), m: rank(m, mode), mode, newestIds:[...newestIds], newestDay, totalAct};
+  }
+  function cmpFreq(mode){
+    return mode === 'fallback'
+      ? (x,y) => (y.newest - x.newest) || (y.score - x.score) || (y.total - x.total) || (x.order - y.order)
+      : (x,y) => (y.score - x.score) || (y.newest - x.newest) || (y.total - x.total) || (x.order - y.order);
+  }
+  function rank(cards, mode){ return cards.slice().sort(cmpFreq(mode)); }
+  return { build, rank, decay, normLatex, normText, packDay, daysBetween, W, WINDOW, FALLBACK_MIN };
+})();
+if(typeof module !== 'undefined') module.exports = MQCardRank;
+</script>
+<script>
 (function(){
 'use strict';
 /* ========== 基础工具 ========== */
@@ -1324,7 +1437,7 @@ function texBlock(latex){ return tex('$'+String(latex||'').replace(/\$/g,'')+'$'
 /* ========== 数据存储 ========== */
 const KEY = 'mathquest_data_v1';
 function defData(){
-  return {v:1, settings:{nickname:'小数学家', goalNew:3, goalReview:true, voice:true, autoRead:true, reminders:true, rate:'normal', voicePick:'', showAnalysis:true}, packs:[], attempts:[], review:{}, checkins:{}, points:0, badges:{}, daily:{}, marks:{}, hadReview:false, created:Date.now()};
+  return {v:1, settings:{nickname:'小数学家', goalNew:3, goalReview:true, voice:true, autoRead:true, reminders:true, rate:'normal', voicePick:'', showAnalysis:true, cardSort:'freq'}, packs:[], attempts:[], review:{}, checkins:{}, points:0, badges:{}, daily:{}, marks:{}, hadReview:false, created:Date.now()};
 }
 let D;
 function load(){
@@ -2194,33 +2307,47 @@ function vReview(){
 
 /* ========== 视图：公式速记 ========== */
 function collectCards(){
-  const fm = new Map(), am = new Map(), methods = [];
-  allPacks().forEach(p=>p.questions.forEach(q=>{
-    q.formulas.forEach(f=>{ const id = f.name+'|'+f.latex; const c = fm.get(id) || {type:'f', id:'f'+hash(id), name:f.name, latex:f.latex, tip:f.tip, kps:new Set()}; q.knowledgePoints.forEach(k=>c.kps.add(k)); fm.set(id,c); });
-    const an = qAnalysis(p, q); if(an) an.associations.forEach(s=>{ if(!s.recall) return; const id = s.trigger+'|'+s.recall; const c = am.get(id) || {type:'a', id:'a'+hash(id), trigger:s.trigger, recall:s.recall, latex:s.latex, why:s.why, kps:new Set()}; q.knowledgePoints.forEach(k=>c.kps.add(k)); am.set(id,c); });
-    if(q.method) methods.push({type:'m', id:'m'+hash(p.id+q.id), name:stripTex(q.original).slice(0,40), original:q.original, method:q.method, kps:new Set(q.knowledgePoints)});
-  }));
-  return {f:[...fm.values()], m:methods, a:[...am.values()]};
+  const r = MQCardRank.build({packs: allPacks(), attempts: D.attempts, marks: D.marks, review: D.review, today: today(), analysisOf: qAnalysis, isMiss});
+  const pre = {f:'f', a:'a', m:'m'};
+  ['f','a','m'].forEach(t => r[t].forEach(c => { c.id = pre[t] + hash(c.key); if(t==='m'){ const fq = findQ(c.key); c.name = fq ? stripTex(fq.q.original).slice(0,40) : ''; } }));
+  return r;
 }
+const CARD_SORTS = [['freq','🔥 近期高频'],['weak','🎯 薄弱优先'],['kp','🏷️ 按知识点']];
+function cardSrcLabel(k){ const f = findQ(k); if(!f) return ''; const t = f.pack.title.replace(/^八年级(第一学期)?/,'').slice(0,8); return `${t}·第${qLabel(f.q, f.pack.questions.indexOf(f.q))}题`; }
 function vFormulas(){
-  const {f,m,a} = collectCards(); const wm = weakMap();
-  const list = S.fTab==='f' ? f : S.fTab==='a' ? a : m;
+  const R = collectCards(), {f,m,a} = R; const wm = weakMap();
+  const sortBy = CARD_SORTS.some(x=>x[0]===D.settings.cardSort) ? D.settings.cardSort : 'freq';
+  const list = S.fTab==='f' ? f : S.fTab==='a' ? a : m;   // 已按近期高频排好（稳定）
   const allKp = [...new Set([...f,...m,...a].flatMap(c=>[...c.kps]))].sort((a,b)=>(wm[b]||0)-(wm[a]||0));
-  const score = c => Math.max(0,...[...c.kps].map(k=>wm[k]||0));
-  const shown = list.filter(c=>S.fKp==='全部' || c.kps.has(S.fKp)).sort((a,b)=>score(b)-score(a));
+  const weakScore = c => Math.max(0,...[...c.kps].map(k=>wm[k]||0));
+  const rankIdx = new Map(list.map((c,i)=>[c,i]));
+  let shown = list.filter(c=>S.fKp==='全部' || c.kps.has(S.fKp));
+  const kpOrder = [...new Set(list.flatMap(c=>[...c.kps]))].sort((x,y)=>x.localeCompare(y,'zh-Hans-CN'));
+  const primaryKp = c => S.fKp!=='全部' && c.kps.has(S.fKp) ? S.fKp : kpOrder.find(k=>c.kps.has(k)) || '综合';
+  if(sortBy==='weak') shown = shown.slice().sort((x,y)=>(weakScore(y)-weakScore(x)) || (rankIdx.get(x)-rankIdx.get(y)));
+  else if(sortBy==='kp') shown = shown.slice().sort((x,y)=>(kpOrder.indexOf(primaryKp(x))-kpOrder.indexOf(primaryKp(y))) || (rankIdx.get(x)-rankIdx.get(y)));
+  const newestT = allPacks().filter(p=>R.newestIds.includes(p.id)).map(p=>'《'+p.title+'》').join('、');
+  const note = sortBy==='freq' ? (R.mode==='fallback' ? `还没有近期练习记录，先按最新试卷${esc(newestT)}里出现的次数排序` : '按最近 14 天练习、错题和新试卷涉及的次数排序，越近越靠前')
+    : sortBy==='weak' ? '薄弱知识点的卡片排在前面，同等情况下按近期频次' : '按知识点分组，组内按近期频次';
+  let lastKp = null;
+  const cardsHtml = shown.map(c=>{
+    let head = '';
+    if(sortBy==='kp'){ const k = primaryKp(c); if(k!==lastKp){ lastKp = k; head = `<div class="kphead">🏷️ ${esc(k)}</div>`; } }
+    const weak = weakScore(c)>0.15, srcs = c.type==='m' ? [] : c.qs;
+    const srcLine = srcs.length ? `<div class="srcs">📄 ${srcs.slice(0,4).map(cardSrcLabel).filter(Boolean).map(esc).join('、')}${srcs.length>4?` 等 ${srcs.length} 题`:''}</div>` : '';
+    return head + `<div class="flip ${S.flipped[c.id]?'on':''}" data-act="flip" data-v="${c.id}" data-key="${esc(c.key)}"><div class="in">
+      <div class="f ${c.type==='m'?'m':c.type==='a'?'a':''}">${c.badge?`<span class="freq ${c.act14?'hot':''}">${c.act14?'🔥 ':'📝 '}${esc(c.badge)}</span>`:''}<div class="chips" style="justify-content:center">${[...c.kps].slice(0,2).map(k=>`<span class="chip">${esc(k)}</span>`).join('')}${weak?'<span class="chip hot">🔥 薄弱</span>':''}</div>
+        <div class="nm">${c.type==='f'?esc(c.name):c.type==='a'?'看到这个，想到什么？':'这道题怎么想？'}</div>${c.type==='a'?`<div class="atrig">${tex(c.trigger)}</div>`:''}${c.type==='m'?`<div class="small muted" style="max-height:56px;overflow:hidden">${tex(c.original)}</div>`:''}<div class="tap">👆 点击翻面${c.total>1&&c.type!=='m'?` · 出现在 ${c.total} 道题`:''}</div></div>
+      <div class="bk">${c.type==='f'?`<div class="ttl">${esc(c.name)}</div><div class="ltx">${texBlock(c.latex)}</div>${c.alt&&c.alt.length?`<div class="ltx alt"><span class="muted small">也写作</span> ${tex('$'+c.alt[0]+'$')}</div>`:''}<div class="muted small">💡 ${tex(c.tip)}</div>`
+        :c.type==='a'?`<div class="ttl a">💭 ${tex(c.recall)}</div>${c.latex?`<div class="ltx">${texBlock(c.latex)}</div>`:''}<div class="muted small">${tex(c.why)}</div>`
+        :`<div class="ttl m">🧭 解题思路</div><div style="font-size:15px">${tex(c.method)}</div>`}${srcLine}</div>
+    </div></div>`;}).join('');
   return `<div class="topbar"><h1>🧠 公式速记</h1></div>
   <div class="seg"><button class="${S.fTab==='f'?'on':''}" data-act="ftab" data-v="f">📐 公式卡 (${f.length})</button><button class="${S.fTab==='m'?'on':''}" data-act="ftab" data-v="m">🧭 思路卡 (${m.length})</button><button class="${S.fTab==='a'?'on':''}" data-act="ftab" data-v="a">🔗 联想卡 (${a.length})</button></div>
+  <div class="sortrow"><span class="muted small">排序</span><div class="seg sm" role="radiogroup" aria-label="卡片排序">${CARD_SORTS.map(([v,n])=>`<button class="${sortBy===v?'on':''}" data-act="fsort" data-v="${v}" role="radio" aria-checked="${sortBy===v}">${n}</button>`).join('')}</div></div>
   <div class="filter">${['全部',...allKp].map(k=>`<button class="${S.fKp===k?'on':''}" data-act="fkp" data-v="${esc(k)}">${(wm[k]||0)>0.15?'🔥':''}${esc(k)}</button>`).join('')}</div>
-  <div class="muted small" style="margin:0 4px 8px">点卡片翻面 · 🔥 = 你的薄弱知识点，已排在前面</div>
-  <div class="fgrid">${shown.length?shown.map(c=>{
-    const weak = score(c)>0.15;
-    return `<div class="flip ${S.flipped[c.id]?'on':''}" data-act="flip" data-v="${c.id}"><div class="in">
-      <div class="f ${c.type==='m'?'m':c.type==='a'?'a':''}"><div class="chips" style="justify-content:center">${[...c.kps].map(k=>`<span class="chip">${esc(k)}</span>`).join('')}${weak?'<span class="chip hot">🔥 薄弱</span>':''}</div>
-        <div class="nm">${c.type==='f'?esc(c.name):c.type==='a'?'看到这个，想到什么？':'这道题怎么想？'}</div>${c.type==='a'?`<div class="atrig">${tex(c.trigger)}</div>`:''}${c.type==='m'?`<div class="small muted" style="max-height:56px;overflow:hidden">${tex(c.original)}</div>`:''}<div class="tap">👆 点击翻面</div></div>
-      <div class="bk">${c.type==='f'?`<div class="ttl">${esc(c.name)}</div><div class="ltx">${texBlock(c.latex)}</div><div class="muted small">💡 ${tex(c.tip)}</div>`
-        :c.type==='a'?`<div class="ttl a">💭 ${tex(c.recall)}</div>${c.latex?`<div class="ltx">${texBlock(c.latex)}</div>`:''}<div class="muted small">${tex(c.why)}</div>`
-        :`<div class="ttl m">🧭 解题思路</div><div style="font-size:15px">${tex(c.method)}</div>`}</div>
-    </div></div>`;}).join(''):`<div class="card empty"><div class="e">🗂️</div>这个知识点下暂时没有卡片</div>`}</div>`;
+  <div class="muted small" id="sortnote" style="margin:0 4px 8px">${note} · 点卡片翻面</div>
+  <div class="fgrid">${shown.length?cardsHtml:`<div class="card empty"><div class="e">🗂️</div>这个知识点下暂时没有卡片</div>`}</div>`;
 }
 
 /* ========== 视图：我的（薄弱项分析 / 徽章 / 设置） ========== */
@@ -2451,6 +2578,7 @@ const act = {
   vrate(d){ D.settings.rate = d.v; save(); render(); say([MQVoiceTexts.EXTRA.ratePreview]); },
   vtest(){ say([MQVoiceTexts.EXTRA.test]); },
   ftab(d){ S.fTab=d.v; render(); },
+  fsort(d){ D.settings.cardSort=d.v; save(); render(); },
   fkp(d){ S.fKp=d.v; if(S.view!=='formulas'){ go('formulas'); } else render(); },
   flip(d,el){ S.flipped[d.v]=!S.flipped[d.v]; el.classList.toggle('on'); },
   kpall(){ S.kpAll=!S.kpAll; render(); },

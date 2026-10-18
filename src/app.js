@@ -51,7 +51,7 @@ function texBlock(latex){ return tex('$'+String(latex||'').replace(/\$/g,'')+'$'
 /* ========== 数据存储 ========== */
 const KEY = 'mathquest_data_v1';
 function defData(){
-  return {v:1, settings:{nickname:'小数学家', goalNew:3, goalReview:true, voice:true, autoRead:true, reminders:true, rate:'normal', voicePick:'', showAnalysis:true}, packs:[], attempts:[], review:{}, checkins:{}, points:0, badges:{}, daily:{}, marks:{}, hadReview:false, created:Date.now()};
+  return {v:1, settings:{nickname:'小数学家', goalNew:3, goalReview:true, voice:true, autoRead:true, reminders:true, rate:'normal', voicePick:'', showAnalysis:true, cardSort:'freq'}, packs:[], attempts:[], review:{}, checkins:{}, points:0, badges:{}, daily:{}, marks:{}, hadReview:false, created:Date.now()};
 }
 let D;
 function load(){
@@ -921,33 +921,47 @@ function vReview(){
 
 /* ========== 视图：公式速记 ========== */
 function collectCards(){
-  const fm = new Map(), am = new Map(), methods = [];
-  allPacks().forEach(p=>p.questions.forEach(q=>{
-    q.formulas.forEach(f=>{ const id = f.name+'|'+f.latex; const c = fm.get(id) || {type:'f', id:'f'+hash(id), name:f.name, latex:f.latex, tip:f.tip, kps:new Set()}; q.knowledgePoints.forEach(k=>c.kps.add(k)); fm.set(id,c); });
-    const an = qAnalysis(p, q); if(an) an.associations.forEach(s=>{ if(!s.recall) return; const id = s.trigger+'|'+s.recall; const c = am.get(id) || {type:'a', id:'a'+hash(id), trigger:s.trigger, recall:s.recall, latex:s.latex, why:s.why, kps:new Set()}; q.knowledgePoints.forEach(k=>c.kps.add(k)); am.set(id,c); });
-    if(q.method) methods.push({type:'m', id:'m'+hash(p.id+q.id), name:stripTex(q.original).slice(0,40), original:q.original, method:q.method, kps:new Set(q.knowledgePoints)});
-  }));
-  return {f:[...fm.values()], m:methods, a:[...am.values()]};
+  const r = MQCardRank.build({packs: allPacks(), attempts: D.attempts, marks: D.marks, review: D.review, today: today(), analysisOf: qAnalysis, isMiss});
+  const pre = {f:'f', a:'a', m:'m'};
+  ['f','a','m'].forEach(t => r[t].forEach(c => { c.id = pre[t] + hash(c.key); if(t==='m'){ const fq = findQ(c.key); c.name = fq ? stripTex(fq.q.original).slice(0,40) : ''; } }));
+  return r;
 }
+const CARD_SORTS = [['freq','🔥 近期高频'],['weak','🎯 薄弱优先'],['kp','🏷️ 按知识点']];
+function cardSrcLabel(k){ const f = findQ(k); if(!f) return ''; const t = f.pack.title.replace(/^八年级(第一学期)?/,'').slice(0,8); return `${t}·第${qLabel(f.q, f.pack.questions.indexOf(f.q))}题`; }
 function vFormulas(){
-  const {f,m,a} = collectCards(); const wm = weakMap();
-  const list = S.fTab==='f' ? f : S.fTab==='a' ? a : m;
+  const R = collectCards(), {f,m,a} = R; const wm = weakMap();
+  const sortBy = CARD_SORTS.some(x=>x[0]===D.settings.cardSort) ? D.settings.cardSort : 'freq';
+  const list = S.fTab==='f' ? f : S.fTab==='a' ? a : m;   // 已按近期高频排好（稳定）
   const allKp = [...new Set([...f,...m,...a].flatMap(c=>[...c.kps]))].sort((a,b)=>(wm[b]||0)-(wm[a]||0));
-  const score = c => Math.max(0,...[...c.kps].map(k=>wm[k]||0));
-  const shown = list.filter(c=>S.fKp==='全部' || c.kps.has(S.fKp)).sort((a,b)=>score(b)-score(a));
+  const weakScore = c => Math.max(0,...[...c.kps].map(k=>wm[k]||0));
+  const rankIdx = new Map(list.map((c,i)=>[c,i]));
+  let shown = list.filter(c=>S.fKp==='全部' || c.kps.has(S.fKp));
+  const kpOrder = [...new Set(list.flatMap(c=>[...c.kps]))].sort((x,y)=>x.localeCompare(y,'zh-Hans-CN'));
+  const primaryKp = c => S.fKp!=='全部' && c.kps.has(S.fKp) ? S.fKp : kpOrder.find(k=>c.kps.has(k)) || '综合';
+  if(sortBy==='weak') shown = shown.slice().sort((x,y)=>(weakScore(y)-weakScore(x)) || (rankIdx.get(x)-rankIdx.get(y)));
+  else if(sortBy==='kp') shown = shown.slice().sort((x,y)=>(kpOrder.indexOf(primaryKp(x))-kpOrder.indexOf(primaryKp(y))) || (rankIdx.get(x)-rankIdx.get(y)));
+  const newestT = allPacks().filter(p=>R.newestIds.includes(p.id)).map(p=>'《'+p.title+'》').join('、');
+  const note = sortBy==='freq' ? (R.mode==='fallback' ? `还没有近期练习记录，先按最新试卷${esc(newestT)}里出现的次数排序` : '按最近 14 天练习、错题和新试卷涉及的次数排序，越近越靠前')
+    : sortBy==='weak' ? '薄弱知识点的卡片排在前面，同等情况下按近期频次' : '按知识点分组，组内按近期频次';
+  let lastKp = null;
+  const cardsHtml = shown.map(c=>{
+    let head = '';
+    if(sortBy==='kp'){ const k = primaryKp(c); if(k!==lastKp){ lastKp = k; head = `<div class="kphead">🏷️ ${esc(k)}</div>`; } }
+    const weak = weakScore(c)>0.15, srcs = c.type==='m' ? [] : c.qs;
+    const srcLine = srcs.length ? `<div class="srcs">📄 ${srcs.slice(0,4).map(cardSrcLabel).filter(Boolean).map(esc).join('、')}${srcs.length>4?` 等 ${srcs.length} 题`:''}</div>` : '';
+    return head + `<div class="flip ${S.flipped[c.id]?'on':''}" data-act="flip" data-v="${c.id}" data-key="${esc(c.key)}"><div class="in">
+      <div class="f ${c.type==='m'?'m':c.type==='a'?'a':''}">${c.badge?`<span class="freq ${c.act14?'hot':''}">${c.act14?'🔥 ':'📝 '}${esc(c.badge)}</span>`:''}<div class="chips" style="justify-content:center">${[...c.kps].slice(0,2).map(k=>`<span class="chip">${esc(k)}</span>`).join('')}${weak?'<span class="chip hot">🔥 薄弱</span>':''}</div>
+        <div class="nm">${c.type==='f'?esc(c.name):c.type==='a'?'看到这个，想到什么？':'这道题怎么想？'}</div>${c.type==='a'?`<div class="atrig">${tex(c.trigger)}</div>`:''}${c.type==='m'?`<div class="small muted" style="max-height:56px;overflow:hidden">${tex(c.original)}</div>`:''}<div class="tap">👆 点击翻面${c.total>1&&c.type!=='m'?` · 出现在 ${c.total} 道题`:''}</div></div>
+      <div class="bk">${c.type==='f'?`<div class="ttl">${esc(c.name)}</div><div class="ltx">${texBlock(c.latex)}</div>${c.alt&&c.alt.length?`<div class="ltx alt"><span class="muted small">也写作</span> ${tex('$'+c.alt[0]+'$')}</div>`:''}<div class="muted small">💡 ${tex(c.tip)}</div>`
+        :c.type==='a'?`<div class="ttl a">💭 ${tex(c.recall)}</div>${c.latex?`<div class="ltx">${texBlock(c.latex)}</div>`:''}<div class="muted small">${tex(c.why)}</div>`
+        :`<div class="ttl m">🧭 解题思路</div><div style="font-size:15px">${tex(c.method)}</div>`}${srcLine}</div>
+    </div></div>`;}).join('');
   return `<div class="topbar"><h1>🧠 公式速记</h1></div>
   <div class="seg"><button class="${S.fTab==='f'?'on':''}" data-act="ftab" data-v="f">📐 公式卡 (${f.length})</button><button class="${S.fTab==='m'?'on':''}" data-act="ftab" data-v="m">🧭 思路卡 (${m.length})</button><button class="${S.fTab==='a'?'on':''}" data-act="ftab" data-v="a">🔗 联想卡 (${a.length})</button></div>
+  <div class="sortrow"><span class="muted small">排序</span><div class="seg sm" role="radiogroup" aria-label="卡片排序">${CARD_SORTS.map(([v,n])=>`<button class="${sortBy===v?'on':''}" data-act="fsort" data-v="${v}" role="radio" aria-checked="${sortBy===v}">${n}</button>`).join('')}</div></div>
   <div class="filter">${['全部',...allKp].map(k=>`<button class="${S.fKp===k?'on':''}" data-act="fkp" data-v="${esc(k)}">${(wm[k]||0)>0.15?'🔥':''}${esc(k)}</button>`).join('')}</div>
-  <div class="muted small" style="margin:0 4px 8px">点卡片翻面 · 🔥 = 你的薄弱知识点，已排在前面</div>
-  <div class="fgrid">${shown.length?shown.map(c=>{
-    const weak = score(c)>0.15;
-    return `<div class="flip ${S.flipped[c.id]?'on':''}" data-act="flip" data-v="${c.id}"><div class="in">
-      <div class="f ${c.type==='m'?'m':c.type==='a'?'a':''}"><div class="chips" style="justify-content:center">${[...c.kps].map(k=>`<span class="chip">${esc(k)}</span>`).join('')}${weak?'<span class="chip hot">🔥 薄弱</span>':''}</div>
-        <div class="nm">${c.type==='f'?esc(c.name):c.type==='a'?'看到这个，想到什么？':'这道题怎么想？'}</div>${c.type==='a'?`<div class="atrig">${tex(c.trigger)}</div>`:''}${c.type==='m'?`<div class="small muted" style="max-height:56px;overflow:hidden">${tex(c.original)}</div>`:''}<div class="tap">👆 点击翻面</div></div>
-      <div class="bk">${c.type==='f'?`<div class="ttl">${esc(c.name)}</div><div class="ltx">${texBlock(c.latex)}</div><div class="muted small">💡 ${tex(c.tip)}</div>`
-        :c.type==='a'?`<div class="ttl a">💭 ${tex(c.recall)}</div>${c.latex?`<div class="ltx">${texBlock(c.latex)}</div>`:''}<div class="muted small">${tex(c.why)}</div>`
-        :`<div class="ttl m">🧭 解题思路</div><div style="font-size:15px">${tex(c.method)}</div>`}</div>
-    </div></div>`;}).join(''):`<div class="card empty"><div class="e">🗂️</div>这个知识点下暂时没有卡片</div>`}</div>`;
+  <div class="muted small" id="sortnote" style="margin:0 4px 8px">${note} · 点卡片翻面</div>
+  <div class="fgrid">${shown.length?cardsHtml:`<div class="card empty"><div class="e">🗂️</div>这个知识点下暂时没有卡片</div>`}</div>`;
 }
 
 /* ========== 视图：我的（薄弱项分析 / 徽章 / 设置） ========== */
@@ -1178,6 +1192,7 @@ const act = {
   vrate(d){ D.settings.rate = d.v; save(); render(); say([MQVoiceTexts.EXTRA.ratePreview]); },
   vtest(){ say([MQVoiceTexts.EXTRA.test]); },
   ftab(d){ S.fTab=d.v; render(); },
+  fsort(d){ D.settings.cardSort=d.v; save(); render(); },
   fkp(d){ S.fKp=d.v; if(S.view!=='formulas'){ go('formulas'); } else render(); },
   flip(d,el){ S.flipped[d.v]=!S.flipped[d.v]; el.classList.toggle('on'); },
   kpall(){ S.kpAll=!S.kpAll; render(); },
