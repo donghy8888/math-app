@@ -317,6 +317,7 @@ function render(){
   const v = S.view;
   const html = v==='home'?vHome(): v==='packs'?vPacks(): v==='pack'?vPack(): v==='play'?vPlay(): v==='review'?vReview(): v==='formulas'?vFormulas(): v==='marks'?vMarks(): vMe();
   $('#app').innerHTML = html;
+  document.body.classList.toggle('inplay', v==='play');
   renderTabs();
   if(v==='play') afterPlay();
 }
@@ -510,14 +511,19 @@ function vPlay(){
   const qi = pack.questions.indexOf(q)+1;
   const head = `<div class="playhead"><button class="iconbtn" data-act="quit">‹</button>
     <div class="grow"><div style="font-weight:800;font-size:15px">${ss.mode==='review'?'🔁 巩固复习':'第 '+esc(qLabel(q,qi-1))+' 题'} ${ss.queue?`<span class="muted small">(${ss.queue.indexOf(ss.key)+1}/${ss.queue.length})</span>`:''}</div><div class="small muted">难度 ${diffStr(q.difficulty)}</div></div>
+    <button class="hushpill" data-act="hush" aria-label="停止朗读"><span class="wave"><i></i><i></i><i></i></span>停止</button>
     <div class="timer" id="timer">⏱ <span id="tval">--:--</span></div></div>
-    <div class="tbar" id="tbar"><i style="width:100%"></i></div><div id="remind">${remindHTML()}</div>`;
+    <div class="tbar" id="tbar"><i style="width:100%"></i></div>`;
   const curM = D.marks[ss.key];
   const markRow = `<div class="markrow"><span class="muted small">试卷初始结果</span><span class="grow"></span>${['ok','wrong','skip'].map(x=>`<button class="mpill ${curM===x?'on '+MARKS[x].cls:''}" data-act="setmark" data-k="${esc(ss.key)}" data-v="${x}">${MARKS[x].e} ${MARKS[x].n}</button>`).join('')}</div>`;
-  const orig = `<div class="card orig"><div class="row between"><div class="lab">原题 · ${q.knowledgePoints.map(esc).join(' · ')}</div>${spk('orig','原题')}</div>${tex(q.original)}${markRow}</div>`;
+  const col = pinCollapsed();
+  const orig = `<div class="card orig"><div class="ohead"><div class="lab grow">原题 · ${q.knowledgePoints.map(esc).join(' · ')}</div>${spk('orig','原题')}<button class="pintgl" data-act="pintoggle" aria-expanded="${col?'false':'true'}">${col?'展开 ▾':'收起 ▴'}</button></div><div class="obody" id="obody">${tex(q.original)}</div></div>`;
+  /* 原题（含计时器、🔊）固定在上方；步骤在下方随页面滚动。iPad 横屏改为左右两栏。 */
+  const pin = `<div class="pin ${col?'collapsed':''}" id="pin">${head}${orig}</div>`;
+  const wrap = (right) => `<div class="playgrid">${pin}<div class="stepspane" id="stepspane"><div id="remind">${remindHTML()}</div>${right}<div class="card markcard">${markRow}</div></div></div>`;
   const dots = `<div class="stepdots">${q.steps.map((s,i)=>`<i class="${ss.results[i]?ss.results[i].status:(i===ss.stepIdx&&ss.phase!=='done'?'cur':'')}"></i>`).join('')}</div>`;
   const done = ss.results.map((r,i)=> (i<ss.stepIdx || ss.phase==='done') ? `<div class="donestep"><span class="b ${r.status==='missed'?'bad':'ok'}">${r.status==='missed'?'!':'✓'}</span><div class="grow"><div class="muted small">第 ${i+1} 步</div>${tex(q.steps[i].prompt)}<div class="small" style="margin-top:4px">答案：<b>${tex(answerText(q.steps[i]))}</b></div></div></div>` : '').join('');
-  if(ss.phase==='done') return head + orig + dots + vResult(q, ss) + `<details class="card"><summary style="font-weight:700;cursor:pointer">查看全部步骤</summary>${done}</details>`;
+  if(ss.phase==='done') return wrap(dots + vResult(q, ss) + `<details class="card"><summary style="font-weight:700;cursor:pointer">查看全部步骤</summary>${done}</details>`);
   const st = q.steps[ss.stepIdx];
   let input = '';
   const locked = ss.phase==='feedback';
@@ -540,7 +546,23 @@ function vPlay(){
   const actions = locked
     ? `<button class="btn block ${ss.stepIdx===n-1?'ok':''}" data-act="next" style="margin-top:14px">${ss.stepIdx===n-1?'🏁 完成本题':'下一步 →'}</button>`
     : `<button class="btn block" data-act="submit" style="margin-top:14px">提交答案</button>`;
-  return head + orig + dots + done + `<div class="card stepcard" id="stepcard"><div class="row between"><span class="steplab">第 ${ss.stepIdx+1} / ${n} 步</span>${spk('prompt','本步')}</div><div class="prompt">${tex(st.prompt)}</div>${input}${fb}${actions}</div>`;
+  return wrap(dots + done + `<div class="card stepcard" id="stepcard"><div class="row between"><span class="steplab">第 ${ss.stepIdx+1} / ${n} 步</span>${spk('prompt','本步')}</div><div class="prompt">${tex(st.prompt)}</div>${input}${fb}${actions}</div>`);
+}
+/* 收起/展开状态：本次打开网页期间记住（sessionStorage） */
+function pinCollapsed(){ try{ return sessionStorage.getItem('mq_pin_collapsed')==='1'; }catch(e){ return !!S.pinCol; } }
+function setPinCollapsed(v){ S.pinCol=v; try{ sessionStorage.setItem('mq_pin_collapsed', v?'1':'0'); }catch(e){} }
+function wideLayout(){ const pin=$('#pin'), sp=$('#stepspane'); return !!(pin && sp && pin.getBoundingClientRect().right <= sp.getBoundingClientRect().left + 1); }
+/* 把元素滚到“固定原题”下方、底部标签栏上方的可见区域里 */
+const SMOOTH_OK = !/[?&]nosmooth\b/.test(location.search);
+function scrollBelowPin(el, mode){
+  if(!el) return;
+  const pin=$('#pin'), tab=document.querySelector('.tabbar');
+  const topLimit = (pin && !wideLayout()) ? pin.getBoundingClientRect().bottom + 10 : 12;
+  const botLimit = (tab ? tab.getBoundingClientRect().top : innerHeight) - 10;
+  const r = el.getBoundingClientRect(); let dy = 0;
+  if(mode==='top') dy = r.top - topLimit;
+  else { if(r.bottom > botLimit) dy = Math.min(r.bottom - botLimit, r.top - topLimit); else if(r.top < topLimit) dy = r.top - topLimit; }
+  if(Math.abs(dy) > 2) window.scrollTo({top: Math.max(0, scrollY + dy), behavior: SMOOTH_OK ? 'smooth' : 'auto'});
 }
 function answerText(st){
   if(st.type==='choice'){ const i = choiceIndex(st, st.answer); return i>=0 ? String.fromCharCode(65+i)+'. '+st.options[i] : String(st.answer); }
@@ -574,13 +596,21 @@ function afterPlayMarkToast(m){ toast(isMiss(m) ? `已标记为 ${MARKS[m].e}${M
 let lastTick = 0;
 function afterPlay(){
   updateTimer();
+  { /* 原题只有 1-2 行时不需要收起/展开按钮 */
+    const pin=$('#pin'), ob=$('#obody');
+    if(pin && ob){ const col=pin.classList.contains('collapsed'); if(col) pin.classList.remove('collapsed');
+      const lh=parseFloat(getComputedStyle(ob).lineHeight)||30; const short = ob.scrollHeight <= lh*2.3 + 4;
+      if(col) pin.classList.add('collapsed'); pin.classList.toggle('short', short); }
+  }
   const inp = $('#ans');
   if(inp && S.session.phase==='answer'){
     inp.addEventListener('input', e=>{ S.session.draft = e.target.value; S.session.lastAct = S.session.elapsed; });
     inp.addEventListener('keydown', e=>{ if(e.key==='Enter'){ e.preventDefault(); act.submit(); } });
     if(window.matchMedia('(hover:hover)').matches) setTimeout(()=>inp.focus({preventScroll:true}),50);
   }
-  const sc = $('#stepcard'); if(sc && S.session.fb){ if(S.session.fb.kind!=='ok') sc.classList.toggle('shake', S.session.fb.fresh); S.session.fb.fresh=false; setTimeout(()=>sc.scrollIntoView({behavior:'smooth',block:'nearest'}),30); }
+  const sc = $('#stepcard'); if(sc && S.session.fb){ if(S.session.fb.kind!=='ok') sc.classList.toggle('shake', S.session.fb.fresh); S.session.fb.fresh=false; setTimeout(()=>scrollBelowPin(sc,'nearest'),30); }
+  const ss2=S.session, sk=ss2.key+'#'+ss2.stepIdx+'#'+ss2.phase.replace('feedback','answer');
+  if(S.lastStepShown!==sk){ const first = S.lastStepShown===undefined || !S.lastStepShown.startsWith(ss2.key+'#'); S.lastStepShown=sk; if(!first && sc && !ss2.fb) requestAnimationFrame(()=>scrollBelowPin(sc,'top')); }
 }
 function updateTimer(){
   const ss = S.session; if(!ss || S.view!=='play') return;
@@ -809,6 +839,7 @@ const act = {
   backlist(){ hush(); const ss=S.session; const f=ss&&findQ(ss.key); const rv = ss&&ss.mode==='review'; S.session=null; if(rv) go('review'); else { if(f) S.packId=f.pack.id; go('pack'); } },
   retry(){ const k=S.session.key; startQ(k, S.session.mode); },
   nextq(d){ const ss=S.session; startQ(d.k, ss.queue?'review':'normal', ss.queue); },
+  pintoggle(){ const v=!pinCollapsed(); setPinCollapsed(v); const pin=$('#pin'), b=pin&&pin.querySelector('.pintgl'); if(pin) pin.classList.toggle('collapsed', v); if(b){ b.textContent = v?'展开 ▾':'收起 ▴'; b.setAttribute('aria-expanded', v?'false':'true'); } const ob=$('#obody'); if(ob) ob.scrollTop=0; },
   sel(d){ const ss=S.session; if(ss.phase!=='answer') return; ss.sel=+d.v; ss.lastAct=ss.elapsed; document.querySelectorAll('.opt').forEach((b,i)=>b.classList.toggle('sel', i===ss.sel)); },
   key(d){ const inp=$('#ans'); if(!inp) return; S.session.lastAct=S.session.elapsed; const s=inp.selectionStart??inp.value.length, e=inp.selectionEnd??s; inp.value = inp.value.slice(0,s)+d.v+inp.value.slice(e); S.session.draft=inp.value; inp.focus(); const p=s+d.v.length; try{inp.setSelectionRange(p,p);}catch(_){} },
   submit(){
@@ -831,7 +862,7 @@ const act = {
   },
   next(){ hush(); const ss=S.session; const {q}=findQ(ss.key); if(ss.stepIdx>=q.steps.length-1){ finishQ(); return; } ss.stepIdx++; ss.tries=0; ss.fb=null; ss.draft=''; ss.sel=null; ss.phase='answer'; ss.lastAct=ss.elapsed; ss.idleDone=false;
     ss.remind = null; const r = (isCalcStep(q.steps[ss.stepIdx]) && Math.random()<0.35) ? remind('calc') : null;
-    render(); say([r, autoStepSpeech(q, ss.stepIdx)]); const sc=$('#stepcard'); if(sc) sc.scrollIntoView({behavior:'smooth',block:'center'}); },
+    render(); say([r, autoStepSpeech(q, ss.stepIdx)]); },
   checkin(){ const t=today(); if(D.checkins[t]) return; D.checkins[t]=Date.now(); const nb=checkBadges(); save(); render(); confetti(90); toast(`🔥 打卡成功！已连续 ${streak()} 天`+(nb.length?' · 获得新徽章':'')); },
   import(){ importModal(); },
   copyprompt(){ copyText(AI_PROMPT); },
@@ -897,7 +928,7 @@ function showVoiceNotice(){
 document.addEventListener('change', e=>{ if(e.target && e.target.id==='voicePick'){ D.settings.voicePick = e.target.value; save(); render(); say([MQVoiceTexts.EXTRA.ratePreview]); } });
 /* 首次触摸/点击即解锁 iPad Safari 的音频（捕获阶段，先于按钮处理） */
 ['touchend','pointerup','click','keydown'].forEach(ev=>document.addEventListener(ev, ()=>{ if(VS.unlock) VS.unlock(); }, {capture:true, passive:true}));
-VS.onChange(sp=>{ const b=$('#speakbar'); if(b) b.classList.toggle('show', !!sp && voiceOn()); });
+VS.onChange(sp=>{ const on=!!sp && voiceOn(); const b=$('#speakbar'); if(b) b.classList.toggle('show', on); document.body.classList.toggle('speaking', on); });
 window.addEventListener('storage', e=>{ if(e.key===KEY){ load(); render(); } });
 window.__mqKatexReady = () => render();
 render();
