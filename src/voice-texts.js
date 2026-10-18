@@ -35,7 +35,15 @@ function allForPack(pack){
   });
   return out.filter(Boolean);
 }
-function fixed(){ var out = []; Object.keys(REMIND).forEach(function(k){ out = out.concat(REMIND[k]); }); out.push(EXTRA.ratePreview, EXTRA.test); return out; }
-return { REMIND: REMIND, EXTRA: EXTRA, answerText: answerText, forQuestion: forQuestion, allForPack: allForPack, fixed: fixed };
+/* 勋章 / 升级庆祝语（固定文本，已预录普通话） */
+var CELEBRATE = {
+  tier: ['恭喜你！获得了一枚铜牌勋章，继续加油！', '太厉害了！你的勋章升级到银牌啦！', '了不起！你拿到了金牌勋章！', '哇，钻石勋章！你真是太棒了！'],
+  badge: '恭喜你获得新勋章！坚持下去，会越来越棒！',
+  kp: '恭喜你获得专项勋章！这个知识点你已经掌握得很好了！',
+  level: '恭喜升级！你的数学等级又提高了！',
+  redeem: '兑换成功！快去找爸爸妈妈领取奖励吧！'
+};
+function fixed(){ var out = []; Object.keys(REMIND).forEach(function(k){ out = out.concat(REMIND[k]); }); out.push(EXTRA.ratePreview, EXTRA.test); out = out.concat(CELEBRATE.tier, [CELEBRATE.badge, CELEBRATE.kp, CELEBRATE.level, CELEBRATE.redeem]); return out; }
+return { REMIND: REMIND, EXTRA: EXTRA, CELEBRATE: CELEBRATE, answerText: answerText, forQuestion: forQuestion, allForPack: allForPack, fixed: fixed };
 })();
 if(typeof module!=='undefined') module.exports = MQVoiceTexts;

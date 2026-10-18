@@ -264,38 +264,153 @@ function goalInfo(){
 }
 function totalStars(){ const best={}; D.attempts.forEach(a=>best[a.key]=Math.max(best[a.key]||0,a.stars)); return Object.values(best).reduce((x,y)=>x+y,0); }
 
-/* ========== 徽章 ========== */
-const BADGES = [
-  {id:'first', e:'🎉', n:'首次通关', d:'完成第一道题'},
-  {id:'perfect', e:'💯', n:'完美一题', d:'全部一次答对且不超时'},
-  {id:'hard', e:'🧗', n:'攻克难题', d:'无失误拿下难度≥4的题'},
-  {id:'speed', e:'⚡', n:'闪电侠', d:'用时不到限时一半且无失误'},
-  {id:'streak3', e:'🔥', n:'连续3天', d:'连续打卡 3 天'},
-  {id:'streak7', e:'🏆', n:'连续7天', d:'连续打卡 7 天'},
-  {id:'zero', e:'🧹', n:'错题清零', d:'把巩固队列全部攻克'},
-  {id:'ten', e:'📚', n:'勤学十题', d:'累计完成 10 次做题'},
-  {id:'goal', e:'🎯', n:'目标达成', d:'完成一次每日目标'},
-  {id:'p500', e:'💎', n:'积分达人', d:'累计获得 500 积分'},
-  {id:'importer', e:'📦', n:'题包收藏家', d:'导入第一个题包'},
-  {id:'review5', e:'🌱', n:'温故知新', d:'完成 5 次巩固复习'}
-];
-function checkBadges(ctx){
-  const got = [];
-  const give = id => { if(!D.badges[id]){ D.badges[id]=Date.now(); got.push(id); } };
-  if(D.attempts.length>=1) give('first');
-  if(D.attempts.length>=10) give('ten');
-  if(ctx){
-    if(ctx.stars===3) give('perfect');
-    if(ctx.difficulty>=4 && !ctx.missed) give('hard');
-    if(!ctx.missed && ctx.timeUsed <= ctx.limit/2) give('speed');
-  }
-  const st = streak(); if(st>=3) give('streak3'); if(st>=7) give('streak7');
-  if(D.hadReview && Object.keys(D.review).length===0) give('zero');
-  if(D.points>=500) give('p500');
-  if(goalInfo().done) give('goal');
-  if(D.attempts.filter(a=>a.mode==='review').length>=5) give('review5');
-  return got;
+/* ========== 等级（由累计积分决定） ========== */
+const LEVELS = [[0,'数学新手'],[100,'数学学徒'],[300,'计算小将'],[600,'解题能手'],[1000,'思维达人'],[1600,'数学高手'],[2500,'数学精英'],[4000,'数学专家'],[6000,'数学宗师'],[9000,'数学大师']];
+function levelInfo(p){
+  p = p==null ? (D.points||0) : p; let i=0; while(i<LEVELS.length-1 && p>=LEVELS[i+1][0]) i++;
+  const cur=LEVELS[i][0], nxt=LEVELS[i+1]?LEVELS[i+1][0]:null;
+  return {lv:i+1, title:LEVELS[i][1], cur, next:nxt, pct: nxt ? (p-cur)/(nxt-cur) : 1, toNext: nxt ? nxt-p : 0};
 }
+
+/* ========== 勋章：分级（铜/银/金/钻石）+ 纪念 + 知识点专项 ========== */
+const TIER_NAMES = ['铜牌','银牌','金牌','钻石'];
+const TIERED = [
+  {id:'streak', e:'🔥', n:'连续打卡', unit:'天', th:[3,7,30,100], val:()=>Math.max(bestStreak(), streak())},
+  {id:'done', e:'📚', n:'累计做题', unit:'题次', th:[10,50,200,500], val:()=>D.attempts.length},
+  {id:'points', e:'💎', n:'累计积分', unit:'分', th:[500,2000,5000,10000], val:()=>D.points||0},
+  {id:'review', e:'🌱', n:'巩固复习', unit:'次', th:[5,30,100,300], val:()=>D.attempts.filter(a=>a.mode==='review').length},
+  {id:'perfect', e:'💯', n:'完美一题', unit:'次', th:[1,10,50,100], val:()=>D.attempts.filter(a=>a.stars===3).length},
+  {id:'hard', e:'🧗', n:'攻克难题', unit:'次', th:[1,5,20,50], val:()=>D.attempts.filter(a=>a.difficulty>=4 && !a.missed).length},
+  {id:'speed', e:'⚡', n:'闪电侠', unit:'次', th:[1,10,30,100], val:()=>D.attempts.filter(a=>!a.missed && a.limit && a.timeUsed<=a.limit/2).length},
+  {id:'goal', e:'🎯', n:'目标达成', unit:'天', th:[1,7,30,100], val:()=>Object.values(D.daily).filter(r=>r.goalDone).length}
+];
+const ONEOFF = [
+  {id:'first', e:'🎉', n:'首次通关', d:'完成第一道题'},
+  {id:'zero', e:'🧹', n:'错题清零', d:'把巩固队列全部攻克（可重复获得）'},
+  {id:'importer', e:'📦', n:'题包收藏家', d:'导入第一个题包'}
+];
+const BADGES = ONEOFF; // 兼容旧代码
+function tierOf(b, v){ let l=0; b.th.forEach((t,i)=>{ if(v>=t) l=i+1; }); return l; }
+/* 每个知识点的步骤作答序列（1=对，0=错），按时间顺序 */
+function kpSteps(){
+  const m = {};
+  D.attempts.forEach(a=>{
+    const seq = []; const wrong = Math.max(0,(a.stepsTotal||0)-(a.stepsOk||0));
+    for(let i=0;i<wrong;i++) seq.push(0); for(let i=0;i<(a.stepsOk||0);i++) seq.push(1);
+    (a.kps||[]).forEach(kp=>{ const arr = m[kp] || (m[kp]=[]); seq.forEach(x=>arr.push(x)); });
+  });
+  return m;
+}
+function kpMedalInfo(arr){
+  arr = arr || []; const n = arr.length, last = arr.slice(-20);
+  const acc = last.length ? last.reduce((x,y)=>x+y,0)/last.length : 0;
+  let lv = 0; if(n>=10 && acc>=0.8) lv = 1; if(n>=30 && acc>=0.9) lv = 2;
+  return {n, acc, lv};
+}
+function packKps(){ return [...new Set(allPacks().flatMap(p=>p.questions.flatMap(q=>q.knowledgePoints||[])))]; }
+const kpMedalName = (kp, lv) => kp + (lv>=2 ? '达人' : '小能手');
+/* 检查并发放勋章；返回本次新获得/升级的事件列表 */
+function checkBadges(){
+  const ev = [];
+  D.tiers = D.tiers || {}; D.tierDates = D.tierDates || {}; D.kpMedals = D.kpMedals || {};
+  const give = id => { if(!D.badges[id]){ D.badges[id]=Date.now(); ev.push({t:'one', id}); } };
+  if(D.attempts.length>=1) give('first');
+  if(D.packs.some(p=>!isBuiltinId(p.id))) give('importer');
+  if(D.hadReview && Object.keys(D.review).length===0){ /* 错题清零：每次清空巩固队列记一次 */
+    D.zeroCount = (D.zeroCount||0) + 1; D.hadReview = false;
+    if(!D.badges.zero) D.badges.zero = Date.now();
+    ev.push({t:'one', id:'zero', n:D.zeroCount});
+  }
+  TIERED.forEach(b=>{ const l = tierOf(b, b.val()), old = D.tiers[b.id]||0; if(l>old){ D.tiers[b.id]=l; D.tierDates[b.id]=Date.now(); ev.push({t:'tier', id:b.id, lv:l}); } });
+  const ks = kpSteps();
+  packKps().forEach(kp=>{ const i = kpMedalInfo(ks[kp]), old = D.kpMedals[kp]||0; if(i.lv>old){ D.kpMedals[kp]=i.lv; ev.push({t:'kp', kp, lv:i.lv}); } });
+  const lv = levelInfo().lv; if(lv > (D.level||1)){ D.level = lv; ev.push({t:'level', lv}); }
+  return ev;
+}
+function evLabel(e){
+  if(e.t==='tier'){ const b = TIERED.find(x=>x.id===e.id); return `${b.e} ${b.n} · ${TIER_NAMES[e.lv-1]}`; }
+  if(e.t==='kp') return `🎖️ ${kpMedalName(e.kp, e.lv)}`;
+  if(e.t==='level') return `⬆️ 升到 Lv${e.lv} ${LEVELS[e.lv-1][1]}`;
+  const b = ONEOFF.find(x=>x.id===e.id); return `${b.e} ${b.n}${e.id==='zero' && e.n>1 ? ` ×${e.n}` : ''}`;
+}
+/* 庆祝弹窗：不阻挡操作，几秒后自动消失；撒花 + 普通话语音 */
+let celebT;
+function celebrate(ev){
+  if(!ev || !ev.length) return;
+  const C = MQVoiceTexts.CELEBRATE;
+  const tiers = ev.filter(e=>e.t==='tier'), top = tiers.sort((a,b)=>b.lv-a.lv)[0];
+  const line = top ? C.tier[top.lv-1] : ev.some(e=>e.t==='kp') ? C.kp : ev.some(e=>e.t==='one') ? C.badge : C.level;
+  const headE = top ? TIERED.find(x=>x.id===top.id).e : ev[0].t==='kp' ? '🎖️' : ev[0].t==='level' ? '⬆️' : (ONEOFF.find(x=>x.id===ev[0].id)||{e:'🏅'}).e;
+  let el = document.getElementById('celebrate');
+  if(!el){ el = document.createElement('div'); el.id = 'celebrate'; el.setAttribute('role','status'); el.setAttribute('aria-live','polite'); document.body.appendChild(el); el.addEventListener('click', ()=>el.classList.remove('show')); }
+  el.innerHTML = `<div class="cb ${top?'t'+top.lv:''}"><div class="ce">${headE}</div><div class="ct">${top?TIER_NAMES[top.lv-1]+'勋章！':'新成就！'}</div>${ev.map(e=>`<div class="ci">${esc(evLabel(e))}</div>`).join('')}</div>`;
+  el.classList.add('show'); clearTimeout(celebT); celebT = setTimeout(()=>el.classList.remove('show'), 4200);
+  confetti(top && top.lv>=3 ? 260 : 180);
+  hush(); say([line]);
+}
+/* ========== 积分兑换 ========== */
+const DEFAULT_REWARDS = [
+  {id:'r1', e:'🎮', n:'30分钟游戏时间', cost:300},
+  {id:'r2', e:'🍦', n:'一个冰淇淋', cost:200},
+  {id:'r3', e:'📺', n:'周末看一部电影', cost:800}
+];
+/* 数据迁移：可用积分 = 现有积分；按历史记录点亮分级勋章（不逐个弹窗） */
+function migrate(){
+  if(typeof D.spend!=='number' || !isFinite(D.spend)) D.spend = D.points||0;
+  D.tiers = D.tiers || {}; D.tierDates = D.tierDates || {}; D.kpMedals = D.kpMedals || {};
+  if(!Array.isArray(D.rewards)) D.rewards = DEFAULT_REWARDS.map(r=>Object.assign({}, r));
+  if(!Array.isArray(D.redeems)) D.redeems = [];
+  if(D.tierInit) return 0;
+  if(D.badges.zero){ D.zeroCount = D.zeroCount || 1; if(!Object.keys(D.review).length) D.hadReview = false; }
+  D.level = levelInfo().lv;
+  const ev = checkBadges(); D.tierInit = 1; save();
+  return ev.length;
+}
+/* 积分规则（防刷分）：首次完成 = 全额；正常模式重做：同一天 0 分，之后 30%；每日巩固复习 = 全额，零失误再 +10 */
+function awardKind(key, isReview){
+  const t = today(); const prior = D.attempts.filter(a=>a.key===key);
+  if(!prior.length) return {kind:'first', factor:1};
+  if(isReview) return {kind:'review', factor:1};
+  if(prior.some(a=>a.date===t)) return {kind:'same', factor:0};
+  return {kind:'later', factor:0.3};
+}
+const SAME_DAY_NOTE = '今天已经拿过这题的积分啦，换一道试试？';
+/* 家长模式：4 位 PIN（散列后存本机）；只是防误操作的轻量锁 */
+const PIN_KEY = 'mathquest_parent_pin';
+const pinHash = pin => { const t = 'mathquest-parent|' + pin + '|v1'; let a = 0x811c9dc5, b = 0x9e3779b9; for(let k=0;k<t.length;k++){ const c=t.charCodeAt(k); a = Math.imul(a ^ c, 0x01000193) >>> 0; b = Math.imul(b ^ c, 0x5bd1e995) >>> 0; b = (b ^ (b>>>15)) >>> 0; } return a.toString(16).padStart(8,'0') + b.toString(16).padStart(8,'0'); };
+function pinSet(){ try{ return !!localStorage.getItem(PIN_KEY); }catch(e){ return false; } }
+function parentOn(){ return (S.parentUntil||0) > Date.now(); }
+function enterParent(){ S.parentUntil = Date.now() + 10*60*1000; }
+function mathQ(hard){ const a = hard ? 100+Math.floor(Math.random()*800) : 12+Math.floor(Math.random()*38), b = hard ? 12+Math.floor(Math.random()*80) : 3+Math.floor(Math.random()*7), c = Math.floor(Math.random()*20)+1; S._mq = {ans: a*b+c}; return `${a} × ${b} + ${c} = ?`; }
+function parentGate(then){
+  S.afterParent = then || null;
+  if(parentOn()){ runAfterParent(); return; }
+  const note = `<div class="muted small" style="margin-top:10px">🔒 家长密码只是防止孩子误操作的轻量锁，并不是真正的安全保护。</div>`;
+  if(!pinSet()){
+    modal(`<h2>👨‍👩‍👧 设置家长密码</h2><div class="muted small">第一次进入家长模式，请设置 4 位数字密码。以后编辑奖励、标记已兑现、撤销兑换都需要它。</div>
+      <div class="field"><label>新密码（4 位数字）</label><input class="pin" id="pin1" type="password" inputmode="numeric" pattern="[0-9]*" maxlength="4" autocomplete="off"></div>
+      <div class="field"><label>再输入一次</label><input class="pin" id="pin2" type="password" inputmode="numeric" pattern="[0-9]*" maxlength="4" autocomplete="off"></div>
+      <div id="pinMsg" class="small err"></div>
+      <div class="row" style="gap:10px;margin-top:10px"><button class="btn ghost grow" data-act="close">取消</button><button class="btn grow" data-act="pinset">设置并进入</button></div>
+      <button class="linkbtn" data-act="pinmath">暂不设置，用算术题验证</button>${note}`);
+  } else {
+    modal(`<h2>🔒 家长模式</h2><div class="field"><label>请输入 4 位家长密码</label><input class="pin" id="pin1" type="password" inputmode="numeric" pattern="[0-9]*" maxlength="4" autocomplete="off"></div>
+      <div id="pinMsg" class="small err"></div>
+      <div class="row" style="gap:10px;margin-top:10px"><button class="btn ghost grow" data-act="close">取消</button><button class="btn grow" data-act="pinenter">进入</button></div>
+      <button class="linkbtn" data-act="pinforgot">忘记密码？</button>${note}`);
+  }
+  setTimeout(()=>{ const i=$('#pin1'); if(i) i.focus(); }, 50);
+}
+function runAfterParent(){ const f = S.afterParent; S.afterParent = null; if(typeof f==='function') f(); else render(); }
+function mathModal(hard){
+  modal(`<h2>${hard?'🔑 重置家长密码':'🧮 家长验证'}</h2><div class="muted small">${hard?'请家长计算下面的题目，答对后可以重新设置密码。':'请家长计算：'}</div>
+    <div style="font-size:26px;font-weight:800;text-align:center;margin:14px 0">${mathQ(hard)}</div>
+    <input class="ans" id="mathAns" type="text" inputmode="numeric" autocomplete="off" placeholder="答案">
+    <div id="pinMsg" class="small err"></div>
+    <div class="row" style="gap:10px;margin-top:10px"><button class="btn ghost grow" data-act="close">取消</button><button class="btn grow" data-act="${hard?'pinreset':'pinmathok'}">确定</button></div>`);
+  setTimeout(()=>{ const i=$('#mathAns'); if(i) i.focus(); }, 50);
+}
+const isLeapPin = v => /^\d{4}$/.test(v);
 
 /* ========== 状态与路由 ========== */
 const S = { view:'home', tab:'home', packId:null, session:null, fTab:'f', fKp:'全部', flipped:{}, meTab:'weak' };
@@ -357,9 +472,10 @@ function vHome(){
   <div class="hero">
     <div class="greet">${greetWord()}，</div>
     <div class="name">${esc(D.settings.nickname)} 👋</div>
+    ${(()=>{ const L=levelInfo(); return `<button class="lvline" data-act="metab" data-v="badge"><span class="lvtag">Lv${L.lv}</span><b>${L.title}</b><span class="lvbar"><i style="width:${Math.round(L.pct*100)}%"></i></span><span class="small">${L.next?`再得 ${L.toNext} 分升级`:'已满级'}</span></button>`; })()}
     <div class="stats3">
       <div class="stat"><b>${st}</b><span>连续打卡(天)</span></div>
-      <div class="stat"><b>${D.points}</b><span>积分</span></div>
+      <button class="stat" data-act="shop"><b>${D.spend||0}</b><span>可用积分 ›</span></button>
       <div class="stat"><b>${totalStars()}</b><span>⭐ 星星</span></div>
     </div>
   </div>
@@ -499,9 +615,11 @@ function startQ(key, mode='normal', queue=null){
   const f = findQ(key); if(!f){ toast('找不到这道题'); return; }
   const isReview = mode==='review' || (D.review[key] && D.review[key].due<=today());
   hush();
-  S.session = { key, mode: isReview?'review':'normal', queue: queue||null, stepIdx:0, tries:0, results:[], elapsed:0, overtime:false, phase:'answer', fb:null, draft:'', sel:null, points:0, startedAt:Date.now(), lastAct:0, idleDone:false, remind:null, spokenSteps:{} };
+  const aw = awardKind(key, isReview);
+  S.session = { key, award: aw.kind, factor: aw.factor, mode: isReview?'review':'normal', queue: queue||null, stepIdx:0, tries:0, results:[], elapsed:0, overtime:false, phase:'answer', fb:null, draft:'', sel:null, points:0, startedAt:Date.now(), lastAct:0, idleDone:false, remind:null, spokenSteps:{} };
   const r = (sessionQCount===0 || Math.random()<0.5) ? remind('start') : null; sessionQCount++;
   go('play');
+  if(aw.kind==='same') setTimeout(()=>toast(SAME_DAY_NOTE), 300);
   say([r, autoStepSpeech(f.q, 0)]); // 在点击事件内同步调用，满足浏览器“需用户手势”的限制
 }
 function vPlay(){
@@ -539,7 +657,7 @@ function vPlay(){
   let fb = '';
   if(ss.fb){
     const F = ss.fb;
-    if(F.kind==='ok') fb = `<div class="fb ok pop"><b class="t row between"><span>✅ ${esc(F.msg)} ${F.pts?`<span class="chip ok">+${F.pts} 积分</span>`:''}</span>${st.explanation?spk('exp','解析'):''}</b>${st.explanation?tex(st.explanation):''}</div>`;
+    if(F.kind==='ok') fb = `<div class="fb ok pop"><b class="t row between"><span>✅ ${esc(F.msg)} ${F.pts && ss.factor===1?`<span class="chip ok">+${F.pts} 积分</span>`:''}</span>${st.explanation?spk('exp','解析'):''}</b>${st.explanation?tex(st.explanation):''}</div>`;
     else if(F.kind==='wrong') fb = `<div class="fb bad pop"><b class="t">🤔 ${esc(F.msg)}</b>还有 1 次机会</div><div class="fb hint pop"><b class="t row between">💡 提示 ${spk('hint','提示')}</b>${tex(st.hint)}</div>`;
     else if(F.kind==='miss') fb = `<div class="fb bad pop"><b class="t">🌱 ${esc(F.msg)}</b>正确答案：<b>${tex(answerText(st))}</b></div><div class="fb exp pop"><b class="t row between">📖 解析 ${spk('exp','解析')}</b>${tex(st.explanation||'对照正确答案再想一想。')}</div>`;
   }
@@ -577,7 +695,8 @@ function vResult(q, ss){
     <div class="bigstars">${'⭐'.repeat(r.stars)}<span class="off">${'⭐'.repeat(3-r.stars)}</span></div>
     <h2 style="margin:4px 0">${title}</h2><div class="muted small">${sub}</div>
     <div class="kv"><div><b>${r.stepsOk}/${r.stepsTotal}</b><span>步骤正确</span></div><div><b class="${r.overtime?'bad':'ok'}">${fmtTime(r.timeUsed)}</b><span>${r.overtime?'超时 ⏱':'限时内 ⚡'}</span></div><div><b>+${r.points}</b><span>积分</span></div></div>
-    ${r.newBadges.length?`<div class="fb ok">🏅 获得新徽章：${r.newBadges.map(id=>{const b=BADGES.find(x=>x.id===id);return b.e+' '+b.n;}).join('、')}</div>`:''}
+    ${r.ptsNote?`<div class="ptsnote ${r.ptsKind==='same'?'same':''}">${r.ptsKind==='same'?'💡':r.ptsKind==='review'?'🌱':'🔁'} ${esc(r.ptsNote)}</div>`:''}
+    ${r.newBadges.length?`<div class="fb ok">🏅 ${r.newBadges.map(e=>esc(evLabel(e))).join('、')}</div>`:''}
   </div>
   <div class="card"><h3>✅ 最终答案</h3><div>${tex(q.finalAnswer||'—')}</div></div>
   ${q.method?`<div class="card"><h3>🧭 解题思路 <span class="grow"></span>${spk('method','解题思路')}</h3><div>${tex(q.method)}</div></div>`:''}
@@ -649,7 +768,12 @@ function finishQ(){
   let pts = ss.points + 5; if(!overtime) pts += 20; if(stars===3) pts += 15;
   const wasDue = D.review[ss.key] && D.review[ss.key].due<=t;
   const mode = (ss.mode==='review' || wasDue) ? 'review' : 'normal';
-  D.attempts.push({key:ss.key, packId:pack.id, qid:q.id, ts:Date.now(), date:t, kps:q.knowledgePoints.slice(), difficulty:q.difficulty, stepsTotal, stepsOk, missed, overtime, timeUsed, limit:q.timeLimitSec, stars, points:pts, mode});
+  /* 防刷分 */
+  const aw = awardKind(ss.key, mode==='review'); const basePts = pts; let bonus = 0, ptsNote = '';
+  if(aw.kind==='review'){ if(!missed && !overtime){ bonus = 10; pts += 10; ptsNote = '巩固复习零失误，额外奖励 +10'; } }
+  else if(aw.kind==='same'){ pts = 0; ptsNote = SAME_DAY_NOTE; }
+  else if(aw.kind==='later'){ pts = Math.round(basePts*0.3); ptsNote = `重做旧题获得 30% 积分（原本 ${basePts} 分）`; }
+  D.attempts.push({key:ss.key, packId:pack.id, qid:q.id, ts:Date.now(), date:t, kps:q.knowledgePoints.slice(), difficulty:q.difficulty, stepsTotal, stepsOk, missed, overtime, timeUsed, limit:q.timeLimitSec, stars, points:pts, basePoints:basePts, award:aw.kind, mode});
   // 间隔复习
   let reviewNote = '';
   const prev = D.review[ss.key];
@@ -665,13 +789,13 @@ function finishQ(){
   const r = dayRec(t); r.questions++; r.points += pts;
   if(mode==='review'){ if(!r.reviewDone.includes(ss.key)) r.reviewDone.push(ss.key); }
   else if(!r.newDone.includes(ss.key)) r.newDone.push(ss.key);
-  D.points += pts;
+  D.points += pts; D.spend = (D.spend||0) + pts;
   let autoChk = false; if(!D.checkins[t]){ D.checkins[t] = Date.now(); autoChk = true; }
   const goalBefore = r.goalDone;
-  const newBadges = checkBadges({stars, difficulty:q.difficulty, missed, timeUsed, limit:q.timeLimitSec});
   const g = goalInfo(); if(g.done && !goalBefore){ r.goalDone = true; }
+  const newBadges = checkBadges();
   save();
-  ss.result = {stars, missed, stepsOk, stepsTotal, overtime, timeUsed, points:pts, newBadges, reviewNote};
+  ss.result = {stars, missed, stepsOk, stepsTotal, overtime, timeUsed, points:pts, ptsKind:aw.kind, ptsNote, newBadges, reviewNote};
   ss.phase = 'done';
   render(); window.scrollTo({top:0, behavior:'smooth'});
   confetti(stars===3 ? 220 : 140);
@@ -680,6 +804,7 @@ function finishQ(){
     if(g.done && !goalBefore){ toast('🎯 今日目标达成！给自己鼓个掌 👏'); confetti(160); }
     else if(autoChk) toast(`🔥 已自动打卡，连续 ${streak()} 天！`);
   }, 900);
+  if(newBadges.length) setTimeout(()=>{ if(S.view==='play') celebrate(newBadges); }, 1700);
 }
 
 /* ========== 视图：每日巩固 ========== */
@@ -750,7 +875,7 @@ function vMe(){
     ${untried.length?`<div class="muted small" style="margin-top:10px">还没练过：${untried.map(esc).join('、')}</div>`:''}</div>
   <div class="card list"><h3>❌ 错题本 <span class="chip bad">${wrongs.length+initMiss.length}</span></h3>${wrongs.length+initMiss.length?wrongs.map(a=>qline(a,markChip(a.key))).join('')+initMiss.map(k=>{const f=findQ(k);return `<div class="item"><div class="grow"><div class="tt small">${tex(f.q.original)}</div><div class="muted small">${f.q.knowledgePoints.map(esc).join('、')} · 试卷初始结果，尚未练习</div></div>${markChip(k)}<button class="btn sm ghost" data-act="start" data-k="${esc(k)}">去练</button></div>`;}).join(''):'<div class="muted small">没有错题，棒！</div>'}</div>
   <div class="card list"><h3>⏱ 超时题 <span class="chip warn">${overs.length}</span></h3>${overs.length?overs.map(a=>qline(a,'')).join(''):'<div class="muted small">没有超时题，速度很稳！</div>'}</div>`;
-  const badgeSec = `<div class="card"><h3>🏅 我的徽章 <span class="muted small">${Object.keys(D.badges).length}/${BADGES.length}</span></h3><div class="badges">${BADGES.map(b=>`<div class="badge ${D.badges[b.id]?'got':'lock'}"><div class="e">${b.e}</div><div class="n">${b.n}</div><div class="d">${D.badges[b.id]?'已获得 '+dstr(new Date(D.badges[b.id])).slice(5):b.d}</div></div>`).join('')}</div></div>
+  const badgeSec = vBadges() + `
   <div class="card"><h3>📅 打卡日历 <span class="grow"></span><span class="muted small">连续 ${streak()} 天 · 最长 ${bestStreak()} 天 · 共 ${Object.keys(D.checkins).length} 天</span></h3>${heatmap(20)}</div>`;
   const curTheme = getTheme();
   const tg = (k,label,desc) => `<div class="switch"><div class="grow"><b style="font-size:14px">${label}</b>${desc?`<div class="muted small">${desc}</div>`:''}</div><button class="tgl ${D.settings[k]?'on':''}" data-act="vset" data-k="${k}" role="switch" aria-checked="${!!D.settings[k]}" aria-label="${label}"><i></i></button></div>`;
@@ -776,10 +901,71 @@ function vMe(){
     <div class="row" style="margin-top:12px;gap:10px"><button class="btn ghost grow" data-act="export">⬇️ 导出备份</button><button class="btn ghost grow" data-act="importbk">⬆️ 导入备份</button></div>
     <button class="btn danger block" style="margin-top:12px" data-act="reset">🗑️ 清空所有数据</button></div>
   <div class="muted small" style="text-align:center;margin:16px 0">数学闯关岛 · 离线可用 · 数据保存在本机</div>`;
-  return `<div class="topbar"><h1>🙋 ${esc(D.settings.nickname)}</h1><span class="sp"></span><span class="chip">💰 ${D.points} 积分</span><span class="chip">⭐ ${totalStars()}</span></div>
-  <div class="seg"><button class="${S.meTab==='weak'?'on':''}" data-act="metab" data-v="weak">📊 薄弱项</button><button class="${S.meTab==='badge'?'on':''}" data-act="metab" data-v="badge">🏅 成就</button><button class="${S.meTab==='set'?'on':''}" data-act="metab" data-v="set">⚙️ 设置</button></div>
-  ${S.meTab==='weak'?weakSec:S.meTab==='badge'?badgeSec:setSec}`;
+  return `<div class="topbar"><h1>🙋 ${esc(D.settings.nickname)}</h1><span class="sp"></span><button class="chip" data-act="shop">💰 ${D.spend||0} 可用</button><span class="chip">⭐ ${totalStars()}</span></div>
+  <div class="seg"><button class="${S.meTab==='weak'?'on':''}" data-act="metab" data-v="weak">📊 薄弱</button><button class="${S.meTab==='badge'?'on':''}" data-act="metab" data-v="badge">🏅 成就</button><button class="${S.meTab==='shop'?'on':''}" data-act="metab" data-v="shop">🎁 兑换</button><button class="${S.meTab==='set'?'on':''}" data-act="metab" data-v="set">⚙️ 设置</button></div>
+  ${S.meTab==='weak'?weakSec:S.meTab==='badge'?badgeSec:S.meTab==='shop'?vShop():setSec}`;
 }
+
+/* ========== 视图：成就 ========== */
+function progBar(pct){ return `<div class="tprog"><i style="width:${Math.max(0,Math.min(100,Math.round(pct*100)))}%"></i></div>`; }
+function vBadges(){
+  const L = levelInfo();
+  const lvCard = `<div class="card lvcard"><div class="row" style="gap:12px"><div class="lvbig">Lv${L.lv}</div><div class="grow"><b style="font-size:18px">${L.title}</b><div class="muted small">累计积分 ${D.points||0}${L.next?` · 距 Lv${L.lv+1} ${LEVELS[L.lv][1]} 还差 ${L.toNext} 分`:' · 已达到最高等级'}</div>${progBar(L.pct)}</div></div>
+    <div class="lvlist">${LEVELS.map(([p,t],i)=>`<span class="${i+1<=L.lv?'on':''}">Lv${i+1} ${t}<small>${p}</small></span>`).join('')}</div></div>`;
+  const tiered = TIERED.map(b=>{
+    const v = b.val(), lv = D.tiers[b.id]||0, cur = Math.max(lv, tierOf(b,v));
+    const next = b.th[cur], prev = cur ? b.th[cur-1] : 0;
+    const pct = next ? v/next : 1;
+    return `<div class="badge tb ${cur?'got t'+cur:'lock'}"><div class="e">${b.e}</div><div class="n">${b.n}</div>
+      <div class="tier">${cur?TIER_NAMES[cur-1]:'未解锁'}</div>${progBar(pct)}
+      <div class="d">${next?`${Math.min(v,next)}/${next} ${b.unit} → ${TIER_NAMES[cur]}`:`${v} ${b.unit} · 已满级`}</div></div>`;
+  }).join('');
+  const one = ONEOFF.map(b=>{ const got = !!D.badges[b.id];
+    return `<div class="badge ${got?'got':'lock'}"><div class="e">${b.e}</div><div class="n">${b.n}${b.id==='zero' && (D.zeroCount||0)>1?` ×${D.zeroCount}`:''}</div><div class="d">${got?'已获得 '+dstr(new Date(D.badges[b.id])).slice(5):b.d}</div></div>`; }).join('');
+  const ks = kpSteps(); const kps = packKps();
+  const kpRows = kps.map(kp=>{ const i = kpMedalInfo(ks[kp]); const lv = Math.max(D.kpMedals[kp]||0, i.lv);
+    const goalN = lv>=1 ? 30 : 10, goalA = lv>=1 ? 90 : 80;
+    return {kp, lv, i, html:`<div class="kpm ${lv?'got t'+(lv+1):'lock'}"><div class="e">${lv>=2?'🏅':lv?'🎖️':'🔒'}</div><div class="grow"><b>${esc(lv?kpMedalName(kp,lv):kp+'小能手')}</b>
+      <div class="muted small">${lv>=2?'已获得最高级「达人」':`练习 ${Math.min(i.n,goalN)}/${goalN} 步 · 近 20 步正确率 ${Math.round(i.acc*100)}%（需 ≥${goalA}%）`}${lv===1?` → 「${esc(kp)}达人」`:''}</div>${lv>=2?'':progBar(Math.min(i.n/goalN, 1)*0.5 + Math.min(i.acc/(goalA/100),1)*0.5)}</div></div>`};
+  }).sort((a,b)=>b.lv-a.lv || b.i.n-a.i.n);
+  const kpGot = kpRows.filter(x=>x.lv).length;
+  return lvCard + `<div class="card"><h3>🏅 分级勋章 <span class="muted small">铜 → 银 → 金 → 钻石</span></h3><div class="badges">${tiered}</div></div>
+  <div class="card"><h3>🎗️ 纪念徽章</h3><div class="badges">${one}</div></div>
+  <div class="card"><h3>🎖️ 专项勋章 <span class="muted small">${kpGot}/${kps.length}</span></h3><div class="muted small" style="margin-bottom:8px">某个知识点练满 10 步、最近 20 步正确率 ≥80% 得「小能手」；练满 30 步且 ≥90% 升级为「达人」。</div><div class="kpgrid">${(S.kpAll?kpRows:kpRows.filter((x,i)=>x.lv || i<kpGot+6)).map(x=>x.html).join('')||'<div class="muted small">导入题包后这里会出现各知识点的专项勋章</div>'}</div>
+    ${kpRows.length>kpGot+6?`<button class="linkbtn" data-act="kpall">${S.kpAll?'收起':`查看全部 ${kps.length} 个知识点 ▾`}</button>`:''}</div>`;
+}
+/* ========== 视图：积分兑换 ========== */
+function vShop(){
+  const P = parentOn(); const sp = D.spend||0; const L = levelInfo();
+  const st = {pending:['待兑现','warn'], done:['已兑现','ok'], refunded:['已撤销','']};
+  const rewards = D.rewards.map(rw=>{ const can = sp>=rw.cost;
+    return `<div class="reward"><div class="re">${esc(rw.e)}</div><div class="grow"><b>${esc(rw.n)}</b><div class="muted small">💰 ${rw.cost} 积分</div>
+      ${!can?progBar(sp/rw.cost):''}</div>
+      ${P?`<button class="btn sm ghost" data-act="rwedit" data-v="${esc(rw.id)}">编辑</button><button class="btn sm danger" data-act="rwdel" data-v="${esc(rw.id)}">删除</button>`
+         :`<button class="btn sm ${can?'':'ghost'}" data-act="redeem" data-v="${esc(rw.id)}" ${can?'':'aria-disabled="true"'}>${can?'兑换':`还差 ${rw.cost-sp}`}</button>`}</div>`; }).join('');
+  const hist = D.redeems.map(r=>`<div class="item rdi"><div class="ic">${esc(r.e)}</div><div class="grow"><div class="tt small">${esc(r.n)}</div><div class="muted small">${r.date} · ${r.cost} 积分${r.status==='done'&&r.doneTs?` · ${dstr(new Date(r.doneTs)).slice(5)} 兑现`:''}</div></div>
+      <span class="chip ${st[r.status][1]}">${st[r.status][0]}</span>
+      ${P && r.status==='pending'?`<button class="btn sm" data-act="rddone" data-v="${esc(r.id)}">已兑现</button>`:''}${P && r.status!=='refunded'?`<button class="btn sm ghost" data-act="rdundo" data-v="${esc(r.id)}">撤销</button>`:''}</div>`).join('');
+  return `<div class="hero shophero"><div class="stats3">
+      <div class="stat"><b>${sp}</b><span>可用积分</span></div>
+      <div class="stat"><b>${D.points||0}</b><span>累计积分</span></div>
+      <div class="stat"><b>Lv${L.lv}</b><span>${L.title}</span></div></div>
+    <div class="note">可用积分用来兑换奖励；累计积分只增不减，决定等级和勋章。</div></div>
+  <div class="card list"><h3>🎁 奖励 <span class="grow"></span>${P?`<button class="btn sm" data-act="rwadd">＋ 添加奖励</button>`:''}</h3>${rewards||'<div class="muted small">还没有奖励，请家长添加</div>'}</div>
+  <div class="card list"><h3>📜 兑换记录 <span class="muted small">${D.redeems.filter(r=>r.status==='pending').length} 个待兑现</span></h3>${hist||'<div class="muted small">还没有兑换过，攒够积分就来换吧！</div>'}</div>
+  <div class="card parentcard"><div class="row" style="gap:10px"><div class="grow"><b>👨‍👩‍👧 家长模式 ${P?'<span class="chip ok">已开启</span>':''}</b><div class="muted small">编辑/删除奖励、标记已兑现、撤销兑换（退回积分）需要家长密码。密码只是防误操作的轻量锁，不是真正的安全保护。</div></div>
+    <button class="btn sm ${P?'ghost':''}" data-act="parent">${P?'退出':'🔒 进入'}</button></div></div>`;
+}
+function rewardModal(id){
+  const rw = id ? D.rewards.find(x=>x.id===id) : null;
+  modal(`<h2>${rw?'✏️ 编辑奖励':'＋ 添加奖励'}</h2>
+    <div class="row" style="gap:10px"><div class="field" style="width:84px"><label>图标</label><input type="text" id="rwE" maxlength="4" value="${esc(rw?rw.e:'🎁')}" style="text-align:center;font-size:22px"></div>
+    <div class="field grow"><label>名称</label><input type="text" id="rwN" maxlength="24" value="${esc(rw?rw.n:'')}" placeholder="例如：周末去公园"></div></div>
+    <div class="field"><label>需要积分</label><input type="number" id="rwC" min="1" max="100000" inputmode="numeric" value="${rw?rw.cost:100}"></div>
+    <div id="rwMsg" class="small err"></div>
+    <div class="row" style="gap:10px;margin-top:10px"><button class="btn ghost grow" data-act="close">取消</button><button class="btn grow" data-act="rwsave" data-v="${rw?esc(rw.id):''}">保存</button></div>`);
+}
+window.__mqTest = { levelInfo: p=>levelInfo(p), awardKind: (k,r)=>awardKind(k,r), pinHash: p=>pinHash(p), parentOn: ()=>parentOn() };
 
 /* ========== 主题 ========== */
 const THEME_KEY = 'mathquest_theme';
@@ -863,7 +1049,7 @@ const act = {
   next(){ hush(); const ss=S.session; const {q}=findQ(ss.key); if(ss.stepIdx>=q.steps.length-1){ finishQ(); return; } ss.stepIdx++; ss.tries=0; ss.fb=null; ss.draft=''; ss.sel=null; ss.phase='answer'; ss.lastAct=ss.elapsed; ss.idleDone=false;
     ss.remind = null; const r = (isCalcStep(q.steps[ss.stepIdx]) && Math.random()<0.35) ? remind('calc') : null;
     render(); say([r, autoStepSpeech(q, ss.stepIdx)]); },
-  checkin(){ const t=today(); if(D.checkins[t]) return; D.checkins[t]=Date.now(); const nb=checkBadges(); save(); render(); confetti(90); toast(`🔥 打卡成功！已连续 ${streak()} 天`+(nb.length?' · 获得新徽章':'')); },
+  checkin(){ const t=today(); if(D.checkins[t]) return; D.checkins[t]=Date.now(); const nb=checkBadges(); save(); render(); confetti(90); toast(`🔥 打卡成功！已连续 ${streak()} 天`); if(nb.length) setTimeout(()=>celebrate(nb), 900); },
   import(){ importModal(); },
   copyprompt(){ copyText(AI_PROMPT); },
   doimport(){
@@ -891,7 +1077,31 @@ const act = {
   ftab(d){ S.fTab=d.v; render(); },
   fkp(d){ S.fKp=d.v; if(S.view!=='formulas'){ go('formulas'); } else render(); },
   flip(d,el){ S.flipped[d.v]=!S.flipped[d.v]; el.classList.toggle('on'); },
-  metab(d){ S.meTab=d.v; render(); },
+  kpall(){ S.kpAll=!S.kpAll; render(); },
+  metab(d){ S.meTab=d.v; if(S.view!=='me') go('me'); else render(); },
+  shop(){ S.meTab='shop'; if(S.view!=='me') go('me'); else { render(); window.scrollTo(0,0); } },
+  redeem(d){ const rw = D.rewards.find(x=>x.id===d.v); if(!rw) return; if((D.spend||0) < rw.cost){ toast(`还差 ${rw.cost-(D.spend||0)} 分，继续加油！`); return; }
+    modal(`<h2>🎁 确认兑换</h2><div style="text-align:center;margin:10px 0"><div style="font-size:52px">${esc(rw.e)}</div><b style="font-size:18px">${esc(rw.n)}</b><div class="muted">需要 <b>${rw.cost}</b> 积分 · 兑换后剩余 ${(D.spend||0)-rw.cost} 分</div></div><div class="row" style="gap:10px"><button class="btn ghost grow" data-act="close">再想想</button><button class="btn grow" data-act="doredeem" data-v="${esc(rw.id)}">确定兑换</button></div>`); },
+  doredeem(d){ const rw = D.rewards.find(x=>x.id===d.v); if(!rw || (D.spend||0) < rw.cost){ closeModal(); return; }
+    D.spend -= rw.cost; D.redeems.unshift({id:'x'+Date.now().toString(36)+Math.random().toString(36).slice(2,6), rid:rw.id, e:rw.e, n:rw.n, cost:rw.cost, ts:Date.now(), date:today(), status:'pending'});
+    save(); closeModal(); render(); confetti(120); toast('🎁 兑换成功！找家长兑现吧'); hush(); say([MQVoiceTexts.CELEBRATE.redeem]); },
+  parent(){ if(parentOn()){ S.parentUntil = 0; render(); toast('已退出家长模式'); return; } parentGate(()=>{ render(); toast('👨‍👩‍👧 已进入家长模式（10 分钟内有效）'); }); },
+  pinset(){ const a=$('#pin1').value.trim(), b=$('#pin2').value.trim(); if(!isLeapPin(a)){ $('#pinMsg').textContent='请输入 4 位数字'; return; } if(a!==b){ $('#pinMsg').textContent='两次输入不一致'; return; }
+    try{ localStorage.setItem(PIN_KEY, pinHash(a)); }catch(e){} enterParent(); closeModal(); runAfterParent(); },
+  pinenter(){ const a=$('#pin1').value.trim(); let h=''; try{ h=localStorage.getItem(PIN_KEY)||''; }catch(e){} if(pinHash(a)!==h){ $('#pinMsg').textContent='密码不对，再试一次'; $('#pin1').value=''; return; } enterParent(); closeModal(); runAfterParent(); },
+  pinmath(){ mathModal(false); },
+  pinmathok(){ if(parseInt($('#mathAns').value,10)!==S._mq.ans){ $('#pinMsg').textContent='答案不对'; return; } enterParent(); closeModal(); runAfterParent(); },
+  pinforgot(){ mathModal(true); },
+  pinreset(){ if(parseInt($('#mathAns').value,10)!==S._mq.ans){ $('#pinMsg').textContent='答案不对'; return; } try{ localStorage.removeItem(PIN_KEY); }catch(e){} const f=S.afterParent; parentGate(f); },
+  rwedit(d){ parentGate(()=>rewardModal(d.v)); },
+  rwadd(){ parentGate(()=>rewardModal(null)); },
+  rwsave(d){ const e=($('#rwE').value.trim()||'🎁').slice(0,4), n=$('#rwN').value.trim().slice(0,24), c=parseInt($('#rwC').value,10);
+    if(!n){ $('#rwMsg').textContent='请填写奖励名称'; return; } if(!(c>=1 && c<=100000)){ $('#rwMsg').textContent='积分需在 1 ~ 100000 之间'; return; }
+    if(d.v){ const rw=D.rewards.find(x=>x.id===d.v); if(rw) Object.assign(rw,{e,n,cost:c}); } else D.rewards.push({id:'r'+Date.now().toString(36), e, n, cost:c});
+    save(); closeModal(); render(); toast('✅ 奖励已保存'); },
+  rwdel(d){ parentGate(()=>{ const rw=D.rewards.find(x=>x.id===d.v); if(!rw) return; if(!confirm(`删除奖励「${rw.n}」吗？（兑换记录会保留）`)) { render(); return; } D.rewards=D.rewards.filter(x=>x.id!==d.v); save(); closeModal(); render(); toast('已删除'); }); },
+  rddone(d){ parentGate(()=>{ const r=D.redeems.find(x=>x.id===d.v); if(r && r.status==='pending'){ r.status='done'; r.doneTs=Date.now(); save(); } render(); toast('✅ 已标记为已兑现'); }); },
+  rdundo(d){ parentGate(()=>{ const r=D.redeems.find(x=>x.id===d.v); if(!r || r.status==='refunded'){ render(); return; } if(!confirm(`撤销这次兑换并退回 ${r.cost} 积分吗？`)){ render(); return; } r.status='refunded'; r.refundTs=Date.now(); D.spend=(D.spend||0)+r.cost; save(); render(); toast(`↩️ 已撤销，退回 ${r.cost} 积分`); }); },
   savesettings(){ D.settings.nickname = ($('#setName').value.trim()||'小数学家').slice(0,12); D.settings.goalNew = Math.max(0,Math.min(30,parseInt($('#setGoal').value)||0)); D.settings.goalReview = $('#setRev').checked; save(); render(); toast('✅ 设置已保存'); },
   export(){ const txt = JSON.stringify({app:'mathquest', version:1, exportedAt:new Date().toISOString(), data:D}, null, 2); download(`数学闯关岛备份-${today()}.json`, txt);
     modal(`<h2>⬇️ 导出备份</h2><div class="muted small">已尝试下载文件。如果手机上没有下载成功，可以复制下面的内容保存到备忘录。</div><textarea class="code" readonly style="margin-top:10px">${esc(txt)}</textarea><div class="row" style="gap:10px;margin-top:10px"><button class="btn ghost grow" data-act="copybk">📋 复制</button><button class="btn grow" data-act="close">完成</button></div>`); S._bk=txt; },
@@ -899,9 +1109,9 @@ const act = {
   importbk(){ modal(`<h2>⬆️ 导入备份</h2><div class="small err">导入会覆盖当前设备上的全部学习记录。</div><textarea class="code" id="bkText" placeholder="粘贴备份 JSON" style="margin-top:10px"></textarea><div class="row" style="margin-top:8px"><label class="btn sm ghost" style="cursor:pointer">📂 选择备份文件<input type="file" id="bkFile" accept=".json,.txt,application/json" hidden></label></div><div id="bkMsg" class="small" class="small err" style="margin-top:8px"></div><div class="row" style="gap:10px;margin-top:12px"><button class="btn ghost grow" data-act="close">取消</button><button class="btn grow" data-act="dobk">导入</button></div>`);
     $('#bkFile').addEventListener('change',e=>{ const f=e.target.files[0]; if(!f) return; const r=new FileReader(); r.onload=()=>{ $('#bkText').value=r.result; }; r.readAsText(f,'utf-8'); }); },
   dobk(){ try{ const o = extractJSON($('#bkText').value); const data = o && o.app==='mathquest' ? o.data : o; if(!data || !Array.isArray(data.attempts) || !data.settings) throw new Error('不是有效的备份文件');
-      if(!confirm('确定用备份覆盖当前数据吗？')) return; D = Object.assign(defData(), data); save(); if(D.settings && D.settings.theme){ try{ localStorage.setItem(THEME_KEY, D.settings.theme); }catch(e){} applyTheme(D.settings.theme); } closeModal(); go('home'); toast('✅ 备份已恢复'); }
+      if(!confirm('确定用备份覆盖当前数据吗？')) return; D = Object.assign(defData(), data); D.tierInit = data.tierInit; migrate(); save(); if(D.settings && D.settings.theme){ try{ localStorage.setItem(THEME_KEY, D.settings.theme); }catch(e){} applyTheme(D.settings.theme); } closeModal(); go('home'); toast('✅ 备份已恢复'); }
     catch(e){ $('#bkMsg').textContent='❌ '+e.message; } },
-  reset(){ if(!confirm('确定清空所有学习数据吗？导入的题包、做题记录、徽章都会被删除。')) return; if(!confirm('真的确定吗？此操作无法撤销。')) return; localStorage.removeItem(KEY); load(); S.session=null; go('home'); toast('已清空，重新出发吧！'); },
+  reset(){ if(!confirm('确定清空所有学习数据吗？导入的题包、做题记录、徽章都会被删除。')) return; if(!confirm('真的确定吗？此操作无法撤销。')) return; localStorage.removeItem(KEY); load(); migrate(); S.session=null; go('home'); toast('已清空，重新出发吧！'); },
   close(){ closeModal(); },
   maskclose(d,el,e){ if(e.target===el) closeModal(); }
 };
@@ -929,7 +1139,9 @@ document.addEventListener('change', e=>{ if(e.target && e.target.id==='voicePick
 /* 首次触摸/点击即解锁 iPad Safari 的音频（捕获阶段，先于按钮处理） */
 ['touchend','pointerup','click','keydown'].forEach(ev=>document.addEventListener(ev, ()=>{ if(VS.unlock) VS.unlock(); }, {capture:true, passive:true}));
 VS.onChange(sp=>{ const on=!!sp && voiceOn(); const b=$('#speakbar'); if(b) b.classList.toggle('show', on); document.body.classList.toggle('speaking', on); });
-window.addEventListener('storage', e=>{ if(e.key===KEY){ load(); render(); } });
+window.addEventListener('storage', e=>{ if(e.key===KEY){ load(); migrate(); render(); } });
 window.__mqKatexReady = () => render();
+const __migN = migrate();
 render();
+if(__migN) setTimeout(()=>toast(`🏅 已根据以往的学习记录点亮 ${__migN} 项成就，去「我的 → 成就」看看吧`), 700);
 })();
