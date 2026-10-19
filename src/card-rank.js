@@ -42,7 +42,7 @@ var MQCardRank = (function(){
     let newestDay = ''; pday.forEach(d => { if(d && (!newestDay || dnum(d) > dnum(newestDay))) newestDay = d; });
     const newestIds = new Set(); pday.forEach((d,id) => { if(d && d === newestDay) newestIds.add(id); });
     let totalAct = 0; qinfo.forEach(it => it.act.forEach(e => { if(decay(e.days) > 0) totalAct++; }));
-    const mode = totalAct < FALLBACK_MIN ? 'fallback' : 'recent';
+    let mode = totalAct < FALLBACK_MIN ? 'fallback' : 'recent', extraAct = 0;
 
     const fm = new Map(), am = new Map(), methods = []; let order = 0;
     const addVar = (c, latex, n) => { if(!latex) return; const k = normLatex(latex); const v = c.variants.find(x => x.k === k); if(v) v.n += n; else c.variants.push({k, latex, n}); };
@@ -75,6 +75,7 @@ var MQCardRank = (function(){
         it.act.forEach(e => { const d = decay(e.days); if(d > 0){ s += e.w * d; a14++; if(e.days <= 7) a7++; } });
         it.appear.forEach(e => { s += e.w * decay(e.days); });
         if(newestIds.has(it.p.id)) nw++; });
+      (c.extra || []).forEach(e => { const d = decay(e.days); if(d > 0){ s += e.w * d; a14++; if(e.days <= 7) a7++; } });
       if(kpShare){ // 思路卡：同知识点的其它题被练习，也算轻度涉及
         qinfo.forEach((it, k) => { if(c.qs.includes(k) || !it.q.knowledgePoints.some(x => c.kps.has(x))) return;
           it.act.forEach(e => { s += W.kpShare * e.w * decay(e.days); }); });
@@ -85,8 +86,12 @@ var MQCardRank = (function(){
     };
     const fcards = [...new Set(fm.values())];
     fcards.forEach(c => { const vs = c.variants.slice().sort((x,y) => y.n - x.n); if(vs.length){ c.latex = vs[0].latex; } c.alt = vs.slice(1).map(v => v.latex); delete c.variants; });
+    // 记忆练习答错：算作该公式卡的一次“做错的练习”
+    (opts.drills || []).forEach(e => { if(e.ok) return; const c = (e.latex && fm.get('L:' + normLatex(e.latex))) || (e.name && fm.get('N:' + normText(e.name))); if(!c) return;
+      const days = daysBetween(e.date, today); (c.extra = c.extra || []).push({days, w: W.miss, kind:'drill'}); if(decay(days) > 0) extraAct++; });
+    if(extraAct && mode === 'fallback' && totalAct + extraAct >= FALLBACK_MIN) mode = 'recent';
     const f = fcards.map(c => score(c)), a = [...am.values()].map(c => score(c)), m = methods.map(c => score(c, true));
-    return {f: rank(f, mode), a: rank(a, mode), m: rank(m, mode), mode, newestIds:[...newestIds], newestDay, totalAct};
+    return {f: rank(f, mode), a: rank(a, mode), m: rank(m, mode), mode, newestIds:[...newestIds], newestDay, totalAct: totalAct + extraAct};
   }
   function cmpFreq(mode){
     return mode === 'fallback'

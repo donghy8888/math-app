@@ -429,6 +429,41 @@ input.pin{letter-spacing:12px;font-size:24px;text-align:center}
 .flip .bk .ltx.alt{font-size:15px;margin:-4px 0 8px}
 @media (min-width:700px){.fgrid{grid-template-columns:1fr 1fr}}
 .kphead{grid-column:1/-1;font-weight:800;color:var(--pri-ink);font-size:14px;margin:6px 4px -4px}
+
+/* ===== 记忆练习 ===== */
+.drillcta{display:flex;align-items:center;gap:12px;background:linear-gradient(135deg,var(--pri-soft),var(--sky-soft));border:1px solid var(--line)}
+.drillcta .de{font-size:34px;flex:none}
+.drillcta b{font-size:17px}.drillcta .hotn{color:var(--bad-ink);font-size:16px}
+.drillcta.slim{margin:12px 0}
+.drillcta .btn{flex:none}
+.practbtn{margin-top:6px;font-size:13px;font-weight:800;color:var(--pri-ink);background:var(--card);border:1px solid var(--line);border-radius:99px;padding:5px 12px;min-height:32px}
+.dpbar{display:flex;gap:4px;margin-top:5px}
+.dpbar i{flex:1;height:6px;border-radius:99px;background:var(--track)}
+.dpbar i.d{background:var(--pri)}.dpbar i.c{background:var(--warn)}.dpbar i.r{opacity:.65}
+.dq{padding:18px}
+.dtag{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:8px}
+.dlead{font-weight:800;color:var(--pri-ink);font-size:16px;margin:4px 0}
+.dformula{font-size:21px;background:var(--card2);border-radius:16px;padding:12px 10px;margin:8px 0 4px;overflow-x:auto;text-align:center;color:var(--ink)}
+.dformula .katex-display{margin:.3em 0}
+.dstate{font-size:18px;line-height:1.8;background:var(--card2);border-radius:16px;padding:14px 16px;margin:8px 0 4px}
+.tilerow{margin-top:12px}
+.tilerow .tl{font-size:13px;font-weight:800;color:var(--sub);margin-bottom:6px}
+.tiles{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.tile{min-height:58px;border-radius:16px;background:var(--card2);border:2px solid var(--line);font-size:20px;color:var(--ink);padding:6px 8px;transition:transform .1s}
+.tile:active{transform:scale(.97)}
+.tile.sel{border-color:var(--pri);background:var(--pri-soft);box-shadow:0 0 0 3px var(--pri-soft)}
+.tile.right{border-color:var(--ok);background:var(--ok-soft)}
+.tile.wrong{border-color:var(--bad);background:var(--bad-soft)}
+.tile.dim{opacity:.5}
+.tfbtns{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px}
+.opt.big{justify-content:center;font-size:20px;font-weight:800;min-height:64px}
+.dfull{margin-top:8px;padding:8px 10px;border-radius:12px;background:var(--card);overflow-x:auto;font-size:15px}
+.dfull .katex-display{margin:.2em 0;font-size:1.1em}
+.dtip{margin-top:8px;font-weight:700;color:var(--warn-ink)}
+.dsum .row{align-items:center}
+.dsum svg{flex:none;color:var(--ink)}
+@media (min-width:1000px){ .dq{display:grid;grid-template-columns:1fr 1fr;gap:20px;align-items:start} }
+@media (max-width:420px){ .dformula{font-size:17px} .tile{font-size:18px} }
 </style>
 </head>
 <body>
@@ -954,7 +989,7 @@ input.pin{letter-spacing:12px;font-size:24px;text-align:center}
 4. 看不清的题请在 original 里注明“（看不清，已按推测补全）”；
 5. analysis 用来教孩子“怎么想”：known 逐条列出已知，**隐藏条件（如二次项系数≠0、被开方数≥0、分母≠0、绝对值/平方非负、根要检验等）必须单独写成 {"hidden": true} 并说明 why**；associations 写“看到什么→想到什么”，第一条要是最关键的联想；thinkingPath 3~5 条，按顺序说清“先想什么、再想什么”；pitfalls 写最常见的失分点。若题目数据本身有问题（如代入后分母为 0），也写进 pitfalls。
 </script>
-<script type="application/json" id="audio-manifest">["0014a6cc4b52", "00402a531160", "006dff0b6bb4", "007530d85dac", "00a9c0d7c95a", "0130e53ddadd", "014e14007bb2", "015323a5aea8", "0164d3f9c46f", "016861bbe204", "016a79e7dfba", "01940777f726", "01c63e77c04c", "021629bb61a6", "02ce5a378a71", "02eecb95e730", "031625429c4e", "0390bc49ede0", "03fec8e3957b", "0402ce1a2bed", "041e94107aba", "04cb3ad43e01", "05289a51a522", "05490020274d", "05570a3a0942", "056346c4135b", "05ec851e27d2", "05f4ea90f7c6", "06b1916b7934", "0735bde85c1f", "0746d5fc3dcf", "0752d0ea9642", "075e11952d90", "081085a8b365", "083a41e5f3bd", "087e6ce38f73", "088a83668a79", "0894c6d6a4c9", "08a8f581a71e", "08b41547fea9", "0940adc6e929", "097cab3ccbe1", "09955688aa66", "0a814ee36bc4", "0a8263e58863", "0aa87f14ba6c", "0b5ab3a37278", "0b5dcd7d532d", "0b8e83c24435", "0c1306274b0a", "0c18ba27c9b9", "0c7d6372e7f6", "0c8606e92b98", "0cd132db3e77", "0d16fb809618", "0d2e455fb78b", "0d4a6001ecc5", "0d4da3265bcd", "0d88bf6faf8f", "0dc76ec84f9a", "0e02749e2da4", "0e713e1b8afc", "0ed32008a2ce", "0ef6b48a40e5", "0f03ede75366", "0f20e2534e15", "0f67e0e643eb", "0f787e3a731d", "0fdd92a9f48e", "0ff8132abda9", "1046d143e9e6", "10505f4ec4b1", "1054c4c52def", "1060509f407e", "108f59868656", "10aa5a9139e1", "110332042ad7", "1112f1a72725", "1185f2220c6a", "11b45861c533", "121dd837696b", "1224fc6021ec", "12561c777e10", "129b8f14884e", "12a6d018d036", "12d87aa9e9e2", "12fc71bb1991", "131c506922b3", "1383a1991c3f", "13b218cdd7fc", "13d5002bae6c", "155792343a15", "1577d2174d7a", "15a2df084a3e", "15ba730be454", "1640ac59c41e", "166833b03caa", "169f6c31b184", "16e2fb6cfa7f", "16f3b18312ad", "16fc1b926fe4", "170ac6557cfb", "176c7128c50c", "1781583201fb", "17fb16b85c89", "17fc79024132", "1818cfffd1c9", "18429e601be9", "18fc6fa007e9", "1a3d42d9ec24", "1a4f88105b28", "1a948201412a", "1a9a6680299a", "1af1448713f1", "1b80c69ad96a", "1bde1fd2fb9c", "1be94645130c", "1c6258ab850e", "1c85d8dced4c", "1ccef35588b6", "1d0a23519626", "1d30ce2818d6", "1d5cd47c873d", "1e6bb0c16683", "1ebd11aaef86", "1ef13816e91c", "1f720bcb9d32", "1f8089c9a332", "206532f2d6eb", "20cf5311c24b", "20e9f5dddf3d", "223b8e934250", "22498b068a4c", "2258cb9ab5f2", "2266665731ed", "22a6adde6d4a", "22af4a991c26", "22fd434e861a", "231fa3f9ab6d", "23549e33d3a5", "2385784d53ad", "2414aa442a00", "24a4d9a67571", "24f090a6a06a", "25431e21f427", "258a8aa1cd7a", "25a341ca5825", "25d51d7305c5", "25ee3a6674cc", "267482268809", "267700b9bcb6", "26aa5308369b", "26c9180b7791", "26e2ead83111", "2724a8c083e9", "272765486897", "2748dd425a35", "276ab7c602fc", "27938564daf5", "27e2a78db979", "28529aa35bb1", "287cea93bd55", "288e5d83d7d2", "28c70d1603c6", "29fc87f3d977", "2a5b8e9f8138", "2a90461844a3", "2abbc589c283", "2ba37a4fc754", "2bbf25409438", "2bf571531bab", "2bfad876dc9f", "2c0adc2804db", "2c3f0e30a5e3", "2ca380320c3d", "2ca7be2f18c7", "2cc83ffe99fb", "2d18cae1a4fa", "2d2875169b2a", "2d295173f3e0", "2d74d88b6743", "2d8a6fc72c0e", "2e505d71823a", "2ede9ae58267", "2f05678f129d", "2f08c891893d", "2f9851d93298", "2fb6812c46a5", "2fe6a1aa5ae1", "2fed37981c67", "2ffb9364b311", "305e26a59418", "308638ac78fb", "30cfa10705c9", "311b09e82bd4", "31331838dfd8", "3135aff3ce3d", "314a2f6a9975", "3174e33af423", "32191709cc6d", "324e08ecfe39", "333abe00995c", "3393921b10e3", "33a5eca4e3ee", "33b4d7995532", "3455668fa764", "34c701ad384f", "34ce286fc458", "34d97292fc28", "34ec4b373cc2", "34f1d1d859e1", "3537859a3b1f", "359f49c1dafe", "35b5aa7e4010", "36a08bed578c", "36d9208d521e", "371eb331171f", "374260356845", "376331e16ebc", "37b40bb79428", "37fd08e7fd18", "3847de57f1ac", "3849d5103f23", "385a3f869f39", "3875bc4aa3b4", "38a121faac94", "38b1a7959ce1", "38e43ac30f4d", "39310adf94a8", "39b5598d75be", "39e5222fc3bd", "39f4c266af1e", "3a2492a313a9", "3a279db4a701", "3a80f9d3fb51", "3af5de821c13", "3b113686a684", "3b5fd2b7072b", "3ba743624d5b", "3bbf95847799", "3bf2241acf2a", "3c7c87229f87", "3c8729bcb30d", "3caa244b5cfc", "3cc1108804fd", "3cda537efea2", "3d262cc99aa5", "3d32e63dd268", "3d4353b93aed", "3d7acc7d03ae", "3e35a9110ef1", "3e4536b0ef45", "3e45c9528020", "3eca345030fe", "3f44f2a5bbbd", "3fb99bbccdd2", "3fbadf839e34", "3fdce61808b0", "4065e4480813", "4066157bfa08", "40681f5a78fd", "40691ab5b283", "409e91d95a04", "40d48cc88a08", "40e64371f6e0", "40efad8a6cd5", "40ff3861e4fa", "415bc3267a5a", "416204c5e3d4", "416bb3e64bb5", "42271f7fda35", "424c4a8e3f88", "428445e68d43", "428b27a067bb", "429cc926ecbe", "42e05c5123f7", "42efe1855e82", "4394c74040e0", "43c751138399", "43fac1094548", "44063e281fb0", "449218e259a7", "44d78878e658", "451a415ca473", "457989528c13", "45b572acae3b", "460f5bac4329", "462ed68476d0", "462f4026dd15", "46375e38dfce", "4659b5ea7e58", "469458234d08", "46ccb73f9e54", "4721a92c3238", "473ee6ee18af", "4794f58594ff", "481db3258eb2", "4853d258522f", "486df91091a6", "4899f207d999", "48ccb8cebd49", "4960e6c22a3d", "49a081c5d58a", "49f801912a56", "4a34b8bde50b", "4afb3c439121", "4b12f89243e9", "4b230e29bf44", "4b8549355fcb", "4bcf9730df9f", "4c0acdb1f2f5", "4c259b7b20d2", "4c3db792c202", "4c5972a71374", "4cabda380c1d", "4cf1f99ca0a4", "4cf269ef1590", "4d4eb703630c", "4d5fdbddfd65", "4d7c5d778311", "4d9233e9f6e5", "4d94a4616e27", "4dacc3ef860f", "4daf3f3f7cbf", "4e02d2464943", "4e154cc08bb0", "4e3910a4852c", "4e3cf14c32a2", "4e401b6ed555", "4e4648165bde", "4f30ce3b9a3d", "4f4f6e79b781", "4fc9040174b2", "502088b6e7fa", "5047d9891fae", "506536bd517a", "5085863aa583", "50ad8f7691f9", "511d69165b08", "51ec9473db7c", "51f1cc74b984", "52247a788ab8", "5232522b115c", "52873ee0bef5", "5293bf453dec", "52aac8f17d01", "53c142a15607", "53ecaf4aabe9", "5426ed5a600c", "54481fdee7e6", "5479db0ede68", "548cbcbb00e3", "54b2d20251d6", "553624e6a9e7", "556a30be7e52", "5598dbad86b9", "55a90e79f15c", "5693a02550ba", "56aea34bc213", "56d9bf08d158", "56e8b3ea9abc", "5765d622478f", "579b7738e715", "57f908a0ee00", "58107a490230", "5859278b49bf", "58606f5da494", "5861c4363774", "58c7d1dcf10a", "58d16d0683c8", "593c4a471474", "595ad8832800", "5a5a96fd9b07", "5abc7f19b4ed", "5b3ec4a89782", "5be5bca9770a", "5bf3fad92b76", "5c8c69c15a73", "5cb1a6d30186", "5cbfb4704cdd", "5cd7062b1b49", "5d28f6f7098b", "5d53321c649c", "5d9f96da240c", "5dcc24c4e908", "5ded30a5d656", "5e02a8f30079", "5e199d45d796", "5e4a400ad85b", "5e86c3ca94ff", "5f1bcec77caa", "5f1daac62c8c", "6037cac1e6dd", "604374430940", "6059983b353e", "605e4d6d7243", "6097f51c067b", "60d6b0f31901", "60ee7d6201c9", "612809fcf58f", "612af89371b4", "6168911a2aa4", "61bda86e8217", "6207b9a410aa", "622f7b01b6ee", "6285c760218a", "628c865bc378", "62aa84e2bd6d", "62d2a103e38f", "62f9de4fa175", "63239721142e", "636b3c96f092", "640f5d79422d", "64110f09a768", "643212f1972d", "64498e89e3d3", "64723b9049a9", "64740e8f71e5", "6499fb227b60", "64c61da79470", "64f652436b39", "659b8c1cfe49", "65b859f38d01", "65df8504116d", "65fc310e5ef6", "663aee2dc16e", "66413f1fa40c", "66dc34e3262c", "66f4b25e969e", "66fab113abce", "6704e3cb8791", "670e16f8c2a6", "67123028e1b1", "67b1a94ffdcc", "67dd5f105bea", "68132efedef2", "681fd9caf39e", "6852a0bbdb5e", "6878c3af019a", "68f7367025f2", "69c86e195796", "6a1e53aa0132", "6a20c4d59045", "6a23572e8047", "6a24286df372", "6a74833cd513", "6aa1fc0d2032", "6ace26518fc6", "6b9193665f9a", "6b93822fb0bc", "6bb9de8e60df", "6c07fcb69881", "6c0d39fe8cca", "6c76e248ca2f", "6d1a06283912", "6d3e9d941300", "6d712a1bb783", "6d78bb4a68c2", "6d9354083177", "6db5b409e7e1", "6de9a987182b", "6e6b80bcb274", "6e6d267120d8", "6e9f4631f09d", "6f03989d58bc", "6f3408bd7c5c", "6f46d7cdbe49", "70cd163b6f16", "70d25b8d7cc3", "70d590688383", "710f04577794", "711e8c7e9ed7", "718778c1c532", "719d7986b79e", "71f76ea263d9", "720870a11662", "721ab005d7a3", "722aaf1680ab", "7267b9af8cda", "7273a6c1a932", "72c036254c3a", "72d8c2b4385d", "72e1cd724a8b", "72f6bd890f13", "732bf91d7e43", "733064bc119c", "737435dd8c53", "74219a0ea610", "7434eed2a3f0", "744aaac3a9dc", "74d09a6c4891", "75652ab8638d", "75c2316b2738", "762af8529a5a", "764112a99202", "76f78985d5b0", "77018ec5bc4c", "7709c4b742c9", "77b505df8739", "7815941ef16a", "7839e9375f2e", "784984fb1a8e", "784f8a5e2410", "7850c6fa5588", "786024ce6c76", "78e5dab2a563", "790568806c0b", "7911330af8cb", "792d94638f1a", "7942c28686d4", "7960c3a8a213", "79d10bf55386", "7a042eaeb7c2", "7a503d906284", "7ad8122b11cf", "7ba4121551a5", "7bb8ae92c1b2", "7bee359e2f5e", "7bf69d7b7a0c", "7bf9f8d7c60b", "7c1bbc0055e8", "7c660b7f8fe1", "7c7c9a19da2b", "7cc4e9b5f457", "7d13b8467da9", "7d2b679a7ee9", "7d6e9e09876c", "7e172e15ea25", "7e392c7cb871", "7eaccf708d2e", "7ecd6f7c7f50", "7f3ad942d04f", "7f51dcdea5f9", "7f5725303da6", "7f95ec43db47", "7fa4dd9d144b", "7fdb2b5656f3", "7fea9f8080d8", "803e452561c7", "8041332317f9", "80a7f19111ec", "81064f1cfecf", "814de097b768", "81c129d805e1", "82dde1f931cd", "82eb26507afa", "83263a146786", "83514c53f975", "836971e0242a", "837b7b54dc0d", "83bfdff4657e", "83c6b5ee7094", "844078e7e775", "8446afa9c55b", "848de2535f21", "849cdc9445f7", "84a0110ff92e", "84ac3a44365a", "84d27b840d58", "84d5cff1651c", "84de62376c64", "84eb422869c0", "8547e1b984c2", "855df8d33e98", "85b8ef3e7c05", "8636b535c89d", "866da9858f0f", "86b01748d1e1", "86bd758e9946", "86f1294b9469", "86f326f320ac", "870e37a79d3d", "871ef968d855", "8736e466e399", "879740dfcb8c", "882ee2e58cfc", "887ccd28d586", "887f395dc954", "888e217aeb43", "88e87be8cd75", "88e97f8127b7", "89259b0c7acc", "89383317e961", "894b7dd2b360", "895a2252e820", "895ac70bde5f", "89bab61a2d53", "8a260405a378", "8a7ac9a4f84a", "8aa1dcf4aad4", "8af16c2cffde", "8af87ae4d426", "8b7c8423b857", "8b84883965fb", "8bf60adbec15", "8c198d0ab8b6", "8c46932315ac", "8cb3de01ca2e", "8cebda2d31fb", "8d0f4619d887", "8d2c2fbc3246", "8d66a89f49ee", "8e3ff3b7f76b", "8e45ea11ce42", "8e776855d883", "8ebbfb401965", "8f0686ed2eeb", "8f41ce5b3406", "8f619b75af8a", "8ff54dad4881", "904cee9c21c6", "9057380ddec3", "90b4e6d59b9e", "90cb8070d61c", "90cc4de23949", "916d1f48a3f0", "91ccea1137db", "9226c59c3a28", "9274bb54c403", "93421a954ba3", "9393ff322009", "93afe92c2d52", "93c0e1a6c6ab", "93ed484a69cb", "948299cdd579", "94c00c2413a4", "952fa38d6f46", "96b417dbcd20", "96c882d29180", "96cb2f163faf", "96ce22e71a71", "96d94aa34f47", "97d357677f84", "97d4ebefd9ef", "97e614dfc70e", "97eef1c539a3", "97fb86ffc119", "9821b514fce1", "9826bccb5c7b", "98bbc968899a", "98c13cb2f232", "98d6b51af08e", "992d0041f9b6", "9939858bf756", "994493023c8e", "996207eadb43", "9a1d4accc2e1", "9a1efb4be8ab", "9a4adbeea3d4", "9a6e34e14f73", "9abe0b4bfce8", "9ac194af59e6", "9ac604b84fdd", "9b31789346c3", "9b48992a04bd", "9b6139c27a6c", "9c00e632bc24", "9c1dbde9d2a8", "9c365b9a7e49", "9ca304401733", "9cbfae691335", "9cf62eaf6708", "9d534d167210", "9d7d9d6d0e42", "9d8bf12e4d27", "9da4ff156884", "9dd93ed57542", "9e034505b55e", "9e34cb513fb9", "9e4c774fb32a", "9e4d12040b05", "9e9dc1eece4b", "9f028b859501", "9f21253a51a2", "9fa23d754049", "9fe0d13411e9", "a0ebff75aab2", "a114d6245759", "a11b0537fa36", "a14f175177b9", "a1a77aa8b932", "a1d1522d8de9", "a1da984c75f1", "a1de62365f79", "a1e74f4e757a", "a1ed4184528a", "a1ed70219459", "a1f9884db11f", "a221936b4b6e", "a275b32816db", "a3044dc00135", "a313b80c2c0f", "a33cb363ac34", "a37040013c02", "a38962de4ebf", "a3a2060d6022", "a3bb88fd2d55", "a3c426b2b4a5", "a3dedd16be25", "a45bc54c0cb9", "a49fb65beb9e", "a4b37cfc73cd", "a4b8d0031e93", "a4e8441eaf22", "a559192d9072", "a56e4d1a930b", "a5bf2f49faaa", "a5c76ff5788d", "a637f0a0f071", "a63c202d4353", "a677a849d2d4", "a696fb535349", "a71925156b84", "a720cb63b6ef", "a7264707f46f", "a77a29f88c1e", "a7887773082f", "a7be5e54d6a9", "a8a0a4b00cdf", "a8f85da9c543", "a920f42bca83", "a95fb8690110", "a99fcdc8ec9d", "a9a9c81422d1", "a9bb49cf6228", "a9d9cee5851c", "aa27c66a61dd", "aab6b0ce4c66", "ab49132c94a0", "ab5014f44b7e", "ab9eea898203", "abab69b0858a", "ac79dc3a7bfe", "ad09221298a1", "ad3e5d84a9ee", "addac1d0e685", "ade453c8b13d", "ae491362a7c1", "ae5ef9f41e3e", "ae7923f9835e", "ae951aeb1f11", "af16cc415c04", "af51d0cc7e07", "afc629e841ad", "afcc6a5a355f", "b028e9c5fb47", "b03cc2eccb5f", "b11575f5173b", "b14cb99d5338", "b17631ceebf7", "b190fb691690", "b1c38694ecff", "b1d6cfcc0e7c", "b23498ce67da", "b27648bdab12", "b2f0a2ffe1c9", "b2fb5e6c77f9", "b3177399ba41", "b407ea5e8451", "b418f8d9ac23", "b47d4c7c1737", "b518aca96230", "b54f11638c03", "b56a6a11cdb2", "b5abfe98479c", "b5b4ef61f4a0", "b5c665719b37", "b63159455aa2", "b63dab8a4910", "b6530e70bd83", "b6ffaf5c88a8", "b70759bcf723", "b724a95e563c", "b79f1aeea2cd", "b7aea15bd504", "b80617604976", "b8c0e007e633", "b8fefbc6bdd4", "b95d72e36555", "b969900aa407", "b9ac426997fd", "ba36129caf23", "ba763b1e1cbc", "ba8bd15a803b", "ba9dc13b2b02", "bab44d7b7f4b", "bac501fdb48e", "bb4a69d14d6f", "bb5e47b25bf7", "bbc227e9f294", "bbc7a573ddf2", "bbd1177d6a35", "bbe1677d931c", "bbe1d19e6194", "bbfb8cf67361", "bc21ab3a43f0", "bc8824731fa3", "bca028232d2a", "bcc51c14009f", "bcedd69d491b", "bd0445a924cf", "bd7dfad74581", "be1953d9ad51", "be27b9c9c133", "be47deb2c6bb", "be737d0806ab", "bebc296aad7c", "bed6b424909b", "bf43478229ef", "bf7b16e04dc0", "c087ce104f53", "c0b9d5b219a7", "c0edd0b4f710", "c0f2b006a1dd", "c115668f1189", "c148f1f6bb62", "c19a313e29f4", "c1b2bb53565f", "c23b711f257d", "c24172fed77b", "c2764bae9c7b", "c2b3e03f6097", "c2c4127995b5", "c317b3957f5e", "c32400e7e277", "c3973f36dc95", "c3afc48f69f6", "c3d24816eed6", "c43955c10dae", "c49a435089a1", "c4ccb19e611f", "c50938072554", "c55420c613cf", "c57013dadb52", "c5ad59551c86", "c5bd38e108ab", "c5c3393030ac", "c62993f031fa", "c654e3bcaaf6", "c666766381eb", "c6769bc70bb4", "c71c797a8595", "c72c94dbe87b", "c74ffe814a60", "c767edca917b", "c7e427201e50", "c817cffca0f1", "c946b302d579", "c9544326a477", "c95b723117f0", "c95e14a076a2", "c97574ee9a01", "c97d4e701cb4", "c993b04081c3", "c9b720d6c725", "ca0b31acfe26", "ca6c56ba6dbd", "cb10c422571a", "cb194e07718b", "cb320d1c46d1", "cb62da5698f9", "cbb9c517d9a5", "cd354af0dabc", "cd35f506b29e", "cdbc39bc50c4", "ce0350dbf119", "ceab52212442", "ceb2f1dfb874", "cec942079bbd", "ced2a09794b1", "cedc209edead", "cf3f33c3e27a", "cf5a9305b12e", "cfbd3ecba56b", "cfcd172db776", "d036158f5995", "d086e4e128a1", "d0c885214ba6", "d0dc1040be69", "d0ef904c9d3e", "d143248fd135", "d19d08715719", "d1c5b831e4a1", "d1d18ee84a26", "d1f2f5292751", "d204d0878a3f", "d2105f0d9abd", "d2ed11f84d07", "d2f25dc88c06", "d323d8459d78", "d34360e57617", "d3596699eced", "d381425e63be", "d3c99693c632", "d3df1e55436d", "d428e893dcca", "d45318a90013", "d4a491ba08f3", "d51eab322b01", "d56274fe86d0", "d5aee9000b3c", "d5c105cbeebd", "d5f86c2a7d2c", "d60ba389164a", "d6db5b8a52f7", "d6ef66df0912", "d706b5f44367", "d74db6928ce5", "d7c4c55ea390", "d7e7c576a8d2", "d7edd0df9ea5", "d7ef994c69f3", "d7f9625ebe71", "d89b7ba64449", "d8ba42d2c72a", "d9fb7dc5010e", "da548741533f", "da6ee0af6eca", "da7b93066f69", "da806820c102", "dac48eea1435", "dada58e2ac15", "db20f7fb734d", "db987f5dd223", "dbffc40b1380", "dc0108053c5d", "dcad31ddd522", "dd12f96307bd", "dd1377424aa2", "dd2d5390d336", "dd3aa48aeb95", "dd3c8f791385", "dd9bd5fbdf04", "ddc5377ba55c", "ddcc69469579", "ddf89ed9150f", "de580ac2af08", "de8f201fb217", "dea7ba6a45a4", "dee5ad188aa0", "df10c100c42c", "df39bb659869", "df6b05692f82", "df7a1112bfff", "df9dd0d0b870", "dfd481f567c6", "e0132ccc7b68", "e06940d938d2", "e06f05a19307", "e08852713786", "e0c0924bd122", "e0f0ccd207a5", "e101d081bfba", "e10ea2b772f0", "e118215877a8", "e130f57719c7", "e1a45be20d8b", "e1ce9fef059b", "e1f6341b4e17", "e293da22ee40", "e2cf1a608bc3", "e2d0d81586d0", "e2f24c001b14", "e2fbc50f4d46", "e30140a3786b", "e315ad134eca", "e3356ac98926", "e36123ae6e08", "e383264547ba", "e47312902b22", "e48c2bb37801", "e48d4c187747", "e49f23f0e807", "e4ecd9055967", "e4f27d7ff543", "e50c0926be98", "e545b3694692", "e55d50c1dc4c", "e57192cf4c34", "e57ab0e851e2", "e5e421359537", "e5f5bb0c0b3b", "e6881f150111", "e6ab6dda080b", "e6b80a96dde5", "e704034b2c62", "e7207074a981", "e75dab838853", "e77fdea68a37", "e7b1bcbfd647", "e7d35120d81d", "ea16e4877e9e", "ea7d5ebad948", "ea9de13c8d33", "eb877821aa50", "eba6e118a000", "ebb37e682d2c", "ebe2042fcba9", "ebf4996ca38c", "ebfa046c6a4a", "ec71d0ec38ae", "ecadca24387d", "ecbb806fa120", "ecd9c3d9fc3c", "ed2fd9d4acc0", "ed40e5c4e80a", "ed436a53ec17", "ed69d40e889e", "ed83e0aa7fd6", "ed87bc4377d3", "edd21875813e", "ede6a2d94089", "ee3389e8fc7c", "ef56d49f2916", "ef973f36cbfb", "efc64f5d1a04", "f0394f1f494e", "f07b9638d1ba", "f09b7e52f086", "f0d96cd96790", "f11c0b36ec27", "f1385ab1ad03", "f1c4196f3ae9", "f1cf23270261", "f1dd9c767049", "f23fd8793800", "f2937b004734", "f2b663963753", "f3277f9c71ac", "f33fa9d1655b", "f3b81bc04cac", "f3e77bb96d9c", "f4101a013897", "f4254d109960", "f4872a66348e", "f4be1b9ebf30", "f4f1241c3551", "f517fddbcfc3", "f54948568987", "f5f156c91768", "f5f845bea169", "f62ffb5f5ba2", "f658ed014036", "f66d42cee371", "f6a362a9ac83", "f6a92c4b3459", "f6b69ab81d83", "f6e91a8dfe50", "f6eaffa32cc8", "f6f4e38645c3", "f74102004c7b", "f7a25ab3ee3a", "f7a48dcad1db", "f7a5c0a1cf4b", "f7b3cab816ce", "f7d666356914", "f7e77c8ae3b6", "f7f5c8c896c0", "f7fbcba0a722", "f8253cd5dc57", "f82d1c06bb8b", "f8c6bdc1e938", "f9551e24f049", "fa9206d36afa", "faa539c7b43a", "fada45ff8595", "fadc9092efaa", "fb821c77a22e", "fbd03537efe0", "fc00808bb485", "fc503c08ca42", "fc734d5717de", "fc9bf5f4e8a1", "fcc10761e205", "fcfd596405db", "fd6b5601cf10", "fd6beee559ae", "fd83523241e1", "fdaa1416f500", "fe60f27924c2", "fe6790a49380", "fea794892667", "ff46e751e014", "ff82b24cbeb8", "ffc0fd41b6c5", "ffd7c920f7a9"]
+<script type="application/json" id="audio-manifest">["0014a6cc4b52", "00402a531160", "006dff0b6bb4", "007530d85dac", "00a9c0d7c95a", "0130e53ddadd", "014e14007bb2", "015323a5aea8", "0164d3f9c46f", "016861bbe204", "016a79e7dfba", "01940777f726", "01c63e77c04c", "021629bb61a6", "02ce5a378a71", "02eecb95e730", "031625429c4e", "0390bc49ede0", "03fec8e3957b", "0402ce1a2bed", "041e94107aba", "04cb3ad43e01", "05289a51a522", "05490020274d", "05570a3a0942", "056346c4135b", "05c7d930f9c1", "05ec851e27d2", "05f4ea90f7c6", "06b1916b7934", "06cb6ea7165c", "0735bde85c1f", "0746d5fc3dcf", "0752d0ea9642", "075e11952d90", "07fa3d8fd116", "081085a8b365", "083a41e5f3bd", "087e6ce38f73", "088a83668a79", "0894c6d6a4c9", "08a8f581a71e", "08b41547fea9", "0940adc6e929", "097cab3ccbe1", "09955688aa66", "0a814ee36bc4", "0a8263e58863", "0aa87f14ba6c", "0b5ab3a37278", "0b5dcd7d532d", "0b8e83c24435", "0c1306274b0a", "0c18ba27c9b9", "0c7d6372e7f6", "0c8606e92b98", "0cd132db3e77", "0d16fb809618", "0d2e455fb78b", "0d3276694000", "0d4a6001ecc5", "0d4da3265bcd", "0d88bf6faf8f", "0dc76ec84f9a", "0e02749e2da4", "0e713e1b8afc", "0ed32008a2ce", "0ef6b48a40e5", "0f03ede75366", "0f20e2534e15", "0f67e0e643eb", "0f787e3a731d", "0fdd92a9f48e", "0ff8132abda9", "1046d143e9e6", "10505f4ec4b1", "1054c4c52def", "1060509f407e", "108f59868656", "10aa5a9139e1", "110332042ad7", "1112f1a72725", "1185f2220c6a", "11b45861c533", "121dd837696b", "1224fc6021ec", "12561c777e10", "129b8f14884e", "12a6d018d036", "12d87aa9e9e2", "12fc71bb1991", "131c506922b3", "1383a1991c3f", "13b218cdd7fc", "13d5002bae6c", "1514db3f94ea", "155792343a15", "1577d2174d7a", "15a2df084a3e", "15ba730be454", "1640ac59c41e", "166833b03caa", "169f6c31b184", "16e2fb6cfa7f", "16f3b18312ad", "16fc1b926fe4", "16fe0b9f93c0", "170ac6557cfb", "176c7128c50c", "1781583201fb", "17fb16b85c89", "17fc79024132", "1818cfffd1c9", "18429e601be9", "18fc6fa007e9", "193e5b2dfd99", "19e0800d44c7", "1a3d42d9ec24", "1a4f88105b28", "1a948201412a", "1a9a6680299a", "1af1448713f1", "1b80c69ad96a", "1bde1fd2fb9c", "1be94645130c", "1c6258ab850e", "1c85d8dced4c", "1ccef35588b6", "1d0a23519626", "1d30ce2818d6", "1d5cd47c873d", "1e6bb0c16683", "1ebd11aaef86", "1ef13816e91c", "1f720bcb9d32", "1f8089c9a332", "206532f2d6eb", "20cf5311c24b", "20e9f5dddf3d", "21cf5f0996a2", "223b8e934250", "22498b068a4c", "2258cb9ab5f2", "2266665731ed", "22a6adde6d4a", "22af4a991c26", "22eff2c19b02", "22fd434e861a", "231fa3f9ab6d", "23549e33d3a5", "2385784d53ad", "23b65c62232d", "2414aa442a00", "24a4d9a67571", "24f090a6a06a", "25431e21f427", "258a8aa1cd7a", "25a341ca5825", "25d51d7305c5", "25ee3a6674cc", "267482268809", "267700b9bcb6", "26aa5308369b", "26c9180b7791", "26e2ead83111", "2724a8c083e9", "272765486897", "2748dd425a35", "276ab7c602fc", "27938564daf5", "27e2a78db979", "28529aa35bb1", "287cea93bd55", "288e5d83d7d2", "28c70d1603c6", "28eef9e0b5dd", "298ef9857dc3", "29fc87f3d977", "2a5b8e9f8138", "2a90461844a3", "2abbc589c283", "2ba37a4fc754", "2bbf25409438", "2bf571531bab", "2bfad876dc9f", "2c0adc2804db", "2c3f0e30a5e3", "2ca380320c3d", "2ca7be2f18c7", "2cc83ffe99fb", "2d18cae1a4fa", "2d2875169b2a", "2d295173f3e0", "2d74d88b6743", "2d8a6fc72c0e", "2e505d71823a", "2ede9ae58267", "2f05678f129d", "2f08c891893d", "2f9851d93298", "2fb4a532caba", "2fb6812c46a5", "2fe6a1aa5ae1", "2fed37981c67", "2ffb9364b311", "305e26a59418", "308638ac78fb", "30cfa10705c9", "311b09e82bd4", "31331838dfd8", "3135aff3ce3d", "314a2f6a9975", "3174e33af423", "32191709cc6d", "324e08ecfe39", "333abe00995c", "3393921b10e3", "33a5eca4e3ee", "33b4d7995532", "3455668fa764", "34c701ad384f", "34ce286fc458", "34d97292fc28", "34ec4b373cc2", "34f1d1d859e1", "3537859a3b1f", "353ec1641177", "359f49c1dafe", "35b5aa7e4010", "3620f9b868ec", "36a08bed578c", "36d9208d521e", "371eb331171f", "374260356845", "376331e16ebc", "37b40bb79428", "37fd08e7fd18", "3847de57f1ac", "3849d5103f23", "385a3f869f39", "3875bc4aa3b4", "38a121faac94", "38b1a7959ce1", "38e43ac30f4d", "39310adf94a8", "39b5598d75be", "39e5222fc3bd", "39f4c266af1e", "3a2492a313a9", "3a279db4a701", "3a80f9d3fb51", "3af5de821c13", "3b113686a684", "3b5fd2b7072b", "3b8b8866eafa", "3ba743624d5b", "3bbf95847799", "3bf2241acf2a", "3c7c87229f87", "3c8729bcb30d", "3caa244b5cfc", "3cc1108804fd", "3cda537efea2", "3d262cc99aa5", "3d32e63dd268", "3d4353b93aed", "3d7acc7d03ae", "3da3f30d6152", "3e35a9110ef1", "3e4536b0ef45", "3e45c9528020", "3eca345030fe", "3f44f2a5bbbd", "3f626dca5538", "3fb99bbccdd2", "3fbadf839e34", "3fdce61808b0", "4065e4480813", "4066157bfa08", "40681f5a78fd", "40691ab5b283", "409e91d95a04", "40d48cc88a08", "40e64371f6e0", "40efad8a6cd5", "40ff3861e4fa", "415bc3267a5a", "416204c5e3d4", "416bb3e64bb5", "42271f7fda35", "424c4a8e3f88", "428445e68d43", "428b27a067bb", "429cc926ecbe", "42e05c5123f7", "42efe1855e82", "4394c74040e0", "43c751138399", "43fac1094548", "44063e281fb0", "449218e259a7", "44d78878e658", "451a415ca473", "457989528c13", "45b572acae3b", "460f5bac4329", "462ed68476d0", "462f4026dd15", "46375e38dfce", "4659b5ea7e58", "469458234d08", "46ccb73f9e54", "4721a92c3238", "473ee6ee18af", "4794f58594ff", "481db3258eb2", "4853d258522f", "486df91091a6", "4899f207d999", "48ccb8cebd49", "4960e6c22a3d", "49a081c5d58a", "49f801912a56", "4a34b8bde50b", "4afb3c439121", "4b12f89243e9", "4b230e29bf44", "4b8549355fcb", "4bcf9730df9f", "4c0acdb1f2f5", "4c259b7b20d2", "4c3db792c202", "4c5972a71374", "4cabda380c1d", "4cf1f99ca0a4", "4cf269ef1590", "4d4eb703630c", "4d5fdbddfd65", "4d7c5d778311", "4d9233e9f6e5", "4d94a4616e27", "4dacc3ef860f", "4daf3f3f7cbf", "4e02d2464943", "4e154cc08bb0", "4e3910a4852c", "4e3cf14c32a2", "4e401b6ed555", "4e4648165bde", "4f30ce3b9a3d", "4f4f6e79b781", "4fc9040174b2", "502088b6e7fa", "5047d9891fae", "506536bd517a", "5085863aa583", "50ad8f7691f9", "511d69165b08", "51a4ae38d7dc", "51ec9473db7c", "51f1cc74b984", "5211bd59b221", "52247a788ab8", "5232522b115c", "52873ee0bef5", "5293bf453dec", "52aac8f17d01", "53c142a15607", "53ecaf4aabe9", "5426ed5a600c", "54481fdee7e6", "5479db0ede68", "548cbcbb00e3", "54b2d20251d6", "553624e6a9e7", "556a30be7e52", "5598dbad86b9", "55a90e79f15c", "5693a02550ba", "56aea34bc213", "56d9bf08d158", "56e8b3ea9abc", "5765d622478f", "579b7738e715", "57f908a0ee00", "58107a490230", "5859278b49bf", "58606f5da494", "5861c4363774", "58c7d1dcf10a", "58d16d0683c8", "593c4a471474", "595ad8832800", "5a5a96fd9b07", "5abc7f19b4ed", "5b3ec4a89782", "5be5bca9770a", "5bf3fad92b76", "5c8c69c15a73", "5cb1a6d30186", "5cbfb4704cdd", "5cd7062b1b49", "5d28f6f7098b", "5d53321c649c", "5d9f96da240c", "5dcc24c4e908", "5ded30a5d656", "5e02a8f30079", "5e199d45d796", "5e4a400ad85b", "5e86c3ca94ff", "5f1bcec77caa", "5f1daac62c8c", "6037cac1e6dd", "604374430940", "6059983b353e", "605e4d6d7243", "6097f51c067b", "60d6b0f31901", "60ee7d6201c9", "612809fcf58f", "612af89371b4", "6168911a2aa4", "61bda86e8217", "6207b9a410aa", "622f7b01b6ee", "6285c760218a", "628c865bc378", "62aa84e2bd6d", "62d2a103e38f", "62f9de4fa175", "63239721142e", "636b3c96f092", "640f5d79422d", "64110f09a768", "643212f1972d", "64498e89e3d3", "64723b9049a9", "64740e8f71e5", "6499fb227b60", "64c61da79470", "64f652436b39", "659b8c1cfe49", "65b859f38d01", "65df8504116d", "65fc310e5ef6", "663aee2dc16e", "66413f1fa40c", "66dc34e3262c", "66f4b25e969e", "66fab113abce", "6704e3cb8791", "670e16f8c2a6", "67123028e1b1", "67b1a94ffdcc", "67dd5f105bea", "680fa9d80cde", "68132efedef2", "681fd9caf39e", "6852a0bbdb5e", "6878c3af019a", "68f7367025f2", "69c86e195796", "6a1e53aa0132", "6a20c4d59045", "6a23572e8047", "6a24286df372", "6a74833cd513", "6aa1fc0d2032", "6ace26518fc6", "6b9193665f9a", "6b93822fb0bc", "6bb9de8e60df", "6c07fcb69881", "6c0d39fe8cca", "6c76e248ca2f", "6d1a06283912", "6d3e9d941300", "6d712a1bb783", "6d78bb4a68c2", "6d9354083177", "6db5b409e7e1", "6de9a987182b", "6e6b80bcb274", "6e6d267120d8", "6e9f4631f09d", "6f03989d58bc", "6f3408bd7c5c", "6f46d7cdbe49", "700b3768c948", "70cd163b6f16", "70d25b8d7cc3", "70d590688383", "710f04577794", "711e8c7e9ed7", "718778c1c532", "719d7986b79e", "71f76ea263d9", "720870a11662", "721ab005d7a3", "722aaf1680ab", "7267b9af8cda", "7273a6c1a932", "7276723cc3f8", "72c036254c3a", "72d8c2b4385d", "72e1cd724a8b", "72f6bd890f13", "732bf91d7e43", "733064bc119c", "73666c9a4497", "737435dd8c53", "74219a0ea610", "7434eed2a3f0", "744aaac3a9dc", "74d09a6c4891", "75652ab8638d", "75c2316b2738", "762af8529a5a", "764112a99202", "765fa82e4ee1", "76f78985d5b0", "77018ec5bc4c", "7709c4b742c9", "77831221848d", "77b505df8739", "7815941ef16a", "7839e9375f2e", "784984fb1a8e", "784f8a5e2410", "7850c6fa5588", "786024ce6c76", "78e5dab2a563", "790568806c0b", "7911330af8cb", "792d94638f1a", "7942c28686d4", "7960c3a8a213", "79d10bf55386", "7a042eaeb7c2", "7a503d906284", "7ad8122b11cf", "7ba4121551a5", "7bb8ae92c1b2", "7bee359e2f5e", "7bf69d7b7a0c", "7bf9f8d7c60b", "7c1bbc0055e8", "7c660b7f8fe1", "7c7c9a19da2b", "7cc4e9b5f457", "7d13b8467da9", "7d2b679a7ee9", "7d6e9e09876c", "7d9284061017", "7dd379b34143", "7e172e15ea25", "7e392c7cb871", "7eaccf708d2e", "7ecd6f7c7f50", "7f3ad942d04f", "7f51dcdea5f9", "7f5725303da6", "7f95ec43db47", "7fa4dd9d144b", "7fdb2b5656f3", "7fea9f8080d8", "803e452561c7", "8041332317f9", "80a7f19111ec", "81064f1cfecf", "814de097b768", "81c129d805e1", "82dde1f931cd", "82eb26507afa", "83263a146786", "83514c53f975", "836971e0242a", "837b7b54dc0d", "83bfdff4657e", "83c6b5ee7094", "844078e7e775", "8446afa9c55b", "848de2535f21", "849cdc9445f7", "84a0110ff92e", "84ac3a44365a", "84d27b840d58", "84d5cff1651c", "84de62376c64", "84eb422869c0", "8547e1b984c2", "8547fea2348a", "855df8d33e98", "85b8ef3e7c05", "85c1aacc1ea0", "8636b535c89d", "866da9858f0f", "86b01748d1e1", "86bd758e9946", "86f1294b9469", "86f326f320ac", "870e37a79d3d", "871ef968d855", "8736e466e399", "879740dfcb8c", "882ee2e58cfc", "887ccd28d586", "887f395dc954", "888e217aeb43", "88e87be8cd75", "88e97f8127b7", "89259b0c7acc", "89383317e961", "894b7dd2b360", "895a2252e820", "895ac70bde5f", "89bab61a2d53", "8a260405a378", "8a7ac9a4f84a", "8aa1dcf4aad4", "8af16c2cffde", "8af87ae4d426", "8b7c8423b857", "8b84883965fb", "8bf60adbec15", "8c198d0ab8b6", "8c46932315ac", "8cb3de01ca2e", "8cebda2d31fb", "8d002c88f82f", "8d0f4619d887", "8d2c2fbc3246", "8d66a89f49ee", "8e3ff3b7f76b", "8e45ea11ce42", "8e776855d883", "8ebbfb401965", "8f0686ed2eeb", "8f41ce5b3406", "8f619b75af8a", "8ff54dad4881", "904cee9c21c6", "9057380ddec3", "90b4e6d59b9e", "90cb8070d61c", "90cc4de23949", "916d1f48a3f0", "91ccea1137db", "91ffffeabaf2", "9226c59c3a28", "9274bb54c403", "93421a954ba3", "9393ff322009", "93afe92c2d52", "93c0e1a6c6ab", "93ed484a69cb", "948299cdd579", "94c00c2413a4", "952fa38d6f46", "96b417dbcd20", "96c882d29180", "96cb2f163faf", "96ce22e71a71", "96d94aa34f47", "97d357677f84", "97d4ebefd9ef", "97e614dfc70e", "97eef1c539a3", "97fb86ffc119", "9821b514fce1", "9826bccb5c7b", "98bbc968899a", "98c13cb2f232", "98d6b51af08e", "992d0041f9b6", "9939858bf756", "994493023c8e", "996207eadb43", "9a1d4accc2e1", "9a1efb4be8ab", "9a4adbeea3d4", "9a6e34e14f73", "9abe0b4bfce8", "9ac194af59e6", "9ac604b84fdd", "9b25acde83f8", "9b31789346c3", "9b48992a04bd", "9b6139c27a6c", "9c00e632bc24", "9c1dbde9d2a8", "9c365b9a7e49", "9ca304401733", "9cbfae691335", "9cf62eaf6708", "9d534d167210", "9d7d9d6d0e42", "9d8bf12e4d27", "9da4ff156884", "9dd93ed57542", "9e034505b55e", "9e0f006b48cb", "9e34cb513fb9", "9e4c774fb32a", "9e4d12040b05", "9e9dc1eece4b", "9f028b859501", "9f21253a51a2", "9fa23d754049", "9fe0d13411e9", "a0ebff75aab2", "a114d6245759", "a11b0537fa36", "a14f175177b9", "a1a77aa8b932", "a1d1522d8de9", "a1da984c75f1", "a1de62365f79", "a1e74f4e757a", "a1ed4184528a", "a1ed70219459", "a1f9884db11f", "a221936b4b6e", "a275b32816db", "a3044dc00135", "a313b80c2c0f", "a33cb363ac34", "a37040013c02", "a38962de4ebf", "a3a2060d6022", "a3bb88fd2d55", "a3c426b2b4a5", "a3dedd16be25", "a43e21670571", "a45bc54c0cb9", "a49fb65beb9e", "a4b37cfc73cd", "a4b8d0031e93", "a4e8441eaf22", "a559192d9072", "a56e4d1a930b", "a58c265d2bbe", "a5bf2f49faaa", "a5c76ff5788d", "a637f0a0f071", "a63c202d4353", "a677a849d2d4", "a696fb535349", "a71925156b84", "a720cb63b6ef", "a7264707f46f", "a77a29f88c1e", "a7887773082f", "a7be5e54d6a9", "a8a0a4b00cdf", "a8f85da9c543", "a920f42bca83", "a95fb8690110", "a99fcdc8ec9d", "a9a9c81422d1", "a9bb49cf6228", "a9d9cee5851c", "aa27c66a61dd", "aab6b0ce4c66", "ab49132c94a0", "ab5014f44b7e", "ab9eea898203", "abab69b0858a", "ac79dc3a7bfe", "ad09221298a1", "ad3e5d84a9ee", "addac1d0e685", "ade453c8b13d", "ae491362a7c1", "ae5ef9f41e3e", "ae7923f9835e", "ae7dbee15f64", "ae951aeb1f11", "af16cc415c04", "af51d0cc7e07", "afc629e841ad", "afcc6a5a355f", "b028e9c5fb47", "b03cc2eccb5f", "b11575f5173b", "b14cb99d5338", "b17631ceebf7", "b190fb691690", "b1c38694ecff", "b1d6cfcc0e7c", "b23498ce67da", "b27648bdab12", "b2f0a2ffe1c9", "b2fb5e6c77f9", "b3177399ba41", "b407ea5e8451", "b418f8d9ac23", "b47d4c7c1737", "b518aca96230", "b5383010725b", "b54f11638c03", "b559726ae293", "b56a6a11cdb2", "b58e18e20683", "b5abfe98479c", "b5b4ef61f4a0", "b5c665719b37", "b63159455aa2", "b63dab8a4910", "b6530e70bd83", "b6745642ab08", "b6ffaf5c88a8", "b70759bcf723", "b724a95e563c", "b79f1aeea2cd", "b7aea15bd504", "b80617604976", "b8c0e007e633", "b8fefbc6bdd4", "b95d72e36555", "b969900aa407", "b9ac426997fd", "ba36129caf23", "ba763b1e1cbc", "ba8bd15a803b", "ba9dc13b2b02", "bab44d7b7f4b", "bac501fdb48e", "bb4a69d14d6f", "bb5e47b25bf7", "bbc227e9f294", "bbc7a573ddf2", "bbd1177d6a35", "bbe1677d931c", "bbe1d19e6194", "bbfb8cf67361", "bc21ab3a43f0", "bc8824731fa3", "bca028232d2a", "bcc51c14009f", "bcedd69d491b", "bd0445a924cf", "bd7dfad74581", "be1953d9ad51", "be27b9c9c133", "be47deb2c6bb", "be737d0806ab", "bebc296aad7c", "bed6b424909b", "bf43478229ef", "bf7b16e04dc0", "c087ce104f53", "c0b9d5b219a7", "c0edd0b4f710", "c0f2b006a1dd", "c115668f1189", "c148f1f6bb62", "c19a313e29f4", "c1b2bb53565f", "c23b711f257d", "c24172fed77b", "c2764bae9c7b", "c2b3e03f6097", "c2c4127995b5", "c317b3957f5e", "c32400e7e277", "c3973f36dc95", "c3afc48f69f6", "c3d24816eed6", "c43955c10dae", "c49a435089a1", "c4ccb19e611f", "c50938072554", "c55420c613cf", "c57013dadb52", "c5ad59551c86", "c5bd38e108ab", "c5c3393030ac", "c62993f031fa", "c654e3bcaaf6", "c666766381eb", "c6769bc70bb4", "c6d242b90bc1", "c71c797a8595", "c72c94dbe87b", "c74ffe814a60", "c767edca917b", "c7e427201e50", "c817cffca0f1", "c946b302d579", "c9544326a477", "c95b723117f0", "c95e14a076a2", "c97574ee9a01", "c97d4e701cb4", "c993b04081c3", "c9b720d6c725", "ca0b31acfe26", "ca6c56ba6dbd", "cb10c422571a", "cb194e07718b", "cb1bd3fac8b7", "cb320d1c46d1", "cb62da5698f9", "cbb9c517d9a5", "cd354af0dabc", "cd35f506b29e", "cdbc39bc50c4", "ce0350dbf119", "ceab52212442", "ceb2f1dfb874", "cec942079bbd", "ced2a09794b1", "cedc209edead", "cf3f33c3e27a", "cf5a9305b12e", "cfbd3ecba56b", "cfcd172db776", "d036158f5995", "d086e4e128a1", "d0c885214ba6", "d0dc1040be69", "d0ef904c9d3e", "d143248fd135", "d19d08715719", "d1c5b831e4a1", "d1d18ee84a26", "d1f2f5292751", "d204d0878a3f", "d2105f0d9abd", "d25a6503465b", "d2ed11f84d07", "d2f25dc88c06", "d323d8459d78", "d34360e57617", "d3596699eced", "d36c6a3eab3f", "d381425e63be", "d3c99693c632", "d3df1e55436d", "d428e893dcca", "d45318a90013", "d4a491ba08f3", "d51eab322b01", "d56274fe86d0", "d5aee9000b3c", "d5b963e46a9c", "d5c105cbeebd", "d5f86c2a7d2c", "d60ba389164a", "d6db5b8a52f7", "d6ef66df0912", "d706b5f44367", "d74db6928ce5", "d7c4c55ea390", "d7e7c576a8d2", "d7edd0df9ea5", "d7ef994c69f3", "d7f9625ebe71", "d89b7ba64449", "d8ba42d2c72a", "d8fde183a8a3", "d9fb7dc5010e", "da548741533f", "da6ee0af6eca", "da7b93066f69", "da806820c102", "dac48eea1435", "dada58e2ac15", "db20f7fb734d", "db987f5dd223", "dbffc40b1380", "dc0108053c5d", "dcad31ddd522", "dd12f96307bd", "dd1377424aa2", "dd2d5390d336", "dd3aa48aeb95", "dd3c8f791385", "dd9bd5fbdf04", "ddc5377ba55c", "ddcc69469579", "ddf89ed9150f", "de580ac2af08", "de8f201fb217", "dea7ba6a45a4", "dee41f0d32aa", "dee5ad188aa0", "df10c100c42c", "df39bb659869", "df6b05692f82", "df7a1112bfff", "df9dd0d0b870", "dfd481f567c6", "e0132ccc7b68", "e06940d938d2", "e06f05a19307", "e08852713786", "e0c0924bd122", "e0f0ccd207a5", "e101d081bfba", "e10ea2b772f0", "e118215877a8", "e130f57719c7", "e1a45be20d8b", "e1ce9fef059b", "e1f6341b4e17", "e293da22ee40", "e2cf1a608bc3", "e2d0d81586d0", "e2f24c001b14", "e2fbc50f4d46", "e30140a3786b", "e315ad134eca", "e333879d80d3", "e3356ac98926", "e36123ae6e08", "e383264547ba", "e47312902b22", "e48c2bb37801", "e48d4c187747", "e49f23f0e807", "e4ecd9055967", "e4f27d7ff543", "e50c0926be98", "e545b3694692", "e54630055b68", "e55d50c1dc4c", "e57192cf4c34", "e57ab0e851e2", "e5e421359537", "e5f5bb0c0b3b", "e6881f150111", "e6ab6dda080b", "e6b80a96dde5", "e704034b2c62", "e7207074a981", "e75dab838853", "e77fdea68a37", "e7b1bcbfd647", "e7d35120d81d", "ea16e4877e9e", "ea7d5ebad948", "ea9de13c8d33", "eb877821aa50", "eba6e118a000", "ebb37e682d2c", "ebe2042fcba9", "ebf4996ca38c", "ebfa046c6a4a", "ec71d0ec38ae", "ecadca24387d", "ecbb806fa120", "ecd9c3d9fc3c", "ed2fd9d4acc0", "ed40e5c4e80a", "ed436a53ec17", "ed69d40e889e", "ed83e0aa7fd6", "ed87bc4377d3", "edd21875813e", "ede6a2d94089", "ee3389e8fc7c", "ef56d49f2916", "ef973f36cbfb", "efc64f5d1a04", "f0394f1f494e", "f07b9638d1ba", "f09b7e52f086", "f0d96cd96790", "f11c0b36ec27", "f1385ab1ad03", "f1c4196f3ae9", "f1cf23270261", "f1dd9c767049", "f23fd8793800", "f27e60584c3a", "f2937b004734", "f2b663963753", "f3277f9c71ac", "f33fa9d1655b", "f3b81bc04cac", "f3e77bb96d9c", "f4101a013897", "f4254d109960", "f4872a66348e", "f4be1b9ebf30", "f4f1241c3551", "f517fddbcfc3", "f54948568987", "f5f156c91768", "f5f845bea169", "f62ffb5f5ba2", "f658ed014036", "f66d42cee371", "f679d3b167fa", "f6a362a9ac83", "f6a92c4b3459", "f6b69ab81d83", "f6e91a8dfe50", "f6eaffa32cc8", "f6f4e38645c3", "f74102004c7b", "f7a25ab3ee3a", "f7a48dcad1db", "f7a5c0a1cf4b", "f7b3cab816ce", "f7d666356914", "f7e77c8ae3b6", "f7f5c8c896c0", "f7fbcba0a722", "f8253cd5dc57", "f82d1c06bb8b", "f8c6bdc1e938", "f9551e24f049", "fa9206d36afa", "faa539c7b43a", "fada45ff8595", "fadc9092efaa", "fb821c77a22e", "fbd03537efe0", "fc00808bb485", "fc503c08ca42", "fc734d5717de", "fc9bf5f4e8a1", "fcc10761e205", "fcfd596405db", "fd6b5601cf10", "fd6beee559ae", "fd83523241e1", "fdaa1416f500", "fe60f27924c2", "fe6790a49380", "fea794892667", "ff46e751e014", "ff82b24cbeb8", "ffc0fd41b6c5", "ffd7c920f7a9"]
 </script>
 <script>
 /* ========== 语音：数学转口语 + Web Speech 朗读引擎 ========== */
@@ -1327,7 +1362,7 @@ var MQCardRank = (function(){
     let newestDay = ''; pday.forEach(d => { if(d && (!newestDay || dnum(d) > dnum(newestDay))) newestDay = d; });
     const newestIds = new Set(); pday.forEach((d,id) => { if(d && d === newestDay) newestIds.add(id); });
     let totalAct = 0; qinfo.forEach(it => it.act.forEach(e => { if(decay(e.days) > 0) totalAct++; }));
-    const mode = totalAct < FALLBACK_MIN ? 'fallback' : 'recent';
+    let mode = totalAct < FALLBACK_MIN ? 'fallback' : 'recent', extraAct = 0;
 
     const fm = new Map(), am = new Map(), methods = []; let order = 0;
     const addVar = (c, latex, n) => { if(!latex) return; const k = normLatex(latex); const v = c.variants.find(x => x.k === k); if(v) v.n += n; else c.variants.push({k, latex, n}); };
@@ -1360,6 +1395,7 @@ var MQCardRank = (function(){
         it.act.forEach(e => { const d = decay(e.days); if(d > 0){ s += e.w * d; a14++; if(e.days <= 7) a7++; } });
         it.appear.forEach(e => { s += e.w * decay(e.days); });
         if(newestIds.has(it.p.id)) nw++; });
+      (c.extra || []).forEach(e => { const d = decay(e.days); if(d > 0){ s += e.w * d; a14++; if(e.days <= 7) a7++; } });
       if(kpShare){ // 思路卡：同知识点的其它题被练习，也算轻度涉及
         qinfo.forEach((it, k) => { if(c.qs.includes(k) || !it.q.knowledgePoints.some(x => c.kps.has(x))) return;
           it.act.forEach(e => { s += W.kpShare * e.w * decay(e.days); }); });
@@ -1370,8 +1406,12 @@ var MQCardRank = (function(){
     };
     const fcards = [...new Set(fm.values())];
     fcards.forEach(c => { const vs = c.variants.slice().sort((x,y) => y.n - x.n); if(vs.length){ c.latex = vs[0].latex; } c.alt = vs.slice(1).map(v => v.latex); delete c.variants; });
+    // 记忆练习答错：算作该公式卡的一次“做错的练习”
+    (opts.drills || []).forEach(e => { if(e.ok) return; const c = (e.latex && fm.get('L:' + normLatex(e.latex))) || (e.name && fm.get('N:' + normText(e.name))); if(!c) return;
+      const days = daysBetween(e.date, today); (c.extra = c.extra || []).push({days, w: W.miss, kind:'drill'}); if(decay(days) > 0) extraAct++; });
+    if(extraAct && mode === 'fallback' && totalAct + extraAct >= FALLBACK_MIN) mode = 'recent';
     const f = fcards.map(c => score(c)), a = [...am.values()].map(c => score(c)), m = methods.map(c => score(c, true));
-    return {f: rank(f, mode), a: rank(a, mode), m: rank(m, mode), mode, newestIds:[...newestIds], newestDay, totalAct};
+    return {f: rank(f, mode), a: rank(a, mode), m: rank(m, mode), mode, newestIds:[...newestIds], newestDay, totalAct: totalAct + extraAct};
   }
   function cmpFreq(mode){
     return mode === 'fallback'
@@ -1382,6 +1422,335 @@ var MQCardRank = (function(){
   return { build, rank, decay, normLatex, normText, packDay, daysBetween, W, WINDOW, FALLBACK_MIN };
 })();
 if(typeof module !== 'undefined') module.exports = MQCardRank;
+</script>
+<script>
+/* 公式速记 · 记忆练习：公式挖空、名称/公式配对、条件判断、快速小练习；间隔复习；每日积分上限 */
+var MQDrill = (function(){
+  const CR = typeof MQCardRank !== 'undefined' ? MQCardRank : require('./card-rank.js');
+  const R = String.raw;
+  /* ---------- 手写的公式挖空：[[正确答案§干扰项1§干扰项2§干扰项3]]；去掉挖空标记后必须等于 forms 中的某个完整公式 ---------- */
+  const DEFS = [
+    {id:'disc', name:'根的判别式', kp:'一元二次方程', names:['根的判别式','判别式'], forms:[R`\Delta=b^2-4ac`],
+      cloze:[R`\Delta=b^2-[[4§2§1§8]]ac`, R`\Delta=[[b^2§b§2b§a^2]]-4ac`, R`\Delta=[[b^2§2b§b§-b^2]]-[[4ac§2ac§ac§4a]]`],
+      tip:'二次项系数不为零，判别式先算清：b方减4ac', say:'根的判别式：德尔塔等于b的平方减4ac。'},
+    {id:'disccase', name:'判别式与根的情况', kp:'一元二次方程', names:['根的判别式','判别式'],
+      forms:[R`\Delta>0\Leftrightarrow\text{方程有两个不相等的实数根}`, R`\Delta=0\Leftrightarrow\text{方程有两个相等的实数根}`, R`\Delta<0\Leftrightarrow\text{方程没有实数根}`],
+      cloze:[R`\Delta[[>§<§=§\ge]]0\Leftrightarrow\text{方程有两个不相等的实数根}`, R`\Delta[[=§>§<§\ne]]0\Leftrightarrow\text{方程有两个相等的实数根}`, R`\Delta[[<§>§=§\ge]]0\Leftrightarrow\text{方程没有实数根}`],
+      tip:'大于零两不等，等于零两相等，小于零没实根', say:'德尔塔大于0，方程有两个不相等的实数根；德尔塔等于0，有两个相等的实数根；德尔塔小于0，没有实数根。'},
+    {id:'quaddef', name:'一元二次方程定义', kp:'一元二次方程', names:['一元二次方程定义','一元二次方程的定义'], forms:[R`ax^2+bx+c=0\ (a\ne0)`],
+      cloze:[R`ax^2+bx+c=0\ (a[[\ne§=§>§\ge]]0)`, R`ax^[[2§1§3§0]]+bx+c=0\ (a\ne0)`],
+      tip:'二次项系数不为零，二次方程才成立', say:'一元二次方程的一般形式：a x的平方加b x加c等于0，其中a不等于0。'},
+    {id:'qformula', name:'求根公式', kp:'一元二次方程', names:['求根公式','公式法'], forms:[R`x=\dfrac{-b\pm\sqrt{b^2-4ac}}{2a}\ (b^2-4ac\ge0)`],
+      cloze:[R`x=\dfrac{-b\pm\sqrt{b^2-4ac}}{[[2a§a§2§4a]]}\ (b^2-4ac\ge0)`, R`x=\dfrac{[[-b§b§-2b§2b]]\pm\sqrt{b^2-4ac}}{2a}\ (b^2-4ac\ge0)`,
+        R`x=\dfrac{-b\pm\sqrt{b^2-4ac}}{2a}\ (b^2-4ac[[\ge§>§\le§<]]0)`, R`x=\dfrac{-b\pm\sqrt{b^2-[[4ac§2ac§ac§4a]]}}{[[2a§a§2§4a]]}\ (b^2-4ac\ge0)`],
+      tip:'负b加减根号下，b方减4ac，全部除以2a；用前先看判别式', say:'求根公式：x等于2a分之负b加减根号下b的平方减4ac，条件是b的平方减4ac大于等于0。'},
+    {id:'sqsum', name:'完全平方公式', kp:'乘法公式', names:['完全平方公式'], forms:[R`(a\pm b)^2=a^2\pm2ab+b^2`],
+      cloze:[R`(a\pm b)^2=a^2\pm[[2ab§ab§4ab§a^2b^2]]+b^2`, R`(a\pm b)^2=a^2\pm2ab+[[b^2§2b§b§-b^2]]`, R`(a\pm b)^2=[[a^2§2a§a§a^2b^2]]\pm[[2ab§ab§4ab§a^2b^2]]+b^2`],
+      tip:'首平方，尾平方，首尾两倍在中央', say:'完全平方公式：a加减b的平方，等于a的平方加减2ab加b的平方。'},
+    {id:'sqdiff', name:'平方差公式', kp:'乘法公式', names:['平方差公式','平方差因式分解'], forms:[R`(a+b)(a-b)=a^2-b^2`],
+      cloze:[R`(a+b)(a-b)=a^2[[-§+§\times§\div]]b^2`, R`(a+b)(a-b)=[[a^2-b^2§a^2+b^2§(a-b)^2§a^2-2ab+b^2]]`],
+      tip:'两数和乘两数差，等于两数平方差', say:'平方差公式：a加b乘a减b，等于a的平方减b的平方。'},
+    {id:'sqrtabs', name:'二次根式的性质', kp:'二次根式', names:['二次根式的性质','绝对值的平方'], forms:[R`\sqrt{a^2}=|a|`],
+      cloze:[R`\sqrt{a^2}=[[|a|§a§-a§\pm a]]`],
+      tip:'根号下平方，开出绝对值；再看正负去掉绝对值', say:'根号下a的平方，等于a的绝对值。'},
+    {id:'sqrtsq', name:'算术平方根的平方', kp:'二次根式', names:['有理化因式'], forms:[R`(\sqrt a)^2=a\ (a\ge0)`],
+      cloze:[R`(\sqrt a)^2=[[a§|a|§-a§a^2]]\ (a\ge0)`, R`(\sqrt a)^2=a\ (a[[\ge§>§\le§\ne]]0)`],
+      tip:'先有根号才平方，a 必须非负', say:'根号a的平方等于a，条件是a大于等于0。'},
+    {id:'sqrtmean', name:'二次根式有意义的条件', kp:'二次根式', names:['有意义条件','二次根式有意义的条件'], forms:[R`\sqrt a\ \text{有意义}\Leftrightarrow a\ge0`],
+      cloze:[R`\sqrt a\ \text{有意义}\Leftrightarrow a[[\ge§>§\le§\ne]]0`],
+      tip:'被开方数要非负，大于等于零别漏“等”', say:'根号a有意义，等价于a大于等于0。'},
+    {id:'sqrtmul', name:'二次根式乘除', kp:'二次根式', names:['二次根式乘除'], forms:[R`\sqrt a\cdot\sqrt b=\sqrt{ab}\ (a\ge0,b\ge0)`, R`\dfrac{\sqrt a}{\sqrt b}=\sqrt{\dfrac ab}\ (a\ge0,b>0)`],
+      cloze:[R`\sqrt a\cdot\sqrt b=[[\sqrt{ab}§\sqrt{a+b}§ab§\sqrt a+\sqrt b]]\ (a\ge0,b\ge0)`, R`\dfrac{\sqrt a}{\sqrt b}=\sqrt{\dfrac ab}\ (a\ge0,b[[>§\ge§<§\ne]]0)`],
+      tip:'乘除可以合根号，分母那个要大于零', say:'根号a乘根号b等于根号ab，a、b都大于等于0；根号a除以根号b等于根号b分之a，a大于等于0，b大于0。'},
+    {id:'ration', name:'分母有理化', kp:'二次根式', names:['分母有理化','化去分母'], forms:[R`\dfrac{1}{\sqrt a}=\dfrac{\sqrt a}{a}\ (a>0)`, R`\dfrac{1}{\sqrt a+\sqrt b}=\dfrac{\sqrt a-\sqrt b}{a-b}\ (a\ge0,b\ge0,a\ne b)`],
+      cloze:[R`\dfrac{1}{\sqrt a}=\dfrac{[[\sqrt a§a§1§\sqrt{2a}]]}{a}\ (a>0)`, R`\dfrac{1}{\sqrt a+\sqrt b}=\dfrac{\sqrt a[[-§+§\times§\div]]\sqrt b}{a-b}\ (a\ge0,b\ge0,a\ne b)`,
+        R`\dfrac{1}{\sqrt a+\sqrt b}=\dfrac{\sqrt a-\sqrt b}{[[a-b§a+b§\sqrt a-\sqrt b§(a-b)^2]]}\ (a\ge0,b\ge0,a\ne b)`],
+      tip:'分母有根号，乘它的有理化因式：和配差，差配和', say:'分母有理化：根号a分之1等于a分之根号a；根号a加根号b分之1，等于a减b分之根号a减根号b。'},
+    {id:'simplest', name:'最简二次根式', kp:'二次根式', names:['最简二次根式'], forms:[String.raw`\text{被开方数不含}\text{分母}\text{，不含}\text{能开尽方的因数}`],
+      cloze:[String.raw`\text{被开方数不含}[[\text{分母}§\text{字母}§\text{负号}§\text{奇数}]]\text{，不含}\text{能开尽方的因数}`,
+        String.raw`\text{被开方数不含}\text{分母}\text{，不含}[[\text{能开尽方的因数}§\text{质因数}§\text{偶数因数}§\text{字母因数}]]`],
+      tip:'一看分母二看方：根号里没分母、没有能开方的因数', say:'最简二次根式：被开方数不含分母，也不含能开得尽方的因数。'},
+    {id:'shift', name:'移位规律', kp:'二次根式', names:['移位规律'], forms:[R`\sqrt{100a}=10\sqrt a\ (a\ge0)`],
+      cloze:[R`\sqrt{100a}=[[10§100§50§\sqrt{10}]]\sqrt a\ (a\ge0)`],
+      tip:'被开方数小数点移两位，平方根小数点移一位', say:'根号下100a等于10倍根号a。被开方数的小数点移动两位，平方根的小数点移动一位。'},
+    {id:'negin', name:'负因式移入根号', kp:'二次根式', names:['负因式移入根号'], forms:[R`a<0,\ m\ge0\Rightarrow a\sqrt m=-\sqrt{a^2m}`],
+      cloze:[R`a<0,\ m\ge0\Rightarrow a\sqrt m=[[-\sqrt{a^2m}§\sqrt{a^2m}§\sqrt{-a^2m}§-\sqrt{am}]]`],
+      tip:'负号留在根号外，只把正的部分平方后移进去', say:'a小于0时，a根号m等于负的根号下a的平方m。'},
+    {id:'estimate', name:'估算', kp:'二次根式', names:['估算'], forms:[R`k^2<m<(k+1)^2\Rightarrow k<\sqrt m<k+1`],
+      cloze:[R`k^2<m<(k+1)^2\Rightarrow k<\sqrt m<[[k+1§k^2§2k§k+2]]`],
+      tip:'夹在两个相邻平方数之间，根号就夹在两个相邻整数之间', say:'如果k的平方小于m小于k加1的平方，那么k小于根号m小于k加1。'},
+    {id:'factor', name:'因式分解法', kp:'一元二次方程', names:['因式分解法','十字相乘'], forms:[R`AB=0\Rightarrow A=0\ \text{或}\ B=0`],
+      cloze:[R`AB=0\Rightarrow A=0\ [[\text{或}§\text{且}§\text{和}§\text{则}]]\ B=0`, R`AB=[[0§1§A§B]]\Rightarrow A=0\ \text{或}\ B=0`],
+      tip:'右边化成零，左边分解成乘积，每个因式等于零', say:'因式分解法：如果A乘B等于0，那么A等于0或B等于0。'},
+    {id:'complete', name:'配方法', kp:'一元二次方程', names:['配方法','配方'], forms:[R`x^2+px=q\Rightarrow\left(x+\dfrac p2\right)^2=q+\dfrac{p^2}{4}`],
+      cloze:[R`x^2+px=q\Rightarrow\left(x+[[\dfrac p2§p§2p§\dfrac p4]]\right)^2=q+\dfrac{p^2}{4}`, R`x^2+px=q\Rightarrow\left(x+\dfrac p2\right)^2=q+[[\dfrac{p^2}{4}§\dfrac{p^2}{2}§p^2§\dfrac p2]]`],
+      tip:'配方：两边同时加上一次项系数一半的平方', say:'配方法：x的平方加p x等于q，配成x加二分之p的平方，等于q加四分之p的平方。'},
+    {id:'direct', name:'直接开平方法', kp:'一元二次方程', names:['直接开平方法','平方根'], forms:[R`(x+m)^2=n\ (n\ge0)\Rightarrow x+m=\pm\sqrt n`],
+      cloze:[R`(x+m)^2=n\ (n\ge0)\Rightarrow x+m=[[\pm\sqrt n§\sqrt n§-\sqrt n§n^2]]`, R`(x+m)^2=n\ (n[[\ge§>§\le§<]]0)\Rightarrow x+m=\pm\sqrt n`],
+      tip:'开平方，别忘正负两个根', say:'直接开平方法：x加m的平方等于n，n大于等于0时，x加m等于正负根号n。'},
+    {id:'rootdef', name:'方程的根', kp:'一元二次方程', names:['方程的根'], forms:[String.raw`x_0\ \text{是根}\Leftrightarrow ax_0^2+bx_0+c=0`],
+      cloze:[String.raw`x_0\ \text{是根}\Leftrightarrow ax_0^2+bx_0+c=[[0§1§x_0§a]]`, String.raw`x_0\ \text{是根}\Leftrightarrow [[ax_0^2+bx_0+c§ax^2+bx+c§a+b+c§x_0]]=0`],
+      tip:'是根就代入，代入就成立', say:'x0是方程a x平方加b x加c等于0的根，等价于把x0代入方程，等式成立。'},
+    {id:'coefsum', name:'系数和与根', kp:'一元二次方程', names:['系数和与根','系数和'], forms:[R`a+b+c=0\Leftrightarrow x=1\ \text{是}\ ax^2+bx+c=0\ \text{的根}`, R`a-b+c=0\Leftrightarrow x=-1\ \text{是}\ ax^2+bx+c=0\ \text{的根}`],
+      cloze:[R`a+b+c=0\Leftrightarrow x=[[1§-1§0§2]]\ \text{是}\ ax^2+bx+c=0\ \text{的根}`, R`a-b+c=0\Leftrightarrow x=[[-1§1§0§-2]]\ \text{是}\ ax^2+bx+c=0\ \text{的根}`],
+      tip:'系数相加得零，1 是根；正负交替得零，−1 是根', say:'a加b加c等于0，x等于1是方程的根；a减b加c等于0，x等于负1是方程的根。'},
+    {id:'abs', name:'绝对值', kp:'实数', names:['绝对值'], forms:[R`|a|=\begin{cases}a,&a\ge0\\-a,&a<0\end{cases}`],
+      cloze:[R`|a|=\begin{cases}a,&a\ge0\\[[-a§a§0§\dfrac1a]],&a<0\end{cases}`, R`|a|=\begin{cases}a,&a[[\ge§\le§<§\ne]]0\\-a,&a<0\end{cases}`],
+      tip:'正数和零的绝对值是本身，负数的绝对值是相反数', say:'a大于等于0时，a的绝对值等于a；a小于0时，a的绝对值等于负a。'},
+    {id:'nonneg', name:'非负数', kp:'实数', names:['非负数'], forms:[R`a^2\ge0,\ |a|\ge0,\ \sqrt a\ge0\ (a\ge0)`],
+      cloze:[R`a^2[[\ge§>§\le§<]]0,\ |a|\ge0,\ \sqrt a\ge0\ (a\ge0)`, R`a^2\ge0,\ |a|\ge0,\ \sqrt a[[\ge§>§\le§\ne]]0\ (a\ge0)`],
+      tip:'平方、绝对值、算术平方根都非负；几个非负数和为零，每个都为零', say:'a的平方、a的绝对值、根号a都大于等于0。'},
+    {id:'pythag', name:'勾股定理', kp:'勾股定理', names:['勾股定理'], forms:[R`a^2+b^2=c^2\ (c\ \text{为斜边})`],
+      cloze:[R`a^2+b^2=[[c^2§c§2c§(a+b)^2]]\ (c\ \text{为斜边})`],
+      tip:'两直角边平方和，等于斜边的平方', say:'勾股定理：两条直角边的平方和等于斜边的平方。'},
+    {id:'rate', name:'增长率 / 降低率', kp:'一元二次方程', names:['降低率公式','增长率公式'], forms:[R`a(1-x)^n=b\ (\text{降低率}\ x)`, R`a(1+x)^n=b\ (\text{增长率}\ x)`],
+      cloze:[R`a(1[[-§+§\times§\div]]x)^n=b\ (\text{降低率}\ x)`, R`a(1+x)^[[n§2§x§b]]=b\ (\text{增长率}\ x)`],
+      tip:'增长 1+x，降低 1−x；变化 n 次就是 n 次方', say:'降低率公式：a乘1减x的n次方等于b；增长率是1加x。'},
+    {id:'zeropow', name:'零指数幂', kp:'实数', names:['零指数幂'], forms:[R`a^0=1\ (a\ne0)`],
+      cloze:[R`a^0=[[1§0§a§-1]]\ (a\ne0)`, R`a^0=1\ (a[[\ne§>§=§\ge]]0)`],
+      tip:'任何不为零的数的零次方都等于 1', say:'a的0次方等于1，a不等于0。'},
+    {id:'ineq3', name:'不等式性质 3', kp:'不等式', names:['不等式性质 3','不等式的性质'], forms:[R`a<b,\ c<0\Rightarrow ac>bc`],
+      cloze:[R`a<b,\ c<0\Rightarrow ac[[>§<§=§\le]]bc`],
+      tip:'两边乘除同一个负数，不等号要变向', say:'如果a小于b，c小于0，那么ac大于bc。'}
+  ];
+  /* ---------- 条件判断（对 / 错），重点练“隐藏条件” ---------- */
+  const TF = [
+    {id:'t1', say:'根号下a的平方等于a，对所有实数a都成立',  def:'sqrtabs', hidden:1, text:R`$\sqrt{a^2}=a$ 对所有实数 $a$ 都成立`, ans:false, why:R`只有 $a\ge0$ 时才成立；$a<0$ 时 $\sqrt{a^2}=-a$。正确写法是 $\sqrt{a^2}=|a|$。`},
+    {id:'t2', say:'根号a的平方，也就是先开方再平方，等于a，对所有实数a都成立',  def:'sqrtsq', hidden:1, text:R`$(\sqrt a)^2=a$ 对所有实数 $a$ 都成立`, ans:false, why:R`$a<0$ 时 $\sqrt a$ 没有意义，所以要求 $a\ge0$。`},
+    {id:'t3', def:'disccase', text:R`$\Delta>0$ 时，一元二次方程有两个不相等的实数根`, ans:true, why:R`$\Delta>0$ 两个不相等实根；$\Delta=0$ 两个相等实根；$\Delta<0$ 没有实根。`},
+    {id:'t4', def:'disccase', text:R`$\Delta=0$ 时，一元二次方程没有实数根`, ans:false, why:R`$\Delta=0$ 时有两个相等的实数根；$\Delta<0$ 才没有实数根。`},
+    {id:'t5', def:'disccase', text:R`$\Delta\ge0$ 时，一元二次方程有实数根`, ans:true, why:R`$\Delta\ge0$ 包含“两个不等实根”和“两个相等实根”两种情况。`},
+    {id:'t6', def:'quaddef', hidden:1, text:R`$ax^2+bx+c=0$ 一定是一元二次方程，不需要任何条件`, ans:false, why:R`必须 $a\ne0$；$a=0$ 时就不是二次方程了。`},
+    {id:'t7', def:'quaddef', hidden:1, text:R`方程 $(m-1)x^2+2x+1=0$ 有两个不相等的实数根，只要 $\Delta>0$ 就够了`, ans:false, why:R`还要二次项系数 $m-1\ne0$，答案要把 $m\ne1$ 一起写上。`},
+    {id:'t8', def:'qformula', text:R`用求根公式前，要先把方程化成一般形式 $ax^2+bx+c=0$`, ans:true, why:R`化成一般形式才能找准 $a$、$b$、$c$（连同符号）。`},
+    {id:'t9', def:'qformula', hidden:1, text:R`$b^2-4ac<0$ 时，也可以用求根公式求出实数根`, ans:false, why:R`$b^2-4ac<0$ 时根号下是负数，方程没有实数根。`},
+    {id:'t10', def:'sqrtmean', hidden:1, text:R`$\sqrt{x}$ 有意义的条件是 $x>0$`, ans:false, why:R`应为 $x\ge0$，$x=0$ 时 $\sqrt0=0$ 也有意义。`},
+    {id:'t11', say:'根号x分之1，也就是1除以根号x，有意义的条件是x大于0',  def:'sqrtmean', hidden:1, text:R`$\dfrac{1}{\sqrt x}$ 有意义的条件是 $x>0$`, ans:true, why:R`被开方数 $x\ge0$，又因为在分母上不能为 0，所以 $x>0$。`},
+    {id:'t12', def:'sqrtmul', hidden:1, text:R`$\sqrt a\cdot\sqrt b=\sqrt{ab}$ 要求 $a\ge0$ 且 $b\ge0$`, ans:true, why:R`例如 $\sqrt{(-2)\times(-8)}=4$，但 $\sqrt{-2}$、$\sqrt{-8}$ 都没有意义。`},
+    {id:'t13', say:'根号a除以根号b等于根号下b分之a，其中b可以等于0',  def:'sqrtmul', hidden:1, text:R`$\dfrac{\sqrt a}{\sqrt b}=\sqrt{\dfrac ab}$ 中 $b$ 可以等于 $0$`, ans:false, why:R`$b$ 在分母上，必须 $b>0$。`},
+    {id:'t14', def:'sqsum', text:R`$(a+b)^2=a^2+b^2$`, ans:false, why:R`漏了中间项：$(a+b)^2=a^2+2ab+b^2$。`},
+    {id:'t15', def:'sqsum', text:R`$(a-b)^2=a^2-2ab+b^2$`, ans:true, why:R`首平方，尾平方，首尾两倍在中央，符号跟着中间走。`},
+    {id:'t16', def:'sqdiff', text:R`$(x+2)(x-2)=x^2-4$`, ans:true, why:R`平方差公式：$(a+b)(a-b)=a^2-b^2$，$2^2=4$。`},
+    {id:'t17', def:'simplest', text:R`$\sqrt{12}$ 是最简二次根式`, ans:false, why:R`$12=4\times3$，含能开得尽方的因数 4，$\sqrt{12}=2\sqrt3$。`},
+    {id:'t18', def:'simplest', text:R`$\sqrt{\dfrac12}$ 是最简二次根式`, ans:false, why:R`被开方数含分母，$\sqrt{\dfrac12}=\dfrac{\sqrt2}{2}$。`},
+    {id:'t19', def:'simplest', text:R`$\sqrt6$ 是最简二次根式`, ans:true, why:R`$6=2\times3$，没有分母，也没有能开得尽方的因数。`},
+    {id:'t20', def:'factor', text:R`若 $(x-1)(x+3)=0$，则 $x=1$ 且 $x=-3$`, ans:false, why:R`应该是 $x=1$ **或** $x=-3$，一个 $x$ 不能同时等于两个数。`},
+    {id:'t21', def:'direct', hidden:1, text:R`方程 $x^2=4$ 的解是 $x=2$`, ans:false, why:R`漏了负根：$x=\pm2$。`},
+    {id:'t22', def:'coefsum', text:R`若 $a+b+c=0$，则 $x=1$ 是方程 $ax^2+bx+c=0\ (a\ne0)$ 的根`, ans:true, why:R`把 $x=1$ 代入，左边正好是 $a+b+c=0$。`},
+    {id:'t23', def:'nonneg', text:R`对所有实数 $a$，都有 $a^2\ge0$`, ans:true, why:R`任何实数的平方都是非负数。`},
+    {id:'t24', def:'ineq3', hidden:1, text:R`不等式两边同时乘一个负数，不等号方向不变`, ans:false, why:R`乘（或除以）负数，不等号方向要改变。`},
+    {id:'t25', def:'zeropow', hidden:1, text:R`$0^0=1$`, ans:false, why:R`零指数幂要求底数不为 0，$0^0$ 没有意义。`},
+    {id:'t26', say:'若a小于0，则a乘根号3等于根号下3a的平方',  def:'negin', hidden:1, text:R`若 $a<0$，则 $a\sqrt3=\sqrt{3a^2}$`, ans:false, why:R`$a<0$ 时 $a\sqrt3$ 是负数，应为 $a\sqrt3=-\sqrt{3a^2}$。`},
+    {id:'t27', def:'abs', hidden:1, text:R`$|a|=a$ 对所有实数 $a$ 都成立`, ans:false, why:R`$a<0$ 时 $|a|=-a$。`}
+  ];
+  /* ---------- 小工具 ---------- */
+  function mulberry(seed){ let a = seed >>> 0; return () => { a = (a + 0x6D2B79F5) >>> 0; let t = a; t = Math.imul(t ^ (t >>> 15), t | 1); t ^= t + Math.imul(t ^ (t >>> 7), t | 61); return ((t ^ (t >>> 14)) >>> 0) / 4294967296; }; }
+  const ri = (rng, lo, hi) => lo + Math.floor(rng() * (hi - lo + 1));
+  const pick = (rng, arr) => arr[Math.floor(rng() * arr.length)];
+  function shuffle(rng, arr){ const a = arr.slice(); for(let i = a.length - 1; i > 0; i--){ const j = Math.floor(rng() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; }
+  const gcd = (a, b) => { a = Math.abs(a); b = Math.abs(b); while(b){ [a, b] = [b, a % b]; } return a; };
+  const pad = n => String(n).padStart(2, '0');
+  function addDays(ds, n){ const [y, m, d] = ds.split('-').map(Number); const t = new Date(Date.UTC(y, m - 1, d + n)); return t.getUTCFullYear() + '-' + pad(t.getUTCMonth() + 1) + '-' + pad(t.getUTCDate()); }
+  function hashStr(s){ let h = 0x811c9dc5; for(const c of String(s)){ h = Math.imul(h ^ c.codePointAt(0), 0x01000193) >>> 0; } return h.toString(16); }
+  /* 多项式：[a,b,c] → "2x^2-3x+1" */
+  function poly(cs, v){ v = v || 'x'; const n = cs.length - 1; let s = '';
+    cs.forEach((c, i) => { if(!c) return; const p = n - i; const abs = Math.abs(c); const body = p === 0 ? String(abs) : (abs === 1 ? '' : abs) + v + (p > 1 ? '^' + p : '');
+      s += (c < 0 ? '-' : (s ? '+' : '')) + body; });
+    return s || '0'; }
+  const lin = (v, c) => c === 0 ? v : v + (c > 0 ? '-' + c : '+' + (-c));   // v − c
+  /* ---------- 挖空 ---------- */
+  const BL = /\[\[([\s\S]+?)\]\]/g;
+  function parseCloze(t){ const blanks = []; t.replace(BL, (m, body) => { const p = body.split('§'); blanks.push({ans: p[0], dis: p.slice(1)}); return m; }); return {t, blanks, full: t.replace(BL, (m, body) => body.split('§')[0])}; }
+  /* fills[j]: 已填 latex 或 null；marks[j]: 'ok' | 'bad' | 'now' | '' */
+  const COLORS = {ok:'#2e8b57', bad:'#d0453f'};
+  function clozeLatex(t, fills, marks){ let j = -1;
+    return t.replace(BL, () => { j++; const f = fills && fills[j], m = marks && marks[j];
+      if(f != null && f !== '') return '{\\boxed{' + (COLORS[m] ? '\\color{' + COLORS[m] + '}{' + f + '}' : f) + '}}';
+      const lab = (fills && fills.length > 1) ? ['①','②','③'][j] || '?' : '?';
+      return '{\\boxed{\\,\\text{' + lab + '}\\,}}'; }); }
+  /* 自动挖空（没有手写定义的公式）：只挖关系符号或单独的整数，且公式较短、结构简单 */
+  const RELS = ['\\ge', '>', '\\le', '<', '\\ne', '='];
+  function autoCloze(latex, rng){
+    const s = String(latex || '');
+    if(!s || s.length > 70 || /\\(text|begin|underbrace|cdots|ldots|quad|mathbb|Rightarrow|Leftrightarrow|iff|to)\b/.test(s) || !/=|\\ge|\\le|\\ne|[<>]/.test(s)) return null;
+    const cands = [];
+    let m, cmdEnd = -1; const re = /\\[a-zA-Z]+|\d+/g;   // 不用后行断言，兼容旧版 Safari
+    while((m = re.exec(s))){ const tok = m[0];
+      if(tok[0] === '\\'){ cmdEnd = m.index + tok.length; if(/^\\(ge|le|ne)$/.test(tok)) cands.push({i: m.index, tok}); continue; }
+      if(m.index === cmdEnd) continue;                        // 例如 \frac12 里的 12：不挖
+      if(s[m.index - 1] === '^' && tok.length > 1) continue;
+      cands.push({i: m.index, tok}); }
+    // 等号左右各至少要有内容；每个关系符号只在非首尾位置
+    const rel = cands.filter(c => !/^\d/.test(c.tok)), num = cands.filter(c => /^\d/.test(c.tok));
+    const c = rel.length ? pick(rng, rel) : num.length ? pick(rng, num) : null; if(!c) return null;
+    let dis;
+    if(/^\d/.test(c.tok)){ const n = +c.tok; dis = [...new Set([n + 1, n > 1 ? n - 1 : n + 2, n * 2 === n ? n + 3 : n * 2, n + 2].map(String))].filter(x => x !== c.tok).slice(0, 3); }
+    else { const pref = {'\\ge':['>','\\le','\\ne'], '\\le':['<','\\ge','\\ne'], '\\ne':['=','>','\\ge']}[c.tok]; dis = pref; }
+    return s.slice(0, c.i) + '[[' + [c.tok, ...dis].join('§') + ']]' + s.slice(c.i + c.tok.length);
+  }
+  /* ---------- 快速小练习（随机参数） ---------- */
+  const RT = ['2','3','5','6','7'];
+  const radTex = (k, m) => (k === 1 ? '' : k) + '\\sqrt{' + m + '}';
+  function fracRad(num, m, den){ // num·√m / den，已约分
+    const g = gcd(num, den); num /= g; den /= g; const top = (num === 1 ? '' : num) + '\\sqrt{' + m + '}';
+    return den === 1 ? top : '\\dfrac{' + top + '}{' + den + '}'; }
+  const GENS = [
+    {id:'g_disc', def:'disc', make(rng){ const a = pick(rng, [1,1,2,3]), b = ri(rng, -6, 6) || 4, c = ri(rng, -6, 6);
+      const d = b*b - 4*a*c; return {kind:'num', prompt:R`方程 $${poly([a,b,c])}=0$ 的判别式 $\Delta=$ ？`, answer:String(d), params:{a,b,c},
+        explain:R`$a=${a}$，$b=${b}$，$c=${c}$，$\Delta=b^2-4ac=${b<0?'('+b+')':b}^2-4\times${a}\times${c<0?'('+c+')':c}=${d}$`}; }},
+    {id:'g_count', def:'disccase', make(rng){ const want = pick(rng, ['gt','eq','lt']); let a, b, c, d, n = 0;
+      do { if(want === 'eq'){ const k = ri(rng, -4, 4) || 2; a = pick(rng,[1,1,4]); const r = a === 4 ? 2 : 1; b = 2*r*k; c = k*k; } else { a = pick(rng,[1,1,2]); b = ri(rng, -6, 6); c = ri(rng, -6, 6); }
+        d = b*b - 4*a*c; n++; } while(!(want === 'gt' ? d > 0 : want === 'eq' ? d === 0 : d < 0) && n < 200);
+      if(!(want === 'gt' ? d > 0 : want === 'eq' ? d === 0 : d < 0)){ a = 1; b = 2; c = want === 'gt' ? -3 : want === 'eq' ? 1 : 5; d = b*b - 4*a*c; }
+      const opts = ['两个不相等的实数根','两个相等的实数根','没有实数根']; const right = d > 0 ? 0 : d === 0 ? 1 : 2;
+      return {kind:'choice', prompt:R`方程 $${poly([a,b,c])}=0$ 的根的情况是？`, opts, right, params:{a,b,c},
+        explain:R`$\Delta=${b<0?'('+b+')':b}^2-4\times${a}\times${c<0?'('+c+')':c}=${d}$，${d>0?'大于 0':d===0?'等于 0':'小于 0'}，所以${opts[right]}。`}; }},
+    {id:'g_simp', def:'simplest', make(rng){ const k = ri(rng, 2, 5), m = +pick(rng, RT), n = k*k*m;
+      const right = radTex(k, m); const cand = [radTex(m, k), radTex(k + 1, m), radTex(2*k, m), radTex(k, 2*m), radTex(k*k, m), '\\sqrt{' + n + '}'];
+      const val = s => evalRad(s); const opts = [right]; for(const c of cand){ if(opts.length >= 4) break; if(!opts.includes(c) && Math.abs(val(c) - val(right)) > 1e-9) opts.push(c); }
+      const sh = shuffle(rng, opts); return {kind:'choice', math:1, prompt:R`化简 $\sqrt{${n}}=$ ？`, opts:sh, right:sh.indexOf(right), params:{n},
+        explain:R`$${n}=${k*k}\times${m}$，$\sqrt{${n}}=\sqrt{${k*k}}\times\sqrt{${m}}=${right}$`}; }},
+    {id:'g_ration', def:'ration', make(rng){ const a = ri(rng, 1, 6), m = +pick(rng, RT); const right = fracRad(a, m, m);
+      const cand = [fracRad(a, m, 1), fracRad(1, m, a), '\\dfrac{' + a + '}{' + m + '}', fracRad(a, m, 2*m), fracRad(m, m, a)].filter(Boolean);
+      const opts = [right]; for(const c of cand){ if(opts.length >= 4) break; if(!opts.includes(c) && Math.abs(evalRad(c) - evalRad(right)) > 1e-9) opts.push(c); }
+      const sh = shuffle(rng, opts); return {kind:'choice', math:1, prompt:R`分母有理化：$\dfrac{${a}}{\sqrt{${m}}}=$ ？`, opts:sh, right:sh.indexOf(right), params:{a, m},
+        explain:(()=>{ const raw = R`\dfrac{${a===1?'':a}\sqrt{${m}}}{${m}}`; return R`分子分母同乘 $\sqrt{${m}}$：$${raw}${raw===right?'':'='+right}$`; })()}; }},
+    {id:'g_expand', def:'sqsum', make(rng){ const p = (ri(rng, 1, 9)) * pick(rng, [1, -1]); const ask = pick(rng, ['mid', 'last']);
+      const sq = R`(x${p > 0 ? '+' : ''}${p})^2`;
+      return ask === 'mid' ? {kind:'num', prompt:R`用完全平方公式：$${sq}=x^2+\square x+${p*p}$，$\square=$ ？`, answer:String(2*p), params:{p, ask}, explain:R`中间项是首尾两倍：$2\times x\times(${p})=${2*p}x$`}
+        : {kind:'num', prompt:R`用完全平方公式：$${sq}=x^2${2*p > 0 ? '+' : ''}${2*p}x+\square$，$\square=$ ？`, answer:String(p*p), params:{p, ask}, explain:R`尾平方：$(${p})^2=${p*p}$`}; }},
+    {id:'g_sqrtabs', def:'sqrtabs', make(rng){ if(rng() < 0.5){ const a = -ri(rng, 2, 9); return {kind:'num', prompt:R`$\sqrt{(${a})^2}=$ ？`, answer:String(-a), params:{a}, explain:R`$\sqrt{a^2}=|a|$，$|${a}|=${-a}$（不是 $${a}$）`}; }
+      const c = ri(rng, 1, 6); const opts = shuffle(rng, [c + '-x', 'x-' + c, '\\pm(x-' + c + ')', 'x+' + c]); const right = opts.indexOf(c + '-x');
+      return {kind:'choice', math:1, prompt:R`当 $x<${c}$ 时，$\sqrt{(x-${c})^2}=$ ？`, opts, right, params:{c}, explain:R`$\sqrt{(x-${c})^2}=|x-${c}|$，而 $x-${c}<0$，所以等于 $-(x-${c})=${c}-x$`}; }},
+    {id:'g_mul', def:'sqrtmul', make(rng){ const [a, b] = pick(rng, [[2,8],[3,12],[2,18],[5,20],[3,27],[2,32],[6,24],[7,28],[5,45],[8,18],[2,50],[3,48]]);
+      return {kind:'num', prompt:R`$\sqrt{${a}}\times\sqrt{${b}}=$ ？`, answer:String(Math.round(Math.sqrt(a*b))), params:{a, b}, explain:R`$\sqrt a\cdot\sqrt b=\sqrt{ab}=\sqrt{${a*b}}=${Math.round(Math.sqrt(a*b))}$`}; }},
+    {id:'g_factor', def:'factor', make(rng){ let r1 = ri(rng, -6, 6), r2 = ri(rng, -6, 6); if(r1 === r2) r2 = r1 + ri(rng, 1, 4);
+      const big = Math.max(r1, r2), small = Math.min(r1, r2);
+      return {kind:'num', prompt:R`解方程 $${poly([1, -(r1 + r2), r1*r2])}=0$，较大的根 $x=$ ？`, answer:String(big), params:{r1, r2},
+        explain:R`因式分解：$${small===0?'x':'('+lin('x', small)+')'}${big===0?'x':'('+lin('x', big)+')'}=0$，所以 $x=${small}$ 或 $x=${big}$`}; }},
+    {id:'g_complete', def:'complete', make(rng){ const h = ri(rng, 1, 6) * pick(rng, [1, -1]);
+      return {kind:'num', prompt:R`配方：$x^2${2*h > 0 ? '+' : ''}${2*h}x+\square=(x${h > 0 ? '+' : ''}${h})^2$，$\square=$ ？`, answer:String(h*h), params:{h}, explain:R`加上一次项系数一半的平方：$\left(\dfrac{${2*h}}{2}\right)^2=${h*h}$`}; }},
+    {id:'g_quaddef', def:'quaddef', make(rng){ const k = ri(rng, -5, 5), b = ri(rng, 1, 5), c = ri(rng, -5, 5) || 1;
+      const lead = k === 0 ? 'mx^2' : '(' + lin('m', k) + ')x^2';
+      return {kind:'num', prompt:R`若 $${lead}+${b}x${c > 0 ? '+' : ''}${c}=0$ 是关于 $x$ 的一元二次方程，则 $m\ne$ ？`, answer:String(k), params:{k}, explain:R`二次项系数不能为 0：$${k === 0 ? 'm' : lin('m', k)}\ne0$，所以 $m\ne${k}$`}; }},
+    {id:'g_mean', def:'sqrtmean', make(rng){ const c = ri(rng, -5, 6) || 2;
+      return {kind:'num', prompt:R`若 $\sqrt{${lin('x', c)}}$ 有意义，则 $x\ge$ ？`, answer:String(c), params:{c}, explain:R`被开方数非负：$${lin('x', c)}\ge0$，所以 $x\ge${c}$`}; }},
+    {id:'g_sqdiff', def:'sqdiff', make(rng){ const p = ri(rng, 2, 9);
+      return {kind:'num', prompt:R`$(x+${p})(x-${p})=x^2-\square$，$\square=$ ？`, answer:String(p*p), params:{p}, explain:R`平方差公式：$x^2-${p}^2=x^2-${p*p}$`}; }},
+    {id:'g_qformula', def:'qformula', make(rng){ let r1 = ri(rng, -5, 6), r2 = ri(rng, -5, 6); if(r1 === r2) r2 = r1 + 2; const s = r1 + r2, p = r1*r2, d = s*s - 4*p;
+      return {kind:'num', prompt:R`用求根公式解 $${poly([1, -s, p])}=0$：$x=\dfrac{${s}\pm\sqrt{\square}}{2}$，$\square=$ ？`, answer:String(d), params:{s, p},
+        explain:R`$a=1$，$b=${-s}$，$c=${p}$，$b^2-4ac=${s*s}-${4*p < 0 ? '('+4*p+')' : 4*p}=${d}$`}; }}
+  ];
+  /* 小型求值器（只认 k√m、k√m/d、a/b、整数），用于生成干扰项与测试 */
+  function evalRad(s){ s = String(s); let m;
+    if((m = /^(-?\d*)\\sqrt\{(\d+)\}$/.exec(s))) return (m[1] === '' ? 1 : m[1] === '-' ? -1 : +m[1]) * Math.sqrt(+m[2]);
+    if((m = /^\\dfrac\{(\d*)\\sqrt\{(\d+)\}\}\{(\d+)\}$/.exec(s))) return (m[1] === '' ? 1 : +m[1]) * Math.sqrt(+m[2]) / +m[3];
+    if((m = /^\\dfrac\{(-?\d+)\}\{(\d+)\}$/.exec(s))) return +m[1] / +m[2];
+    if(/^-?\d+$/.test(s)) return +s; return NaN; }
+  /* ---------- 卡片 ↔ 定义 ---------- */
+  const N = s => CR.normText(s), L = s => CR.normLatex(s);
+  function defsForCard(c){ if(!c) return []; const n = N(c.name), l = L(c.latex); return DEFS.filter(d => d.names.some(x => N(x) === n) || (l && d.forms.some(f => L(f) === l))); }
+  const defById = id => DEFS.find(d => d.id === id);
+  function target(c, def){ const ds = c ? defsForCard(c) : [def]; const d = def || ds[0] || null;
+    return {fid: d ? 'd:' + d.id : 'c:' + hashStr(c.key || c.name), def: d, defs: d ? (def ? [def] : ds) : [], card: c || null, name: d && !c ? d.name : c.name, latex: c && c.latex ? c.latex : (d ? d.forms[0] : ''), tip: d ? d.tip : ''}; }
+  /* ---------- 题目生成 ---------- */
+  function makeCloze(T, rng, avoid, valid){
+    let src = null, full = null;
+    if(T.def){ const list = T.defs.flatMap(d => d.cloze.map(t => ({t, d}))); const fresh = list.filter(x => !(avoid || []).includes(x.t)); const x = fresh.length ? pick(rng, fresh) : null; if(x){ src = x.t; T = Object.assign({}, T, {def: x.d}); } }
+    else { src = autoCloze(T.latex, rng); if(src && valid && !valid(clozeLatex(src, [], [])) ) src = null; if(src && (avoid || []).includes(src)) src = null; }
+    if(!src) return null; const P = parseCloze(src); full = P.full;
+    return {type:'cloze', fid: T.fid, name: T.def ? T.def.name : T.name, card: cardRef(T), t: src, blanks: P.blanks.map(b => ({ans: b.ans, tiles: shuffle(rng, [b.ans, ...b.dis])})), full, tip: T.def ? T.def.tip : '', say: T.def ? fbSpeech(T.def) : '', auto: !T.def};
+  }
+  function cardRef(T){ return T.card ? {key: T.card.key, name: T.card.name, latex: T.card.latex} : T.def ? {key: 'd:' + T.def.id, name: T.def.name, latex: T.def.forms[0]} : null; }
+  function makeTF(T, rng, avoid){ const ids = T.defs.map(d => d.id); const list = TF.filter(t => ids.includes(t.def) && !(avoid || []).includes(t.id)); if(!list.length) return null; const t = pick(rng, list.filter(x => x.hidden).length && rng() < 0.6 ? list.filter(x => x.hidden) : list); const d = defById(t.def);
+    return {type:'tf', fid: 'd:' + d.id, name: d.name, card: cardRef(T), tfid: t.id, text: t.text, ans: t.ans, why: t.why, full: d.forms[0], tip: d.tip, say: t.say || t.text, fsay: fbSpeech(d)}; }
+  function makeGen(T, rng, avoidGen){ const ids = T.defs.map(d => d.id); const list = GENS.filter(g => ids.includes(g.def)); if(!list.length) return null; const fresh = list.filter(g => g.id !== avoidGen); const g = pick(rng, fresh.length ? fresh : list); const d = defById(g.def);
+    return Object.assign({type:'gen', gen: g.id, fid: 'd:' + d.id, name: d.name, card: cardRef(T), full: d.forms[0], tip: d.tip, fsay: fbSpeech(d)}, g.make(rng)); }
+  function makeMatch(T, rng, pool, dir){
+    const me = {name: T.def && !T.card ? T.def.name : T.name, latex: T.latex};
+    const others = pool.filter(c => N(c.name) !== N(me.name) && L(c.latex) !== L(me.latex) && c.latex && c.latex.length < 90);
+    const uniq = []; others.forEach(c => { if(!uniq.some(u => N(u.name) === N(c.name) || L(u.latex) === L(c.latex))) uniq.push(c); });
+    if(uniq.length < 3) return null;
+    const kps = T.card && T.card.kps ? [...T.card.kps] : [];
+    const near = uniq.filter(c => c.kps && [...c.kps].some(k => kps.includes(k))), far = uniq.filter(c => !near.includes(c));
+    const dis = shuffle(rng, near).slice(0, 2).concat(shuffle(rng, far)).slice(0, 3);
+    if(dis.length < 3) dis.push(...shuffle(rng, near).filter(c => !dis.includes(c)).slice(0, 3 - dis.length));
+    dir = dir || (rng() < 0.5 ? 'f2n' : 'n2f');
+    const opts = shuffle(rng, [me, ...dis.slice(0, 3)]);
+    return {type:'match', dir, fid: T.fid, name: me.name, card: cardRef(T), prompt: dir === 'f2n' ? me.latex : me.name, opts: opts.map(o => dir === 'f2n' ? o.name : o.latex), right: opts.indexOf(me), full: me.latex, tip: T.tip || '', say: T.def ? fbSpeech(T.def) : ''};
+  }
+  const fbSpeech = d => d.say + (d.tip ? '口诀：' + d.tip + '。' : '');
+  /* 一组练习：o = {cards:[已按近期高频+薄弱排好的公式卡], sr, today, rng, single:card, n, valid(latex)} */
+  function buildSession(o){
+    const rng = o.rng || Math.random, n = o.n || 8, today = o.today, sr = o.sr || {}, cards = o.cards || [];
+    const pool = cards.map(c => ({name: c.name, latex: c.latex, kps: c.kps})).concat(DEFS.filter(d => !cards.some(c => defsForCard(c).includes(d))).map(d => ({name: d.name, latex: d.forms[0], kps: new Set([d.kp])})));
+    const items = [], seen = {cloze: [], tf: []};
+    const push = it => { if(!it) return false; items.push(it); if(it.type === 'cloze') seen.cloze.push(it.t); if(it.type === 'tf') seen.tf.push(it.tfid); return true; };
+    if(o.single){
+      const T = target(o.single); const want = ['cloze', 'match', 'tf', 'cloze', 'gen', 'tf', 'gen', 'cloze'];
+      for(const ty of want){ if(items.length >= 6) break; const it = ty === 'cloze' ? makeCloze(T, rng, seen.cloze, o.valid) : ty === 'tf' ? (T.def ? makeTF(T, rng, seen.tf) : null) : ty === 'gen' ? (T.def ? makeGen(T, rng, (items.filter(x => x.type === 'gen').pop() || {}).gen) : null) : makeMatch(T, rng, pool, items.some(x => x.type === 'match' && x.dir === 'f2n') ? 'n2f' : null);
+        if(it && it.type === 'cloze' && items.some(x => x.type === 'cloze' && x.t === it.t)) continue; push(it); }
+      if(items.length < 3){ const m2 = makeMatch(T, rng, pool, items.some(x => x.dir === 'f2n') ? 'n2f' : 'f2n'); push(m2); }
+      return items;
+    }
+    // 目标公式：今日待记 → 近期高频/薄弱 → 其它手写定义
+    const tg = [], has = f => tg.some(x => x.fid === f);
+    const due = Object.keys(sr).filter(f => sr[f].due && sr[f].due <= today).sort((a, b) => sr[a].due.localeCompare(sr[b].due));
+    due.forEach(f => { let T = null; if(f.startsWith('d:')){ const d = defById(f.slice(2)); if(!d) return; const c = cards.find(c => defsForCard(c).includes(d)); T = c ? target(c, d) : target(null, d); } else { const c = cards.find(c => 'c:' + hashStr(c.key || c.name) === f); if(c) T = target(c); } if(T && !has(T.fid) && tg.length < 4) tg.push(T); });
+    const ranked = []; cards.forEach(c => { const T = target(c); if(!has(T.fid) && !ranked.some(x => x.fid === T.fid)) ranked.push(T); });
+    DEFS.forEach(d => { const f = 'd:' + d.id; if(!has(f) && !ranked.some(x => x.fid === f)) ranked.push(target(null, d)); });
+    const top = ranked.slice(0, 12); const want = Math.max(0, 5 - tg.length);
+    for(let k = 0; k < want && top.length; k++){ // 越靠前越容易被选中
+      const w = top.map((x, i) => 1 / (i + 1)), sum = w.reduce((a, b) => a + b, 0); let r = rng() * sum, i = 0; while(r > w[i] && i < w.length - 1){ r -= w[i]; i++; }
+      tg.push(top.splice(i, 1)[0]); }
+    const plan = ['cloze', 'tf', 'gen', 'cloze', 'match', 'gen', 'tf', 'cloze'].slice(0, n);
+    while(plan.length < n) plan.push(pick(rng, ['cloze', 'tf', 'gen', 'match']));
+    const used = new Map(tg.map(t => [t.fid, 0]));
+    const backup = ranked.filter(t => t.def);
+    for(const ty of plan){
+      const order = tg.slice().sort((a, b) => used.get(a.fid) - used.get(b.fid));
+      let it = null;
+      for(const T of order){ it = ty === 'cloze' ? makeCloze(T, rng, seen.cloze, o.valid) : ty === 'tf' ? makeTF(T, rng, seen.tf) : ty === 'gen' ? makeGen(T, rng, (items.filter(x => x.type === 'gen').pop() || {}).gen) : makeMatch(T, rng, pool);
+        if(it){ used.set(T.fid, used.get(T.fid) + 1); break; } }
+      if(!it && (ty === 'tf' || ty === 'gen')){ for(const T of shuffle(rng, backup.slice(0, 15))){ it = ty === 'tf' ? makeTF(T, rng, seen.tf) : makeGen(T, rng, (items.filter(x => x.type === 'gen').pop() || {}).gen); if(it) break; } }
+      if(!it){ for(const T of order){ it = makeCloze(T, rng, seen.cloze, o.valid) || makeMatch(T, rng, pool); if(it) break; } }
+      push(it);
+    }
+    return items;
+  }
+  /* 答错的题：本组稍后再问一次（换一种挖法 / 换一组数） */
+  function retryOf(it, rng, ctx){
+    rng = rng || Math.random; let r = null;
+    if(it.type === 'cloze'){ const d = DEFS.find(x => 'd:' + x.id === it.fid); const others = d ? d.cloze.filter(t => t !== it.t) : []; const t = others.length ? pick(rng, others) : it.t; const P = parseCloze(t); r = Object.assign({}, it, {t, full: P.full, blanks: P.blanks.map(b => ({ans: b.ans, tiles: shuffle(rng, [b.ans, ...b.dis])}))}); }
+    else if(it.type === 'gen'){ const g = GENS.find(x => x.id === it.gen); r = Object.assign({}, it, g.make(rng)); }
+    else if(it.type === 'match'){ const sh = shuffle(rng, it.opts.map((o, i) => ({o, ok: i === it.right}))); r = Object.assign({}, it, {opts: sh.map(x => x.o), right: sh.findIndex(x => x.ok)}); }
+    else r = Object.assign({}, it);
+    r.retry = true; return r;
+  }
+  /* ---------- 间隔复习（每个公式） ---------- */
+  const INT = [1, 3, 7, 14, 30];
+  function schedule(sr, fid, ok, today){
+    const e = sr[fid] || {level: 0, n: 0, wrong: 0}; e.n++; e.last = today;
+    if(ok){ e.level = Math.min(e.level + 1, INT.length); e.due = addDays(today, INT[e.level - 1]); }
+    else { e.level = 0; e.wrong++; e.due = today; }
+    sr[fid] = e; return e;
+  }
+  /* 一组内同一公式只按第一次结果升级；先错后对 → 明天再复习 */
+  function record(sr, done, fid, ok, today){
+    const st = done[fid];
+    if(!st){ schedule(sr, fid, ok, today); done[fid] = ok ? 'ok' : 'wrong'; }
+    else if(st === 'wrong' && ok){ sr[fid].due = addDays(today, 1); done[fid] = 'fixed'; }
+    else if(st !== 'wrong' && !ok){ schedule(sr, fid, false, today); done[fid] = 'wrong'; }
+    return sr[fid];
+  }
+  const dueList = (sr, today) => Object.keys(sr || {}).filter(f => sr[f].due && sr[f].due <= today);
+  /* ---------- 积分：每题首答对 +2，每天最多 30 分 ---------- */
+  const PTS = 2, CAP = 30;
+  function grant(st, today, pts){ if(!st.pday || st.pday.date !== today) st.pday = {date: today, n: 0}; const g = Math.max(0, Math.min(pts, CAP - st.pday.n)); st.pday.n += g; return g; }
+  function speechTexts(){ return DEFS.map(fbSpeech).concat(TF.map(t => t.say || t.text)); }
+  return {DEFS, TF, GENS, parseCloze, clozeLatex, autoCloze, evalRad, poly, defsForCard, buildSession, retryOf, schedule, record, dueList, grant, addDays, mulberry, speechTexts, fbSpeech, hashStr, INT, PTS, CAP};
+})();
+if(typeof module !== 'undefined') module.exports = MQDrill;
 </script>
 <script>
 (function(){
@@ -1437,7 +1806,7 @@ function texBlock(latex){ return tex('$'+String(latex||'').replace(/\$/g,'')+'$'
 /* ========== 数据存储 ========== */
 const KEY = 'mathquest_data_v1';
 function defData(){
-  return {v:1, settings:{nickname:'小数学家', goalNew:3, goalReview:true, voice:true, autoRead:true, reminders:true, rate:'normal', voicePick:'', showAnalysis:true, cardSort:'freq'}, packs:[], attempts:[], review:{}, checkins:{}, points:0, badges:{}, daily:{}, marks:{}, hadReview:false, created:Date.now()};
+  return {v:1, settings:{nickname:'小数学家', goalNew:3, goalReview:true, voice:true, autoRead:true, reminders:true, rate:'normal', voicePick:'', showAnalysis:true, cardSort:'freq'}, drill:{sr:{}, log:[], sessions:0, pday:null}, packs:[], attempts:[], review:{}, checkins:{}, points:0, badges:{}, daily:{}, marks:{}, hadReview:false, created:Date.now()};
 }
 let D;
 function load(){
@@ -1668,7 +2037,8 @@ const TIERED = [
   {id:'perfect', e:'💯', n:'完美一题', unit:'次', th:[1,10,50,100], val:()=>D.attempts.filter(a=>a.stars===3).length},
   {id:'hard', e:'🧗', n:'攻克难题', unit:'次', th:[1,5,20,50], val:()=>D.attempts.filter(a=>a.difficulty>=4 && !a.missed).length},
   {id:'speed', e:'⚡', n:'闪电侠', unit:'次', th:[1,10,30,100], val:()=>D.attempts.filter(a=>!a.missed && a.limit && a.timeUsed<=a.limit/2).length},
-  {id:'goal', e:'🎯', n:'目标达成', unit:'天', th:[1,7,30,100], val:()=>Object.values(D.daily).filter(r=>r.goalDone).length}
+  {id:'goal', e:'🎯', n:'目标达成', unit:'天', th:[1,7,30,100], val:()=>Object.values(D.daily).filter(r=>r.goalDone).length},
+  {id:'memo', e:'🧠', n:'公式记忆王', unit:'组', th:[3,15,50,150], val:()=>(D.drill&&D.drill.sessions)||0}
 ];
 const ONEOFF = [
   {id:'first', e:'🎉', n:'首次通关', d:'完成第一道题'},
@@ -1746,6 +2116,7 @@ function migrate(){
   D.tiers = D.tiers || {}; D.tierDates = D.tierDates || {}; D.kpMedals = D.kpMedals || {};
   if(!Array.isArray(D.rewards)) D.rewards = DEFAULT_REWARDS.map(r=>Object.assign({}, r));
   if(!Array.isArray(D.redeems)) D.redeems = [];
+  if(!D.drill || typeof D.drill!=='object') D.drill = {}; D.drill.sr = D.drill.sr || {}; D.drill.log = D.drill.log || []; D.drill.sessions = D.drill.sessions || 0;
   if(D.tierInit) return 0;
   if(D.badges.zero){ D.zeroCount = D.zeroCount || 1; if(!Object.keys(D.review).length) D.hadReview = false; }
   D.level = levelInfo().lv;
@@ -1806,6 +2177,7 @@ function go(view, opts={}){
   S.view = view;
   if(TABS.some(t=>t[0]===view)) S.tab = view;
   if(view==='pack' || view==='marks') S.tab='packs';
+  if(view==='drill') S.tab='formulas';
   if(view==='play') S.tab = S.session && S.session.mode==='review' ? 'review' : 'packs';
   render(); if(!opts.keepScroll) window.scrollTo(0,0);
 }
@@ -1816,11 +2188,12 @@ function renderTabs(){
 function render(){
   if(voiceNoticePending && S.view!=='play') setTimeout(showVoiceNotice, 0);
   const v = S.view;
-  const html = v==='home'?vHome(): v==='packs'?vPacks(): v==='pack'?vPack(): v==='play'?vPlay(): v==='review'?vReview(): v==='formulas'?vFormulas(): v==='marks'?vMarks(): vMe();
+  const html = v==='home'?vHome(): v==='packs'?vPacks(): v==='pack'?vPack(): v==='play'?vPlay(): v==='review'?vReview(): v==='formulas'?vFormulas(): v==='drill'?vDrill(): v==='marks'?vMarks(): vMe();
   $('#app').innerHTML = html;
   document.body.classList.toggle('inplay', v==='play');
   renderTabs();
   if(v==='play') afterPlay();
+  if(v==='drill') afterDrill();
 }
 
 /* ========== 视图：首页 ========== */
@@ -2299,6 +2672,7 @@ function vReview(){
     <div class="greet">今日待复习</div><div class="name" style="font-size:40px;margin:0">${due.length} <span style="font-size:16px">道</span></div>
     <div class="note">今天已复习 ${r.reviewDone.length} 道 · 间隔 1→2→4→7→15 天，答对且不超时就升级，失误则从头开始</div>
   </div>
+  ${drillDueLine()}
   ${due.length?`<button class="btn block warn" style="margin:14px 0" data-act="startreview">▶ 开始今日巩固（${due.length} 道）</button>
     <div class="card list">${due.map(k=>item(k,`<button class="btn sm ghost" data-act="start" data-k="${esc(k)}" data-mode="review">做</button>`)).join('')}</div>`
   :`<div class="card empty"><div class="e">${Object.keys(D.review).length?'🌈':'🎈'}</div><b>今天没有要复习的题</b><div class="small">${Object.keys(D.review).length?'按计划，过几天再来巩固下面的题目吧':'做错或超时的题会自动出现在这里'}</div></div>`}
@@ -2307,7 +2681,7 @@ function vReview(){
 
 /* ========== 视图：公式速记 ========== */
 function collectCards(){
-  const r = MQCardRank.build({packs: allPacks(), attempts: D.attempts, marks: D.marks, review: D.review, today: today(), analysisOf: qAnalysis, isMiss});
+  const r = MQCardRank.build({packs: allPacks(), attempts: D.attempts, marks: D.marks, review: D.review, today: today(), analysisOf: qAnalysis, isMiss, drills: (D.drill&&D.drill.log)||[]});
   const pre = {f:'f', a:'a', m:'m'};
   ['f','a','m'].forEach(t => r[t].forEach(c => { c.id = pre[t] + hash(c.key); if(t==='m'){ const fq = findQ(c.key); c.name = fq ? stripTex(fq.q.original).slice(0,40) : ''; } }));
   return r;
@@ -2337,17 +2711,132 @@ function vFormulas(){
     const srcLine = srcs.length ? `<div class="srcs">📄 ${srcs.slice(0,4).map(cardSrcLabel).filter(Boolean).map(esc).join('、')}${srcs.length>4?` 等 ${srcs.length} 题`:''}</div>` : '';
     return head + `<div class="flip ${S.flipped[c.id]?'on':''}" data-act="flip" data-v="${c.id}" data-key="${esc(c.key)}"><div class="in">
       <div class="f ${c.type==='m'?'m':c.type==='a'?'a':''}">${c.badge?`<span class="freq ${c.act14?'hot':''}">${c.act14?'🔥 ':'📝 '}${esc(c.badge)}</span>`:''}<div class="chips" style="justify-content:center">${[...c.kps].slice(0,2).map(k=>`<span class="chip">${esc(k)}</span>`).join('')}${weak?'<span class="chip hot">🔥 薄弱</span>':''}</div>
-        <div class="nm">${c.type==='f'?esc(c.name):c.type==='a'?'看到这个，想到什么？':'这道题怎么想？'}</div>${c.type==='a'?`<div class="atrig">${tex(c.trigger)}</div>`:''}${c.type==='m'?`<div class="small muted" style="max-height:56px;overflow:hidden">${tex(c.original)}</div>`:''}<div class="tap">👆 点击翻面${c.total>1&&c.type!=='m'?` · 出现在 ${c.total} 道题`:''}</div></div>
+        <div class="nm">${c.type==='f'?esc(c.name):c.type==='a'?'看到这个，想到什么？':'这道题怎么想？'}</div>${c.type==='a'?`<div class="atrig">${tex(c.trigger)}</div>`:''}${c.type==='m'?`<div class="small muted" style="max-height:56px;overflow:hidden">${tex(c.original)}</div>`:''}<div class="tap">👆 点击翻面${c.total>1&&c.type!=='m'?` · 出现在 ${c.total} 道题`:''}</div>${c.type==='f'?`<button class="practbtn" data-act="dstart" data-k="${esc(c.key)}" aria-label="练一练：${esc(c.name)}">✏️ 练一练</button>`:''}</div>
       <div class="bk">${c.type==='f'?`<div class="ttl">${esc(c.name)}</div><div class="ltx">${texBlock(c.latex)}</div>${c.alt&&c.alt.length?`<div class="ltx alt"><span class="muted small">也写作</span> ${tex('$'+c.alt[0]+'$')}</div>`:''}<div class="muted small">💡 ${tex(c.tip)}</div>`
         :c.type==='a'?`<div class="ttl a">💭 ${tex(c.recall)}</div>${c.latex?`<div class="ltx">${texBlock(c.latex)}</div>`:''}<div class="muted small">${tex(c.why)}</div>`
         :`<div class="ttl m">🧭 解题思路</div><div style="font-size:15px">${tex(c.method)}</div>`}${srcLine}</div>
     </div></div>`;}).join('');
   return `<div class="topbar"><h1>🧠 公式速记</h1></div>
   <div class="seg"><button class="${S.fTab==='f'?'on':''}" data-act="ftab" data-v="f">📐 公式卡 (${f.length})</button><button class="${S.fTab==='m'?'on':''}" data-act="ftab" data-v="m">🧭 思路卡 (${m.length})</button><button class="${S.fTab==='a'?'on':''}" data-act="ftab" data-v="a">🔗 联想卡 (${a.length})</button></div>
+  ${drillCta()}
   <div class="sortrow"><span class="muted small">排序</span><div class="seg sm" role="radiogroup" aria-label="卡片排序">${CARD_SORTS.map(([v,n])=>`<button class="${sortBy===v?'on':''}" data-act="fsort" data-v="${v}" role="radio" aria-checked="${sortBy===v}">${n}</button>`).join('')}</div></div>
   <div class="filter">${['全部',...allKp].map(k=>`<button class="${S.fKp===k?'on':''}" data-act="fkp" data-v="${esc(k)}">${(wm[k]||0)>0.15?'🔥':''}${esc(k)}</button>`).join('')}</div>
   <div class="muted small" id="sortnote" style="margin:0 4px 8px">${note} · 点卡片翻面</div>
   <div class="fgrid">${shown.length?cardsHtml:`<div class="card empty"><div class="e">🗂️</div>这个知识点下暂时没有卡片</div>`}</div>`;
+}
+
+/* ========== 公式速记 · 记忆练习 ========== */
+const katexOk = s => { if(!window.katex) return false; try{ katex.renderToString(s,{throwOnError:true, strict:'ignore'}); return true; }catch(e){ return false; } };
+const drillDue = () => MQDrill.dueList(D.drill.sr, today());
+function drillCards(){ const {f} = collectCards(); const wm = weakMap(); const w = c => Math.max(0,...[...c.kps].map(k=>wm[k]||0)) > 0.15;
+  return f.map((c,i)=>({c, s: i - (w(c) ? 6 : 0), i})).sort((x,y)=>(x.s-y.s)||(x.i-y.i)).map(x=>x.c); }
+function drillCta(){
+  const X = S.drill, n = drillDue().length, left = MQDrill.CAP - (D.drill.pday && D.drill.pday.date===today() ? D.drill.pday.n : 0);
+  return `<div class="card drillcta"><div class="de">🧠</div><div class="grow"><b>记忆练习</b><div class="muted small">${n?`今日待记 <b class="hotn">${n}</b> 个公式 · `:'今日待记 0 个公式 · '}挖空、配对、判断、小练习，每组约 8 题${left>0?` · 今天还能得 ${left} 分`:' · 今日积分已满'}</div></div>
+    ${X && X.phase!=='done' ? `<button class="btn" data-act="dcont">继续练习</button>` : `<button class="btn" data-act="dstart">开始</button>`}</div>`;
+}
+function drillDueLine(){ const n = drillDue().length; return n ? `<div class="card drillcta slim"><div class="de">🧠</div><div class="grow"><b>今日待记 ${n} 个公式</b><div class="muted small">花 3 分钟做一组记忆练习</div></div><button class="btn sm" data-act="dstart">去记忆</button></div>` : ''; }
+function startDrill(key){
+  let single = null;
+  if(key){ const cards = collectCards().f; single = cards.find(c=>c.key===key);
+    if(!single && key.startsWith('d:')){ const d = MQDrill.DEFS.find(x=>'d:'+x.id===key); if(d) single = {key, name:d.name, latex:d.forms[0], kps:new Set([d.kp])}; } }
+  const items = MQDrill.buildSession({cards: drillCards(), sr: D.drill.sr, today: today(), single, valid: katexOk});
+  if(!items.length){ toast('这个公式暂时没有可练的题，换一个试试吧'); return; }
+  hush(); S.drill = {items, idx:0, n0: items.length, phase:'answer', fills: items[0].blanks ? items[0].blanks.map(()=>null) : [], typed:'', typing:false, res:[], done:{}, retried:{}, pts:0, single: single ? single.name : null};
+  go('drill');
+}
+const DTYPE = {cloze:'公式挖空', tf:'判断对错', gen:'小练习', match:'配对'};
+const PRAISE = ['记住啦！','太棒了！','完全正确！','好记性！','稳稳的！'];
+function drillCheck(choice){
+  const X = S.drill; if(!X || X.phase!=='answer') return; const it = X.items[X.idx]; let ok;
+  if(it.type==='cloze'){
+    if(X.typing){ const v = ($('#dans')||{}).value || X.typed; if(!norm(v)){ toast('先写下你的答案吧 ✍️'); return; } X.typed = v; ok = checkAnswer({type:'text', answer: it.blanks[0].ans.replace(/\\/g,''), acceptable:[it.blanks[0].ans]}, v); X.fills = [ok ? it.blanks[0].ans : v]; }
+    else { if(X.fills.some(f=>f==null)){ toast('每个空都选一个答案吧 😊'); return; } ok = it.blanks.every((b,j)=>X.fills[j]===b.ans); }
+  } else if(it.type==='tf'){ X.sel = choice; ok = (choice===1) === it.ans; }
+  else if(it.type==='match' || (it.type==='gen' && it.kind==='choice')){ X.sel = choice; ok = choice===it.right; }
+  else { const v = ($('#dans')||{}).value || X.typed; if(!norm(v)){ toast('先写下你的答案吧 ✍️'); return; } X.typed = v; ok = checkAnswer({type:'number', answer: it.answer}, v); }
+  const t = today(); let pts = 0;
+  if(!it.retry){
+    if(ok){ pts = MQDrill.grant(D.drill, t, MQDrill.PTS); if(pts){ D.points += pts; D.spend = (D.spend||0) + pts; X.pts += pts; } }
+    D.drill.log.push({date:t, ts:Date.now(), fid:it.fid, ok, type:it.type, name: it.card && it.card.name, latex: it.card && it.card.latex}); if(D.drill.log.length > 600) D.drill.log.splice(0, D.drill.log.length-600);
+    X.res.push({fid:it.fid, name:it.name, key: it.card && it.card.key, ok});
+  } else { const r = X.res.find(r=>r.fid===it.fid && !r.ok); if(r) r.fixed = ok; }
+  MQDrill.record(D.drill.sr, X.done, it.fid, ok, t);
+  let requeue = false;
+  if(!ok && !it.retry && !X.retried[it.fid]){ X.retried[it.fid] = 1; X.items.push(MQDrill.retryOf(it)); requeue = true; }
+  X.phase = 'fb'; X.fb = {ok, pts, requeue, praise: PRAISE[Math.floor(Math.random()*PRAISE.length)]};
+  save(); render(); if(ok) confetti(30);
+  setTimeout(()=>{ const el = $('#dfb'); if(el) el.scrollIntoView({block:'nearest', behavior:'smooth'}); }, 30);
+}
+function drillNext(){
+  const X = S.drill; if(!X) return; hush();
+  if(X.idx < X.items.length-1){ X.idx++; const it = X.items[X.idx]; X.phase='answer'; X.fills = it.blanks ? it.blanks.map(()=>null) : []; X.typed=''; X.typing=false; X.sel=null; X.fb=null; render(); window.scrollTo(0,0); return; }
+  X.phase = 'done';
+  if(X.res.length >= 4){ D.drill.sessions = (D.drill.sessions||0) + 1; }
+  const ev = checkBadges(); save(); render(); window.scrollTo(0,0);
+  if(ev.length) setTimeout(()=>{ if(S.view==='drill') celebrate(ev); }, 900);
+}
+function drillCanType(it){ return it.type==='cloze' && it.blanks.length===1 && /^[-+a-z0-9^|()]+$/i.test(it.blanks[0].ans); }
+function vDrill(){
+  const X = S.drill; if(!X) return vFormulas();
+  if(X.phase==='done') return vDrillSum(X);
+  const it = X.items[X.idx], fb = X.phase==='fb' ? X.fb : null, total = X.items.length;
+  const vsay = (t, w, lab) => voiceOn() && t && VS.hasClip(t) ? `<button class="spk" data-act="dsay" data-w="${w}" aria-label="朗读${lab}">🔊</button>` : '';
+  const head = `<div class="playhead"><button class="iconbtn" data-act="dquit" aria-label="返回">‹</button><div class="grow"><div style="font-weight:800;font-size:15px">🧠 记忆练习${X.single?` · ${esc(X.single)}`:''} <span class="muted small">(${X.idx+1}/${total})</span></div>
+    <div class="dpbar">${X.items.map((_,i)=>`<i class="${i<X.idx?'d':i===X.idx?'c':''} ${X.items[i].retry?'r':''}"></i>`).join('')}</div></div><span class="chip ok">+${X.pts}</span></div>`;
+  let q = '', ans = '';
+  const tag = `<div class="dtag"><span class="chip">${DTYPE[it.type]}${it.type==='match'?(it.dir==='f2n'?' · 看公式选名称':' · 看名称选公式'):''}</span>${it.type!=='match'||it.dir==='n2f'?`<span class="muted small">${esc(it.name)}</span>`:''}${it.retry?'<span class="chip warn">再来一次</span>':''}</div>`;
+  const optCls = i => { if(!fb) return ''; const right = it.type==='tf' ? (it.ans?1:0) : it.right; return i===right ? 'right' : i===X.sel ? 'wrong' : ''; };
+  if(it.type==='cloze'){
+    const marks = fb ? it.blanks.map((b,j)=>X.fills[j]===b.ans?'ok':'bad') : it.blanks.map(()=> '');
+    q = `<div class="dlead">把公式补完整：</div><div class="dformula" id="dformula">${tex('$$'+MQDrill.clozeLatex(it.t, X.fills, marks)+'$$')}</div>`;
+    if(X.typing && !fb){ ans = `<input id="dans" class="ans" type="text" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="写出空里的内容，如 2ab" value="${esc(X.typed)}"><div class="keys">${['^2','|','-','+','(',')'].map(k=>`<button data-act="dkey" data-v="${esc(k)}">${k==='^2'?'□²':esc(k)}</button>`).join('')}</div>
+      <div class="row" style="gap:10px;margin-top:12px"><button class="btn grow" data-act="dcheck">检查</button><button class="btn ghost" data-act="dtype">🔤 用卡片选</button></div>`; }
+    else { ans = it.blanks.map((b,j)=>`<div class="tilerow">${it.blanks.length>1?`<div class="tl">第 ${'①②③'[j]} 空</div>`:''}<div class="tiles">${b.tiles.map((x,i)=>{ let c = X.fills[j]===x ? 'sel' : ''; if(fb){ c = x===b.ans ? 'right' : X.fills[j]===x ? 'wrong' : 'dim'; } return `<button class="tile ${c}" data-act="dtile" data-b="${j}" data-v="${i}" ${fb?'disabled':''}>${texBlock(x)}</button>`; }).join('')}</div></div>`).join('')
+      + (fb ? '' : `<div class="row" style="gap:10px;margin-top:14px"><button class="btn grow" data-act="dcheck" ${X.fills.some(f=>f==null)?'aria-disabled="true"':''}>检查</button>${drillCanType(it)?'<button class="btn ghost" data-act="dtype">⌨️ 自己写</button>':''}</div>`); }
+  } else if(it.type==='tf'){
+    q = `<div class="row between"><div class="dlead">这句话对吗？</div>${vsay(it.say,'q','题目')}</div><div class="dstate">${tex(it.text)}</div>`;
+    ans = `<div class="tfbtns"><button class="opt big ${optCls(1)}" data-act="dopt" data-v="1" ${fb?'disabled':''}>✓ 对</button><button class="opt big ${optCls(0)}" data-act="dopt" data-v="0" ${fb?'disabled':''}>✗ 错</button></div>`;
+  } else if(it.type==='match'){
+    q = it.dir==='f2n' ? `<div class="dlead">这是哪个公式？</div><div class="dformula">${tex('$$'+it.prompt+'$$')}</div>` : `<div class="dlead">「${esc(it.prompt)}」是哪一个？</div>`;
+    ans = `<div class="opts">${it.opts.map((o,i)=>`<button class="opt ${optCls(i)}" data-act="dopt" data-v="${i}" ${fb?'disabled':''}><span class="k">${'ABCD'[i]}</span><span class="grow">${it.dir==='f2n'?esc(o):texBlock(o)}</span></button>`).join('')}</div>`;
+  } else {
+    q = `<div class="dlead">用公式算一算：</div><div class="dstate">${tex(it.prompt)}</div>`;
+    if(it.kind==='choice') ans = `<div class="opts">${it.opts.map((o,i)=>`<button class="opt ${optCls(i)}" data-act="dopt" data-v="${i}" ${fb?'disabled':''}><span class="k">${'ABCD'[i]}</span><span class="grow">${it.math?texBlock(o):esc(o)}</span></button>`).join('')}</div>`;
+    else ans = `<input id="dans" class="ans" type="text" inputmode="text" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="输入数字" value="${esc(X.typed)}" ${fb?'disabled':''}>${fb?'':`<div class="keys">${['-','/','.'].map(k=>`<button data-act="dkey" data-v="${k}">${k}</button>`).join('')}</div><button class="btn block" style="margin-top:12px" data-act="dcheck">检查</button>`}`;
+  }
+  let fbh = '';
+  if(fb){
+    const full = it.type==='cloze' ? MQDrill.clozeLatex(it.t, it.blanks.map(b=>b.ans), it.blanks.map(()=> 'ok')) : it.full;
+    const extra = it.type==='tf' ? it.why : it.type==='gen' ? it.explain : '';
+    const mine = it.type==='cloze' && !fb.ok ? `<div class="small" style="margin-top:4px">你填的是 ${X.fills.map(f=>texBlock(f||'')).join('、')}</div>` : '';
+    fbh = `<div class="fb ${fb.ok?'ok':'bad'} pop" id="dfb"><div class="row between"><b class="t">${fb.ok?`✅ ${fb.praise}${fb.pts?` <span class="chip ok">+${fb.pts} 积分</span>`:''}`:'💪 差一点点，再记一遍！'}</b>${vsay(it.fsay||it.say,'fb','公式')}</div>
+      ${mine}${extra?`<div style="margin-top:6px">${tex(extra)}</div>`:''}
+      ${!fb.ok || it.type!=='cloze' ? `<div class="dfull">📐 ${it.type==='cloze'?'完整公式':'对应公式'}：${tex('$$'+full+'$$')}</div>` : ''}
+      ${it.tip && (!fb.ok || it.type==='cloze') ? `<div class="dtip">📌 口诀：${esc(it.tip)}</div>` : ''}
+      ${fb.requeue?'<div class="muted small" style="margin-top:6px">🔁 这个公式稍后会再出现一次</div>':''}</div>
+      <button class="btn block" style="margin-top:12px" data-act="dnext">${X.idx<X.items.length-1?'下一题 →':'看看结果 →'}</button>`;
+  }
+  return head + `<div class="card dq ${it.type}"><div class="dql">${tag}${q}</div><div class="dqr">${ans}${fbh}</div></div>`;
+}
+function vDrillSum(X){
+  const n = X.res.length, ok = X.res.filter(r=>r.ok).length, pct = n ? Math.round(ok/n*100) : 0;
+  const miss = [], got = []; X.res.forEach(r=>{ const L = r.ok ? got : miss; if(!L.some(x=>x.fid===r.fid)) L.push(r); });
+  const gotOnly = got.filter(r=>!miss.some(m=>m.fid===r.fid));
+  const used = D.drill.pday && D.drill.pday.date===today() ? D.drill.pday.n : 0;
+  return `<div class="playhead"><button class="iconbtn" data-act="dquit" aria-label="返回">‹</button><div class="grow" style="font-weight:800;font-size:16px">🧠 记忆练习 · 小结</div></div>
+  <div class="card dsum"><div class="row" style="gap:16px">${ring(pct/100, 96, 10).replace('</svg>', `<text x="48" y="54" text-anchor="middle" font-size="22" font-weight="800" fill="currentColor">${pct}%</text></svg>`)}
+    <div class="grow"><div style="font-size:20px;font-weight:800">${pct>=90?'🌟 记得真牢！':pct>=60?'👍 不错，继续巩固！':'💪 多练几次就记住了！'}</div>
+    <div class="muted">首次答对 ${ok}/${n} 题 · 本组 +${X.pts} 积分</div><div class="muted small">今日记忆练习积分 ${used}/${MQDrill.CAP}${used>=MQDrill.CAP?'（今天已满，明天再来）':''}</div></div></div></div>
+  ${miss.length?`<div class="card list"><h3>📌 需要再记的公式 <span class="chip bad">${miss.length}</span></h3>${miss.map(r=>`<div class="item"><div class="grow"><b>${esc(r.name)}</b><div class="muted small">${r.fixed?'重练时答对了 · 明天再复习一次':'已加入今日待记'}</div></div>${r.key?`<button class="btn sm ghost" data-act="dstart" data-k="${esc(r.key)}">练一练</button>`:''}</div>`).join('')}</div>`:''}
+  ${gotOnly.length?`<div class="card"><h3>✅ 记住的公式</h3><div class="chips">${gotOnly.map(r=>`<span class="chip ok">${esc(r.name)}</span>`).join('')}</div><div class="muted small" style="margin-top:8px">按间隔复习，过几天会再提醒你记一次</div></div>`:''}
+  <div class="row" style="gap:10px;margin-top:6px"><button class="btn grow" data-act="dstart">再练一组</button><button class="btn ghost grow" data-act="dquit">返回公式卡</button></div>`;
+}
+function fitMath(){ document.querySelectorAll('.dformula,.dfull,.dstate').forEach(el=>{ let fs = parseFloat(getComputedStyle(el).fontSize); let n = 0; while(el.scrollWidth > el.clientWidth + 1 && fs > 11 && n++ < 14){ fs -= 1; el.style.fontSize = fs + 'px'; } }); }
+function afterDrill(){
+  fitMath(); if(document.fonts && document.fonts.ready) document.fonts.ready.then(()=>{ if(S.view==='drill') fitMath(); }); const inp = $('#dans'); const X = S.drill;
+  if(inp && X && X.phase==='answer'){ inp.addEventListener('input', e=>{ X.typed = e.target.value; }); inp.addEventListener('keydown', e=>{ if(e.key==='Enter'){ e.preventDefault(); drillCheck(); } });
+    if(window.matchMedia('(hover:hover)').matches) setTimeout(()=>inp.focus({preventScroll:true}),50); }
 }
 
 /* ========== 视图：我的（薄弱项分析 / 徽章 / 设置） ========== */
@@ -2460,7 +2949,7 @@ function rewardModal(id){
     <div id="rwMsg" class="small err"></div>
     <div class="row" style="gap:10px;margin-top:10px"><button class="btn ghost grow" data-act="close">取消</button><button class="btn grow" data-act="rwsave" data-v="${rw?esc(rw.id):''}">保存</button></div>`);
 }
-window.__mqTest = { levelInfo: p=>levelInfo(p), awardKind: (k,r)=>awardKind(k,r), pinHash: p=>pinHash(p), parentOn: ()=>parentOn() };
+window.__mqTest = { levelInfo: p=>levelInfo(p), awardKind: (k,r)=>awardKind(k,r), pinHash: p=>pinHash(p), parentOn: ()=>parentOn(), drill: ()=>S.drill, drillCards: ()=>drillCards().map(c=>({key:c.key,name:c.name})) };
 
 /* ========== 主题 ========== */
 const THEME_KEY = 'mathquest_theme';
@@ -2578,6 +3067,16 @@ const act = {
   vrate(d){ D.settings.rate = d.v; save(); render(); say([MQVoiceTexts.EXTRA.ratePreview]); },
   vtest(){ say([MQVoiceTexts.EXTRA.test]); },
   ftab(d){ S.fTab=d.v; render(); },
+  dstart(d){ startDrill(d.k||null); },
+  dcont(){ go('drill'); },
+  dtile(d){ const X=S.drill; if(!X||X.phase!=='answer') return; const it=X.items[X.idx]; X.fills[+d.b] = it.blanks[+d.b].tiles[+d.v]; render(); },
+  dtype(){ const X=S.drill; if(!X) return; X.typing=!X.typing; render(); },
+  dcheck(){ drillCheck(); },
+  dopt(d){ drillCheck(+d.v); },
+  dkey(d){ const inp=$('#dans'); if(!inp) return; const s=inp.selectionStart??inp.value.length, e=inp.selectionEnd??s; inp.value=inp.value.slice(0,s)+d.v+inp.value.slice(e); S.drill.typed=inp.value; inp.focus(); },
+  dnext(){ drillNext(); },
+  dquit(){ hush(); const X=S.drill; if(X && X.phase==='done') S.drill=null; go('formulas'); if(X && X.phase!=='done') toast('进度已保留，可点「继续练习」回来'); },
+  dsay(d){ const X=S.drill; if(!X) return; const it=X.items[X.idx]; const t = d.w==='q' ? it.say : (it.fsay||it.say); if(t){ hush(); say([t]); } },
   fsort(d){ D.settings.cardSort=d.v; save(); render(); },
   fkp(d){ S.fKp=d.v; if(S.view!=='formulas'){ go('formulas'); } else render(); },
   flip(d,el){ S.flipped[d.v]=!S.flipped[d.v]; el.classList.toggle('on'); },

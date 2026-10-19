@@ -51,7 +51,7 @@ function texBlock(latex){ return tex('$'+String(latex||'').replace(/\$/g,'')+'$'
 /* ========== 数据存储 ========== */
 const KEY = 'mathquest_data_v1';
 function defData(){
-  return {v:1, settings:{nickname:'小数学家', goalNew:3, goalReview:true, voice:true, autoRead:true, reminders:true, rate:'normal', voicePick:'', showAnalysis:true, cardSort:'freq'}, packs:[], attempts:[], review:{}, checkins:{}, points:0, badges:{}, daily:{}, marks:{}, hadReview:false, created:Date.now()};
+  return {v:1, settings:{nickname:'小数学家', goalNew:3, goalReview:true, voice:true, autoRead:true, reminders:true, rate:'normal', voicePick:'', showAnalysis:true, cardSort:'freq'}, drill:{sr:{}, log:[], sessions:0, pday:null}, packs:[], attempts:[], review:{}, checkins:{}, points:0, badges:{}, daily:{}, marks:{}, hadReview:false, created:Date.now()};
 }
 let D;
 function load(){
@@ -282,7 +282,8 @@ const TIERED = [
   {id:'perfect', e:'💯', n:'完美一题', unit:'次', th:[1,10,50,100], val:()=>D.attempts.filter(a=>a.stars===3).length},
   {id:'hard', e:'🧗', n:'攻克难题', unit:'次', th:[1,5,20,50], val:()=>D.attempts.filter(a=>a.difficulty>=4 && !a.missed).length},
   {id:'speed', e:'⚡', n:'闪电侠', unit:'次', th:[1,10,30,100], val:()=>D.attempts.filter(a=>!a.missed && a.limit && a.timeUsed<=a.limit/2).length},
-  {id:'goal', e:'🎯', n:'目标达成', unit:'天', th:[1,7,30,100], val:()=>Object.values(D.daily).filter(r=>r.goalDone).length}
+  {id:'goal', e:'🎯', n:'目标达成', unit:'天', th:[1,7,30,100], val:()=>Object.values(D.daily).filter(r=>r.goalDone).length},
+  {id:'memo', e:'🧠', n:'公式记忆王', unit:'组', th:[3,15,50,150], val:()=>(D.drill&&D.drill.sessions)||0}
 ];
 const ONEOFF = [
   {id:'first', e:'🎉', n:'首次通关', d:'完成第一道题'},
@@ -360,6 +361,7 @@ function migrate(){
   D.tiers = D.tiers || {}; D.tierDates = D.tierDates || {}; D.kpMedals = D.kpMedals || {};
   if(!Array.isArray(D.rewards)) D.rewards = DEFAULT_REWARDS.map(r=>Object.assign({}, r));
   if(!Array.isArray(D.redeems)) D.redeems = [];
+  if(!D.drill || typeof D.drill!=='object') D.drill = {}; D.drill.sr = D.drill.sr || {}; D.drill.log = D.drill.log || []; D.drill.sessions = D.drill.sessions || 0;
   if(D.tierInit) return 0;
   if(D.badges.zero){ D.zeroCount = D.zeroCount || 1; if(!Object.keys(D.review).length) D.hadReview = false; }
   D.level = levelInfo().lv;
@@ -420,6 +422,7 @@ function go(view, opts={}){
   S.view = view;
   if(TABS.some(t=>t[0]===view)) S.tab = view;
   if(view==='pack' || view==='marks') S.tab='packs';
+  if(view==='drill') S.tab='formulas';
   if(view==='play') S.tab = S.session && S.session.mode==='review' ? 'review' : 'packs';
   render(); if(!opts.keepScroll) window.scrollTo(0,0);
 }
@@ -430,11 +433,12 @@ function renderTabs(){
 function render(){
   if(voiceNoticePending && S.view!=='play') setTimeout(showVoiceNotice, 0);
   const v = S.view;
-  const html = v==='home'?vHome(): v==='packs'?vPacks(): v==='pack'?vPack(): v==='play'?vPlay(): v==='review'?vReview(): v==='formulas'?vFormulas(): v==='marks'?vMarks(): vMe();
+  const html = v==='home'?vHome(): v==='packs'?vPacks(): v==='pack'?vPack(): v==='play'?vPlay(): v==='review'?vReview(): v==='formulas'?vFormulas(): v==='drill'?vDrill(): v==='marks'?vMarks(): vMe();
   $('#app').innerHTML = html;
   document.body.classList.toggle('inplay', v==='play');
   renderTabs();
   if(v==='play') afterPlay();
+  if(v==='drill') afterDrill();
 }
 
 /* ========== 视图：首页 ========== */
@@ -913,6 +917,7 @@ function vReview(){
     <div class="greet">今日待复习</div><div class="name" style="font-size:40px;margin:0">${due.length} <span style="font-size:16px">道</span></div>
     <div class="note">今天已复习 ${r.reviewDone.length} 道 · 间隔 1→2→4→7→15 天，答对且不超时就升级，失误则从头开始</div>
   </div>
+  ${drillDueLine()}
   ${due.length?`<button class="btn block warn" style="margin:14px 0" data-act="startreview">▶ 开始今日巩固（${due.length} 道）</button>
     <div class="card list">${due.map(k=>item(k,`<button class="btn sm ghost" data-act="start" data-k="${esc(k)}" data-mode="review">做</button>`)).join('')}</div>`
   :`<div class="card empty"><div class="e">${Object.keys(D.review).length?'🌈':'🎈'}</div><b>今天没有要复习的题</b><div class="small">${Object.keys(D.review).length?'按计划，过几天再来巩固下面的题目吧':'做错或超时的题会自动出现在这里'}</div></div>`}
@@ -921,7 +926,7 @@ function vReview(){
 
 /* ========== 视图：公式速记 ========== */
 function collectCards(){
-  const r = MQCardRank.build({packs: allPacks(), attempts: D.attempts, marks: D.marks, review: D.review, today: today(), analysisOf: qAnalysis, isMiss});
+  const r = MQCardRank.build({packs: allPacks(), attempts: D.attempts, marks: D.marks, review: D.review, today: today(), analysisOf: qAnalysis, isMiss, drills: (D.drill&&D.drill.log)||[]});
   const pre = {f:'f', a:'a', m:'m'};
   ['f','a','m'].forEach(t => r[t].forEach(c => { c.id = pre[t] + hash(c.key); if(t==='m'){ const fq = findQ(c.key); c.name = fq ? stripTex(fq.q.original).slice(0,40) : ''; } }));
   return r;
@@ -951,17 +956,132 @@ function vFormulas(){
     const srcLine = srcs.length ? `<div class="srcs">📄 ${srcs.slice(0,4).map(cardSrcLabel).filter(Boolean).map(esc).join('、')}${srcs.length>4?` 等 ${srcs.length} 题`:''}</div>` : '';
     return head + `<div class="flip ${S.flipped[c.id]?'on':''}" data-act="flip" data-v="${c.id}" data-key="${esc(c.key)}"><div class="in">
       <div class="f ${c.type==='m'?'m':c.type==='a'?'a':''}">${c.badge?`<span class="freq ${c.act14?'hot':''}">${c.act14?'🔥 ':'📝 '}${esc(c.badge)}</span>`:''}<div class="chips" style="justify-content:center">${[...c.kps].slice(0,2).map(k=>`<span class="chip">${esc(k)}</span>`).join('')}${weak?'<span class="chip hot">🔥 薄弱</span>':''}</div>
-        <div class="nm">${c.type==='f'?esc(c.name):c.type==='a'?'看到这个，想到什么？':'这道题怎么想？'}</div>${c.type==='a'?`<div class="atrig">${tex(c.trigger)}</div>`:''}${c.type==='m'?`<div class="small muted" style="max-height:56px;overflow:hidden">${tex(c.original)}</div>`:''}<div class="tap">👆 点击翻面${c.total>1&&c.type!=='m'?` · 出现在 ${c.total} 道题`:''}</div></div>
+        <div class="nm">${c.type==='f'?esc(c.name):c.type==='a'?'看到这个，想到什么？':'这道题怎么想？'}</div>${c.type==='a'?`<div class="atrig">${tex(c.trigger)}</div>`:''}${c.type==='m'?`<div class="small muted" style="max-height:56px;overflow:hidden">${tex(c.original)}</div>`:''}<div class="tap">👆 点击翻面${c.total>1&&c.type!=='m'?` · 出现在 ${c.total} 道题`:''}</div>${c.type==='f'?`<button class="practbtn" data-act="dstart" data-k="${esc(c.key)}" aria-label="练一练：${esc(c.name)}">✏️ 练一练</button>`:''}</div>
       <div class="bk">${c.type==='f'?`<div class="ttl">${esc(c.name)}</div><div class="ltx">${texBlock(c.latex)}</div>${c.alt&&c.alt.length?`<div class="ltx alt"><span class="muted small">也写作</span> ${tex('$'+c.alt[0]+'$')}</div>`:''}<div class="muted small">💡 ${tex(c.tip)}</div>`
         :c.type==='a'?`<div class="ttl a">💭 ${tex(c.recall)}</div>${c.latex?`<div class="ltx">${texBlock(c.latex)}</div>`:''}<div class="muted small">${tex(c.why)}</div>`
         :`<div class="ttl m">🧭 解题思路</div><div style="font-size:15px">${tex(c.method)}</div>`}${srcLine}</div>
     </div></div>`;}).join('');
   return `<div class="topbar"><h1>🧠 公式速记</h1></div>
   <div class="seg"><button class="${S.fTab==='f'?'on':''}" data-act="ftab" data-v="f">📐 公式卡 (${f.length})</button><button class="${S.fTab==='m'?'on':''}" data-act="ftab" data-v="m">🧭 思路卡 (${m.length})</button><button class="${S.fTab==='a'?'on':''}" data-act="ftab" data-v="a">🔗 联想卡 (${a.length})</button></div>
+  ${drillCta()}
   <div class="sortrow"><span class="muted small">排序</span><div class="seg sm" role="radiogroup" aria-label="卡片排序">${CARD_SORTS.map(([v,n])=>`<button class="${sortBy===v?'on':''}" data-act="fsort" data-v="${v}" role="radio" aria-checked="${sortBy===v}">${n}</button>`).join('')}</div></div>
   <div class="filter">${['全部',...allKp].map(k=>`<button class="${S.fKp===k?'on':''}" data-act="fkp" data-v="${esc(k)}">${(wm[k]||0)>0.15?'🔥':''}${esc(k)}</button>`).join('')}</div>
   <div class="muted small" id="sortnote" style="margin:0 4px 8px">${note} · 点卡片翻面</div>
   <div class="fgrid">${shown.length?cardsHtml:`<div class="card empty"><div class="e">🗂️</div>这个知识点下暂时没有卡片</div>`}</div>`;
+}
+
+/* ========== 公式速记 · 记忆练习 ========== */
+const katexOk = s => { if(!window.katex) return false; try{ katex.renderToString(s,{throwOnError:true, strict:'ignore'}); return true; }catch(e){ return false; } };
+const drillDue = () => MQDrill.dueList(D.drill.sr, today());
+function drillCards(){ const {f} = collectCards(); const wm = weakMap(); const w = c => Math.max(0,...[...c.kps].map(k=>wm[k]||0)) > 0.15;
+  return f.map((c,i)=>({c, s: i - (w(c) ? 6 : 0), i})).sort((x,y)=>(x.s-y.s)||(x.i-y.i)).map(x=>x.c); }
+function drillCta(){
+  const X = S.drill, n = drillDue().length, left = MQDrill.CAP - (D.drill.pday && D.drill.pday.date===today() ? D.drill.pday.n : 0);
+  return `<div class="card drillcta"><div class="de">🧠</div><div class="grow"><b>记忆练习</b><div class="muted small">${n?`今日待记 <b class="hotn">${n}</b> 个公式 · `:'今日待记 0 个公式 · '}挖空、配对、判断、小练习，每组约 8 题${left>0?` · 今天还能得 ${left} 分`:' · 今日积分已满'}</div></div>
+    ${X && X.phase!=='done' ? `<button class="btn" data-act="dcont">继续练习</button>` : `<button class="btn" data-act="dstart">开始</button>`}</div>`;
+}
+function drillDueLine(){ const n = drillDue().length; return n ? `<div class="card drillcta slim"><div class="de">🧠</div><div class="grow"><b>今日待记 ${n} 个公式</b><div class="muted small">花 3 分钟做一组记忆练习</div></div><button class="btn sm" data-act="dstart">去记忆</button></div>` : ''; }
+function startDrill(key){
+  let single = null;
+  if(key){ const cards = collectCards().f; single = cards.find(c=>c.key===key);
+    if(!single && key.startsWith('d:')){ const d = MQDrill.DEFS.find(x=>'d:'+x.id===key); if(d) single = {key, name:d.name, latex:d.forms[0], kps:new Set([d.kp])}; } }
+  const items = MQDrill.buildSession({cards: drillCards(), sr: D.drill.sr, today: today(), single, valid: katexOk});
+  if(!items.length){ toast('这个公式暂时没有可练的题，换一个试试吧'); return; }
+  hush(); S.drill = {items, idx:0, n0: items.length, phase:'answer', fills: items[0].blanks ? items[0].blanks.map(()=>null) : [], typed:'', typing:false, res:[], done:{}, retried:{}, pts:0, single: single ? single.name : null};
+  go('drill');
+}
+const DTYPE = {cloze:'公式挖空', tf:'判断对错', gen:'小练习', match:'配对'};
+const PRAISE = ['记住啦！','太棒了！','完全正确！','好记性！','稳稳的！'];
+function drillCheck(choice){
+  const X = S.drill; if(!X || X.phase!=='answer') return; const it = X.items[X.idx]; let ok;
+  if(it.type==='cloze'){
+    if(X.typing){ const v = ($('#dans')||{}).value || X.typed; if(!norm(v)){ toast('先写下你的答案吧 ✍️'); return; } X.typed = v; ok = checkAnswer({type:'text', answer: it.blanks[0].ans.replace(/\\/g,''), acceptable:[it.blanks[0].ans]}, v); X.fills = [ok ? it.blanks[0].ans : v]; }
+    else { if(X.fills.some(f=>f==null)){ toast('每个空都选一个答案吧 😊'); return; } ok = it.blanks.every((b,j)=>X.fills[j]===b.ans); }
+  } else if(it.type==='tf'){ X.sel = choice; ok = (choice===1) === it.ans; }
+  else if(it.type==='match' || (it.type==='gen' && it.kind==='choice')){ X.sel = choice; ok = choice===it.right; }
+  else { const v = ($('#dans')||{}).value || X.typed; if(!norm(v)){ toast('先写下你的答案吧 ✍️'); return; } X.typed = v; ok = checkAnswer({type:'number', answer: it.answer}, v); }
+  const t = today(); let pts = 0;
+  if(!it.retry){
+    if(ok){ pts = MQDrill.grant(D.drill, t, MQDrill.PTS); if(pts){ D.points += pts; D.spend = (D.spend||0) + pts; X.pts += pts; } }
+    D.drill.log.push({date:t, ts:Date.now(), fid:it.fid, ok, type:it.type, name: it.card && it.card.name, latex: it.card && it.card.latex}); if(D.drill.log.length > 600) D.drill.log.splice(0, D.drill.log.length-600);
+    X.res.push({fid:it.fid, name:it.name, key: it.card && it.card.key, ok});
+  } else { const r = X.res.find(r=>r.fid===it.fid && !r.ok); if(r) r.fixed = ok; }
+  MQDrill.record(D.drill.sr, X.done, it.fid, ok, t);
+  let requeue = false;
+  if(!ok && !it.retry && !X.retried[it.fid]){ X.retried[it.fid] = 1; X.items.push(MQDrill.retryOf(it)); requeue = true; }
+  X.phase = 'fb'; X.fb = {ok, pts, requeue, praise: PRAISE[Math.floor(Math.random()*PRAISE.length)]};
+  save(); render(); if(ok) confetti(30);
+  setTimeout(()=>{ const el = $('#dfb'); if(el) el.scrollIntoView({block:'nearest', behavior:'smooth'}); }, 30);
+}
+function drillNext(){
+  const X = S.drill; if(!X) return; hush();
+  if(X.idx < X.items.length-1){ X.idx++; const it = X.items[X.idx]; X.phase='answer'; X.fills = it.blanks ? it.blanks.map(()=>null) : []; X.typed=''; X.typing=false; X.sel=null; X.fb=null; render(); window.scrollTo(0,0); return; }
+  X.phase = 'done';
+  if(X.res.length >= 4){ D.drill.sessions = (D.drill.sessions||0) + 1; }
+  const ev = checkBadges(); save(); render(); window.scrollTo(0,0);
+  if(ev.length) setTimeout(()=>{ if(S.view==='drill') celebrate(ev); }, 900);
+}
+function drillCanType(it){ return it.type==='cloze' && it.blanks.length===1 && /^[-+a-z0-9^|()]+$/i.test(it.blanks[0].ans); }
+function vDrill(){
+  const X = S.drill; if(!X) return vFormulas();
+  if(X.phase==='done') return vDrillSum(X);
+  const it = X.items[X.idx], fb = X.phase==='fb' ? X.fb : null, total = X.items.length;
+  const vsay = (t, w, lab) => voiceOn() && t && VS.hasClip(t) ? `<button class="spk" data-act="dsay" data-w="${w}" aria-label="朗读${lab}">🔊</button>` : '';
+  const head = `<div class="playhead"><button class="iconbtn" data-act="dquit" aria-label="返回">‹</button><div class="grow"><div style="font-weight:800;font-size:15px">🧠 记忆练习${X.single?` · ${esc(X.single)}`:''} <span class="muted small">(${X.idx+1}/${total})</span></div>
+    <div class="dpbar">${X.items.map((_,i)=>`<i class="${i<X.idx?'d':i===X.idx?'c':''} ${X.items[i].retry?'r':''}"></i>`).join('')}</div></div><span class="chip ok">+${X.pts}</span></div>`;
+  let q = '', ans = '';
+  const tag = `<div class="dtag"><span class="chip">${DTYPE[it.type]}${it.type==='match'?(it.dir==='f2n'?' · 看公式选名称':' · 看名称选公式'):''}</span>${it.type!=='match'||it.dir==='n2f'?`<span class="muted small">${esc(it.name)}</span>`:''}${it.retry?'<span class="chip warn">再来一次</span>':''}</div>`;
+  const optCls = i => { if(!fb) return ''; const right = it.type==='tf' ? (it.ans?1:0) : it.right; return i===right ? 'right' : i===X.sel ? 'wrong' : ''; };
+  if(it.type==='cloze'){
+    const marks = fb ? it.blanks.map((b,j)=>X.fills[j]===b.ans?'ok':'bad') : it.blanks.map(()=> '');
+    q = `<div class="dlead">把公式补完整：</div><div class="dformula" id="dformula">${tex('$$'+MQDrill.clozeLatex(it.t, X.fills, marks)+'$$')}</div>`;
+    if(X.typing && !fb){ ans = `<input id="dans" class="ans" type="text" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="写出空里的内容，如 2ab" value="${esc(X.typed)}"><div class="keys">${['^2','|','-','+','(',')'].map(k=>`<button data-act="dkey" data-v="${esc(k)}">${k==='^2'?'□²':esc(k)}</button>`).join('')}</div>
+      <div class="row" style="gap:10px;margin-top:12px"><button class="btn grow" data-act="dcheck">检查</button><button class="btn ghost" data-act="dtype">🔤 用卡片选</button></div>`; }
+    else { ans = it.blanks.map((b,j)=>`<div class="tilerow">${it.blanks.length>1?`<div class="tl">第 ${'①②③'[j]} 空</div>`:''}<div class="tiles">${b.tiles.map((x,i)=>{ let c = X.fills[j]===x ? 'sel' : ''; if(fb){ c = x===b.ans ? 'right' : X.fills[j]===x ? 'wrong' : 'dim'; } return `<button class="tile ${c}" data-act="dtile" data-b="${j}" data-v="${i}" ${fb?'disabled':''}>${texBlock(x)}</button>`; }).join('')}</div></div>`).join('')
+      + (fb ? '' : `<div class="row" style="gap:10px;margin-top:14px"><button class="btn grow" data-act="dcheck" ${X.fills.some(f=>f==null)?'aria-disabled="true"':''}>检查</button>${drillCanType(it)?'<button class="btn ghost" data-act="dtype">⌨️ 自己写</button>':''}</div>`); }
+  } else if(it.type==='tf'){
+    q = `<div class="row between"><div class="dlead">这句话对吗？</div>${vsay(it.say,'q','题目')}</div><div class="dstate">${tex(it.text)}</div>`;
+    ans = `<div class="tfbtns"><button class="opt big ${optCls(1)}" data-act="dopt" data-v="1" ${fb?'disabled':''}>✓ 对</button><button class="opt big ${optCls(0)}" data-act="dopt" data-v="0" ${fb?'disabled':''}>✗ 错</button></div>`;
+  } else if(it.type==='match'){
+    q = it.dir==='f2n' ? `<div class="dlead">这是哪个公式？</div><div class="dformula">${tex('$$'+it.prompt+'$$')}</div>` : `<div class="dlead">「${esc(it.prompt)}」是哪一个？</div>`;
+    ans = `<div class="opts">${it.opts.map((o,i)=>`<button class="opt ${optCls(i)}" data-act="dopt" data-v="${i}" ${fb?'disabled':''}><span class="k">${'ABCD'[i]}</span><span class="grow">${it.dir==='f2n'?esc(o):texBlock(o)}</span></button>`).join('')}</div>`;
+  } else {
+    q = `<div class="dlead">用公式算一算：</div><div class="dstate">${tex(it.prompt)}</div>`;
+    if(it.kind==='choice') ans = `<div class="opts">${it.opts.map((o,i)=>`<button class="opt ${optCls(i)}" data-act="dopt" data-v="${i}" ${fb?'disabled':''}><span class="k">${'ABCD'[i]}</span><span class="grow">${it.math?texBlock(o):esc(o)}</span></button>`).join('')}</div>`;
+    else ans = `<input id="dans" class="ans" type="text" inputmode="text" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="输入数字" value="${esc(X.typed)}" ${fb?'disabled':''}>${fb?'':`<div class="keys">${['-','/','.'].map(k=>`<button data-act="dkey" data-v="${k}">${k}</button>`).join('')}</div><button class="btn block" style="margin-top:12px" data-act="dcheck">检查</button>`}`;
+  }
+  let fbh = '';
+  if(fb){
+    const full = it.type==='cloze' ? MQDrill.clozeLatex(it.t, it.blanks.map(b=>b.ans), it.blanks.map(()=> 'ok')) : it.full;
+    const extra = it.type==='tf' ? it.why : it.type==='gen' ? it.explain : '';
+    const mine = it.type==='cloze' && !fb.ok ? `<div class="small" style="margin-top:4px">你填的是 ${X.fills.map(f=>texBlock(f||'')).join('、')}</div>` : '';
+    fbh = `<div class="fb ${fb.ok?'ok':'bad'} pop" id="dfb"><div class="row between"><b class="t">${fb.ok?`✅ ${fb.praise}${fb.pts?` <span class="chip ok">+${fb.pts} 积分</span>`:''}`:'💪 差一点点，再记一遍！'}</b>${vsay(it.fsay||it.say,'fb','公式')}</div>
+      ${mine}${extra?`<div style="margin-top:6px">${tex(extra)}</div>`:''}
+      ${!fb.ok || it.type!=='cloze' ? `<div class="dfull">📐 ${it.type==='cloze'?'完整公式':'对应公式'}：${tex('$$'+full+'$$')}</div>` : ''}
+      ${it.tip && (!fb.ok || it.type==='cloze') ? `<div class="dtip">📌 口诀：${esc(it.tip)}</div>` : ''}
+      ${fb.requeue?'<div class="muted small" style="margin-top:6px">🔁 这个公式稍后会再出现一次</div>':''}</div>
+      <button class="btn block" style="margin-top:12px" data-act="dnext">${X.idx<X.items.length-1?'下一题 →':'看看结果 →'}</button>`;
+  }
+  return head + `<div class="card dq ${it.type}"><div class="dql">${tag}${q}</div><div class="dqr">${ans}${fbh}</div></div>`;
+}
+function vDrillSum(X){
+  const n = X.res.length, ok = X.res.filter(r=>r.ok).length, pct = n ? Math.round(ok/n*100) : 0;
+  const miss = [], got = []; X.res.forEach(r=>{ const L = r.ok ? got : miss; if(!L.some(x=>x.fid===r.fid)) L.push(r); });
+  const gotOnly = got.filter(r=>!miss.some(m=>m.fid===r.fid));
+  const used = D.drill.pday && D.drill.pday.date===today() ? D.drill.pday.n : 0;
+  return `<div class="playhead"><button class="iconbtn" data-act="dquit" aria-label="返回">‹</button><div class="grow" style="font-weight:800;font-size:16px">🧠 记忆练习 · 小结</div></div>
+  <div class="card dsum"><div class="row" style="gap:16px">${ring(pct/100, 96, 10).replace('</svg>', `<text x="48" y="54" text-anchor="middle" font-size="22" font-weight="800" fill="currentColor">${pct}%</text></svg>`)}
+    <div class="grow"><div style="font-size:20px;font-weight:800">${pct>=90?'🌟 记得真牢！':pct>=60?'👍 不错，继续巩固！':'💪 多练几次就记住了！'}</div>
+    <div class="muted">首次答对 ${ok}/${n} 题 · 本组 +${X.pts} 积分</div><div class="muted small">今日记忆练习积分 ${used}/${MQDrill.CAP}${used>=MQDrill.CAP?'（今天已满，明天再来）':''}</div></div></div></div>
+  ${miss.length?`<div class="card list"><h3>📌 需要再记的公式 <span class="chip bad">${miss.length}</span></h3>${miss.map(r=>`<div class="item"><div class="grow"><b>${esc(r.name)}</b><div class="muted small">${r.fixed?'重练时答对了 · 明天再复习一次':'已加入今日待记'}</div></div>${r.key?`<button class="btn sm ghost" data-act="dstart" data-k="${esc(r.key)}">练一练</button>`:''}</div>`).join('')}</div>`:''}
+  ${gotOnly.length?`<div class="card"><h3>✅ 记住的公式</h3><div class="chips">${gotOnly.map(r=>`<span class="chip ok">${esc(r.name)}</span>`).join('')}</div><div class="muted small" style="margin-top:8px">按间隔复习，过几天会再提醒你记一次</div></div>`:''}
+  <div class="row" style="gap:10px;margin-top:6px"><button class="btn grow" data-act="dstart">再练一组</button><button class="btn ghost grow" data-act="dquit">返回公式卡</button></div>`;
+}
+function fitMath(){ document.querySelectorAll('.dformula,.dfull,.dstate').forEach(el=>{ let fs = parseFloat(getComputedStyle(el).fontSize); let n = 0; while(el.scrollWidth > el.clientWidth + 1 && fs > 11 && n++ < 14){ fs -= 1; el.style.fontSize = fs + 'px'; } }); }
+function afterDrill(){
+  fitMath(); if(document.fonts && document.fonts.ready) document.fonts.ready.then(()=>{ if(S.view==='drill') fitMath(); }); const inp = $('#dans'); const X = S.drill;
+  if(inp && X && X.phase==='answer'){ inp.addEventListener('input', e=>{ X.typed = e.target.value; }); inp.addEventListener('keydown', e=>{ if(e.key==='Enter'){ e.preventDefault(); drillCheck(); } });
+    if(window.matchMedia('(hover:hover)').matches) setTimeout(()=>inp.focus({preventScroll:true}),50); }
 }
 
 /* ========== 视图：我的（薄弱项分析 / 徽章 / 设置） ========== */
@@ -1074,7 +1194,7 @@ function rewardModal(id){
     <div id="rwMsg" class="small err"></div>
     <div class="row" style="gap:10px;margin-top:10px"><button class="btn ghost grow" data-act="close">取消</button><button class="btn grow" data-act="rwsave" data-v="${rw?esc(rw.id):''}">保存</button></div>`);
 }
-window.__mqTest = { levelInfo: p=>levelInfo(p), awardKind: (k,r)=>awardKind(k,r), pinHash: p=>pinHash(p), parentOn: ()=>parentOn() };
+window.__mqTest = { levelInfo: p=>levelInfo(p), awardKind: (k,r)=>awardKind(k,r), pinHash: p=>pinHash(p), parentOn: ()=>parentOn(), drill: ()=>S.drill, drillCards: ()=>drillCards().map(c=>({key:c.key,name:c.name})) };
 
 /* ========== 主题 ========== */
 const THEME_KEY = 'mathquest_theme';
@@ -1192,6 +1312,16 @@ const act = {
   vrate(d){ D.settings.rate = d.v; save(); render(); say([MQVoiceTexts.EXTRA.ratePreview]); },
   vtest(){ say([MQVoiceTexts.EXTRA.test]); },
   ftab(d){ S.fTab=d.v; render(); },
+  dstart(d){ startDrill(d.k||null); },
+  dcont(){ go('drill'); },
+  dtile(d){ const X=S.drill; if(!X||X.phase!=='answer') return; const it=X.items[X.idx]; X.fills[+d.b] = it.blanks[+d.b].tiles[+d.v]; render(); },
+  dtype(){ const X=S.drill; if(!X) return; X.typing=!X.typing; render(); },
+  dcheck(){ drillCheck(); },
+  dopt(d){ drillCheck(+d.v); },
+  dkey(d){ const inp=$('#dans'); if(!inp) return; const s=inp.selectionStart??inp.value.length, e=inp.selectionEnd??s; inp.value=inp.value.slice(0,s)+d.v+inp.value.slice(e); S.drill.typed=inp.value; inp.focus(); },
+  dnext(){ drillNext(); },
+  dquit(){ hush(); const X=S.drill; if(X && X.phase==='done') S.drill=null; go('formulas'); if(X && X.phase!=='done') toast('进度已保留，可点「继续练习」回来'); },
+  dsay(d){ const X=S.drill; if(!X) return; const it=X.items[X.idx]; const t = d.w==='q' ? it.say : (it.fsay||it.say); if(t){ hush(); say([t]); } },
   fsort(d){ D.settings.cardSort=d.v; save(); render(); },
   fkp(d){ S.fKp=d.v; if(S.view!=='formulas'){ go('formulas'); } else render(); },
   flip(d,el){ S.flipped[d.v]=!S.flipped[d.v]; el.classList.toggle('on'); },

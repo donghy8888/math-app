@@ -12,6 +12,7 @@ const fs = require('fs'), path = require('path'), os = require('os'), { execFile
 const ROOT = path.resolve(__dirname, '..');
 const S = require(path.join(ROOT, 'src/speech.js'));
 const VT = require(path.join(ROOT, 'src/voice-texts.js'));
+const DR = require(path.join(ROOT, 'src/drill.js'));   // 记忆练习：手写公式朗读+口诀、判断题
 const args = process.argv.slice(2);
 const opt = (k, d) => { const i = args.indexOf(k); if (i >= 0) { const v = args[i + 1]; args.splice(i, 2); return v; } return d; };
 const VOICE = opt('--voice', 'zh-CN-XiaoxiaoNeural'), RATE = opt('--rate', '-10%'), KBPS = opt('--kbps', '24'), AKBPS = opt('--analysis-kbps', '16'), OUT = path.resolve(ROOT, opt('--out', 'audio'));
@@ -25,10 +26,12 @@ for (const f of packFiles) {
   if (onlyPrompts) t = pack.questions.flatMap(q => q.steps.map((s, i) => VT.forQuestion(q, 'prompt', i)));
   texts.push(...t);
 }
+if (!files.length) texts.push(...DR.speechTexts());
 const spoken = [...new Set(texts.map(t => S.toSpeech(t)).filter(t => t && t.trim()))];
 /* 审题分析文本较长、只在手动点 🔊 时播放，用更低码率（默认 16kbps）控制体积 */
 const analysisSet = new Set();
 for (const f of packFiles) { const pack = JSON.parse(fs.readFileSync(f, 'utf8')); (pack.questions || []).forEach(q => { if (q.analysis) VT.ANALYSIS_KINDS.forEach(k => analysisSet.add(S.toSpeech(VT.forQuestion(q, k)))); }); }
+if (!files.length) DR.speechTexts().forEach(t => analysisSet.add(S.toSpeech(t)));
 fs.mkdirSync(OUT, { recursive: true });
 const manPath = path.join(OUT, 'manifest.json');
 const man = fs.existsSync(manPath) ? JSON.parse(fs.readFileSync(manPath, 'utf8')) : { clips: {} };

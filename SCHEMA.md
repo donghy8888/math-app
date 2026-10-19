@@ -271,6 +271,11 @@ Association：`{"trigger": "题目特征", "recall": "定理/公式/方法", "la
 5. analysis 用来教孩子“怎么想”：known 逐条列出已知，**隐藏条件（如二次项系数≠0、被开方数≥0、分母≠0、绝对值/平方非负、根要检验等）必须单独写成 {"hidden": true} 并说明 why**；associations 写“看到什么→想到什么”，第一条要是最关键的联想；thinkingPath 3~5 条，按顺序说清“先想什么、再想什么”；pitfalls 写最常见的失分点。若题目数据本身有问题（如代入后分母为 0），也写进 pitfalls。
 ```
 
+### 公式记忆练习（`src/drill.js`）
+
+「公式速记 → 🧠 记忆练习」的题目来自 `src/drill.js`：`DEFS`（手写公式挖空，`[[正确§干扰1§干扰2§干扰3]]`，去掉挖空后必须等于 `forms` 中的完整公式，`test/drill_test.js` 会检查）、`TF`（条件判断题）、`GENS`（随机参数小练习）。没有手写定义的公式只在安全时自动挖空（关系符号或单独的整数）。
+`node tools/gen-audio.js` 会同时为手写公式的朗读+口诀和判断题生成普通话录音（16kbps）；修改文本后可运行 `node tools/prune-audio.js` 删除不再使用的录音。
+
 ## 学习进度备份格式（供参考）
 
 「我的 → 设置 → 导出备份」得到 `{ "app": "mathquest", "version": 1, "exportedAt": "...", "data": { settings, packs, attempts, review, checkins, points, badges, daily } }`。它和题包是两种不同的文件，请在「导入备份」里导入。
