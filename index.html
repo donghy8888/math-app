@@ -241,16 +241,18 @@ html[data-theme=dark] .pin{--pin-shadow:rgba(0,0,0,.6)}
 .badge.lock .n{color:var(--sub)}
 .badge.got{background:var(--warn-soft);border-color:var(--warn-line)}
 .fgrid{display:grid;grid-template-columns:1fr;gap:12px}
-.flip{perspective:1000px;height:190px;cursor:pointer}
-.flip .in{position:relative;width:100%;height:100%;transition:transform .5s;transform-style:preserve-3d}
+/* 两面叠在同一个网格格子里：卡片高度 = 较高的一面，内容多时卡片变高，不裁切、不重叠 */
+.flip{perspective:1000px;min-height:190px;cursor:pointer;display:flex}
+.flip .in{position:relative;flex:1;display:grid;transition:transform .5s;transform-style:preserve-3d}
 .flip.on .in{transform:rotateY(180deg)}
-.flip .f,.flip .bk{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;border-radius:22px;padding:16px;display:flex;flex-direction:column;box-shadow:var(--shadow);overflow:auto;border:1px solid var(--line)}
+.flip .f,.flip .bk{grid-area:1/1;position:relative;min-width:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;border-radius:22px;padding:14px 16px;display:flex;flex-direction:column;gap:8px;box-shadow:var(--shadow);border:1px solid var(--line);overflow-wrap:anywhere}
+.flip .f>*,.flip .bk>*{flex:none;max-width:100%}
 .flip .f{background:var(--pri-soft);color:var(--ink);justify-content:center;align-items:center;text-align:center;border-left:6px solid var(--pri)}
 .flip .f.m{background:var(--warn-soft);border-left-color:var(--warn)}
-.flip .f .nm{font-size:21px;font-weight:800;margin:8px 0;color:var(--pri-ink)}
+.flip .f .nm{font-size:21px;font-weight:800;margin:2px 0;color:var(--pri-ink)}
 .flip .f.m .nm{color:var(--warn-ink)}
 .flip .f .tap{font-size:12px;color:var(--sub)}
-.flip .f .chip{background:var(--card);color:var(--sub)}
+.flip .f .chip{background:var(--card);color:var(--sub);white-space:normal;max-width:100%}
 .flip .f .chip.hot{background:var(--bad-soft);color:var(--bad-ink)}
 .flip .bk{background:var(--card);transform:rotateY(180deg);justify-content:center}
 .flip .bk .ltx{font-size:20px;text-align:center;margin:6px 0 10px;overflow-x:auto}
@@ -415,17 +417,19 @@ input.pin{letter-spacing:12px;font-size:24px;text-align:center}
 .anrev .anblk:first-of-type{margin-top:10px}
 .flip .f.a{background:var(--sky-soft);border-left-color:var(--sky)}
 .flip .f.a .nm{color:var(--pri-ink)}
-.flip .atrig{font-size:15px;text-align:center;margin-top:6px;max-height:84px;overflow:hidden}
+.flip .atrig{font-size:19px;font-weight:700;line-height:1.55;text-align:center;color:var(--ink);margin:2px 0;padding:4px 2px}
+.flip .morig{font-size:14.5px;line-height:1.6;text-align:left;color:var(--ink);align-self:stretch;padding:4px 2px}
+.flip .f .flbl{font-size:12.5px;font-weight:700;color:var(--sub);align-self:stretch;text-align:left;line-height:1.3}
 .flip .bk .ttl.a{color:var(--pri-ink);margin-bottom:6px}
 
 /* ===== 公式速记排序 ===== */
 .sortrow{display:flex;align-items:center;gap:8px;margin:-2px 0 2px}
 .sortrow .seg{flex:1;margin:0}
 .seg.sm button{min-height:34px;font-size:13px;padding:0 4px}
-.flip .f .freq{flex:none;margin-bottom:6px;font-size:12px;font-weight:800;border-radius:99px;padding:2px 9px;background:var(--card);color:var(--sub);border:1px solid var(--line)}
+.flip .f .freq{flex:none;margin:0;font-size:12px;line-height:1.6;font-weight:800;border-radius:99px;padding:2px 9px;background:var(--card);color:var(--sub);border:1px solid var(--line)}
 .flip .f .freq.hot{background:var(--warn-soft);color:var(--warn-ink);border-color:var(--warn-line)}
-.flip .f .chips{max-height:58px;overflow:hidden}
-.flip .bk .srcs{margin-top:8px;font-size:12px;color:var(--sub);line-height:1.5}
+.flip .f .chips{justify-content:center}
+.flip .bk .srcs{margin-top:2px;font-size:12px;color:var(--sub);line-height:1.5}
 .flip .bk .ltx.alt{font-size:15px;margin:-4px 0 8px}
 @media (min-width:700px){.fgrid{grid-template-columns:1fr 1fr}}
 .kphead{grid-column:1/-1;font-weight:800;color:var(--pri-ink);font-size:14px;margin:6px 4px -4px}
@@ -2860,8 +2864,8 @@ function vFormulas(){
     const weak = weakScore(c)>0.15, srcs = c.type==='m' ? [] : c.qs;
     const srcLine = srcs.length ? `<div class="srcs">📄 ${srcs.slice(0,4).map(cardSrcLabel).filter(Boolean).map(esc).join('、')}${srcs.length>4?` 等 ${srcs.length} 题`:''}</div>` : '';
     return head + `<div class="flip ${S.flipped[c.id]?'on':''}" data-act="flip" data-v="${c.id}" data-key="${esc(c.key)}"><div class="in">
-      <div class="f ${c.type==='m'?'m':c.type==='a'?'a':''}">${c.badge?`<span class="freq ${c.act14?'hot':''}">${c.act14?'🔥 ':'📝 '}${esc(c.badge)}</span>`:''}<div class="chips" style="justify-content:center">${[...c.kps].slice(0,2).map(k=>`<span class="chip">${esc(k)}</span>`).join('')}${weak?'<span class="chip hot">🔥 薄弱</span>':''}</div>
-        <div class="nm">${c.type==='f'?esc(c.name):c.type==='a'?'看到这个，想到什么？':'这道题怎么想？'}</div>${c.type==='a'?`<div class="atrig">${tex(c.trigger)}</div>`:''}${c.type==='m'?`<div class="small muted" style="max-height:56px;overflow:hidden">${tex(c.original)}</div>`:''}<div class="tap">👆 点击翻面${c.total>1&&c.type!=='m'?` · 出现在 ${c.total} 道题`:''}</div>${c.type==='f'?`<button class="practbtn" data-act="dstart" data-k="${esc(c.key)}" aria-label="练一练：${esc(c.name)}">✏️ 练一练</button>`:''}</div>
+      <div class="f ${c.type==='m'?'m':c.type==='a'?'a':''}">${c.type==='a'?'<div class="flbl">🔗 看到这个，你会想到什么？</div>':c.type==='m'?'<div class="flbl">🧭 这道题怎么想？</div>':''}<div class="chips">${c.badge?`<span class="freq ${c.act14?'hot':''}">${c.act14?'🔥 ':'📝 '}${esc(c.badge)}</span>`:''}${[...c.kps].slice(0,2).map(k=>`<span class="chip">${esc(k)}</span>`).join('')}${weak?'<span class="chip hot">🔥 薄弱</span>':''}</div>
+        ${c.type==='f'?`<div class="nm">${esc(c.name)}</div>`:c.type==='a'?`<div class="atrig">${tex(c.trigger)}</div>`:`<div class="morig">${tex(c.original)}</div>`}<div class="tap">👆 点击翻面${c.total>1&&c.type!=='m'?` · 出现在 ${c.total} 道题`:''}</div>${c.type==='f'?`<button class="practbtn" data-act="dstart" data-k="${esc(c.key)}" aria-label="练一练：${esc(c.name)}">✏️ 练一练</button>`:''}</div>
       <div class="bk">${c.type==='f'?`<div class="ttl">${esc(c.name)}</div><div class="ltx">${texBlock(c.latex)}</div>${c.alt&&c.alt.length?`<div class="ltx alt"><span class="muted small">也写作</span> ${tex('$'+c.alt[0]+'$')}</div>`:''}<div class="muted small">💡 ${tex(c.tip)}</div>`
         :c.type==='a'?`<div class="ttl a">💭 ${tex(c.recall)}</div>${c.latex?`<div class="ltx">${texBlock(c.latex)}</div>`:''}<div class="muted small">${tex(c.why)}</div>`
         :`<div class="ttl m">🧭 解题思路</div><div style="font-size:15px">${tex(c.method)}</div>`}${srcLine}</div>
