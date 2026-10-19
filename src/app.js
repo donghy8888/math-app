@@ -595,6 +595,7 @@ function hush(){ VS.stop(); clearTimeout(sayLaterT); }
 /* ---------- 答对音效（Web Audio，独立于录音元素） ---------- */
 const SFX = (typeof MQSfx!=='undefined') ? MQSfx : {supported:false, play(){return false;}, unlock(){}, duck(){}, remainingMs(){return 0;}, setEnabled(){}, setVolume(){}};
 function sfxSync(){ SFX.setEnabled(!!D.settings.sfx); SFX.setVolume(D.settings.sfxVol||'mid'); }
+if(SFX.setKeepAlive && SFX.needsKeepAlive && SFX.needsKeepAlive() && VS.keepAlive) SFX.setKeepAlive(()=>VS.keepAlive());
 function sfx(kind, o){ if(!D.settings.sfx) return false; sfxSync(); return SFX.play(kind, o); }
 /* 音效刚响起时紧接着要朗读：录音稍等 ~350ms 再开始（音效仍在响时朗读会自动把音效压低） */
 let sayLaterT;
@@ -1026,7 +1027,9 @@ function drillNext(){
   X.phase = 'done';
   if(X.res.length >= 4){ D.drill.sessions = (D.drill.sessions||0) + 1; }
   const ev = checkBadges(); save(); render(); window.scrollTo(0,0);
-  if(ev.length) setTimeout(()=>{ if(S.view==='drill') celebrate(ev); }, 900);
+  const okN = X.res.filter(r=>r.ok).length, fan = X.res.length ? sfx('fanfare', {bonus: okN===X.res.length}) : false;
+  if(fan || okN) confetti(okN===X.res.length ? 160 : 90);
+  if(ev.length) setTimeout(()=>{ if(S.view==='drill') celebrate(ev); }, fan ? 1300 : 900);
 }
 function drillCanType(it){ return it.type==='cloze' && it.blanks.length===1 && /^[-+a-z0-9^|()]+$/i.test(it.blanks[0].ans); }
 function vDrill(){
@@ -1337,7 +1340,7 @@ const act = {
   dsay(d){ const X=S.drill; if(!X) return; const it=X.items[X.idx]; const t = d.w==='q' ? it.say : (it.fsay||it.say); if(t){ hush(); say([t]); } },
   fsort(d){ D.settings.cardSort=d.v; save(); render(); },
   fkp(d){ S.fKp=d.v; if(S.view!=='formulas'){ go('formulas'); } else render(); },
-  flip(d,el){ S.flipped[d.v]=!S.flipped[d.v]; el.classList.toggle('on'); },
+  flip(d,el){ S.flipped[d.v]=!S.flipped[d.v]; el.classList.toggle('on'); sfx('flip'); },
   kpall(){ S.kpAll=!S.kpAll; render(); },
   metab(d){ S.meTab=d.v; if(S.view!=='me') go('me'); else render(); },
   shop(){ S.meTab='shop'; if(S.view!=='me') go('me'); else { render(); window.scrollTo(0,0); } },

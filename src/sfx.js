@@ -10,6 +10,7 @@ var AC = hasWin ? (window.AudioContext || window.webkitAudioContext) : null;
 var ctx = null, master = null, comp = null, enabled = true, vol = 0.3, busyUntil = 0, lastVariant = -1, log = [];
 var VOLS = {low:0.15, mid:0.3, high:0.5};
 var BASE = 0.65; /* 多个音叠加后的总峰值：中档约 0.3~0.45，低于朗读录音 */
+function isIOS(){ if(!hasWin) return false; var u = navigator.userAgent||''; return /iP(hone|ad|od)/.test(u) || (/Macintosh/.test(u) && navigator.maxTouchPoints>1); }
 function now(){ return ctx ? ctx.currentTime : 0; }
 function ensure(){
   if(ctx || !AC) return ctx;
@@ -20,24 +21,24 @@ function ensure(){
     master = ctx.createGain(); master.gain.value = BASE;
     if(comp){ try{ comp.threshold.value = -14; comp.knee.value = 12; comp.ratio.value = 4; comp.attack.value = 0.003; comp.release.value = 0.2; }catch(e){} master.connect(comp); comp.connect(ctx.destination); }
     else master.connect(ctx.destination);
+    /* iOS：录音播放、来电、切到后台后上下文会变成 interrupted/suspended，标记下来，下一次点击时在手势里 resume */
+    ctx.onstatechange = function(){ if(ctx && ctx.state!=='running') stale = true; };
   }catch(e){ ctx = null; }
   return ctx;
 }
 /* 必须在用户手势里调用：创建/恢复上下文，并播放 1 个采样的静音缓冲（老版 iOS 需要） */
-var primed = false;
+var primed = false, stale = false, keepAlive = null;
+function resumeNow(){ /* 同步调用（在手势里才有效） */
+  try{ if(ctx && ctx.state!=='running' && ctx.state!=='closed' && ctx.resume){ var p = ctx.resume(); if(p && p.catch) p.catch(function(){}); return p; } }catch(e){}
+  return null;
+}
 function unlock(){
   if(!enabled && !ctx) return;
   if(!ensure()) return;
-  try{ if(ctx.state!=='running' && ctx.resume){ var p = ctx.resume(); if(p && p.catch) p.catch(function(){}); } }catch(e){}
+  resumeNow(); if(ctx.state==='running') stale = false;
   if(!primed){ try{ var b = ctx.createBuffer(1, 1, 22050), s = ctx.createBufferSource(); s.buffer = b; s.connect(ctx.destination); s.start(0); primed = true; }catch(e){} }
 }
-/* 切到后台回来后 iOS 可能处于 interrupted：下次点击 unlock() 或播放前 ready() 会再 resume */
-function ready(){
-  if(!enabled || !AC) return false;
-  if(!ctx) return false; /* 还没有用户手势：不创建，静默跳过 */
-  if(ctx.state==='suspended' || ctx.state==='interrupted'){ try{ var p = ctx.resume(); if(p && p.catch) p.catch(function(){}); }catch(e){} }
-  return ctx.state!=='closed';
-}
+function canPlay(){ return enabled && !!AC && !!ctx && ctx.state!=='closed'; }
 /* 一个柔和的“铃音”：正弦基音 + 少量泛音，快起慢落，经低通去刺耳高频 */
 function bell(freq, t, dur, gain, opts){
   opts = opts || {};
@@ -94,11 +95,28 @@ function levelup(){
   sparkle(t2+0.25, 9, N(3+12), 0.08, 0.3);
   return 'levelup';
 }
-var KINDS = {chime:chime, fanfare:fanfare, levelup:levelup};
-function play(kind, o){
-  if(!ready()) { log.push({kind:kind, skipped:true}); return false; }
-  try{ if(master){ master.gain.cancelScheduledValues(now()); master.gain.setValueAtTime(BASE, now()); } var r = KINDS[kind](o); log.push({kind:kind, v:r, t:Date.now()}); return true; }
+function flip(){ /* 翻卡：非常轻的“嗒”——短促下滑的正弦，不带泛音 */
+  var t = now()+0.005;
+  bell(N(-2+12) * (0.96+Math.random()*0.08), t, 0.12, 0.5, {partial:false, glide:0.7, att:0.004});
+  return 'flip';
+}
+var KINDS = {chime:chime, fanfare:fanfare, levelup:levelup, flip:flip};
+function doPlay(kind, o){
+  try{ if(master){ master.gain.cancelScheduledValues(now()); master.gain.setValueAtTime(BASE, now()); } var r = KINDS[kind](o); log.push({kind:kind, v:r, t:Date.now()});
+    if(keepAlive) try{ keepAlive(); }catch(e){}
+    return true; }
   catch(e){ return false; }
+}
+/* 上下文没在运行（iOS 的 suspended/interrupted）：先在当前手势里 resume，再播放。
+   绝不在“冻结”的时钟上排队——否则恢复后会一下子补放一串旧音效。恢复不了就跳过这一次。 */
+function play(kind, o){
+  if(!canPlay()){ log.push({kind:kind, skipped:true}); return false; }
+  if(ctx.state==='running') return doPlay(kind, o);
+  var p = resumeNow();
+  if(ctx.state==='running') return doPlay(kind, o);
+  var t0 = Date.now();
+  if(p && p.then){ p.then(function(){ if(ctx.state==='running' && Date.now()-t0 < 600) doPlay(kind, o); else log.push({kind:kind, skipped:'late'}); }, function(){ log.push({kind:kind, skipped:'resume'}); }); return true; }
+  log.push({kind:kind, skipped:'suspended'}); return false;
 }
 /* 录音开始时如果音效还在响，把音效压低（不停止），两者都听得见 */
 function duck(){
@@ -107,6 +125,9 @@ function duck(){
 }
 function remainingMs(){ return ctx ? Math.max(0, (busyUntil - now())*1000) : 0; }
 return { play: play, unlock: unlock, duck: duck, remainingMs: remainingMs, supported: !!AC,
+  /* iOS 旧版本没有 navigator.audioSession：页面上没有媒体元素在播放时，Web Audio 会跟随静音开关。
+     传入一个回调（让共享录音元素在空闲时放一小段静音），把音频会话保持在 playback。 */
+  setKeepAlive: function(f){ keepAlive = f; }, needsKeepAlive: function(){ return isIOS() && !(hasWin && navigator.audioSession); },
   setEnabled: function(v){ enabled = !!v; }, setVolume: function(v){ vol = typeof v==='number' ? v : (VOLS[v] || 0.3); },
   state: function(){ return ctx ? ctx.state : 'none'; }, log: log, VOLS: VOLS };
 })();

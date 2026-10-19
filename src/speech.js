@@ -181,6 +181,12 @@ function unlock(){
   var a = getAudio(); if(pending>0) return; /* 已经在播放真实录音（同一次点击里），无需再解锁 */
   try{ a.muted = false; a.src = SILENCE; var pr = a.play(); if(pr && pr.catch) pr.catch(function(err){ if(!err || err.name!=='AbortError') unlocked = false; }); }catch(e){ unlocked = false; }
 }
+/* 空闲时在已解锁的同一元素上放一小段静音（不打断正在播放的录音）：iOS 借此保持音频会话，让 Web Audio 音效不被静音开关吞掉 */
+function keepAlive(){
+  if(!unlocked || !audioEl || pending>0) return false;
+  if(!audioEl.paused && String(audioEl.src).slice(0,5)!=='data:') return false;
+  try{ audioEl.onended = audioEl.onerror = null; audioEl.src = SILENCE; var pr = audioEl.play(); if(pr && pr.catch) pr.catch(function(){}); return true; }catch(e){ return false; }
+}
 function clipUrl(spoken){ var h = hash(spoken); return clips[h] ? audioBase + h + '.mp3' : null; }
 function stop(){
   token++; pending = 0; lastText = '';
@@ -247,7 +253,7 @@ function speak(texts, opts){
 }
 function addClips(list){ (list||[]).forEach(function(h){ clips[h] = 1; }); }
 return { toSpeech: toSpeech, latex: latex, plain: plain, hash: hash, supported: !!synth || audioOK, ttsSupported: !!synth, audioSupported: audioOK,
-  speak: speak, stop: stop, unlock: unlock, isUnlocked: function(){ return unlocked; }, whenVoices: whenVoices, addClips: addClips, hasClip: function(t){ return !!clipUrl(toSpeech(t)); }, clipCount: function(){ return Object.keys(clips).length; },
+  speak: speak, stop: stop, unlock: unlock, keepAlive: keepAlive, isUnlocked: function(){ return unlocked; }, whenVoices: whenVoices, addClips: addClips, hasClip: function(t){ return !!clipUrl(toSpeech(t)); }, clipCount: function(){ return Object.keys(clips).length; },
   setAudioBase: function(b){ audioBase = b; }, onNotice: function(f){ noticeCb = f; },
   hasMandarin: function(){ pickVoice(); return !!voice; }, voicesLoaded: function(){ return voicesReady; },
   voices: function(){ return allVoices().map(function(v){ return {name:v.name, lang:v.lang, mandarin:isMandarinCN(v)}; }); },
