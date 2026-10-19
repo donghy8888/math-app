@@ -51,7 +51,7 @@ function texBlock(latex){ return tex('$'+String(latex||'').replace(/\$/g,'')+'$'
 /* ========== 数据存储 ========== */
 const KEY = 'mathquest_data_v1';
 function defData(){
-  return {v:1, settings:{nickname:'小数学家', goalNew:3, goalReview:true, voice:true, autoRead:true, reminders:true, rate:'normal', voicePick:'', showAnalysis:true, cardSort:'freq'}, drill:{sr:{}, log:[], sessions:0, pday:null}, packs:[], attempts:[], review:{}, checkins:{}, points:0, badges:{}, daily:{}, marks:{}, hadReview:false, created:Date.now()};
+  return {v:1, settings:{nickname:'小数学家', goalNew:3, goalReview:true, voice:true, autoRead:true, reminders:true, rate:'normal', voicePick:'', showAnalysis:true, cardSort:'freq', sfx:true, sfxVol:'mid'}, drill:{sr:{}, log:[], sessions:0, pday:null}, packs:[], attempts:[], review:{}, checkins:{}, points:0, badges:{}, daily:{}, marks:{}, hadReview:false, created:Date.now()};
 }
 let D;
 function load(){
@@ -347,7 +347,7 @@ function celebrate(ev){
   el.innerHTML = `<div class="cb ${top?'t'+top.lv:''}"><div class="ce">${headE}</div><div class="ct">${top?TIER_NAMES[top.lv-1]+'勋章！':'新成就！'}</div>${ev.map(e=>`<div class="ci">${esc(evLabel(e))}</div>`).join('')}</div>`;
   el.classList.add('show'); clearTimeout(celebT); celebT = setTimeout(()=>el.classList.remove('show'), 4200);
   confetti(top && top.lv>=3 ? 260 : 180);
-  hush(); say([line]);
+  hush(); sayAfterSfx([line], sfx('levelup'));
 }
 /* ========== 积分兑换 ========== */
 const DEFAULT_REWARDS = [
@@ -591,7 +591,14 @@ const RATES = {slow:0.75, normal:0.9, fast:1.1};
 const PLAYRATES = {slow:0.85, normal:1, fast:1.15}; // 内置录音本身已放慢 10%
 const voiceOn = () => VS.supported && !!D.settings.voice;
 function say(texts){ if(!voiceOn()) return false; return VS.speak(texts, {rate: RATES[D.settings.rate] || 0.9, playbackRate: PLAYRATES[D.settings.rate] || 1, voiceName: D.settings.voicePick || ''}); }
-function hush(){ VS.stop(); }
+function hush(){ VS.stop(); clearTimeout(sayLaterT); }
+/* ---------- 答对音效（Web Audio，独立于录音元素） ---------- */
+const SFX = (typeof MQSfx!=='undefined') ? MQSfx : {supported:false, play(){return false;}, unlock(){}, duck(){}, remainingMs(){return 0;}, setEnabled(){}, setVolume(){}};
+function sfxSync(){ SFX.setEnabled(!!D.settings.sfx); SFX.setVolume(D.settings.sfxVol||'mid'); }
+function sfx(kind, o){ if(!D.settings.sfx) return false; sfxSync(); return SFX.play(kind, o); }
+/* 音效刚响起时紧接着要朗读：录音稍等 ~350ms 再开始（音效仍在响时朗读会自动把音效压低） */
+let sayLaterT;
+function sayAfterSfx(texts, played){ clearTimeout(sayLaterT); if(!played) return say(texts); sayLaterT = setTimeout(()=>say(texts), 350); return true; }
 const REMIND = MQVoiceTexts.REMIND;
 const REMIND_ICON = {start:'📝', calc:'✏️', wrong:'🌱', idle:'🔍', overtime:'🍵', finish:'🌟'};
 const lastRemind = {}; let sessionQCount = 0;
@@ -895,8 +902,8 @@ function finishQ(){
   ss.result = {stars, missed, stepsOk, stepsTotal, overtime, timeUsed, points:pts, ptsKind:aw.kind, ptsNote, newBadges, reviewNote};
   ss.phase = 'done';
   render(); window.scrollTo({top:0, behavior:'smooth'});
-  confetti(stars===3 ? 220 : 140);
-  hush(); const fr = remind('finish'); if(fr){ refreshRemind(); say([fr]); }
+  confetti(stars===3 ? 220 : 140); hush(); const fan = sfx('fanfare', {bonus: stars===3});
+  const fr = remind('finish'); if(fr){ refreshRemind(); sayAfterSfx([fr], fan); }
   setTimeout(()=>{
     if(g.done && !goalBefore){ toast('🎯 今日目标达成！给自己鼓个掌 👏'); confetti(160); }
     else if(autoChk) toast(`🔥 已自动打卡，连续 ${streak()} 天！`);
@@ -1010,7 +1017,7 @@ function drillCheck(choice){
   let requeue = false;
   if(!ok && !it.retry && !X.retried[it.fid]){ X.retried[it.fid] = 1; X.items.push(MQDrill.retryOf(it)); requeue = true; }
   X.phase = 'fb'; X.fb = {ok, pts, requeue, praise: PRAISE[Math.floor(Math.random()*PRAISE.length)]};
-  save(); render(); if(ok) confetti(30);
+  save(); render(); if(ok){ confetti(30); sfx('chime', {bonus: !it.retry}); }
   setTimeout(()=>{ const el = $('#dfb'); if(el) el.scrollIntoView({block:'nearest', behavior:'smooth'}); }, 30);
 }
 function drillNext(){
@@ -1118,7 +1125,11 @@ function vMe(){
     <div class="field"><label>语速</label><div class="seg">${[['slow','🐢 慢'],['normal','🙂 正常'],['fast','🐇 快']].map(([v,n])=>`<button class="${D.settings.rate===v?'on':''}" data-act="vrate" data-v="${v}">${n}</button>`).join('')}</div></div>
     <div class="row" style="justify-content:flex-end"><button class="btn sm ghost" data-act="vtest">▶ 试听</button></div>` : ''}
   </div>`;
-  const setSec = `<div class="card"><h3>📖 学习方式</h3>${tg('showAnalysis','做题前显示审题分析','先看已知条件、隐藏条件、该联想的定理和解题思路，再分步做题；随时可点原题旁的「🔍 审题」')}</div>` + voiceSec + `<div class="card"><h3>🎨 外观主题</h3>
+  const sfxSec = `<div class="card"><h3>🎉 答对音效</h3>
+    ${SFX.supported ? tg('sfx','答对音效','答对时“叮”一声，完成整题、获得勋章时有喜庆音乐；答错不响') + (D.settings.sfx ? `<div class="field"><label>音效音量</label><div class="seg" role="radiogroup" aria-label="音效音量">${[['low','🔈 低'],['mid','🔉 中'],['high','🔊 高']].map(([v,n])=>`<button class="${(D.settings.sfxVol||'mid')===v?'on':''}" data-act="sfxvol" data-v="${v}" role="radio" aria-checked="${(D.settings.sfxVol||'mid')===v}">${n}</button>`).join('')}</div></div>
+    <div class="row" style="gap:8px;justify-content:flex-end;flex-wrap:wrap"><button class="btn sm ghost" data-act="sfxtest" data-v="chime">▶ 试听 叮</button><button class="btn sm ghost" data-act="sfxtest" data-v="fanfare">▶ 试听 完成</button><button class="btn sm ghost" data-act="sfxtest" data-v="levelup">▶ 试听 勋章</button></div>
+    <div class="muted small" style="margin-top:6px">iPad 听不到音效时，请检查侧边静音开关或控制中心的静音（朗读录音不受影响）。</div>` : '') : '<div class="muted small">当前浏览器不支持音效。</div>'}</div>`;
+  const setSec = `<div class="card"><h3>📖 学习方式</h3>${tg('showAnalysis','做题前显示审题分析','先看已知条件、隐藏条件、该联想的定理和解题思路，再分步做题；随时可点原题旁的「🔍 审题」')}</div>` + voiceSec + sfxSec + `<div class="card"><h3>🎨 外观主题</h3>
     <div class="seg themeseg">${[['eye','🌿 护眼'],['dark','🌙 深色'],['system','📱 跟随系统']].map(([v,n])=>`<button class="${curTheme===v?'on':''}" data-act="theme" data-v="${v}">${n}</button>`).join('')}</div>
     <div class="muted small">「护眼」使用暖纸色低眩光背景；「跟随系统」会随手机的深色模式自动切换。</div></div>
   <div class="card"><h3>⚙️ 设置</h3>
@@ -1256,7 +1267,7 @@ const act = {
   nextq(d){ const ss=S.session; startQ(d.k, ss.queue?'review':'normal', ss.queue); },
   anext(){ const ss=S.session; if(!ss||!ss.an) return; ss.an.reveal++; render(); scrollBelowPin($('#anal .kcard:last-of-type')||$('#anal'),'nearest'); },
   anall(){ const ss=S.session; if(!ss||!ss.an) return; ss.an.reveal=999; render(); },
-  anq(d){ const ss=S.session; const Z=ss&&ss.an&&ss.an.quiz; if(!Z||ss.an.quizDone) return; const i=+d.v; Z.choice=i; Z.ok = i>=0 && Z.opts[i]===Z.right; Z.pts = Z.ok ? 2 : 0; if(Z.ok){ ss.points += 2; } ss.an.quizDone=true; render(); if(Z.ok) confetti(40);
+  anq(d){ const ss=S.session; const Z=ss&&ss.an&&ss.an.quiz; if(!Z||ss.an.quizDone) return; const i=+d.v; Z.choice=i; Z.ok = i>=0 && Z.opts[i]===Z.right; Z.pts = Z.ok ? 2 : 0; if(Z.ok){ ss.points += 2; } ss.an.quizDone=true; render(); if(Z.ok){ confetti(40); sfx('chime', {bonus:true}); }
     setTimeout(()=>scrollBelowPin($('#anal .assoc')||$('#anal'),'nearest'),30); },
   anskip(){ leaveAnalysis(); },
   anstart(){ leaveAnalysis(); },
@@ -1271,7 +1282,7 @@ const act = {
     if(checkAnswer(st,val)){
       const pts = ss.tries===0?10:5; ss.points+=pts; ss.results[ss.stepIdx]={status:ss.tries===0?'first':'second', tries:ss.tries};
       ss.phase='feedback'; ss.fb={kind:'ok', msg:pick(MSG_OK), pts, fresh:true};
-      ss.remind = null;
+      ss.remind = null; sfx('chime', {bonus: ss.tries===0 && !ss.overtime && ss.elapsed/1000 <= q.timeLimitSec});
     } else {
       ss.tries++;
       if(ss.tries>=2){ ss.results[ss.stepIdx]={status:'missed', tries:ss.tries}; ss.phase='feedback'; ss.fb={kind:'miss', msg:pick(MSG_MISS), fresh:true};
@@ -1311,6 +1322,8 @@ const act = {
   vset(d){ D.settings[d.k] = !D.settings[d.k]; save(); if(d.k==='voice' && !D.settings.voice) hush(); render(); },
   vrate(d){ D.settings.rate = d.v; save(); render(); say([MQVoiceTexts.EXTRA.ratePreview]); },
   vtest(){ say([MQVoiceTexts.EXTRA.test]); },
+  sfxvol(d){ D.settings.sfxVol = d.v; save(); render(); sfx('chime'); },
+  sfxtest(d){ SFX.unlock(); sfx(d.v||'chime', {bonus: d.v!=='chime'}); },
   ftab(d){ S.fTab=d.v; render(); },
   dstart(d){ startDrill(d.k||null); },
   dcont(){ go('drill'); },
@@ -1385,7 +1398,8 @@ function showVoiceNotice(){
 }
 document.addEventListener('change', e=>{ if(e.target && e.target.id==='voicePick'){ D.settings.voicePick = e.target.value; save(); render(); say([MQVoiceTexts.EXTRA.ratePreview]); } });
 /* 首次触摸/点击即解锁 iPad Safari 的音频（捕获阶段，先于按钮处理） */
-['touchend','pointerup','click','keydown'].forEach(ev=>document.addEventListener(ev, ()=>{ if(VS.unlock) VS.unlock(); }, {capture:true, passive:true}));
+['touchend','pointerup','click','keydown'].forEach(ev=>document.addEventListener(ev, ()=>{ if(VS.unlock) VS.unlock(); if(D.settings.sfx){ sfxSync(); SFX.unlock(); } }, {capture:true, passive:true}));
+VS.onChange(sp=>{ if(sp) SFX.duck(); });
 VS.onChange(sp=>{ const on=!!sp && voiceOn(); const b=$('#speakbar'); if(b) b.classList.toggle('show', on); document.body.classList.toggle('speaking', on); });
 window.addEventListener('storage', e=>{ if(e.key===KEY){ load(); migrate(); render(); } });
 window.__mqKatexReady = () => render();
