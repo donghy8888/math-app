@@ -100,7 +100,25 @@ function flip(){ /* 翻卡：非常轻的“嗒”——短促下滑的正弦，
   bell(N(-2+12) * (0.96+Math.random()*0.08), t, 0.12, 0.5, {partial:false, glide:0.7, att:0.004});
   return 'flip';
 }
-var KINDS = {chime:chime, fanfare:fanfare, levelup:levelup, flip:flip};
+var noiseBuf = null;
+function slice(){ /* 刀光“嗖”：带通滤波的噪声，频率快速上扫；不支持时用正弦滑音代替 */
+  var t = now()+0.003, dur = 0.16;
+  try{
+    if(!noiseBuf){ var n = Math.floor(ctx.sampleRate*0.25); noiseBuf = ctx.createBuffer(1, n, ctx.sampleRate); var d = noiseBuf.getChannelData(0); for(var i=0;i<n;i++) d[i] = Math.random()*2-1; }
+    var s = ctx.createBufferSource(), f = ctx.createBiquadFilter(), g = ctx.createGain(); s.buffer = noiseBuf;
+    f.type = 'bandpass'; f.Q.value = 1.2; f.frequency.setValueAtTime(700, t); f.frequency.exponentialRampToValueAtTime(3200, t+dur);
+    var pk = Math.max(0.0002, 0.55*vol);
+    g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(pk, t+0.03); g.gain.exponentialRampToValueAtTime(0.0001, t+dur);
+    s.connect(f); f.connect(g); g.connect(master); s.start(t); s.stop(t+dur+0.02); busyUntil = Math.max(busyUntil, t+dur);
+  }catch(e){ bell(N(3+12), t, 0.12, 0.3, {partial:false, glide:1.6, att:0.004}); }
+  return 'slice';
+}
+function soft(){ /* 切错：低而软的“咚”，不刺耳、不像警报 */
+  var t = now()+0.005;
+  bell(N(-14), t, 0.22, 0.55, {partial:false, glide:0.85, att:0.01});
+  return 'soft';
+}
+var KINDS = {chime:chime, fanfare:fanfare, levelup:levelup, flip:flip, slice:slice, soft:soft};
 function doPlay(kind, o){
   try{ if(master){ master.gain.cancelScheduledValues(now()); master.gain.setValueAtTime(BASE, now()); } var r = KINDS[kind](o); log.push({kind:kind, v:r, t:Date.now()});
     if(keepAlive) try{ keepAlive(); }catch(e){}

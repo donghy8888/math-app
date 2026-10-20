@@ -288,7 +288,8 @@ const TIERED = [
 const ONEOFF = [
   {id:'first', e:'🎉', n:'首次通关', d:'完成第一道题'},
   {id:'zero', e:'🧹', n:'错题清零', d:'把巩固队列全部攻克（可重复获得）'},
-  {id:'importer', e:'📦', n:'题包收藏家', d:'导入第一个题包'}
+  {id:'importer', e:'📦', n:'题包收藏家', d:'导入第一个题包'},
+  {id:'slicer', e:'🍉', n:'切瓜大师', d:'「切公式」一局全部切对（10 题、不丢心）'}
 ];
 const BADGES = ONEOFF; // 兼容旧代码
 function tierOf(b, v){ let l=0; b.th.forEach((t,i)=>{ if(v>=t) l=i+1; }); return l; }
@@ -317,6 +318,7 @@ function checkBadges(){
   const give = id => { if(!D.badges[id]){ D.badges[id]=Date.now(); ev.push({t:'one', id}); } };
   if(D.attempts.length>=1) give('first');
   if(D.packs.some(p=>!isBuiltinId(p.id))) give('importer');
+  if(D.slice && D.slice.perfect>0) give('slicer');
   if(D.hadReview && Object.keys(D.review).length===0){ /* 错题清零：每次清空巩固队列记一次 */
     D.zeroCount = (D.zeroCount||0) + 1; D.hadReview = false;
     if(!D.badges.zero) D.badges.zero = Date.now();
@@ -491,6 +493,7 @@ function vHome(){
       <button class="btn sm ${checked?'ghost':'warn'}" data-act="checkin" ${checked?'disabled':''}>${checked?'已打卡':'打卡'}</button>
     </div>
   </div>
+  ${sliceCta(true)}
   <div class="card">
     <h3>🎯 今日目标</h3>
     <div class="goalwrap">
@@ -912,6 +915,100 @@ function finishQ(){
   if(newBadges.length) setTimeout(()=>{ if(S.view==='play') celebrate(newBadges); }, 1700);
 }
 
+/* ========== 🍉 切公式（复习小游戏） ========== */
+/* 今天翻看过的卡片（翻到背面就算复习过） */
+function markReviewed(key){ if(!key) return; const t = today(); if(!D.rev || D.rev.date!==t) D.rev = {date:t, keys:[]}; if(!D.rev.keys.includes(key)){ D.rev.keys.push(key); save(); } }
+const sliceNorm = h => String(h||'').replace(/<[^>]+>/g,'').replace(/\s+/g,'');
+const cardFid = c => 'c:' + MQDrill.hashStr(c.key || c.name);
+/* 今日内容池：今天翻过的卡片 + 今天记忆练习里练过的公式 + 上次切错的卡片 */
+function slicePool(){
+  const t = today(), R = collectCards(), all = [...R.f, ...R.a, ...R.m], byKey = new Map(all.map(c=>[c.key, c]));
+  const src = [], seen = new Set(); const add = (o, id) => { if(o && !seen.has(id)){ seen.add(id); src.push(o); } };
+  const sw = D.slice && D.slice.weak && D.slice.weak.date===t ? D.slice.weak.keys : [];
+  sw.forEach(k => { const c = byKey.get(k); if(c) add({card:c}, 'k:'+k); else { const d = MQDrill.DEFS.find(x=>'d:'+x.id===k); if(d) add({def:d}, k); } });
+  ((D.rev && D.rev.date===t) ? D.rev.keys : []).forEach(k => { const c = byKey.get(k); if(c) add({card:c}, 'k:'+k); });
+  ((D.drill && D.drill.log) || []).filter(r=>r.date===t).forEach(r => {
+    if(r.fid && r.fid.startsWith('d:')){ const d = MQDrill.DEFS.find(x=>'d:'+x.id===r.fid); if(d) add({def:d}, r.fid); }
+    else { const c = R.f.find(c=>cardFid(c)===r.fid); if(c) add({card:c}, 'k:'+c.key); }
+  });
+  return {src, R, seen};
+}
+function sliceCta(home){
+  const n = slicePool().src.length, best = (D.slice && D.slice.best) || 0, plays = sliceDay().plays;
+  return `<div class="card slicecta"><div class="de">🍉</div><div class="grow"><b>切公式</b><div class="muted small">${n?`今天复习过 <b class="hotn">${n}</b> 张卡片/公式 · `:''}切开正确答案，拼出大公式${best?` · 最高 ${best} 分`:''}${plays?` · 下一局奖励×${sliceBonus(plays).toFixed(1)}`:''}</div></div><button class="btn" data-act="slice">${home?'玩一局':'开始'}</button></div>`;
+}
+function sliceDay(t){ t = t || today(); D.slice = D.slice || {best:0, perfect:0, days:{}}; D.slice.days = D.slice.days || {}; return D.slice.days[t] || {plays:0, pts:0}; }
+/* 每多玩一局奖励 +10%，最高 ×2（只奖励真正切对的） */
+const sliceBonus = prior => Math.min(2, 1 + 0.1*prior);
+function sliceItem(o, R){
+  const uniq = (ans, list) => { const a = sliceNorm(ans), out = [], keys = new Set([a]); list.forEach(h => { const k = sliceNorm(h); if(k && !keys.has(k)){ keys.add(k); out.push(h); } }); return out; };
+  const revF = (name, latex, tip) => `<div class="sl-bt">${esc(name)}</div><div class="sl-bf">${texBlock(latex)}</div>${tip?`<div class="sl-bs">💡 ${tex(tip)}</div>`:''}`;
+  const fromDef = d => { const t = pick(d.cloze), P = MQDrill.parseCloze(t), j = Math.floor(Math.random()*P.blanks.length), b = P.blanks[j];
+    const fills = P.blanks.map((x,i)=>i===j?null:x.ans);
+    return {kind:'cloze', fid:'d:'+d.id, key:'d:'+d.id, label:`📐 ${esc(d.name)} · 切出${P.blanks.length>1?' '+'①②③'[j]+' ':'方框'}里的内容`,
+      prompt:`<div class="sl-ltx">${texBlock(MQDrill.clozeLatex(t, fills, []))}</div>`, answer: texBlock(b.ans), opts: uniq(texBlock(b.ans), b.dis.map(texBlock)), reveal: revF(d.name, d.forms[0], d.tip)}; };
+  if(o.def) return fromDef(o.def);
+  const c = o.card;
+  if(c.type==='f'){
+    const ds = MQDrill.defsForCard(c); if(ds.length && Math.random()<0.6) return fromDef(pick(ds));
+    const others = R.f.filter(x=>x!==c && x.latex).sort((x,y)=>([...y.kps].some(k=>c.kps.has(k))-[...x.kps].some(k=>c.kps.has(k))) || Math.random()-0.5).map(x=>texBlock(x.latex));
+    return {kind:'f', fid:cardFid(c), key:c.key, label:'📐 哪个是这个公式？', prompt:`<div class="sl-name">${esc(c.name)}</div>`, answer:texBlock(c.latex), opts:uniq(texBlock(c.latex), others).slice(0,4), reveal:revF(c.name, c.latex, c.tip)};
+  }
+  if(c.type==='a'){
+    const others = R.a.filter(x=>x!==c && x.recall).map(x=>tex(x.recall));
+    return {kind:'a', fid:'a:'+c.key, key:c.key, label:'🔗 看到这个，想到什么？', prompt:`<div class="sl-trig">${tex(c.trigger)}</div>`, answer:tex(c.recall), opts:shuffleArr(uniq(tex(c.recall), others)).slice(0,4),
+      reveal:`<div class="sl-bt">👀 ${tex(c.trigger)}</div><div class="sl-bf sm">💭 ${tex(c.recall)}</div>${c.latex?`<div class="sl-bf">${texBlock(c.latex)}</div>`:''}${c.why?`<div class="sl-bs">${tex(c.why)}</div>`:''}`};
+  }
+  const short = x => x.method && stripTex(x.method).length <= 26;
+  if(!short(c)) return null;
+  const others = R.m.filter(x=>x!==c && short(x)).map(x=>tex(x.method));
+  return {kind:'m', fid:'m:'+c.key, key:c.key, label:'🧭 这道题怎么想？', prompt:`<div class="sl-orig">${tex(c.original)}</div>`, answer:tex(c.method), opts:shuffleArr(uniq(tex(c.method), others)).slice(0,4),
+    reveal:`<div class="sl-bt">🧭 解题思路</div><div class="sl-bf sm">${tex(c.method)}</div>`};
+}
+function shuffleArr(a){ a = a.slice(); for(let i=a.length-1;i>0;i--){ const j = Math.floor(Math.random()*(i+1)); [a[i],a[j]] = [a[j],a[i]]; } return a; }
+function startSlice(useTop){
+  hush(); const {src, R, seen} = slicePool(); let note = '';
+  if(!src.length && !useTop){
+    modal(`<h2>🍉 切公式</h2><div class="muted" style="font-size:14.5px">今天还没有复习卡片哦～<br>先去「公式速记」翻几张公式卡 / 联想卡，或者做一组记忆练习，复习过的内容会变成水果，等你来切！</div>
+      <div class="row" style="gap:10px;margin-top:14px"><button class="btn grow" data-act="tab" data-v="formulas" onclick="document.getElementById('modal').innerHTML=''">去公式速记</button><button class="btn ghost grow" data-act="slicetop">先用近期高频卡片玩</button></div>`);
+    return;
+  }
+  if(src.length < 4){ /* 太少：用近期高频卡片补足 */
+    const top = [...R.f.slice(0,6), ...R.a.slice(0,4)];
+    for(const c of top){ if(src.length>=6) break; if(!seen.has('k:'+c.key)){ seen.add('k:'+c.key); src.push({card:c}); } }
+    note = src.length && seen.size ? (useTop && !slicePool().src.length ? '用近期高频卡片来一局' : '今天复习的内容还不多，加入了几张近期高频卡片') : '';
+  }
+  const items = []; let order = shuffleArr(src), guard = 0;
+  while(items.length < 10 && guard++ < 60){ const o = order[guard % order.length]; const it = sliceItem(o, R); if(it && it.opts.length>=2) items.push(it); if(guard % order.length===0) order = shuffleArr(src); }
+  if(!items.length){ toast('今天的卡片暂时做不成题，先去做一组记忆练习吧'); return; }
+  if(note) toast('🍉 '+note);
+  sfxSync();
+  MQSlice.start({items, rounds:10, sfx:(k,o)=>sfx(k,o), onWeak:sliceWeak, onEnd:sliceEnd, onReplay:()=>startSlice(true), onQuit:()=>render()});
+}
+function sliceWeak(it){
+  const t = today();
+  if(it.fid && (it.fid.startsWith('d:') || it.fid.startsWith('c:'))){ const sr = D.drill.sr, e = sr[it.fid] || {level:0, n:0, wrong:0}; e.level = 0; e.wrong = (e.wrong||0)+1; e.due = t; sr[it.fid] = e; }
+  sliceDay(); if(!D.slice.weak || D.slice.weak.date!==t) D.slice.weak = {date:t, keys:[]};
+  if(!D.slice.weak.keys.includes(it.key)) D.slice.weak.keys.push(it.key);
+  save();
+}
+function sliceEnd(res){
+  const t = today(); sliceDay(t); const day = D.slice.days[t] || (D.slice.days[t] = {plays:0, pts:0});
+  const prior = day.plays, bonus = sliceBonus(prior), acc = res.correct/Math.max(1, res.rounds);
+  const base = res.correct*3 + res.gold*2, pts = Math.round(base*acc*bonus);
+  day.plays++; day.pts += pts; D.points += pts; D.spend = (D.spend||0) + pts; dayRec(t).points += pts;
+  const newBest = res.score > (D.slice.best||0); if(newBest) D.slice.best = res.score;
+  const perfect = res.rounds>=10 && res.correct===res.rounds && !res.wrong && !res.miss; if(perfect) D.slice.perfect = (D.slice.perfect||0)+1;
+  Object.keys(D.slice.days).sort().slice(0,-14).forEach(k=>delete D.slice.days[k]);
+  D.slice.last = {date:t, score:res.score, correct:res.correct, rounds:res.rounds, pts, bonus};
+  const ev = checkBadges(); save();
+  if(pts) confetti(acc>=0.9?180:90);
+  if(ev.length) setTimeout(()=>celebrate(ev), 1500);
+  const stars = !res.correct ? 0 : acc>=0.9 ? 3 : acc>=0.7 ? 2 : 1;
+  return {stars, newBest, best:D.slice.best, title: ['再来一局，一定更好！','不错的开始 🌱','切得漂亮！✨','切瓜大师级！🍉'][stars],
+    pointsHtml:`<b>+${pts}</b> 积分 · 第${prior+1}局 奖励×${bonus.toFixed(1)}<div class="muted small">每多玩一局奖励 +10%（最高 ×2），只算真正切对的</div>`, nextBonus: sliceBonus(prior+1).toFixed(1)};
+}
+
 /* ========== 视图：每日巩固 ========== */
 function vReview(){
   const due = dueKeys(); const t = today();
@@ -972,6 +1069,7 @@ function vFormulas(){
   return `<div class="topbar"><h1>🧠 公式速记</h1></div>
   <div class="seg"><button class="${S.fTab==='f'?'on':''}" data-act="ftab" data-v="f">📐 公式卡 (${f.length})</button><button class="${S.fTab==='m'?'on':''}" data-act="ftab" data-v="m">🧭 思路卡 (${m.length})</button><button class="${S.fTab==='a'?'on':''}" data-act="ftab" data-v="a">🔗 联想卡 (${a.length})</button></div>
   ${drillCta()}
+  ${sliceCta()}
   <div class="sortrow"><span class="muted small">排序</span><div class="seg sm" role="radiogroup" aria-label="卡片排序">${CARD_SORTS.map(([v,n])=>`<button class="${sortBy===v?'on':''}" data-act="fsort" data-v="${v}" role="radio" aria-checked="${sortBy===v}">${n}</button>`).join('')}</div></div>
   <div class="filter">${['全部',...allKp].map(k=>`<button class="${S.fKp===k?'on':''}" data-act="fkp" data-v="${esc(k)}">${(wm[k]||0)>0.15?'🔥':''}${esc(k)}</button>`).join('')}</div>
   <div class="muted small" id="sortnote" style="margin:0 4px 8px">${note} · 点卡片翻面</div>
@@ -1340,7 +1438,9 @@ const act = {
   dsay(d){ const X=S.drill; if(!X) return; const it=X.items[X.idx]; const t = d.w==='q' ? it.say : (it.fsay||it.say); if(t){ hush(); say([t]); } },
   fsort(d){ D.settings.cardSort=d.v; save(); render(); },
   fkp(d){ S.fKp=d.v; if(S.view!=='formulas'){ go('formulas'); } else render(); },
-  flip(d,el){ S.flipped[d.v]=!S.flipped[d.v]; el.classList.toggle('on'); sfx('flip'); },
+  flip(d,el){ S.flipped[d.v]=!S.flipped[d.v]; el.classList.toggle('on'); sfx('flip'); if(S.flipped[d.v]){ markReviewed(el.dataset.key); const sc=$('.slicecta'); if(sc) sc.outerHTML = sliceCta(); } },
+  slice(){ startSlice(false); },
+  slicetop(){ closeModal(); startSlice(true); },
   kpall(){ S.kpAll=!S.kpAll; render(); },
   metab(d){ S.meTab=d.v; if(S.view!=='me') go('me'); else render(); },
   shop(){ S.meTab='shop'; if(S.view!=='me') go('me'); else { render(); window.scrollTo(0,0); } },
