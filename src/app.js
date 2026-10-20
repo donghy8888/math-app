@@ -965,6 +965,11 @@ function sliceItem(o, R){
   return {kind:'m', fid:'m:'+c.key, key:c.key, label:'🧭 这道题怎么想？', prompt:`<div class="sl-orig">${tex(c.original)}</div>`, answer:tex(c.method), opts:shuffleArr(uniq(tex(c.method), others)).slice(0,4),
     reveal:`<div class="sl-bt">🧭 解题思路</div><div class="sl-bf sm">${tex(c.method)}</div>`};
 }
+/* 测试/检查用：所有可能出现在水果上的答案 */
+window.__mqSliceAllAnswers = function(){ const R = collectCards(), out = new Set();
+  MQDrill.DEFS.forEach(d => d.cloze.forEach(t => MQDrill.parseCloze(t).blanks.forEach(b => [b.ans, ...b.dis].forEach(x => out.add(texBlock(x))))));
+  R.f.forEach(c => c.latex && out.add(texBlock(c.latex))); R.a.forEach(c => c.recall && out.add(tex(c.recall)));
+  R.m.forEach(c => c.method && stripTex(c.method).length <= 26 && out.add(tex(c.method))); return [...out]; };
 function shuffleArr(a){ a = a.slice(); for(let i=a.length-1;i>0;i--){ const j = Math.floor(Math.random()*(i+1)); [a[i],a[j]] = [a[j],a[i]]; } return a; }
 function startSlice(useTop){
   hush(); const {src, R, seen} = slicePool(); let note = '';

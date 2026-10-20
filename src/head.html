@@ -514,12 +514,18 @@ body.slicing{overflow:hidden}
 .sl-bf.sm{font-size:1.375em;font-weight:700}
 .sl-bs{font-size:14.5px;color:var(--sub);margin-top:6px;line-height:1.55}
 .sl-ft{position:absolute;transform:translate(-50%,-50%);font-size:22px;font-weight:900;color:var(--ok-ink);white-space:nowrap;animation:slRise 1.05s ease-out forwards;text-shadow:0 1px 0 var(--card)}
+.sl-spd{position:relative;height:16px;margin:8px auto 0;max-width:420px;border-radius:9px;background:var(--line);overflow:hidden}
+.sl-spd i{position:absolute;left:0;top:0;bottom:0;background:var(--ok);border-radius:9px;transition:width .1s linear}
+.sl-spd.mid i{background:var(--gold)}.sl-spd.slow i{background:var(--sky)}
+.sl-spd span{position:relative;display:block;font-size:12px;line-height:16px;font-weight:800;color:var(--ink)}
+.sl-ft.spd{font-size:26px}
+.sfc .katex{white-space:normal}
 .sl-ft.gold{color:var(--warn-ink)}
 @keyframes slRise{from{opacity:0;transform:translate(-50%,-30%) scale(.8)}20%{opacity:1;transform:translate(-50%,-60%) scale(1.1)}to{opacity:0;transform:translate(-50%,-160%) scale(1)}}
 .sl-end{position:absolute;inset:0;overflow:auto;-webkit-overflow-scrolling:touch;padding:10px 16px 24px;text-align:center;color:var(--ink)}
 .sl-stars{font-size:54px;letter-spacing:6px;color:var(--track)}.sl-stars .on{color:var(--gold);text-shadow:0 0 14px var(--gold)}
 .sl-et{font-size:22px;font-weight:900;color:var(--pri-ink);margin:2px 0 12px}
-.sl-nums{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;max-width:620px;margin:0 auto 10px}
+.sl-nums{display:grid;grid-template-columns:repeat(auto-fit,minmax(92px,1fr));gap:8px;max-width:620px;margin:0 auto 10px}
 .sl-nums div{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:10px 4px}.sl-nums b{display:block;font-size:22px;color:var(--pri-ink)}.sl-nums span{font-size:12px;color:var(--sub)}
 .sl-pts{max-width:620px;margin:0 auto 10px;background:var(--warn-soft);color:var(--warn-ink);border-radius:16px;padding:10px 12px;font-size:15px}.sl-pts b{font-size:20px}
 .sl-weak{max-width:620px;margin:0 auto 10px;background:var(--ok-soft);color:var(--ok-ink);border-radius:14px;padding:8px 12px;font-size:13.5px}
