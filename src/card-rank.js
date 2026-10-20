@@ -29,6 +29,12 @@ var MQCardRank = (function(){
     const qinfo = new Map();   // key → {pack, q, act:[{days,w}], appear:[{days,w}]}
     const pday = new Map();
     packs.forEach(p => { pday.set(p.id, packDay(p)); p.questions.forEach(q => qinfo.set(qk(p,q), {p, q, act:[], appear:[]})); });
+    // 内置「补充」核心公式：没有试卷来源，也要出现在卡片、记忆练习和切公式里
+    const CP = {id:'core', title:'补充', questions:[]};
+    (opts.core || []).forEach(e => {
+      qinfo.set('core::' + e.id, {p: CP, q: {id: e.id, core: true, knowledgePoints: e.kps || [], formulas: e.formulas || [], analysis: {associations: e.associations || []}}, act:[], appear:[]});
+      (e.methods || []).forEach((m, i) => qinfo.set('core::' + e.id + '-m' + (i+1), {p: CP, q: {id: e.id + '-m' + (i+1), core: true, knowledgePoints: e.kps || [], original: m.original, method: m.method}, act:[], appear:[]}));
+    });
     // 试卷初始结果 ❌/⭕：日期取复习队列中记录的标记日期，否则取题包日期；同时让题包的“最近标记日”变新
     Object.keys(opts.marks || {}).forEach(k => {
       const it = qinfo.get(k); if(!it) return;
@@ -61,7 +67,7 @@ var MQCardRank = (function(){
         if(lk) fm.set('L:'+lk, c); if(nk) fm.set('N:'+nk, c);
         if(!c.tip && f.tip) c.tip = f.tip; addVar(c, f.latex, 1); touch(c, it);
       });
-      const an = anOf(p, q);
+      const an = q.core ? q.analysis : anOf(p, q);
       if(an && an.associations) an.associations.forEach(s => {
         if(!s.recall) return; const key = normText(s.recall); if(!key) return;
         let c = am.get(key); if(!c){ c = {type:'a', key, trigger:s.trigger, triggers:[], recall:s.recall, latex:s.latex, why:s.why, kps:new Set(), qs:[], order:order++}; am.set(key, c); }
@@ -81,7 +87,8 @@ var MQCardRank = (function(){
           it.act.forEach(e => { s += W.kpShare * e.w * decay(e.days); }); });
       }
       c.score = Math.round(s * 1000) / 1000; c.act7 = a7; c.act14 = a14; c.newest = nw; c.total = c.qs.length;
-      c.badge = a7 ? '近7天 ×' + a7 : a14 ? '近14天 ×' + a14 : (nw ? '新试卷 ×' + nw : '');
+      c.core = c.qs.length > 0 && c.qs.every(k => k.indexOf('core::') === 0);
+      c.badge = a7 ? '近7天 ×' + a7 : a14 ? '近14天 ×' + a14 : (nw ? '新试卷 ×' + nw : c.core ? '补充' : '');
       return c;
     };
     const fcards = [...new Set(fm.values())];
@@ -98,7 +105,13 @@ var MQCardRank = (function(){
       ? (x,y) => (y.newest - x.newest) || (y.score - x.score) || (y.total - x.total) || (x.order - y.order)
       : (x,y) => (y.score - x.score) || (y.newest - x.newest) || (y.total - x.total) || (x.order - y.order);
   }
-  function rank(cards, mode){ return cards.slice().sort(cmpFreq(mode)); }
+  /* 补充卡没有试卷频次：不让它沉底——第 1 张放在第 3 位，之后每隔 3 张插一张（若本来就更靠前则保持） */
+  const CORE_POS = 2, CORE_GAP = 3;
+  function rank(cards, mode){
+    const all = cards.slice().sort(cmpFreq(mode)), out = all.filter(c => !c.core || c.score > 0), core = all.filter(c => c.core && !(c.score > 0));
+    core.forEach((c, j) => out.splice(Math.min(out.length, CORE_POS + j*CORE_GAP), 0, c));
+    return out;
+  }
   return { build, rank, decay, normLatex, normText, packDay, daysBetween, W, WINDOW, FALLBACK_MIN };
 })();
 if(typeof module !== 'undefined') module.exports = MQCardRank;

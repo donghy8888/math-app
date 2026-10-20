@@ -934,6 +934,8 @@ function slicePool(){
   });
   return {src, R, seen};
 }
+window.__mqSlicePeek = () => { const P = slicePool(); return {n: P.src.length, vieta: P.src.some(o=>(o.card&&/韦达/.test(o.card.name))||(o.def&&o.def.id==='vieta')),
+  calc: P.src.map(o=>{ for(let i=0;i<40;i++){ const it = sliceItem(o, P.R); if(it && it.kind==='calc') return it; } return null; }).filter(Boolean).map(x=>({p:x.prompt, a:x.answer, o:x.opts.length}))}; };
 function sliceCta(home){
   const n = slicePool().src.length, best = (D.slice && D.slice.best) || 0, plays = sliceDay().plays;
   return `<div class="card slicecta"><div class="de">🍉</div><div class="grow"><b>切公式</b><div class="muted small">${n?`今天复习过 <b class="hotn">${n}</b> 张卡片/公式 · `:''}切开正确答案，拼出大公式${best?` · 最高 ${best} 分`:''}${plays?` · 下一局奖励×${sliceBonus(plays).toFixed(1)}`:''}</div></div><button class="btn" data-act="slice">${home?'玩一局':'开始'}</button></div>`;
@@ -944,7 +946,9 @@ const sliceBonus = prior => Math.min(2, 1 + 0.1*prior);
 function sliceItem(o, R){
   const uniq = (ans, list) => { const a = sliceNorm(ans), out = [], keys = new Set([a]); list.forEach(h => { const k = sliceNorm(h); if(k && !keys.has(k)){ keys.add(k); out.push(h); } }); return out; };
   const revF = (name, latex, tip) => `<div class="sl-bt">${esc(name)}</div><div class="sl-bf">${texBlock(latex)}</div>${tip?`<div class="sl-bs">💡 ${tex(tip)}</div>`:''}`;
-  const fromDef = d => { const t = pick(d.cloze), P = MQDrill.parseCloze(t), j = Math.floor(Math.random()*P.blanks.length), b = P.blanks[j];
+  const fromCalc = d => { const c = pick(d.calc);
+    return {kind:'calc', fid:'d:'+d.id, key:'d:'+d.id, label:`🧮 ${esc(d.name)} · 算一算`, prompt:`<div class="sl-ltx">${tex(c.q)}</div>`, answer: texBlock(c.ans), opts: uniq(texBlock(c.ans), c.dis.map(texBlock)), reveal: revF(d.name, d.forms[0], d.tip)}; };
+  const fromDef = d => { if(d.calc && d.calc.length && Math.random() < 0.4) return fromCalc(d); const t = pick(d.cloze), P = MQDrill.parseCloze(t), j = Math.floor(Math.random()*P.blanks.length), b = P.blanks[j];
     const fills = P.blanks.map((x,i)=>i===j?null:x.ans);
     return {kind:'cloze', fid:'d:'+d.id, key:'d:'+d.id, label:`📐 ${esc(d.name)} · 切出${P.blanks.length>1?' '+'①②③'[j]+' ':'方框'}里的内容`,
       prompt:`<div class="sl-ltx">${texBlock(MQDrill.clozeLatex(t, fills, []))}</div>`, answer: texBlock(b.ans), opts: uniq(texBlock(b.ans), b.dis.map(texBlock)), reveal: revF(d.name, d.forms[0], d.tip)}; };
@@ -1037,13 +1041,13 @@ function vReview(){
 
 /* ========== 视图：公式速记 ========== */
 function collectCards(){
-  const r = MQCardRank.build({packs: allPacks(), attempts: D.attempts, marks: D.marks, review: D.review, today: today(), analysisOf: qAnalysis, isMiss, drills: (D.drill&&D.drill.log)||[]});
+  const r = MQCardRank.build({packs: allPacks(), attempts: D.attempts, marks: D.marks, review: D.review, today: today(), analysisOf: qAnalysis, isMiss, drills: (D.drill&&D.drill.log)||[], core: (typeof MQCore!=='undefined' ? MQCore : [])});
   const pre = {f:'f', a:'a', m:'m'};
-  ['f','a','m'].forEach(t => r[t].forEach(c => { c.id = pre[t] + hash(c.key); if(t==='m'){ const fq = findQ(c.key); c.name = fq ? stripTex(fq.q.original).slice(0,40) : ''; } }));
+  ['f','a','m'].forEach(t => r[t].forEach(c => { c.id = pre[t] + hash(c.key); if(t==='m'){ const fq = findQ(c.key); c.name = fq ? stripTex(fq.q.original).slice(0,40) : stripTex(c.original||'').slice(0,40); } }));
   return r;
 }
 const CARD_SORTS = [['freq','🔥 近期高频'],['weak','🎯 薄弱优先'],['kp','🏷️ 按知识点']];
-function cardSrcLabel(k){ const f = findQ(k); if(!f) return ''; const t = f.pack.title.replace(/^八年级(第一学期)?/,'').slice(0,8); return `${t}·第${qLabel(f.q, f.pack.questions.indexOf(f.q))}题`; }
+function cardSrcLabel(k){ if(String(k).startsWith('core::')) return '补充'; const f = findQ(k); if(!f) return ''; const t = f.pack.title.replace(/^八年级(第一学期)?/,'').slice(0,8); return `${t}·第${qLabel(f.q, f.pack.questions.indexOf(f.q))}题`; }
 function vFormulas(){
   const R = collectCards(), {f,m,a} = R; const wm = weakMap();
   const sortBy = CARD_SORTS.some(x=>x[0]===D.settings.cardSort) ? D.settings.cardSort : 'freq';
@@ -1063,8 +1067,8 @@ function vFormulas(){
   const cardsHtml = shown.map(c=>{
     let head = '';
     if(sortBy==='kp'){ const k = primaryKp(c); if(k!==lastKp){ lastKp = k; head = `<div class="kphead">🏷️ ${esc(k)}</div>`; } }
-    const weak = weakScore(c)>0.15, srcs = c.type==='m' ? [] : c.qs;
-    const srcLine = srcs.length ? `<div class="srcs">📄 ${srcs.slice(0,4).map(cardSrcLabel).filter(Boolean).map(esc).join('、')}${srcs.length>4?` 等 ${srcs.length} 题`:''}</div>` : '';
+    const weak = weakScore(c)>0.15, srcs = c.type==='m' ? (c.core ? c.qs.slice(0,1) : []) : c.qs;
+    const srcLine = srcs.length ? `<div class="srcs">📄 ${[...new Set(srcs.slice(0,4).map(cardSrcLabel).filter(Boolean))].map(esc).join('、')}${srcs.length>4&&!c.core?` 等 ${srcs.length} 题`:''}</div>` : '';
     return head + `<div class="flip ${S.flipped[c.id]?'on':''}" data-act="flip" data-v="${c.id}" data-key="${esc(c.key)}"><div class="in">
       <div class="f ${c.type==='m'?'m':c.type==='a'?'a':''}">${c.type==='a'?'<div class="flbl">🔗 看到这个，你会想到什么？</div>':c.type==='m'?'<div class="flbl">🧭 这道题怎么想？</div>':''}<div class="chips">${c.badge?`<span class="freq ${c.act14?'hot':''}">${c.act14?'🔥 ':'📝 '}${esc(c.badge)}</span>`:''}${[...c.kps].slice(0,2).map(k=>`<span class="chip">${esc(k)}</span>`).join('')}${weak?'<span class="chip hot">🔥 薄弱</span>':''}</div>
         ${c.type==='f'?`<div class="nm">${esc(c.name)}</div>`:c.type==='a'?`<div class="atrig">${tex(c.trigger)}</div>`:`<div class="morig">${tex(c.original)}</div>`}<div class="tap">👆 点击翻面${c.total>1&&c.type!=='m'?` · 出现在 ${c.total} 道题`:''}</div>${c.type==='f'?`<button class="practbtn" data-act="dstart" data-k="${esc(c.key)}" aria-label="练一练：${esc(c.name)}">✏️ 练一练</button>`:''}</div>

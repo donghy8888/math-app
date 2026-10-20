@@ -85,7 +85,30 @@ var MQDrill = (function(){
       tip:'任何不为零的数的零次方都等于 1', say:'a的0次方等于1，a不等于0。'},
     {id:'ineq3', name:'不等式性质 3', kp:'不等式', names:['不等式性质 3','不等式的性质'], forms:[R`a<b,\ c<0\Rightarrow ac>bc`],
       cloze:[R`a<b,\ c<0\Rightarrow ac[[>§<§=§\le]]bc`],
-      tip:'两边乘除同一个负数，不等号要变向', say:'如果a小于b，c小于0，那么ac大于bc。'}
+      tip:'两边乘除同一个负数，不等号要变向', say:'如果a小于b，c小于0，那么ac大于bc。'},
+    /* ---- 补充：韦达定理（根与系数的关系），试卷里还没出现，内置卡片 ---- */
+    {id:'vieta', name:'韦达定理（根与系数的关系）', kp:'一元二次方程', names:['韦达定理（根与系数的关系）','韦达定理','根与系数的关系'], forms:[R`x_1+x_2=-\dfrac{b}{a},\ x_1x_2=\dfrac{c}{a}`],
+      cloze:[R`x_1+x_2=[[-\dfrac{b}{a}§\dfrac{b}{a}§-\dfrac{c}{a}§\dfrac{c}{a}]],\ x_1x_2=\dfrac{c}{a}`, R`x_1+x_2=-\dfrac{b}{a},\ x_1x_2=[[\dfrac{c}{a}§-\dfrac{c}{a}§\dfrac{b}{a}§-\dfrac{b}{a}]]`,
+        R`x_1+x_2=-\dfrac{b}{[[a§c§2a§b]]},\ x_1x_2=\dfrac{c}{a}`],
+      calc:[{q:R`$2x^2-6x+1=0$ 的两根：$x_1+x_2=$ ？`, ans:R`3`, dis:[R`-3`, R`6`, R`\dfrac12`]},
+        {q:R`$2x^2-6x+1=0$ 的两根：$x_1x_2=$ ？`, ans:R`\dfrac12`, dis:[R`-\dfrac12`, R`1`, R`3`]},
+        {q:R`$2x^2-6x+1=0$ 的两根：$x_1^2+x_2^2=$ ？`, ans:R`8`, dis:[R`9`, R`10`, R`7`]},
+        {q:R`$x^2-3x-4=0$ 的两根：$x_1+x_2=$ ？`, ans:R`3`, dis:[R`-3`, R`-4`, R`4`]},
+        {q:R`$x^2-3x-4=0$ 的两根：$x_1x_2=$ ？`, ans:R`-4`, dis:[R`4`, R`3`, R`-3`]},
+        {q:R`$x^2-5x+3=0$ 的两根：$\dfrac1{x_1}+\dfrac1{x_2}=$ ？`, ans:R`\dfrac53`, dis:[R`\dfrac35`, R`-\dfrac53`, R`5`]}],
+      tip:'前提：a≠0 且 Δ≥0；和是负的 b/a，积是 c/a', say:'韦达定理：x1加x2等于负a分之b，x1乘x2等于a分之c，前提是a不等于0，且判别式大于等于0。'},
+    {id:'vsq', name:'两根的平方和', kp:'一元二次方程', names:['两根的平方和'], forms:[R`x_1^2+x_2^2=(x_1+x_2)^2-2x_1x_2`],
+      cloze:[R`x_1^2+x_2^2=(x_1+x_2)^2-[[2§4§1§3]]x_1x_2`, R`x_1^2+x_2^2=[[(x_1+x_2)^2§(x_1-x_2)^2§x_1+x_2§(x_1x_2)^2]]-2x_1x_2`],
+      tip:'和的平方，减去两倍积', say:'x1的平方加x2的平方，等于x1加x2的和的平方，减去2倍的x1乘x2。'},
+    {id:'vrec', name:'两根的倒数和', kp:'一元二次方程', names:['两根的倒数和'], forms:[R`\dfrac{1}{x_1}+\dfrac{1}{x_2}=\dfrac{x_1+x_2}{x_1x_2}`],
+      cloze:[R`\dfrac{1}{x_1}+\dfrac{1}{x_2}=\dfrac{[[x_1+x_2§x_1x_2§1§2]]}{x_1x_2}`, R`\dfrac{1}{x_1}+\dfrac{1}{x_2}=\dfrac{x_1+x_2}{[[x_1x_2§x_1+x_2§x_1^2x_2^2§2]]}`],
+      tip:'通分：分子是两根之和，分母是两根之积', say:'x1分之1加x2分之1，等于x1乘x2分之x1加x2。'},
+    {id:'vdiff', name:'两根之差的平方', kp:'一元二次方程', names:['两根之差的平方'], forms:[R`(x_1-x_2)^2=(x_1+x_2)^2-4x_1x_2`],
+      cloze:[R`(x_1-x_2)^2=(x_1+x_2)^2-[[4§2§1§8]]x_1x_2`],
+      tip:'和的平方，减去四倍积', say:'x1减x2的差的平方，等于x1加x2的和的平方，减去4倍的x1乘x2。'},
+    {id:'vbuild', name:'已知两根构造方程', kp:'一元二次方程', names:['已知两根构造方程'], forms:[R`x^2-(x_1+x_2)x+x_1x_2=0`],
+      cloze:[R`x^2-[[(x_1+x_2)§(x_1x_2)§(x_1-x_2)§2(x_1+x_2)]]x+x_1x_2=0`, R`x^2-(x_1+x_2)x+[[x_1x_2§x_1+x_2§-x_1x_2§2x_1x_2]]=0`, R`x^2[[-§+§\times§\div]](x_1+x_2)x+x_1x_2=0`],
+      tip:'一次项系数是负的两根之和，常数项是两根之积', say:'以x1、x2为根的方程：x的平方，减去两根之和乘x，加上两根之积，等于0。'}
   ];
   /* ---------- 条件判断（对 / 错），重点练“隐藏条件” ---------- */
   const TF = [
@@ -115,7 +138,11 @@ var MQDrill = (function(){
     {id:'t24', def:'ineq3', hidden:1, text:R`不等式两边同时乘一个负数，不等号方向不变`, ans:false, why:R`乘（或除以）负数，不等号方向要改变。`},
     {id:'t25', def:'zeropow', hidden:1, text:R`$0^0=1$`, ans:false, why:R`零指数幂要求底数不为 0，$0^0$ 没有意义。`},
     {id:'t26', say:'若a小于0，则a乘根号3等于根号下3a的平方',  def:'negin', hidden:1, text:R`若 $a<0$，则 $a\sqrt3=\sqrt{3a^2}$`, ans:false, why:R`$a<0$ 时 $a\sqrt3$ 是负数，应为 $a\sqrt3=-\sqrt{3a^2}$。`},
-    {id:'t27', def:'abs', hidden:1, text:R`$|a|=a$ 对所有实数 $a$ 都成立`, ans:false, why:R`$a<0$ 时 $|a|=-a$。`}
+    {id:'t27', def:'abs', hidden:1, text:R`$|a|=a$ 对所有实数 $a$ 都成立`, ans:false, why:R`$a<0$ 时 $|a|=-a$。`},
+    {id:'t28', def:'vieta', say:'方程x的平方加x加1等于0的两根之和是负1', text:R`方程 $x^2+x+1=0$ 的两根之和是 $-1$`, ans:false, why:R`$\Delta=1-4=-3<0$，方程没有实数根，不能用韦达定理。用之前先看 $\Delta\ge0$。`},
+    {id:'t29', def:'vieta', say:'方程2x的平方减6x加1等于0的两根之积是2分之1', text:R`方程 $2x^2-6x+1=0$ 的两根之积是 $\dfrac12$`, ans:true, why:R`$\Delta=36-8=28>0$，$x_1x_2=\dfrac{c}{a}=\dfrac12$。`},
+    {id:'t30', def:'vieta', say:'方程2x的平方减6x加1等于0的两根之和是负3', text:R`方程 $2x^2-6x+1=0$ 的两根之和是 $-3$`, ans:false, why:R`$x_1+x_2=-\dfrac{b}{a}=-\dfrac{-6}{2}=3$，别漏了负号。`},
+    {id:'t31', def:'vieta', say:'一元二次方程两根异号，等价于两根之积小于0', text:R`一元二次方程两根异号 $\Leftrightarrow x_1x_2<0$`, ans:true, why:R`$x_1x_2=\dfrac ca<0$ 时 $a,c$ 异号，$\Delta=b^2-4ac>0$ 自动成立，两根一正一负。`}
   ];
   /* ---------- 小工具 ---------- */
   function mulberry(seed){ let a = seed >>> 0; return () => { a = (a + 0x6D2B79F5) >>> 0; let t = a; t = Math.imul(t ^ (t >>> 15), t | 1); t ^= t + Math.imul(t ^ (t >>> 7), t | 61); return ((t ^ (t >>> 14)) >>> 0) / 4294967296; }; }
@@ -213,7 +240,14 @@ var MQDrill = (function(){
       return {kind:'num', prompt:R`$(x+${p})(x-${p})=x^2-\square$，$\square=$ ？`, answer:String(p*p), params:{p}, explain:R`平方差公式：$x^2-${p}^2=x^2-${p*p}$`}; }},
     {id:'g_qformula', def:'qformula', make(rng){ let r1 = ri(rng, -5, 6), r2 = ri(rng, -5, 6); if(r1 === r2) r2 = r1 + 2; const s = r1 + r2, p = r1*r2, d = s*s - 4*p;
       return {kind:'num', prompt:R`用求根公式解 $${poly([1, -s, p])}=0$：$x=\dfrac{${s}\pm\sqrt{\square}}{2}$，$\square=$ ？`, answer:String(d), params:{s, p},
-        explain:R`$a=1$，$b=${-s}$，$c=${p}$，$b^2-4ac=${s*s}-${4*p < 0 ? '('+4*p+')' : 4*p}=${d}$`}; }}
+        explain:R`$a=1$，$b=${-s}$，$c=${p}$，$b^2-4ac=${s*s}-${4*p < 0 ? '('+4*p+')' : 4*p}=${d}$`}; }},
+    {id:'g_vieta', def:'vieta', make(rng){ let r1 = ri(rng, -5, 6), r2 = ri(rng, -5, 6); if(r1 === r2) r2 = r1 + 1; const s = r1 + r2, p = r1*r2, ask = pick(rng, ['sum','prod','sq']);
+      const eq = poly([1, -s, p]), ans = ask==='sum' ? s : ask==='prod' ? p : s*s - 2*p;
+      const lhs = ask==='sum' ? 'x_1+x_2' : ask==='prod' ? 'x_1x_2' : 'x_1^2+x_2^2';
+      return {kind:'num', prompt:R`方程 $${eq}=0$ 的两根为 $x_1,x_2$，则 $${lhs}=$ ？`, answer:String(ans), params:{r1, r2, ask},
+        explain: ask==='sq' ? R`$x_1+x_2=${s}$，$x_1x_2=${p}$，$x_1^2+x_2^2=(x_1+x_2)^2-2x_1x_2=${s*s}${-2*p >= 0 ? '+' : ''}${-2*p}=${ans}$` : ask==='sum' ? R`$x_1+x_2=-\dfrac ba=${s}$（$b=${-s}$，别漏负号）` : R`$x_1x_2=\dfrac ca=${p}$`}; }},
+    {id:'g_vieta2', def:'vieta', make(rng){ const it = pick(rng, DEFS.find(d => d.id==='vieta').calc); const sh = shuffle(rng, [it.ans, ...it.dis]);
+      return {kind:'choice', math:1, prompt:it.q, opts:sh, right:sh.indexOf(it.ans), params:{q:it.q}, explain:R`韦达定理：$x_1+x_2=-\dfrac ba$，$x_1x_2=\dfrac ca$（先确认 $\Delta\ge0$）`}; }}
   ];
   /* 小型求值器（只认 k√m、k√m/d、a/b、整数），用于生成干扰项与测试 */
   function evalRad(s){ s = String(s); let m;
