@@ -12,47 +12,95 @@ var VOLS = {low:0.15, mid:0.3, high:0.5};
 var BASE = 0.65; /* 多个音叠加后的总峰值：中档约 0.3~0.45，低于朗读录音 */
 function isIOS(){ if(!hasWin) return false; var u = navigator.userAgent||''; return /iP(hone|ad|od)/.test(u) || (/Macintosh/.test(u) && navigator.maxTouchPoints>1); }
 function now(){ return ctx ? ctx.currentTime : 0; }
-function ensure(){
-  if(ctx || !AC) return ctx;
+function setSession(){ try{ if(hasWin && navigator.audioSession && navigator.audioSession.type!=='playback') navigator.audioSession.type = 'playback'; }catch(e){} }
+var primed = false, stale = false, keepAlive = null, gen = 0, lastCT = -1, lastWall = 0, lastGesture = 0, reviveT = 0, stats = {recreated: 0, resumed: 0, fallback: 0, capped: 0};
+function build(){
   try{
-    try{ if(navigator.audioSession && navigator.audioSession.type!=='playback') navigator.audioSession.type = 'playback'; }catch(e){}
-    ctx = new AC();
+    setSession();
+    ctx = new AC(); gen++; noiseBuf = null; silentBuf = null; active = 0; ends = []; lastCT = -1;
     comp = ctx.createDynamicsCompressor ? ctx.createDynamicsCompressor() : null; /* 防止叠加时爆音 */
     master = ctx.createGain(); master.gain.value = BASE;
     if(comp){ try{ comp.threshold.value = -14; comp.knee.value = 12; comp.ratio.value = 4; comp.attack.value = 0.003; comp.release.value = 0.2; }catch(e){} master.connect(comp); comp.connect(ctx.destination); }
     else master.connect(ctx.destination);
-    /* iOS：录音播放、来电、切到后台后上下文会变成 interrupted/suspended，标记下来，下一次点击时在手势里 resume */
-    ctx.onstatechange = function(){ if(ctx && ctx.state!=='running') stale = true; };
+    /* iOS：录音播放、来电、切到后台后上下文会变成 interrupted/suspended，标记下来，下一次点击时在手势里恢复 */
+    var me = ctx; ctx.onstatechange = function(){ if(ctx===me && ctx.state!=='running') stale = true; };
   }catch(e){ ctx = null; }
   return ctx;
 }
-/* 必须在用户手势里调用：创建/恢复上下文，并播放 1 个采样的静音缓冲（老版 iOS 需要） */
-var primed = false, stale = false, keepAlive = null;
+function ensure(){ if(ctx && ctx.state!=='closed') return ctx; if(!AC) return null; return build(); }
+function recreate(){ /* 关掉旧上下文、重建（必须在手势里调用，新上下文才能直接 running） */
+  var old = ctx; ctx = null; master = null; comp = null; stats.recreated++;
+  try{ if(old && old.state!=='closed' && old.close){ var p = old.close(); if(p && p.catch) p.catch(function(){}); } }catch(e){}
+  build(); resumeNow(); prime(); return ctx;
+}
 function resumeNow(){ /* 同步调用（在手势里才有效） */
-  try{ if(ctx && ctx.state!=='running' && ctx.state!=='closed' && ctx.resume){ var p = ctx.resume(); if(p && p.catch) p.catch(function(){}); return p; } }catch(e){}
+  try{ if(ctx && ctx.state!=='running' && ctx.state!=='closed' && ctx.resume){ stats.resumed++; var p = ctx.resume(); if(p && p.catch) p.catch(function(){}); return p; } }catch(e){}
   return null;
 }
-function unlock(){
+var silentBuf = null;
+function prime(){ /* 每次手势都放 1 个采样的静音缓冲（复用同一个 buffer），让 iOS 保持音频通路 */
+  try{ if(!silentBuf) silentBuf = ctx.createBuffer(1, 1, 22050); var s = ctx.createBufferSource(); s.buffer = silentBuf; s.connect(ctx.destination);
+    s.onended = function(){ try{ s.disconnect(); }catch(e){} }; s.start(0); primed = true; }catch(e){}
+}
+/* 每次 pointerdown/touchend/click（捕获阶段）调用：检查状态，必要时恢复或重建 */
+function unlock(force){
   if(!enabled && !ctx) return;
-  if(!ensure()) return;
-  resumeNow(); if(ctx.state==='running') stale = false;
-  if(!primed){ try{ var b = ctx.createBuffer(1, 1, 22050), s = ctx.createBufferSource(); s.buffer = b; s.connect(ctx.destination); s.start(0); primed = true; }catch(e){} }
+  if(!AC) return;
+  lastGesture = Date.now(); setSession();
+  if(force===true || !ctx || ctx.state==='closed'){ if(ctx) recreate(); else { build(); resumeNow(); prime(); } check(); return; }
+  var st = ctx.state, wall = performance.now();
+  /* iOS 冻结时钟：状态显示 running，但 currentTime 不再前进 → 重建 */
+  if(st==='running' && lastCT>=0 && wall - lastWall > 250 && ctx.currentTime === lastCT){ recreate(); check(); return; }
+  if(st!=='running'){ resumeNow(); }
+  prime(); check();
+  if(ctx.state==='running') stale = false;
+  note(wall);
+}
+function note(wall){ /* 只在时钟变化时记下（用于检测冻结） */ if(ctx && ctx.state==='running'){ var c = ctx.currentTime; if(c !== lastCT){ lastCT = c; lastWall = wall || performance.now(); } } else lastCT = -1; }
+function check(){ /* resume 300ms 内没到 running → 标记，下一次手势里重建 */
+  clearTimeout(reviveT); var g = gen;
+  reviveT = setTimeout(function(){ if(!ctx || g!==gen) return; if(ctx.state!=='running'){ stale = true; needRebuild = true; } note(); }, 300);
+}
+var needRebuild = false;
+function onGesture(){ if(!enabled || !ctx) return; if(needRebuild && ctx){ needRebuild = false; recreate(); check(); return; } unlock(); }
+function markStale(){ stale = true; if(ctx && ctx.state!=='running') needRebuild = ctx.state==='closed'; }
+if(hasWin && typeof document!=='undefined'){
+  ['pointerdown','touchend','click'].forEach(function(ev){ document.addEventListener(ev, onGesture, {capture: true, passive: true}); });
+  document.addEventListener('visibilitychange', function(){ markStale(); if(document.visibilityState==='hidden') lastCT = -1; });
+  window.addEventListener('pageshow', function(e){ markStale(); if(e && e.persisted) needRebuild = !!ctx; });
+  window.addEventListener('pagehide', markStale); window.addEventListener('focus', markStale); window.addEventListener('blur', markStale);
+  /* 录音元素被系统打断（来电、Siri、其它 App 播放）时，音频会话往往也被打断 */
+  ['pause','ended'].forEach(function(ev){ document.addEventListener(ev, function(e){ if(e.target && e.target.tagName==='AUDIO' && !e.target.__mqSfx) markStale(); }, true); });
 }
 function canPlay(){ return enabled && !!AC && !!ctx && ctx.state!=='closed'; }
+/* 同时发声的节点上限（切公式里很多粒子/刀光时防止 WebKit 节点泄漏导致静音） */
+var MAXV = 24, active = 0;
+var ends = [];
+function voices(){ var t = now(); ends = ends.filter(function(e){ return e > t; }); active = ends.length; return active; }
+function track(src, nodes, end){ ends.push(end); active = ends.length; src.onended = function(){ nodes.forEach(function(n){ try{ n.disconnect(); }catch(e){} }); }; }
+/* 兜底：Web Audio 恢复不了时，用预先渲染好的小音频（HTMLAudio 池）播放 */
+var pool = [], poolI = 0, WAV = (hasWin && window.MQSfxWav) || {};
+function fallback(kind, muted){
+  var src = WAV[kind] || WAV[kind==='flip' || kind==='soft' ? 'chime' : kind]; if(!src || typeof Audio==='undefined') return false;
+  try{ if(!pool.length) for(var i=0;i<3;i++){ var a = new Audio(); a.__mqSfx = true; a.preload = 'auto'; pool.push(a); }
+    var e = pool[poolI++ % pool.length]; if(e.getAttribute('src')!==src) e.src = src; e.volume = Math.min(1, vol*2); e.muted = !!muted; try{ e.currentTime = 0; }catch(_){}
+    var p = e.play(); if(p && p.catch) p.catch(function(){}); if(!muted) stats.fallback++; return e; }catch(e){ return false; }
+}
 /* 一个柔和的“铃音”：正弦基音 + 少量泛音，快起慢落，经低通去刺耳高频 */
 function bell(freq, t, dur, gain, opts){
   opts = opts || {};
+  if(voices() >= MAXV){ stats.capped++; return; }
   var o = ctx.createOscillator(), g = ctx.createGain(), f = ctx.createBiquadFilter();
   o.type = opts.type || 'sine'; o.frequency.setValueAtTime(freq, t);
   if(opts.glide) o.frequency.exponentialRampToValueAtTime(freq*opts.glide, t+dur*0.6);
   f.type = 'lowpass'; f.frequency.value = Math.min(9000, freq*4); f.Q.value = 0.4;
   var peak = Math.max(0.0002, gain*vol), att = opts.att || 0.008;
   g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(peak, t+att); g.gain.exponentialRampToValueAtTime(0.0001, t+dur);
-  o.connect(f); f.connect(g); g.connect(master); o.start(t); o.stop(t+dur+0.05);
-  if(opts.partial!==false){ /* 2 倍泛音，让声音更像铃 */
+  o.connect(f); f.connect(g); g.connect(master); track(o, [o, f, g], t+dur+0.05); o.start(t); o.stop(t+dur+0.05);
+  if(opts.partial!==false && voices() < MAXV){ /* 2 倍泛音，让声音更像铃 */
     var o2 = ctx.createOscillator(), g2 = ctx.createGain(); o2.type = 'sine'; o2.frequency.setValueAtTime(freq*2.0, t);
     g2.gain.setValueAtTime(0.0001, t); g2.gain.exponentialRampToValueAtTime(peak*0.22, t+att); g2.gain.exponentialRampToValueAtTime(0.0001, t+dur*0.5);
-    o2.connect(g2); g2.connect(master); o2.start(t); o2.stop(t+dur*0.5+0.05);
+    o2.connect(g2); g2.connect(master); track(o2, [o2, g2], t+dur*0.5+0.05); o2.start(t); o2.stop(t+dur*0.5+0.05);
   }
   busyUntil = Math.max(busyUntil, t+dur);
 }
@@ -109,7 +157,8 @@ function slice(){ /* 刀光“嗖”：带通滤波的噪声，频率快速上�
     f.type = 'bandpass'; f.Q.value = 1.2; f.frequency.setValueAtTime(700, t); f.frequency.exponentialRampToValueAtTime(3200, t+dur);
     var pk = Math.max(0.0002, 0.55*vol);
     g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(pk, t+0.03); g.gain.exponentialRampToValueAtTime(0.0001, t+dur);
-    s.connect(f); f.connect(g); g.connect(master); s.start(t); s.stop(t+dur+0.02); busyUntil = Math.max(busyUntil, t+dur);
+    if(voices() >= MAXV){ stats.capped++; return 'slice'; }
+    s.connect(f); f.connect(g); g.connect(master); track(s, [s, f, g], t+dur+0.02); s.start(t); s.stop(t+dur+0.02); busyUntil = Math.max(busyUntil, t+dur);
   }catch(e){ bell(N(3+12), t, 0.12, 0.3, {partial:false, glide:1.6, att:0.004}); }
   return 'slice';
 }
@@ -127,13 +176,23 @@ function doPlay(kind, o){
 }
 /* 上下文没在运行（iOS 的 suspended/interrupted）：先在当前手势里 resume，再播放。
    绝不在“冻结”的时钟上排队——否则恢复后会一下子补放一串旧音效。恢复不了就跳过这一次。 */
+function inGesture(){ return Date.now() - lastGesture < 150; }
 function play(kind, o){
+  if(!enabled || !AC){ log.push({kind:kind, skipped:true}); return false; }
+  if(!canPlay() && inGesture()) unlock(true);
   if(!canPlay()){ log.push({kind:kind, skipped:true}); return false; }
   if(ctx.state==='running') return doPlay(kind, o);
   var p = resumeNow();
   if(ctx.state==='running') return doPlay(kind, o);
-  var t0 = Date.now();
-  if(p && p.then){ p.then(function(){ if(ctx.state==='running' && Date.now()-t0 < 600) doPlay(kind, o); else log.push({kind:kind, skipped:'late'}); }, function(){ log.push({kind:kind, skipped:'resume'}); }); return true; }
+  /* 手势里：先静音启动兜底音频（保住手势权限）；Web Audio 250ms 内恢复就用合成音，否则取消静音用兜底音频 */
+  var fb = inGesture() ? fallback(kind, true) : null, t0 = Date.now(), done = false;
+  var useFb = function(why){ if(done) return; done = true; if(fb){ try{ fb.muted = false; fb.currentTime = 0; }catch(e){} stats.fallback++; needRebuild = true; log.push({kind:kind, v:'fallback', fallback:true, why:why, t:Date.now()}); } else log.push({kind:kind, skipped:why}); };
+  if(p && p.then){
+    p.then(function(){ if(done) return; if(ctx && ctx.state==='running' && Date.now()-t0 < 600){ done = true; if(fb) try{ fb.pause(); }catch(e){} doPlay(kind, o); } else useFb('late'); }, function(){ useFb('resume'); });
+    if(fb) setTimeout(function(){ useFb('timeout'); }, 250);
+    return true;
+  }
+  if(fb){ useFb('noresume'); return true; }
   log.push({kind:kind, skipped:'suspended'}); return false;
 }
 /* 录音开始时如果音效还在响，把音效压低（不停止），两者都听得见 */
@@ -147,6 +206,7 @@ return { play: play, unlock: unlock, duck: duck, remainingMs: remainingMs, suppo
      传入一个回调（让共享录音元素在空闲时放一小段静音），把音频会话保持在 playback。 */
   setKeepAlive: function(f){ keepAlive = f; }, needsKeepAlive: function(){ return isIOS() && !(hasWin && navigator.audioSession); },
   setEnabled: function(v){ enabled = !!v; }, setVolume: function(v){ vol = typeof v==='number' ? v : (VOLS[v] || 0.3); },
-  state: function(){ return ctx ? ctx.state : 'none'; }, log: log, VOLS: VOLS };
+  state: function(){ return ctx ? ctx.state : 'none'; }, repair: function(){ lastGesture = Date.now(); recreate(); return ctx ? ctx.state : 'none'; },
+  info: function(){ return {state: ctx ? ctx.state : 'none', active: active, max: MAXV, gen: gen, stale: stale, needRebuild: needRebuild, stats: stats, session: hasWin && navigator.audioSession ? navigator.audioSession.type : null}; }, log: log, VOLS: VOLS };
 })();
 if(typeof module!=='undefined') module.exports = MQSfx;

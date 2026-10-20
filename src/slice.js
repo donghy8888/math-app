@@ -46,19 +46,21 @@ function start(cfg){
   G.trailCol = cssVar('--pri', '#4A7563');
   root.querySelector('.sl-x').addEventListener('click', function(){ var c = G && G.cfg; close(); if(c && c.onQuit) c.onQuit(); });
   bindInput();
-  resize(); G.onResize = function(){ resize(); }; window.addEventListener('resize', G.onResize);
+  resize(); G.onResize = function(){ resize(); }; window.addEventListener('resize', G.onResize); window.addEventListener('orientationchange', G.onResize); if(window.visualViewport) window.visualViewport.addEventListener('resize', G.onResize);
   hud(); nextRound();
   G.raf = requestAnimationFrame(loop);
   return G;
 }
 function close(){
-  if(!G) return; cancelAnimationFrame(G.raf); window.removeEventListener('resize', G.onResize);
+  if(!G) return; cancelAnimationFrame(G.raf); window.removeEventListener('resize', G.onResize); window.removeEventListener('orientationchange', G.onResize); if(window.visualViewport) window.visualViewport.removeEventListener('resize', G.onResize);
   clearTimeout(G.t1); clearTimeout(G.t2); clearTimeout(G.t3);
   if(G.root && G.root.parentNode) G.root.parentNode.removeChild(G.root); document.body.classList.remove('slicing'); G = null;
 }
 function resize(){
   var r = G.stage.getBoundingClientRect(), dpr = Math.min(2, window.devicePixelRatio || 1);
-  G.W = r.width; G.H = r.height; G.cv.width = Math.round(r.width*dpr); G.cv.height = Math.round(r.height*dpr);
+  var vh = (window.visualViewport && window.visualViewport.height) || window.innerHeight;
+  G.W = r.width; G.H = Math.max(120, Math.min(r.height, vh - r.top)); /* 只算可见部分 */
+  var pr = G.root.querySelector('.sl-prompt'); G.top = pr && pr.style.display!=='none' ? Math.max(0, pr.getBoundingClientRect().bottom - r.top) + 8 : 8; G.cv.width = Math.round(r.width*dpr); G.cv.height = Math.round(r.height*dpr);
   G.cv.style.width = r.width+'px'; G.cv.style.height = r.height+'px'; G.ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 }
 function hud(){
@@ -82,13 +84,13 @@ function nextRound(){
   var it = G.items[G.round]; G.cur = it; G.state = 'fly'; G.failed = false; G.slow = 1; G.done = false;
   G.root.querySelector('.sl-pl').innerHTML = it.label || '';
   G.root.querySelector('.sl-pq').innerHTML = it.prompt;
-  hud();
+  hud(); resize(); /* 题目文字填好后再量游戏区（题目可能变高） */
   /* 水果数量随回合增加：3 → 5；速度每回合加快一点 */
   var nOpt = Math.min(it.opts.length, (G.W < 560 ? 2 : 2 + Math.floor(G.round/5))), opts = shuffle(it.opts).slice(0, nOpt);
   var all = shuffle([{html: it.answer, ok: true}].concat(opts.map(function(h){ return {html: h, ok: false}; })));
   var gold = G.round>=2 && Math.random() < (window.__mqSliceGold!=null ? window.__mqSliceGold : 0.22);
   var T = 1.6; /* 飞上来的时间（秒），之后一直漂浮，不再加速 */
-  G.rt = 0; G.top = Math.max(0, G.root.querySelector('.sl-prompt').getBoundingClientRect().bottom - G.stage.getBoundingClientRect().top) + 8;
+  G.rt = 0;
   var slots = shuffle(all.map(function(_, i){ return (i+0.5)/all.length; }));
   G.fruits = all.map(function(o, i){ return makeFruit(o, i, T, slots[i], gold && o.ok); });
 }

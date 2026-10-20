@@ -599,6 +599,7 @@ function hush(){ VS.stop(); clearTimeout(sayLaterT); }
 const SFX = (typeof MQSfx!=='undefined') ? MQSfx : {supported:false, play(){return false;}, unlock(){}, duck(){}, remainingMs(){return 0;}, setEnabled(){}, setVolume(){}};
 function sfxSync(){ SFX.setEnabled(!!D.settings.sfx); SFX.setVolume(D.settings.sfxVol||'mid'); }
 if(SFX.setKeepAlive && SFX.needsKeepAlive && SFX.needsKeepAlive() && VS.keepAlive) SFX.setKeepAlive(()=>VS.keepAlive());
+function sfxStateTxt(){ const st = SFX.state ? SFX.state() : 'none'; return ({running:'✅ 正常（running）', suspended:'⏸ 暂停（suspended，点一下会恢复）', interrupted:'⏸ 被打断（interrupted）', closed:'⛔ 已关闭（closed）', none:'未启动（点一下会启动）'})[st] || st; }
 function sfx(kind, o){ if(!D.settings.sfx) return false; sfxSync(); return SFX.play(kind, o); }
 /* 音效刚响起时紧接着要朗读：录音稍等 ~350ms 再开始（音效仍在响时朗读会自动把音效压低） */
 let sayLaterT;
@@ -1234,7 +1235,8 @@ function vMe(){
   const sfxSec = `<div class="card"><h3>🎉 答对音效</h3>
     ${SFX.supported ? tg('sfx','答对音效','答对时“叮”一声，完成整题、获得勋章时有喜庆音乐；答错不响') + (D.settings.sfx ? `<div class="field"><label>音效音量</label><div class="seg" role="radiogroup" aria-label="音效音量">${[['low','🔈 低'],['mid','🔉 中'],['high','🔊 高']].map(([v,n])=>`<button class="${(D.settings.sfxVol||'mid')===v?'on':''}" data-act="sfxvol" data-v="${v}" role="radio" aria-checked="${(D.settings.sfxVol||'mid')===v}">${n}</button>`).join('')}</div></div>
     <div class="row" style="gap:8px;justify-content:flex-end;flex-wrap:wrap"><button class="btn sm ghost" data-act="sfxtest" data-v="chime">▶ 试听 叮</button><button class="btn sm ghost" data-act="sfxtest" data-v="fanfare">▶ 试听 完成</button><button class="btn sm ghost" data-act="sfxtest" data-v="levelup">▶ 试听 勋章</button></div>
-    <div class="muted small" style="margin-top:6px">iPad 听不到音效时，请检查侧边静音开关或控制中心的静音（朗读录音不受影响）。</div>` : '') : '<div class="muted small">当前浏览器不支持音效。</div>'}</div>`;
+    <div class="muted small" style="margin-top:6px">iPad 听不到音效时，请检查侧边静音开关或控制中心的静音（朗读录音不受影响）。</div>
+    <div class="row sfxst" style="gap:8px;margin-top:8px;align-items:center"><span class="muted small grow">音效状态：<b id="sfxState">${sfxStateTxt()}</b></span><button class="btn sm ghost" data-act="sfxfix">🔧 修复音效</button></div>` : '') : '<div class="muted small">当前浏览器不支持音效。</div>'}</div>`;
   const setSec = `<div class="card"><h3>📖 学习方式</h3>${tg('showAnalysis','做题前显示审题分析','先看已知条件、隐藏条件、该联想的定理和解题思路，再分步做题；随时可点原题旁的「🔍 审题」')}</div>` + voiceSec + sfxSec + `<div class="card"><h3>🎨 外观主题</h3>
     <div class="seg themeseg">${[['eye','🌿 护眼'],['dark','🌙 深色'],['system','📱 跟随系统']].map(([v,n])=>`<button class="${curTheme===v?'on':''}" data-act="theme" data-v="${v}">${n}</button>`).join('')}</div>
     <div class="muted small">「护眼」使用暖纸色低眩光背景；「跟随系统」会随手机的深色模式自动切换。</div></div>
@@ -1429,6 +1431,7 @@ const act = {
   vrate(d){ D.settings.rate = d.v; save(); render(); say([MQVoiceTexts.EXTRA.ratePreview]); },
   vtest(){ say([MQVoiceTexts.EXTRA.test]); },
   sfxvol(d){ D.settings.sfxVol = d.v; save(); render(); sfx('chime'); },
+  sfxfix(){ sfxSync(); if(SFX.repair) SFX.repair(); setTimeout(()=>{ const e = $('#sfxState'); if(e) e.innerHTML = sfxStateTxt(); sfx('chime'); toast(SFX.state()==='running' ? '音效已修复 🔔' : '已重建音效，如仍无声请检查静音开关'); }, 120); },
   sfxtest(d){ SFX.unlock(); sfx(d.v||'chime', {bonus: d.v!=='chime'}); },
   ftab(d){ S.fTab=d.v; render(); },
   dstart(d){ startDrill(d.k||null); },
