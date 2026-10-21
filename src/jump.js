@@ -21,17 +21,17 @@ function start(cfg){
   close();
   var root = el('div', 'jump'); root.id = 'jump'; root.setAttribute('role', 'dialog'); root.setAttribute('aria-label', '跳台闯关小游戏');
   root.innerHTML = '<div class="sl-top jp-top"><button class="sl-x" aria-label="退出">✕</button><div class="sl-rd"></div><div class="sl-hearts" aria-label="生命"></div><div class="grow"></div><div class="sl-combo"></div><div class="sl-score">0</div></div>'
-    + '<div class="jp-scene"><svg class="jp-svg" aria-hidden="true"></svg><div class="jp-fx"></div></div>'
+    + '<div class="jp-scene"><svg class="jp-svg" aria-hidden="true"></svg><div class="jp-fx"></div><div class="jp-hint" aria-hidden="true"><span class="fg">👆</span><b>轻轻一划就跳</b></div></div>'
     + '<div class="jp-panel"><div class="jp-q"><div class="jp-ql"></div><div class="jp-qp"></div></div>'
     + '<div class="sl-spd jp-spd"><i></i><span></span></div><div class="jp-opts" role="radiogroup" aria-label="选项"></div>'
-    + '<div class="jp-tip">① 先选答案　② 在上面按住小人<b>往后下方拉</b>瞄准，松手起跳 🏹</div></div>'
+    + '<div class="jp-tip">① 先选答案　② 在上面<b>轻轻往上一划</b>（或再点一下亮起的平台）就跳 👆</div></div>'
     + '<div class="jp-card" hidden></div>';
   document.body.appendChild(root); document.body.classList.add('slicing');
   G = {cfg: cfg, root: root, svg: root.querySelector('.jp-svg'), fx: root.querySelector('.jp-fx'), items: cfg.items.slice(0, cfg.rounds || ROUNDS),
     round: -1, lives: LIVES, score: 0, combo: 0, maxCombo: 0, correct: 0, wrong: 0, times: [], seen: [], weak: [], log: [],
     state: 'idle', sel: -1, rt: 0, timers: [], raf: [], cleanup: []};
   root.querySelector('.sl-x').addEventListener('click', function(){ var c = G && G.cfg; close(); if(c && c.onQuit) c.onQuit(); });
-  bindDrag(root.querySelector('.jp-scene'));
+  bindSwipe(root.querySelector('.jp-scene')); bindSwipe(root.querySelector('.jp-q'));
   var onR = function(){ if(G) layout(); }; window.addEventListener('resize', onR); window.addEventListener('orientationchange', onR);
   G.cleanup.push(function(){ window.removeEventListener('resize', onR); window.removeEventListener('orientationchange', onR); });
   /* 计时（用时越短得分越高） */
@@ -68,7 +68,7 @@ function nextRound(){
   var box = G.root.querySelector('.jp-opts');
   box.innerHTML = G.opts.map(function(o, i){ return '<button class="jp-opt" role="radio" aria-checked="false" data-i="'+i+'"><span class="k">'+'ABCD'[i]+'</span><span class="jp-ot">'+o.html+'</span></button>'; }).join('');
   box.querySelectorAll('.jp-opt').forEach(function(b){ b.addEventListener('click', function(){ select(+b.dataset.i); }); });
-  G.missed = false; G.root.querySelector('.jp-panel').scrollTop = 0;
+  G.root.querySelector('.jp-panel').scrollTop = 0;
   hud(); spdBar(); buildScene(); G.state = 'ask';
 }
 function select(i){
@@ -76,7 +76,7 @@ function select(i){
   G.sel = i;
   G.root.querySelectorAll('.jp-opt').forEach(function(b, j){ b.classList.toggle('on', j===i); b.setAttribute('aria-checked', j===i ? 'true' : 'false'); });
   G.plats.forEach(function(p, j){ p.g.classList.toggle('sel', j===i); });
-  pose('look', G.plats[i]); aimGuide(); sfx('flip');
+  pose('look', G.plats[i]); aimGuide(); hint(true); sfx('flip');
 }
 /* ---------- 弹弓式起跳：按住往后拉，虚线显示轨迹，松手起跳 ---------- */
 var GRAV = 900, K = 7.5, MAXD = 150;
@@ -97,45 +97,30 @@ function idealV(p){ /* 引导线：固定 55° 起跳角，正好落到平台中
   var th = 55*Math.PI/180, dx = p.x + p.w/2 - G.man.x, h = G.man.y - p.y, den = 2*Math.cos(th)*Math.cos(th)*(dx*Math.tan(th) - h);
   if(den <= 0) return null; var v = Math.sqrt(GRAV*dx*dx/den); return {vx: v*Math.cos(th), vy: -v*Math.sin(th)};
 }
-function aimGuide(){ if(!G.guide) return; var p = G.plats[G.sel], v = p && idealV(p); if(!v){ G.guide.setAttribute('d', ''); return; } G.guide.setAttribute('d', arcPath(v, landing(v).t, 24)); }
-function bindDrag(scene){
-  var drag = null;
-  var down = function(e){ if(!G || G.state !== 'ask') return; e.preventDefault();
-    if(G.sel < 0){ hintSelect(); return; }
-    drag = {s: svgPt(e), id: e.pointerId}; try{ scene.setPointerCapture(e.pointerId); }catch(_){} G.man.g.classList.add('aim'); };
-  var move = function(e){ if(!drag || !G) return; e.preventDefault(); var p = svgPt(e), dx = p.x - drag.s.x, dy = p.y - drag.s.y; drag.dx = dx; drag.dy = dy;
-    var v = launchV(dx, dy), L = landing(v); G.traj.setAttribute('d', Math.sqrt(dx*dx+dy*dy) > 12 ? arcPath(v, Math.min(L.t, 2.5), 30) : ''); G.power.style.width = (v.power*100).toFixed(0) + '%';
-    G.plats.forEach(function(q){ q.g.classList.toggle('target', !!(L.p && L.p === q)); }); };
-  var up = function(e){ if(!drag || !G) return; var d = drag; drag = null; G.man.g.classList.remove('aim'); G.traj.setAttribute('d', ''); G.power.style.width = '0';
-    G.plats.forEach(function(q){ q.g.classList.remove('target'); });
-    if(!d.dx || Math.sqrt(d.dx*d.dx + d.dy*d.dy) < 15) return; launch(launchV(d.dx, d.dy)); };
-  scene.addEventListener('pointerdown', down); scene.addEventListener('pointermove', move); scene.addEventListener('pointerup', up); scene.addEventListener('pointercancel', up);
-  scene.addEventListener('touchmove', function(e){ e.preventDefault(); }, {passive: false});
+function arcH(x0, y0, x1, y1){ return Math.max(24, Math.min(60 + Math.abs(x1 - x0)*0.15, (y0 + y1)/2 - 70)); }
+function aimGuide(){ if(!G.guide) return; var p = G.plats[G.sel]; if(!p){ G.guide.setAttribute('d', ''); return; }
+  var x0 = G.man.x, y0 = G.man.y, x1 = p.x + p.w/2, y1 = p.y, h = arcH(x0, y0, x1, y1);
+  G.guide.setAttribute('d', 'M' + x0.toFixed(1) + ' ' + y0.toFixed(1) + ' Q ' + ((x0 + x1)/2).toFixed(1) + ' ' + ((y0 + y1)/2 - 2*h).toFixed(1) + ' ' + x1.toFixed(1) + ' ' + y1.toFixed(1)); }
+/* 轻轻一划就跳：选好答案后，在场景（或题目区）任意位置向上/向前划一下 ≥20px；或再点一下高亮的平台 */
+function bindSwipe(area){
+  var st = null;
+  area.addEventListener('pointerdown', function(e){ if(!G || G.state !== 'ask') return; st = {x: e.clientX, y: e.clientY, t: e.target}; });
+  area.addEventListener('pointerup', function(e){ if(!st || !G) return; var a = st; st = null; if(G.state !== 'ask') return;
+    var dx = e.clientX - a.x, dy = e.clientY - a.y, L = Math.sqrt(dx*dx + dy*dy);
+    if(L < 12){ var pg = a.t && a.t.closest && a.t.closest('.jp-plat.opt'); if(pg){ var i = +pg.getAttribute('data-i'); if(i === G.sel) jumpSel(); else select(i); } return; }
+    if(L >= 20 && (dy < -8 || dx > 8)){ if(G.sel < 0) hintSelect(); else jumpSel(); } });
+  area.addEventListener('pointercancel', function(){ st = null; });
+  area.addEventListener('touchmove', function(e){ if(G && G.state !== 'end') e.preventDefault(); }, {passive: false});
 }
 function hintSelect(){ var q = G.root.querySelector('.jp-opts'); q.classList.remove('shake'); void q.offsetWidth; q.classList.add('shake'); floatText('先选答案 👇', 'tip'); sfx('soft'); }
-function launch(v){
-  G.state = 'jump'; var L = landing(v), rt = G.rt, x0 = G.man.x, y0 = G.man.y;
-  G.root.querySelectorAll('.jp-opt').forEach(function(b){ b.disabled = true; });
-  if(G.guide) G.guide.setAttribute('d', '');
+function jumpSel(){
+  if(!G || G.state !== 'ask' || G.sel < 0) return;
+  G.state = 'jump'; var p = G.plats[G.sel], rt = G.rt, x0 = G.man.x, y0 = G.man.y, x1 = p.x + p.w/2, y1 = p.y, h = arcH(x0, y0, x1, y1);
+  G.root.querySelectorAll('.jp-opt').forEach(function(b){ b.disabled = true; }); if(G.guide) G.guide.setAttribute('d', ''); hint(false);
   sfx('slice'); pose('jump');
-  var tEnd = L.t;
-  tween(Math.max(450, Math.min(1100, tEnd*900)), function(k){ var t = tEnd*k, x = x0 + v.vx*t, y = y0 + v.vy*t + 0.5*GRAV*t*t;
-    if(L.p && k === 1){ x = L.x; y = L.p.y; } placeMan(x, y); }, function(){
-    if(!L.p){ miss(); return; }
-    G.sel = L.p.i; G.root.querySelectorAll('.jp-opt').forEach(function(b, j){ b.classList.toggle('on', j===L.p.i); });
-    G.plats.forEach(function(q){ q.g.classList.toggle('sel', q===L.p); });
-    if(L.p.ok) land(L.p, rt); else fall(L.p, rt); });
+  tween(680, function(k){ placeMan(x0 + (x1 - x0)*k, y0 + (y1 - y0)*k - 4*h*k*(1 - k)); }, function(){ if(p.ok) land(p, rt); else fall(p, rt); });
 }
-/* 没跳到任何平台：第一次不扣心，再试一次；第二次算答错 */
-function miss(){
-  var x = G.man.x; splash(x); G.man.g.style.opacity = '0'; crocChomp(x);
-  if(!G.missed){ G.missed = true; G.state = 'miss';
-    later(function(){ floatText('没跳到～再试一次！', 'tip'); }, 500);
-    later(function(){ G.man.g.style.opacity = '1'; placeMan(G.start.x + G.start.w*0.55, G.start.y); pose('look', G.plats[G.sel]); G.man.g.classList.add('pop');
-      G.root.querySelectorAll('.jp-opt').forEach(function(b){ b.disabled = false; }); aimGuide(); G.state = 'ask'; G.log.push({round: G.round, res: 'retry'}); }, 1500);
-    return; }
-  wrongOut(null, G.rt, true);
-}
+function hint(on){ var h = G.root.querySelector('.jp-hint'); if(h) h.classList.toggle('on', !!on); }
 function land(p, rt){
   G.state = 'cheer'; pose('cheer'); p.g.classList.add('good');
   G.combo++; G.maxCombo = Math.max(G.maxCombo, G.combo); G.correct++; G.times.push(rt);
@@ -194,14 +179,14 @@ function advance(){
 }
 
 /* ---------- 场景绘制 ---------- */
-function dims(){ var r = G.root.querySelector('.jp-scene').getBoundingClientRect(); var H = 300, W = Math.max(300, Math.round(H * r.width / Math.max(1, r.height))); return {W: W, H: H}; }
+function dims(){ var r = G.root.querySelector('.jp-scene').getBoundingClientRect(); var H = 240, W = Math.max(260, Math.round(H * r.width / Math.max(1, r.height))); return {W: W, H: H}; }
 function layout(){ if(!G || !G.plats) return; buildScene(true); }
 function buildScene(keep){
-  var d = dims(), W = d.W, H = d.H, svg = G.svg; G.W = W; G.H = H; G.waterY = 228;
+  var d = dims(), W = d.W, H = d.H, svg = G.svg; G.W = W; G.H = H; G.waterY = 176;
   svg.setAttribute('viewBox', '0 0 ' + W + ' ' + H); svg.setAttribute('preserveAspectRatio', 'xMidYMid meet'); svg.innerHTML = '';
   sv('rect', {x: 0, y: 0, width: W, height: H, class: 'jp-sky'}, svg);
-  sv('circle', {cx: W - 46, cy: 44, r: 22, class: 'jp-sun'}, svg);
-  [[0.18, 46], [0.52, 30], [0.8, 70]].forEach(function(c){ var g = sv('g', {class: 'jp-cloud', transform: 'translate(' + (W*c[0]) + ',' + c[1] + ')'}, svg);
+  sv('circle', {cx: W - 40, cy: 34, r: 18, class: 'jp-sun'}, svg);
+  [[0.18, 34], [0.52, 22], [0.8, 48]].forEach(function(c){ var g = sv('g', {class: 'jp-cloud', transform: 'translate(' + (W*c[0]) + ',' + c[1] + ')'}, svg);
     sv('ellipse', {cx: 0, cy: 0, rx: 26, ry: 10}, g); sv('ellipse', {cx: 16, cy: -6, rx: 16, ry: 10}, g); });
   var world = sv('g', {class: 'jp-world'}, svg); G.world = world; G.wx = 0;
   sv('rect', {x: -W, y: G.waterY, width: W*3, height: H - G.waterY, class: 'jp-water'}, world);
@@ -217,22 +202,21 @@ function buildScene(keep){
   for(var b=0;b<3;b++) sv('circle', {cx: 70 + b*8, cy: -6 - b*10, r: 3 + b, class: 'bubble b' + b}, croc);
   G.croc = croc; G.crocX = W*0.55; croc.setAttribute('transform', 'translate(' + G.crocX + ',' + (G.waterY - 2) + ')');
   /* 起点平台 */
-  var sw = Math.min(110, W*0.16); G.start = {x: W*0.03, y: 176, w: sw};
+  var sw = Math.min(100, W*0.15); G.start = {x: W*0.03, y: 128, w: sw};
   plat(world, G.start.x, G.start.y, sw, '', false);
   /* 选项平台 */
-  var n = G.opts.length, x0 = W*0.03 + sw + 18, span = W - x0 - 10, slot = span / n, pw = Math.min(118, slot*0.74);
-  var ys = [160, 184, 168, 190];
+  var n = G.opts.length, x0 = W*0.03 + sw + 18, span = W - x0 - 10, slot = span / n, pw = Math.min(130, slot*0.78);
+  var ys = [112, 134, 118, 138];
   G.plats = G.opts.map(function(o, i){ var x = x0 + slot*i + (slot - pw)/2, y = ys[i % 4];
     var p = plat(world, x, y, pw, 'ABCD'[i], true); p.ok = o.ok; p.i = i;
-    p.g.addEventListener('click', function(){ select(i); }); return p; });
+    p.g.setAttribute('data-i', i); return p; });
   /* 火柴人 */
   var man = sv('g', {class: 'jp-man'}, world);
   var m = {g: man, head: sv('circle', {r: 10, class: 'head'}, man), body: sv('line', {class: 'limb'}, man), la: sv('polyline', {class: 'limb'}, man), ra: sv('polyline', {class: 'limb'}, man),
     ll: sv('polyline', {class: 'limb'}, man), rl: sv('polyline', {class: 'limb'}, man), eye: sv('circle', {r: 1.8, class: 'eyed'}, man), mouth: sv('path', {class: 'mouth'}, man), band: sv('g', {class: 'band'}, man)};
   sv('rect', {x: -9, y: -64, width: 18, height: 6, rx: 3, transform: 'rotate(-20 0 -61)'}, m.band); sv('path', {d: 'M-2 -64 v6 M2 -64 v6', class: 'bandl', transform: 'rotate(-20 0 -61)'}, m.band);
   m.band.style.display = 'none'; G.man = m;
-  G.guide = sv('path', {class: 'jp-guide'}, world); G.traj = sv('path', {class: 'jp-traj'}, world);
-  if(!G.power){ var pw = el('div', 'jp-pow', '<i></i>'); G.root.querySelector('.jp-scene').appendChild(pw); G.power = pw.firstChild; }
+  G.guide = sv('path', {class: 'jp-guide'}, world);
   placeMan(G.start.x + sw*0.55, G.start.y); pose(G.sel >= 0 && G.state === 'ask' ? 'look' : 'stand', G.sel >= 0 ? G.plats[G.sel] : null);
   if(keep && G.sel >= 0){ G.plats[G.sel].g.classList.add('sel'); aimGuide(); }
 }
@@ -306,17 +290,11 @@ function finish(){
   panel.querySelector('.sl-back').addEventListener('click', function(){ close(); if(c.onQuit) c.onQuit(); });
   sfx(stars >= 2 ? 'fanfare' : 'chime', {bonus: stars === 3});
 }
-/* 测试用：给出把小人拉到哪里能落到第 i 个平台（屏幕坐标）；i = -1 表示拉得太轻掉水里 */
-function aimFor(i, far){
-  var v = i >= 0 ? idealV(G.plats[i]) : {vx: far ? 1400 : 60, vy: far ? -500 : -120}; if(!v) return null;
-  var dx = -v.vx/K, dy = -v.vy/K, m = G.svg.getScreenCTM(), r = G.svg.getBoundingClientRect();
-  var sx = G.man.x + (G.wx||0), sy = G.man.y - 30, p = G.svg.createSVGPoint(); p.x = sx; p.y = sy; var a = p.matrixTransform(m); p.x = sx + dx; p.y = sy + dy; var b = p.matrixTransform(m);
-  return {x0: a.x, y0: a.y, x1: b.x, y1: b.y, len: Math.sqrt(dx*dx+dy*dy)};
-}
-return { start: start, close: close, active: function(){ return !!G; }, select: function(i){ select(i); }, aimFor: aimFor,
+function platPt(i){ var p = G.plats[i], m = G.svg.getScreenCTM(), q = G.svg.createSVGPoint(); q.x = p.x + p.w/2 + (G.wx||0); q.y = p.y + 6; q = q.matrixTransform(m); return {x: q.x, y: q.y}; }
+return { start: start, close: close, active: function(){ return !!G; }, select: function(i){ select(i); }, platPt: platPt,
   skipCard: function(){ if(G && G.state === 'card' && G.endCard) G.endCard(); },
   _g: function(){ return G; },
   state: function(){ if(!G) return null; return {phase: G.state, round: G.round, lives: G.lives, score: G.score, combo: G.combo, correct: G.correct, wrong: G.wrong, sel: G.sel, rt: G.rt, times: G.times.slice(),
-    missed: !!G.missed, right: G.opts ? G.opts.findIndex(function(o){ return o.ok; }) : -1, n: G.opts ? G.opts.length : 0, pose: G.man ? G.man.pose : null}; } };
+    right: G.opts ? G.opts.findIndex(function(o){ return o.ok; }) : -1, n: G.opts ? G.opts.length : 0, pose: G.man ? G.man.pose : null}; } };
 })();
 if(typeof module !== 'undefined') module.exports = MQJump;
