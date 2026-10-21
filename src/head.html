@@ -538,6 +538,72 @@ body.slicing{overflow:hidden}
 .slicecta{display:flex;align-items:center;gap:12px;background:linear-gradient(135deg,var(--bad-soft),var(--warn-soft));border:1px solid var(--line)}
 .slicecta .de{font-size:34px;flex:none}
 .slicecta .hotn{color:var(--bad-ink)}
+
+/* ===== 🦘 跳台闯关 ===== */
+.jump{position:fixed;inset:0;z-index:55;background:var(--bg);display:flex;flex-direction:column;padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);-webkit-user-select:none;user-select:none;-webkit-tap-highlight-color:transparent;touch-action:manipulation}
+.jp-scene{position:relative;flex:0 0 auto;height:clamp(170px,40vh,460px);margin:0 10px;border-radius:20px;overflow:hidden;border:1px solid var(--line);box-shadow:var(--shadow)}
+.jp-svg{position:absolute;inset:0;width:100%;height:100%;display:block}
+.jp-sky{fill:var(--sky-soft)}.jp-sun{fill:var(--warn-soft);stroke:var(--gold);stroke-width:2;opacity:.9}
+.jp-cloud ellipse{fill:var(--card);opacity:.85}
+.jp-water{fill:var(--sky);opacity:.55}.jp-wave{fill:none;stroke:var(--card);stroke-width:2;opacity:.6;stroke-linecap:round}
+.jp-plat .post{fill:var(--warn);opacity:.55}.jp-plat .top{fill:var(--pri2);stroke:var(--pri-ink);stroke-width:1.5}
+.jp-plat.opt{cursor:pointer;transition:transform .5s,opacity .5s}.jp-plat.opt .top{fill:var(--card2);stroke:var(--sub)}
+.jp-plat .lbl circle{fill:var(--card);stroke:var(--sub);stroke-width:1.5}.jp-plat .lbl text{font:800 15px system-ui,sans-serif;fill:var(--ink)}
+.jp-plat.sel .top{fill:var(--warn-soft);stroke:var(--gold);stroke-width:3}.jp-plat.sel .lbl circle{fill:var(--gold);stroke:var(--gold)}.jp-plat.sel .lbl text{fill:var(--on-pri)}
+.jp-plat.good .top{fill:var(--ok-soft);stroke:var(--ok);stroke-width:3}
+.jp-plat.hint .top{fill:var(--ok-soft);stroke:var(--ok);stroke-width:3;animation:jpHint .7s ease-in-out infinite alternate}.jp-plat.hint .lbl circle{fill:var(--ok);stroke:var(--ok)}.jp-plat.hint .lbl text{fill:var(--on-pri)}
+@keyframes jpHint{to{opacity:.6}}
+.jp-plat.sink{transform:translateY(60px) rotate(8deg);transform-box:fill-box;transform-origin:center;opacity:.35;transition:transform 1.1s ease-in,opacity 1.1s}
+.jp-man .limb{stroke:var(--ink);stroke-width:3.4;stroke-linecap:round;stroke-linejoin:round;fill:none}
+.jp-man .head{fill:var(--card);stroke:var(--ink);stroke-width:3}.jp-man .eyed{fill:var(--ink)}.jp-man .mouth{fill:none;stroke:var(--ink);stroke-width:1.6;stroke-linecap:round}
+.jp-man .band rect{fill:var(--warn-soft);stroke:var(--warn);stroke-width:1}.jp-man .bandl{stroke:var(--warn);stroke-width:1}
+.jp-man.pop{animation:jpPop .5s}@keyframes jpPop{0%{opacity:0}60%{opacity:1}}
+.jp-croc .body,.jp-croc .jawu,.jp-croc .jawl{fill:var(--h3);stroke:var(--h4);stroke-width:1.5}.jp-croc .tail{fill:none;stroke:var(--h3);stroke-width:8;stroke-linecap:round}
+.jp-croc .tooth{fill:var(--card);stroke:none}.jp-croc .eye{fill:var(--card);stroke:var(--h4);stroke-width:1.5}.jp-croc .pupil{fill:var(--ink)}
+.jp-crocb{animation:jpBob 2.4s ease-in-out infinite}@keyframes jpBob{50%{transform:translateY(3px)}}
+.jp-croc .bubble{fill:none;stroke:var(--card);stroke-width:1.5;opacity:0;animation:jpBub 2.6s ease-in infinite}.jp-croc .bubble.b1{animation-delay:.8s}.jp-croc .bubble.b2{animation-delay:1.6s}
+@keyframes jpBub{0%{opacity:0;transform:translateY(16px)}30%{opacity:.8}100%{opacity:0;transform:translateY(-14px)}}
+.jp-fx{position:absolute;inset:0;pointer-events:none;overflow:hidden}
+.jp-drop{position:absolute;width:8px;height:8px;border-radius:50%;background:var(--sky);animation:jpDrop .8s ease-out forwards}
+@keyframes jpDrop{to{transform:translate(var(--dx),var(--dy));opacity:0}}
+.jp-conf{position:absolute;width:8px;height:12px;border-radius:2px;animation:jpConf 1.6s ease-in forwards}
+@keyframes jpConf{0%{transform:translate(0,-10px) rotate(0)}100%{transform:translate(var(--dx),300px) rotate(540deg);opacity:.2}}
+.jp-ft{position:absolute;transform:translate(-50%,-50%);font-size:22px;font-weight:900;color:var(--ok-ink);white-space:nowrap;animation:slRise 1.2s ease-out forwards;text-shadow:0 1px 0 var(--card)}
+.jp-ft.chomp{font-size:30px;color:var(--bad-ink)}
+.jp-panel{flex:1 1 auto;min-height:0;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:8px 12px 10px;display:flex;flex-direction:column;gap:8px}
+.jp-q{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:10px 14px;text-align:center;box-shadow:var(--shadow)}
+.jp-ql{font-size:13px;color:var(--sub);font-weight:700}.jp-qp{font-size:18px;overflow-x:auto;overflow-y:hidden}
+.jp-spd{margin:0 auto;width:100%}
+.jp-opts{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:8px}
+.jp-opt{display:flex;align-items:center;gap:10px;min-height:58px;padding:8px 12px;border-radius:16px;background:var(--card);border:2px solid var(--line);color:var(--ink);text-align:left;font-size:18px;box-shadow:var(--shadow)}
+.jp-opt .k{flex:none;width:32px;height:32px;border-radius:50%;display:grid;place-items:center;background:var(--card2);font-weight:900;color:var(--sub)}
+.jp-opt .jp-ot{flex:1;min-width:0;overflow-x:auto;overflow-y:hidden}.jp-opt .katex-display{margin:2px 0}
+.jp-opt.on{border-color:var(--gold);background:var(--warn-soft)}.jp-opt.on .k{background:var(--gold);color:var(--on-pri)}
+.jp-opt.right{border-color:var(--ok);background:var(--ok-soft)}.jp-opt.right .k{background:var(--ok);color:var(--on-pri)}.jp-opt.wrong{border-color:var(--bad);background:var(--bad-soft)}
+.jp-gobar{position:sticky;bottom:0;padding-top:4px;background:linear-gradient(transparent,var(--bg) 35%)}
+.jp-go{width:100%;min-height:58px;font-size:22px;font-weight:900;border-radius:18px}.jp-go:disabled{opacity:.45}
+.jp-card{position:absolute;inset:0;z-index:3;display:flex;align-items:center;justify-content:center;background:var(--mask);padding:12px}
+.jp-card[hidden]{display:none}
+.jp-big{opacity:1;transform:none;position:relative;max-height:90vh;overflow:auto;animation:jpIn .35s cubic-bezier(.2,1.4,.4,1)}
+.jp-card.wrong .jp-big{border-color:var(--sky)}
+@keyframes jpIn{from{transform:scale(.85);opacity:0}}
+.jp-cd{position:absolute;top:8px;right:8px;width:40px;height:40px}.jp-cd svg{width:100%;height:100%;transform:rotate(-90deg)}
+.jp-cd circle{fill:none;stroke-width:4}.jp-cd .bg{stroke:var(--line)}.jp-cd .fg{stroke:var(--pri)}
+.jp-cd b{position:absolute;inset:0;display:grid;place-items:center;font-size:15px;color:var(--pri-ink)}
+.jp-skip{font-size:12px;color:var(--faint);margin-top:6px;visibility:hidden}.jp-card.skip .jp-skip{visibility:visible}
+.jp-panel.ended{display:block}
+.jp-scene{touch-action:none}
+.jp-guide{fill:none;stroke:var(--gold);stroke-width:3;stroke-dasharray:2 9;stroke-linecap:round;opacity:.75;animation:jpGlow 1s ease-in-out infinite alternate}
+@keyframes jpGlow{to{opacity:.35}}
+.jp-traj{fill:none;stroke:var(--pri-ink);stroke-width:4;stroke-dasharray:1 10;stroke-linecap:round}
+.jp-plat.target .top{stroke:var(--pri);stroke-width:4}
+.jp-man.aim{transform-box:fill-box}
+.jp-pow{position:absolute;left:10px;bottom:10px;width:90px;height:8px;border-radius:4px;background:var(--card);opacity:.85;overflow:hidden}.jp-pow i{display:block;height:100%;width:0;background:var(--warn)}
+.jp-tip{font-size:13px;color:var(--sub);text-align:center;padding:4px 0 2px}
+.jp-opts.shake{animation:slHurt .45s}
+.jp-ft.tip{font-size:20px;color:var(--warn-ink)}
+.jumpcta{display:flex;align-items:center;gap:12px;background:linear-gradient(135deg,var(--sky-soft),var(--ok-soft));border:1px solid var(--line)}
+.jumpcta .de{font-size:34px;flex:none}.jumpcta .hotn{color:var(--pri-ink)}
 </style>
 </head>
 <body>
