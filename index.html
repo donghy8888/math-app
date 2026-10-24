@@ -2,7 +2,7 @@
 <html lang="zh-CN" data-theme="eye">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, interactive-widget=resizes-content">
 <meta name="theme-color" content="#F3EDDF">
 <meta name="color-scheme" content="light dark">
 <title>数学闯关岛 · 初中数学练习</title>
@@ -609,6 +609,63 @@ body.slicing{overflow:hidden}
 @keyframes jpSwipe{0%{transform:translateY(8px);opacity:.3}50%{transform:translateY(-8px);opacity:1}100%{transform:translateY(-12px);opacity:0}}
 .jumpcta{display:flex;align-items:center;gap:12px;background:linear-gradient(135deg,var(--sky-soft),var(--ok-soft));border:1px solid var(--line)}
 .jumpcta .de{font-size:34px;flex:none}.jumpcta .hotn{color:var(--pri-ink)}
+
+/* ========== iPad / 宽屏横屏适配 ========== */
+@media (min-width: 900px){
+  #app{max-width:980px;padding-left:20px;padding-right:20px}
+  .tabbar .in,.sheet{max-width:980px}
+  .fgrid{grid-template-columns:repeat(3,1fr)}
+  .badges{grid-template-columns:repeat(4,1fr)}
+  .quick{grid-template-columns:repeat(4,1fr)}
+  .card.jumpcta,.card.drillcta{max-width:100%}
+}
+@media (orientation: landscape) and (min-width: 900px){
+  #app{max-width:1120px;padding-bottom:calc(var(--tabh) + 18px + env(safe-area-inset-bottom))}
+  .tabbar .in{max-width:1120px}
+  .hero{display:grid;grid-template-columns:1.2fr 1fr;gap:12px;align-items:center}
+  .hero .greet,.hero .name,.hero .lvline{grid-column:1}
+  .hero .stats3{grid-column:2;grid-row:1 / span 4;align-self:stretch;grid-template-rows:repeat(3,1fr)}
+  .hero .stats3 .stat{display:flex;flex-direction:column;justify-content:center}
+  .fgrid{grid-template-columns:repeat(3,1fr);gap:14px}
+  .sortrow{flex-wrap:wrap}
+  /* 记忆练习：讲解左右分栏；认出/半填/全默题目+选项并排 */
+  .dteachcard{display:grid;grid-template-columns:1.15fr .85fr;gap:16px 22px;align-items:start;max-width:1000px;margin:0 auto}
+  .dteachcard .chips,.dteachcard .nm{grid-column:1/-1}
+  .dteachcard .dformula{grid-column:1;margin:0;font-size:24px}
+  .dteachcard .dtip,.dteachcard .dex,.dteachcard .muted{grid-column:2}
+  .dteachcard .btn.block{grid-column:1/-1;max-width:420px;justify-self:center}
+  .dq{display:grid;grid-template-columns:1.05fr .95fr;gap:18px;align-items:start}
+  .dteachrow{justify-content:flex-start}
+  .btn.dteach,.dteach.btn{min-height:44px;padding:8px 16px;font-size:14.5px}
+  .tiles{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .jp-opts{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+/* 跳台闯关横屏：左侧大场景、右侧题目选项（平台居中放大） */
+@media (orientation: landscape) and (min-width: 900px){
+  .jump{flex-direction:row;flex-wrap:wrap;align-items:stretch;gap:0}
+  .jump .jp-top{flex:0 0 100%;width:100%}
+  .jp-scene{flex:1 1 58%;height:auto;min-height:0;margin:0 8px 10px 12px;align-self:stretch}
+  .jp-panel{flex:1 1 38%;max-width:440px;margin:0 12px 10px 4px;padding-top:0;justify-content:flex-start}
+  .jp-panel.ended{flex:1 1 100%;max-width:none;margin:0 16px 12px}
+  .jp-opt{min-height:52px;font-size:17px}
+  .jp-q{padding:8px 12px}
+  .jp-qp{font-size:16.5px}
+  .jp-hint{bottom:10px}
+}
+@media (orientation: landscape) and (min-width: 900px) and (max-height: 500px){
+  .jp-scene{min-height:220px}
+  .jp-opt{min-height:46px;padding:6px 10px}
+  .jp-tip{display:none}
+}
+/* 中等平板横屏（如 1024×768） */
+@media (orientation: landscape) and (min-width: 700px) and (max-width: 899px){
+  #app,.tabbar .in{max-width:720px}
+  .fgrid{grid-template-columns:1fr 1fr}
+  .dq{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  .jp-scene{height:clamp(180px,48vh,320px)}
+  .jp-opts{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+
 
 .chip.dtier{font-weight:800}
 .chip.dtier.recog{background:var(--sky-soft);color:var(--sky)}
@@ -2539,7 +2596,10 @@ function advance(){
 }
 
 /* ---------- 场景绘制 ---------- */
-function dims(){ var r = G.root.querySelector('.jp-scene').getBoundingClientRect(); var H = 240, W = Math.max(260, Math.round(H * r.width / Math.max(1, r.height))); return {W: W, H: H}; }
+function dims(){ var r = G.root.querySelector('.jp-scene').getBoundingClientRect(); var wide = r.width > r.height * 1.15;
+  var H = wide ? 220 : 240, W = Math.max(260, Math.round(H * r.width / Math.max(1, r.height)));
+  if(wide){ W = Math.max(W, 420); H = Math.round(W * r.height / Math.max(1, r.width)); H = Math.max(180, Math.min(260, H)); W = Math.round(H * r.width / Math.max(1, r.height)); }
+  return {W: W, H: H}; }
 function layout(){ if(!G || !G.plats) return; buildScene(true); }
 function buildScene(keep){
   var d = dims(), W = d.W, H = d.H, svg = G.svg; G.W = W; G.H = H; G.waterY = 176;

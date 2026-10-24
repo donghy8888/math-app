@@ -179,7 +179,10 @@ function advance(){
 }
 
 /* ---------- 场景绘制 ---------- */
-function dims(){ var r = G.root.querySelector('.jp-scene').getBoundingClientRect(); var H = 240, W = Math.max(260, Math.round(H * r.width / Math.max(1, r.height))); return {W: W, H: H}; }
+function dims(){ var r = G.root.querySelector('.jp-scene').getBoundingClientRect(); var wide = r.width > r.height * 1.15;
+  var H = wide ? 220 : 240, W = Math.max(260, Math.round(H * r.width / Math.max(1, r.height)));
+  if(wide){ W = Math.max(W, 420); H = Math.round(W * r.height / Math.max(1, r.width)); H = Math.max(180, Math.min(260, H)); W = Math.round(H * r.width / Math.max(1, r.height)); }
+  return {W: W, H: H}; }
 function layout(){ if(!G || !G.plats) return; buildScene(true); }
 function buildScene(keep){
   var d = dims(), W = d.W, H = d.H, svg = G.svg; G.W = W; G.H = H; G.waterY = 176;
