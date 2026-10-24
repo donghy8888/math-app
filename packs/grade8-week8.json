@@ -1,0 +1,1984 @@
+{
+ "id": "grade8-week8",
+ "title": "八年级第一学期第八周数学营养餐（一元二次方程）",
+ "date": "2026-10-24",
+ "questions": [
+  {
+   "id": "q1",
+   "original": "1. 将方程 $4x^2+x=5$ 化为一般形式后，$a$、$b$、$c$ 的值分别是（　）\nA. $a=4,\\ b=1,\\ c=5$\nB. $a=1,\\ b=4,\\ c=5$\nC. $a=4,\\ b=1,\\ c=-5$\nD. $a=4,\\ b=-5,\\ c=1$",
+   "knowledgePoints": [
+    "一元二次方程的一般形式"
+   ],
+   "difficulty": 1,
+   "timeLimitSec": 60,
+   "steps": [
+    {
+     "prompt": "把 $5$ 移到左边，方程变成？",
+     "type": "choice",
+     "answer": "A",
+     "hint": "移项要变号。",
+     "explanation": "$4x^2+x-5=0$。",
+     "options": [
+      "$4x^2+x-5=0$",
+      "$4x^2+x+5=0$",
+      "$x^2+4x-5=0$"
+     ]
+    },
+    {
+     "prompt": "对照 $ax^2+bx+c=0$，这里 $a=4$，$b=1$，$c=$？",
+     "type": "number",
+     "answer": "-5",
+     "hint": "常数项连同符号。",
+     "explanation": "$c=-5$，所以选 C。"
+    }
+   ],
+   "finalAnswer": "C（$a=4,\\ b=1,\\ c=-5$）",
+   "formulas": [
+    {
+     "name": "一般形式",
+     "latex": "ax^2+bx+c=0\\ (a\\ne0)",
+     "tip": "所有项移到等号左边，按降幂排列，读出 $a,b,c$（连同符号）。"
+    }
+   ],
+   "method": "移项化成右边为 0 的一般形式，再读出 $a,b,c$（注意常数项符号）。",
+   "analysis": {
+    "known": [
+     "$4x^2+x=5$",
+     {
+      "text": "一般形式右边必须是 0",
+      "hidden": true,
+      "why": "移项后才能确定 $c$ 的符号"
+     }
+    ],
+    "goal": "求 $a,b,c$",
+    "associations": [
+     {
+      "trigger": "化为一般形式",
+      "recall": "移项使右边为 0",
+      "why": "$4x^2+x-5=0$",
+      "latex": "ax^2+bx+c=0"
+     }
+    ],
+    "thinkingPath": [
+     "移项：$4x^2+x-5=0$。",
+     "读出 $a=4,b=1,c=-5$，选 C。"
+    ],
+    "pitfalls": [
+     "移项不变号，误选 A。",
+     "把系数顺序搞乱，误选 B。"
+    ]
+   }
+  },
+  {
+   "id": "q2",
+   "original": "2. 将一元二次方程 $x^2-4x-2024=0$ 转化为 $(x+a)^2=b$ 的形式，则 $a+b$ 的值为（　）\nA. $2025$\nB. $2026$\nC. $2027$\nD. $2028$",
+   "knowledgePoints": [
+    "配方法",
+    "直接开平方法"
+   ],
+   "difficulty": 2,
+   "timeLimitSec": 90,
+   "steps": [
+    {
+     "prompt": "配方：两边同时加上一次项系数一半的平方。一次项系数是 $-4$，一半的平方是？",
+     "type": "number",
+     "answer": "4",
+     "hint": "$(\\frac{-4}{2})^2$。",
+     "explanation": "加上 4。"
+    },
+    {
+     "prompt": "得 $(x-2)^2=2024+4=2028$。对照 $(x+a)^2=b$，则 $a=$？",
+     "type": "number",
+     "answer": "-2",
+     "hint": "$x-2=x+(-2)$。",
+     "explanation": "$a=-2$，$b=2028$。"
+    },
+    {
+     "prompt": "$a+b=$？",
+     "type": "number",
+     "answer": "2026",
+     "hint": "$-2+2028$。",
+     "explanation": "$a+b=2026$，选 B。"
+    }
+   ],
+   "finalAnswer": "B（$a+b=2026$）",
+   "formulas": [
+    {
+     "name": "配方法",
+     "latex": "x^2+px=\\left(x+\\dfrac p2\\right)^2-\\dfrac{p^2}{4}",
+     "tip": "加上再减去一次项系数一半的平方。"
+    },
+    {
+     "name": "直接开平方法",
+     "latex": "(x+m)^2=n\\ (n\\ge0)\\Rightarrow x+m=\\pm\\sqrt n",
+     "tip": "别忘了负的那个平方根。"
+    }
+   ],
+   "method": "配方得 $(x-2)^2=2028$，即 $a=-2$、$b=2028$，相加。",
+   "analysis": {
+    "known": [
+     "$x^2-4x-2024=0$",
+     {
+      "text": "写成 $(x+a)^2=b$ 时，$a$ 可能是负数",
+      "hidden": true,
+      "why": "$x-2=x+(-2)$"
+     }
+    ],
+    "goal": "求 $a+b$",
+    "associations": [
+     {
+      "trigger": "转化为 $(x+a)^2=b$",
+      "recall": "配方法",
+      "why": "一次项系数一半的平方是配方常数",
+      "latex": "x^2+px=(x+\\frac p2)^2-\\frac{p^2}{4}"
+     }
+    ],
+    "thinkingPath": [
+     "配方：$(x-2)^2=2028$。",
+     "$a=-2$，$b=2028$。",
+     "$a+b=2026$。"
+    ],
+    "pitfalls": [
+     "把 $a$ 写成 $2$ 而漏掉负号，误选 D。"
+    ]
+   }
+  },
+  {
+   "id": "q3",
+   "original": "3. 将一元二次方程 $x^2-6x=1$ 配方，得到方程 $x^2-6x+\\blacktriangle=1+\\blacktriangle$，其中“$\\blacktriangle$”表示的数是（　）\nA. $3$\nB. $6$\nC. $9$\nD. $10$",
+   "knowledgePoints": [
+    "配方法"
+   ],
+   "difficulty": 1,
+   "timeLimitSec": 60,
+   "steps": [
+    {
+     "prompt": "一次项系数是 $-6$，它的一半是？",
+     "type": "number",
+     "answer": "-3",
+     "hint": "$\\frac{-6}{2}$。",
+     "explanation": "一半是 $-3$。"
+    },
+    {
+     "prompt": "一半的平方是？这就是配方要加的数 $\\blacktriangle$。",
+     "type": "number",
+     "answer": "9",
+     "hint": "$(-3)^2$。",
+     "explanation": "$\\blacktriangle=9$，选 C。"
+    }
+   ],
+   "finalAnswer": "C（$9$）",
+   "formulas": [
+    {
+     "name": "配方法",
+     "latex": "x^2+px=\\left(x+\\dfrac p2\\right)^2-\\dfrac{p^2}{4}",
+     "tip": "加上再减去一次项系数一半的平方。"
+    }
+   ],
+   "method": "配方加上一次项系数一半的平方：$(\\frac{-6}{2})^2=9$。",
+   "analysis": {
+    "known": [
+     "$x^2-6x=1$",
+     "配方得到 $x^2-6x+\\blacktriangle=1+\\blacktriangle$"
+    ],
+    "goal": "求 $\\blacktriangle$",
+    "associations": [
+     {
+      "trigger": "配方",
+      "recall": "加一次项系数一半的平方",
+      "why": "$(\\frac{b}{2a})^2$，这里 $a=1,b=-6$",
+      "latex": "\\left(\\dfrac{-6}{2}\\right)^2=9"
+     }
+    ],
+    "thinkingPath": [
+     "算一半的平方：9。",
+     "两边同加 9，得 $(x-3)^2=10$。"
+    ],
+    "pitfalls": [
+     "只取一半 3 不平方，误选 A。",
+     "把一次项系数 6 直接当答案，误选 B。"
+    ]
+   }
+  },
+  {
+   "id": "q4",
+   "original": "4. “河图洛书”是中华文明的源头之一。我们定义一种新运算“洛书积”：对于两个实数 $a$ 和 $b$，其“洛书积”记为 $a\\otimes b$，运算规则为 $a\\otimes b=(a-b)^2-2ab$。例如：$3\\otimes 2=(3-2)^2-2\\times3\\times2=-11$。则关于 $x$ 的方程 $x\\otimes 2=0$ 的根的情况为（　）\nA. 有两个不相等的实数根\nB. 有两个相等的实数根\nC. 只有一个实数根\nD. 没有实数根",
+   "knowledgePoints": [
+    "根的判别式",
+    "新定义运算"
+   ],
+   "difficulty": 2,
+   "timeLimitSec": 120,
+   "steps": [
+    {
+     "prompt": "把定义代入：$x\\otimes 2=(x-2)^2-2\\cdot x\\cdot 2=0$。展开整理成一般式：$x^2-8x+$？$=0$",
+     "type": "number",
+     "answer": "4",
+     "hint": "$(x-2)^2=x^2-4x+4$，再减 $4x$。",
+     "explanation": "$x^2-8x+4=0$。"
+    },
+    {
+     "prompt": "$\\Delta=b^2-4ac=64-16=$？",
+     "type": "number",
+     "answer": "48",
+     "hint": "$4\\times1\\times4=16$。",
+     "explanation": "$\\Delta=48>0$，有两个不相等的实数根，选 A。"
+    }
+   ],
+   "finalAnswer": "A（有两个不相等的实数根）",
+   "formulas": [
+    {
+     "name": "根的判别式",
+     "latex": "\\Delta=b^2-4ac",
+     "tip": "$\\Delta>0$ 两不等实根；$\\Delta=0$ 两相等实根；$\\Delta<0$ 无实根。"
+    },
+    {
+     "name": "一般形式",
+     "latex": "ax^2+bx+c=0\\ (a\\ne0)",
+     "tip": "所有项移到等号左边，按降幂排列，读出 $a,b,c$（连同符号）。"
+    }
+   ],
+   "method": "先按新定义化成一元二次方程，再用判别式判断。",
+   "analysis": {
+    "known": [
+     "$a\\otimes b=(a-b)^2-2ab$",
+     "方程 $x\\otimes 2=0$"
+    ],
+    "goal": "判断根的情况",
+    "associations": [
+     {
+      "trigger": "新定义运算的方程",
+      "recall": "先代入定义化为普通方程",
+      "why": "不要被新符号吓住"
+     },
+     {
+      "trigger": "判断根的情况",
+      "recall": "算判别式 $\\Delta$",
+      "why": "$\\Delta>0$ 两不等实根",
+      "latex": "\\Delta=b^2-4ac"
+     }
+    ],
+    "thinkingPath": [
+     "代入定义展开得 $x^2-8x+4=0$。",
+     "$\\Delta=48>0$，选 A。"
+    ],
+    "pitfalls": [
+     "展开漏项，判别式算错。",
+     "把“只有一个实数根”和“两个相等实根”搞混。"
+    ]
+   }
+  },
+  {
+   "id": "q5",
+   "original": "5. 如图，某庭院平面图：长方形庭院长 $42\\,\\mathrm{m}$、宽 $24\\,\\mathrm{m}$。院内从入口到出口有一条宽度均为 $x\\,\\mathrm{m}$ 的 L 形石板路（入口在右上，先竖直向下再水平向左至左下出口），其余两块矩形区域为水池，水池总面积为 $640\\,\\mathrm{m}^2$。根据题意可列方程（　）\nA. $(42-2x)(24-x)=640$\nB. $(42-x)(24-2x)=640$\nC. $(42-2x)(24+x)=640$\nD. $(42-x)(24-x)=640$",
+   "knowledgePoints": [
+    "一元二次方程的应用",
+    "面积问题"
+   ],
+   "difficulty": 3,
+   "timeLimitSec": 150,
+   "steps": [
+    {
+     "prompt": "庭院总面积是？",
+     "type": "number",
+     "answer": "1008",
+     "hint": "$42\\times24$。",
+     "explanation": "$1008\\,\\mathrm{m}^2$。"
+    },
+    {
+     "prompt": "L 形石板路宽为 $x$，可“平移归边”：竖直段宽 $x$、水平段宽 $x$，水池总面积等于边长各缩短 $x$ 后的矩形面积。这个矩形的两边是？",
+     "type": "choice",
+     "answer": "B",
+     "hint": "长减 $x$，宽减 $x$。",
+     "explanation": "$(42-x)$ 和 $(24-x)$。",
+     "options": [
+      "$(42-2x)$ 和 $(24-x)$",
+      "$(42-x)$ 和 $(24-x)$",
+      "$(42-x)$ 和 $(24-2x)$"
+     ]
+    },
+    {
+     "prompt": "所以方程是？",
+     "type": "choice",
+     "answer": "D",
+     "hint": "水池面积 $640$。",
+     "explanation": "$(42-x)(24-x)=640$，选 D。",
+     "options": [
+      "A",
+      "B",
+      "C",
+      "D"
+     ]
+    }
+   ],
+   "finalAnswer": "D（$(42-x)(24-x)=640$）",
+   "formulas": [
+    {
+     "name": "L形道路面积转化",
+     "latex": "(L-x)(W-x)=\\text{水池面积}",
+     "tip": "宽为 $x$ 的 L 形通道，水池面积等于两边各减 $x$ 的矩形。"
+    }
+   ],
+   "method": "L 形等宽通道：水池总面积 $=(42-x)(24-x)$。也可用总面积减道路面积验证：$42\\cdot24-x(42+24-x)=(42-x)(24-x)$。",
+   "analysis": {
+    "known": [
+     "庭院长 $42$、宽 $24$",
+     "L 形石板路宽均为 $x$",
+     "两块水池总面积 $640$",
+     {
+      "text": "L 形等宽通道可归并为 $(L-x)(W-x)$",
+      "hidden": true,
+      "why": "竖直段与水平段在拐角重叠 $x^2$，道路面积 $=x(L+W-x)$"
+     }
+    ],
+    "goal": "列出方程",
+    "associations": [
+     {
+      "trigger": "L 形等宽通道+矩形水池",
+      "recall": "两边各减 $x$",
+      "why": "水池面积 $(42-x)(24-x)$",
+      "latex": "(L-x)(W-x)=640"
+     },
+     {
+      "trigger": "验证",
+      "recall": "总面积$-$道路面积",
+      "why": "$1008-x(66-x)=(42-x)(24-x)$"
+     }
+    ],
+    "thinkingPath": [
+     "识别路径为 L 形等宽。",
+     "水池面积转化为 $(42-x)(24-x)$。",
+     "等于 640，选 D。"
+    ],
+    "pitfalls": [
+     "看成两边都减 $2x$ 的环形通道，误选 A 或 B。"
+    ]
+   }
+  },
+  {
+   "id": "q6",
+   "original": "6. 一元二次方程 $x^2=x(2x-1)$ 的解是______。",
+   "knowledgePoints": [
+    "因式分解法解一元二次方程"
+   ],
+   "difficulty": 2,
+   "timeLimitSec": 90,
+   "steps": [
+    {
+     "prompt": "移项：$x^2-x(2x-1)=0$，展开得？",
+     "type": "choice",
+     "answer": "A",
+     "hint": "$x(2x-1)=2x^2-x$。",
+     "explanation": "$-x^2+x=0$，即 $x-x^2=0$。",
+     "options": [
+      "$x-x^2=0$",
+      "$x^2+x=0$",
+      "$3x^2-x=0$"
+     ]
+    },
+    {
+     "prompt": "提公因式 $x(1-x)=0$，解得？",
+     "type": "choice",
+     "answer": "C",
+     "hint": "$x=0$ 或 $1-x=0$。",
+     "explanation": "$x_1=0,\\ x_2=1$。",
+     "options": [
+      "$x=1$",
+      "$x=0$",
+      "$x=0$ 或 $x=1$",
+      "$x=\\dfrac12$"
+     ]
+    }
+   ],
+   "finalAnswer": "$x_1=0,\\ x_2=1$",
+   "formulas": [
+    {
+     "name": "因式分解法",
+     "latex": "AB=0\\Rightarrow A=0\\ \\text{或}\\ B=0",
+     "tip": "右边必须是 0。"
+    }
+   ],
+   "method": "移项使一边为 0，提公因式求解。",
+   "analysis": {
+    "known": [
+     "$x^2=x(2x-1)$",
+     {
+      "text": "不能两边同除以 $x$",
+      "hidden": true,
+      "why": "会丢掉根 $x=0$"
+     }
+    ],
+    "goal": "求方程的解",
+    "associations": [
+     {
+      "trigger": "一边不是 0",
+      "recall": "先移项",
+      "why": "化成 $AB=0$ 再用因式分解",
+      "latex": "AB=0"
+     }
+    ],
+    "thinkingPath": [
+     "移项展开：$x-x^2=0$。",
+     "$x(1-x)=0$。",
+     "$x=0$ 或 $1$。"
+    ],
+    "pitfalls": [
+     "两边除以 $x$ 丢掉 $x=0$。"
+    ]
+   }
+  },
+  {
+   "id": "q7",
+   "original": "7. 写出一个二次项系数为 $3$ 的关于 $x$ 的一元二次方程：______。",
+   "knowledgePoints": [
+    "一元二次方程的定义"
+   ],
+   "difficulty": 1,
+   "timeLimitSec": 45,
+   "steps": [
+    {
+     "prompt": "二次项系数是 $3$，只要写出形如 $3x^2+\\cdots=0$ 且确是二次方程的式子即可。下面哪个可以？",
+     "type": "choice",
+     "answer": "A",
+     "hint": "常数、一次项随意（也可没有）。",
+     "explanation": "例如 $3x^2-1=0$。",
+     "options": [
+      "$3x^2-1=0$",
+      "$3x-1=0$",
+      "$x^2+3=0$",
+      "$3x^2+y=0$"
+     ]
+    }
+   ],
+   "finalAnswer": "$3x^2-1=0$（答案不唯一，凡二次项系数为 $3$ 的关于 $x$ 的一元二次方程均可）",
+   "formulas": [
+    {
+     "name": "一般形式",
+     "latex": "ax^2+bx+c=0\\ (a\\ne0)",
+     "tip": "所有项移到等号左边，按降幂排列，读出 $a,b,c$（连同符号）。"
+    }
+   ],
+   "method": "写出 $3x^2+bx+c=0$（$b,c$ 为任意实数，或可缺项），保证是整式方程且只含 $x$。",
+   "analysis": {
+    "known": [
+     "二次项系数为 $3$",
+     "关于 $x$ 的一元二次方程"
+    ],
+    "goal": "写出一个符合条件的方程",
+    "associations": [
+     {
+      "trigger": "二次项系数为 3",
+      "recall": "$a=3$",
+      "why": "例如 $3x^2+1=0$",
+      "latex": "3x^2+bx+c=0"
+     }
+    ],
+    "thinkingPath": [
+     "任写一个 $3x^2+\\cdots=0$。"
+    ],
+    "pitfalls": [
+     "写成一次方程，或混入第二个未知数。"
+    ]
+   }
+  },
+  {
+   "id": "q8",
+   "original": "8. 将方程 $x^2+6x-1=0$ 配方成 $(x+m)^2=n$ 的形式，则 $mn=$______。",
+   "knowledgePoints": [
+    "配方法"
+   ],
+   "difficulty": 2,
+   "timeLimitSec": 90,
+   "steps": [
+    {
+     "prompt": "移项：$x^2+6x=1$。一次项系数一半是？",
+     "type": "number",
+     "answer": "3",
+     "hint": "$\\frac{6}{2}$。",
+     "explanation": "$3$。"
+    },
+    {
+     "prompt": "配方：$(x+3)^2=1+9=10$。所以 $m=3$，$n=10$，$mn=$？",
+     "type": "number",
+     "answer": "30",
+     "hint": "$3\\times10$。",
+     "explanation": "$mn=30$。"
+    }
+   ],
+   "finalAnswer": "$30$",
+   "formulas": [
+    {
+     "name": "配方法",
+     "latex": "x^2+px=\\left(x+\\dfrac p2\\right)^2-\\dfrac{p^2}{4}",
+     "tip": "加上再减去一次项系数一半的平方。"
+    }
+   ],
+   "method": "配方得 $(x+3)^2=10$，故 $m=3,n=10,mn=30$。",
+   "analysis": {
+    "known": [
+     "$x^2+6x-1=0$"
+    ],
+    "goal": "求 $mn$",
+    "associations": [
+     {
+      "trigger": "配方成 $(x+m)^2=n$",
+      "recall": "加一次项一半的平方",
+      "why": "$m=\\dfrac{6}{2}=3$，$n=1+9=10$"
+     }
+    ],
+    "thinkingPath": [
+     "配方：$(x+3)^2=10$。",
+     "$mn=30$。"
+    ],
+    "pitfalls": [
+     "$n$ 算成 $1-9=-8$，得 $mn=-24$。"
+    ]
+   }
+  },
+  {
+   "id": "q9",
+   "original": "9. 已知关于 $x$ 的一元二次方程 $2x^2-kx+4=0$ 的一个根为 $x=2$，则 $k$ 的值为______。",
+   "knowledgePoints": [
+    "方程的根"
+   ],
+   "difficulty": 1,
+   "timeLimitSec": 60,
+   "steps": [
+    {
+     "prompt": "把 $x=2$ 代入：$2\\cdot4-k\\cdot2+4=0$，即 $8-2k+4=0$。$2k=$？",
+     "type": "number",
+     "answer": "12",
+     "hint": "$12-2k=0$。",
+     "explanation": "$2k=12$。"
+    },
+    {
+     "prompt": "所以 $k=$？",
+     "type": "number",
+     "answer": "6",
+     "hint": "除以 2。",
+     "explanation": "$k=6$。"
+    }
+   ],
+   "finalAnswer": "$6$",
+   "formulas": [
+    {
+     "name": "方程的根",
+     "latex": "x_0\\ \\text{是根}\\Leftrightarrow ax_0^2+bx_0+c=0",
+     "tip": "把已知根代入方程求参数。"
+    }
+   ],
+   "method": "已知一根就代入原方程求参数。",
+   "analysis": {
+    "known": [
+     "方程 $2x^2-kx+4=0$",
+     "一个根是 $x=2$"
+    ],
+    "goal": "求 $k$",
+    "associations": [
+     {
+      "trigger": "已知一个根求参数",
+      "recall": "代入方程",
+      "why": "a x_0^2+b x_0+c=0"
+     }
+    ],
+    "thinkingPath": [
+     "代入 $x=2$。",
+     "解得 $k=6$。"
+    ],
+    "pitfalls": [
+     "代入时 $2\\cdot2^2$ 算成 $2\\cdot2$。"
+    ]
+   }
+  },
+  {
+   "id": "q10",
+   "original": "10. 如果关于 $x$ 的方程 $x^2-2x+4-m=0$ 有两个不相等的实数根，那么 $m$ 的取值范围是______。",
+   "knowledgePoints": [
+    "根的判别式"
+   ],
+   "difficulty": 2,
+   "timeLimitSec": 90,
+   "steps": [
+    {
+     "prompt": "这里 $a=1,b=-2,c=4-m$。$\\Delta=4-4(4-m)>0$，化简得 $4m>$？",
+     "type": "number",
+     "answer": "12",
+     "hint": "$4-16+4m>0$。",
+     "explanation": "$4m>12$。"
+    },
+    {
+     "prompt": "所以 $m>$？",
+     "type": "number",
+     "answer": "3",
+     "hint": "两边除以 4。",
+     "explanation": "$m>3$。"
+    }
+   ],
+   "finalAnswer": "$m>3$",
+   "formulas": [
+    {
+     "name": "根的判别式",
+     "latex": "\\Delta=b^2-4ac",
+     "tip": "$\\Delta>0$ 两不等实根；$\\Delta=0$ 两相等实根；$\\Delta<0$ 无实根。"
+    }
+   ],
+   "method": "由 $\\Delta>0$ 解不等式。",
+   "analysis": {
+    "known": [
+     "$x^2-2x+(4-m)=0$",
+     "有两个不相等的实数根",
+     {
+      "text": "$\\Delta>0$",
+      "hidden": true,
+      "why": "“不相等”对应严格大于"
+     }
+    ],
+    "goal": "求 $m$ 的范围",
+    "associations": [
+     {
+      "trigger": "两个不相等的实数根",
+      "recall": "$\\Delta>0$",
+      "why": "\\Delta=b^2-4ac>0"
+     }
+    ],
+    "thinkingPath": [
+     "列出 $\\Delta=4-4(4-m)>0$。",
+     "解得 $m>3$。"
+    ],
+    "pitfalls": [
+     "写成 $m\\ge3$，忽略“不相等”。"
+    ]
+   }
+  },
+  {
+   "id": "q11",
+   "original": "11. 定义新运算：$a\\circledast b=a^2-2ab$。例如：$2\\circledast 3=2^2-2\\times2\\times3=-8$。则方程 $x\\circledast 1=0$ 的解为______。",
+   "knowledgePoints": [
+    "因式分解法解一元二次方程",
+    "新定义运算"
+   ],
+   "difficulty": 2,
+   "timeLimitSec": 90,
+   "steps": [
+    {
+     "prompt": "代入定义：$x\\circledast 1=x^2-2x\\cdot1=0$，即 $x^2-2x=0$。提公因式得？",
+     "type": "choice",
+     "answer": "A",
+     "hint": "$x(x-2)$。",
+     "explanation": "$x(x-2)=0$。",
+     "options": [
+      "$x(x-2)=0$",
+      "$x(x+2)=0$",
+      "$(x-1)^2=0$"
+     ]
+    },
+    {
+     "prompt": "解得？",
+     "type": "choice",
+     "answer": "C",
+     "hint": "$x=0$ 或 $x=2$。",
+     "explanation": "$x_1=0,\\ x_2=2$。",
+     "options": [
+      "$x=2$",
+      "$x=0$",
+      "$x=0$ 或 $x=2$",
+      "$x=1$"
+     ]
+    }
+   ],
+   "finalAnswer": "$x_1=0,\\ x_2=2$",
+   "formulas": [
+    {
+     "name": "因式分解法",
+     "latex": "AB=0\\Rightarrow A=0\\ \\text{或}\\ B=0",
+     "tip": "右边必须是 0。"
+    }
+   ],
+   "method": "按新定义化为 $x^2-2x=0$，提公因式。",
+   "analysis": {
+    "known": [
+     "$a\\circledast b=a^2-2ab$",
+     "$x\\circledast 1=0$"
+    ],
+    "goal": "求方程的解",
+    "associations": [
+     {
+      "trigger": "新定义",
+      "recall": "先代入再化简",
+      "why": "化成普通方程再解"
+     }
+    ],
+    "thinkingPath": [
+     "$x^2-2x=0$。",
+     "$x=0$ 或 $2$。"
+    ],
+    "pitfalls": [
+     "两边同除以 $x$ 丢掉 $0$。"
+    ]
+   }
+  },
+  {
+   "id": "q12",
+   "original": "12. 某校组织乒乓球比赛，初赛时参加比赛的每两名选手之间都要进行一场比赛，初赛共进行了 $55$ 场。设有 $x$ 名选手参加比赛，可列方程为______。",
+   "knowledgePoints": [
+    "一元二次方程的应用"
+   ],
+   "difficulty": 2,
+   "timeLimitSec": 90,
+   "steps": [
+    {
+     "prompt": "每两人赛一场，场次数是组合数 $\\dfrac{x(x-1)}{2}$。它等于？",
+     "type": "number",
+     "answer": "55",
+     "hint": "题目给出场次。",
+     "explanation": "$\\dfrac{x(x-1)}{2}=55$。"
+    },
+    {
+     "prompt": "也可以写成 $x(x-1)=$？",
+     "type": "number",
+     "answer": "110",
+     "hint": "两边乘 2。",
+     "explanation": "两种写法都对。"
+    }
+   ],
+   "finalAnswer": "$\\dfrac{x(x-1)}{2}=55$（或 $x(x-1)=110$）",
+   "formulas": [
+    {
+     "name": "组合数（比赛场次）",
+     "latex": "\\dfrac{x(x-1)}{2}=n",
+     "tip": "每两人一场，场次是组合数 $C_x^2$。"
+    }
+   ],
+   "method": "场次 $=$ 组合数 $C_x^2$，列方程 $\\dfrac{x(x-1)}{2}=55$。",
+   "analysis": {
+    "known": [
+     "每两名选手赛一场",
+     "共 55 场",
+     "$x$ 名选手"
+    ],
+    "goal": "列出方程",
+    "associations": [
+     {
+      "trigger": "每两人一场",
+      "recall": "组合数 $\\dfrac{x(x-1)}{2}$",
+      "why": "不要写成 $x^2$ 或 $x-1$"
+     }
+    ],
+    "thinkingPath": [
+     "场次 $=\\dfrac{x(x-1)}{2}=55$。"
+    ],
+    "pitfalls": [
+     "写成 $x+x=55$ 或 $x^2=55$。"
+    ]
+   }
+  },
+  {
+   "id": "q13",
+   "original": "13. 某服装店搞促销活动，将一款原价为 $118$ 元的衬衣第一次降价后，销售量仍然不好，又进行第二次降价，两次降价的百分率相同，现售价为 $76$ 元。设降价的百分率为 $x$，可列出方程______。",
+   "knowledgePoints": [
+    "一元二次方程的应用",
+    "百分率问题"
+   ],
+   "difficulty": 2,
+   "timeLimitSec": 90,
+   "steps": [
+    {
+     "prompt": "第一次降价后价格为 $118(1-x)$。第二次再降相同百分率，现价是？",
+     "type": "choice",
+     "answer": "A",
+     "hint": "再乘 $(1-x)$。",
+     "explanation": "$118(1-x)^2$。",
+     "options": [
+      "$118(1-x)^2$",
+      "$118(1-2x)$",
+      "$118-2x$",
+      "$118(1-x^2)$"
+     ]
+    },
+    {
+     "prompt": "现价等于 76，方程是？",
+     "type": "choice",
+     "answer": "A",
+     "hint": "列等式。",
+     "explanation": "$118(1-x)^2=76$。",
+     "options": [
+      "$118(1-x)^2=76$",
+      "$118(1-x)=76$",
+      "$118-2\\cdot118x=76$"
+     ]
+    }
+   ],
+   "finalAnswer": "$118(1-x)^2=76$",
+   "formulas": [
+    {
+     "name": "连续两次降价",
+     "latex": "原价(1-x)^2=\\text{现价}",
+     "tip": "两次相同百分率降价，连乘 $(1-x)$ 两次。"
+    }
+   ],
+   "method": "两次相同百分率降价：原价连续乘两次 $(1-x)$。",
+   "analysis": {
+    "known": [
+     "原价 $118$ 元",
+     "两次降价百分率都是 $x$",
+     "现价 $76$ 元"
+    ],
+    "goal": "列出方程",
+    "associations": [
+     {
+      "trigger": "两次相同降价百分率",
+      "recall": "连乘 $(1-x)^2$",
+      "why": "不是减 $2x$"
+     }
+    ],
+    "thinkingPath": [
+     "现价 $=118(1-x)^2=76$。"
+    ],
+    "pitfalls": [
+     "误列成一次式 $118(1-2x)=76$。"
+    ]
+   }
+  },
+  {
+   "id": "q14",
+   "original": "14. 若关于 $x$ 的一元二次方程 $ax^2+bx+c=0\\ (a<0)$ 的两根为 $x_1=1,\\ x_2=3$，则关于 $x$ 的一元二次方程 $a(x-2)^2+bx+c=2b\\ (a<0)$ 的解为______。",
+   "knowledgePoints": [
+    "根与系数的关系",
+    "因式分解法"
+   ],
+   "difficulty": 4,
+   "timeLimitSec": 180,
+   "steps": [
+    {
+     "prompt": "由韦达：$1+3=-\\dfrac{b}{a}$，得 $b=$？（用 $a$ 表示）",
+     "type": "choice",
+     "answer": "A",
+     "hint": "$4=-b/a$。",
+     "explanation": "$b=-4a$。",
+     "options": [
+      "$-4a$",
+      "$4a$",
+      "$-a$",
+      "$a$"
+     ]
+    },
+    {
+     "prompt": "又 $1\\cdot3=\\dfrac{c}{a}$，得 $c=$？",
+     "type": "choice",
+     "answer": "A",
+     "hint": "$c=3a$。",
+     "explanation": "$c=3a$。",
+     "options": [
+      "$3a$",
+      "$-3a$",
+      "$a/3$",
+      "$4a$"
+     ]
+    },
+    {
+     "prompt": "代入新方程：$a(x-2)^2+(-4a)x+3a=2(-4a)$。两边除以 $a$（$a\\ne0$）并展开，得 $x^2-8x+15=0$。因式分解？",
+     "type": "choice",
+     "answer": "B",
+     "hint": "$15=3\\times5$，$8=3+5$。",
+     "explanation": "$(x-3)(x-5)=0$，解为 $x=3$ 或 $x=5$。",
+     "options": [
+      "$(x-1)(x-15)$",
+      "$(x-3)(x-5)$",
+      "$(x-2)(x-6)$"
+     ]
+    }
+   ],
+   "finalAnswer": "$x=3$ 或 $x=5$",
+   "formulas": [
+    {
+     "name": "韦达定理",
+     "latex": "x_1+x_2=-\\dfrac{b}{a},\\ x_1x_2=\\dfrac{c}{a}",
+     "tip": "用两根表示系数，再代入新方程。"
+    },
+    {
+     "name": "因式分解法",
+     "latex": "AB=0\\Rightarrow A=0\\ \\text{或}\\ B=0",
+     "tip": "右边必须是 0。"
+    }
+   ],
+   "method": "先由韦达得 $b=-4a$、$c=3a$，代入新方程后约去 $a$，解 $x^2-8x+15=0$。",
+   "analysis": {
+    "known": [
+     "原方程两根为 $1$、$3$",
+     "$a<0$",
+     "新方程 $a(x-2)^2+bx+c=2b$",
+     {
+      "text": "注意新方程中间项是 $bx$ 而不是 $b(x-2)$",
+      "hidden": true,
+      "why": "按题面展开，不要想当然做换元"
+     }
+    ],
+    "goal": "求新方程的解",
+    "associations": [
+     {
+      "trigger": "已知两根",
+      "recall": "韦达定理求 $b,c$",
+      "why": "b=-a(x_1+x_2),\\ c=a x_1 x_2"
+     },
+     {
+      "trigger": "系数含 $a$",
+      "recall": "两边同除以 $a$",
+      "why": "$a\\ne0$ 且 $a<0$ 保证是二次方程"
+     }
+    ],
+    "thinkingPath": [
+     "韦达：$b=-4a,\\ c=3a$。",
+     "代入并约去 $a$。",
+     "解得 $x=3$ 或 $5$。"
+    ],
+    "pitfalls": [
+     "把中间项误当成 $b(x-2)$。",
+     "约分时漏掉常数项。"
+    ]
+   }
+  },
+  {
+   "id": "q15",
+   "original": "15. 如果关于 $x$ 的一元二次方程 $ax^2+bx+c=0\\ (a\\ne0)$ 有两个实数根，且其中一个根比另一个根大 $1$，那么称这样的方程为“邻根方程”。例如：$x^2+x=0$ 的两个根是 $0$ 和 $-1$，它是“邻根方程”。关于 $x$ 的方程 $x^2-(m-1)x-m=0$（$m$ 是常数）是“邻根方程”，则 $m$ 的值是______。",
+   "knowledgePoints": [
+    "根的判别式",
+    "根的差",
+    "新定义"
+   ],
+   "difficulty": 3,
+   "timeLimitSec": 150,
+   "steps": [
+    {
+     "prompt": "两根之差的绝对值为 $|x_1-x_2|=\\dfrac{\\sqrt{\\Delta}}{|a|}$。这里 $a=1$，$\\Delta=(m-1)^2+4m=(m+1)^2$，所以 $|x_1-x_2|=|m+1|$。邻根要求它等于？",
+     "type": "number",
+     "answer": "1",
+     "hint": "差为 1。",
+     "explanation": "$|m+1|=1$。"
+    },
+    {
+     "prompt": "$|m+1|=1$ 得 $m+1=\\pm1$，所以 $m=$？",
+     "type": "choice",
+     "answer": "C",
+     "hint": "$m=0$ 或 $m=-2$。",
+     "explanation": "$m=0$ 或 $m=-2$（均使 $\\Delta>0$，确有两实根）。",
+     "options": [
+      "$0$",
+      "$-2$",
+      "$0$ 或 $-2$",
+      "$1$"
+     ]
+    }
+   ],
+   "finalAnswer": "$m=0$ 或 $m=-2$",
+   "formulas": [
+    {
+     "name": "根的判别式",
+     "latex": "\\Delta=b^2-4ac",
+     "tip": "$\\Delta>0$ 两不等实根；$\\Delta=0$ 两相等实根；$\\Delta<0$ 无实根。"
+    },
+    {
+     "name": "两根之差",
+     "latex": "|x_1-x_2|=\\dfrac{\\sqrt{\\Delta}}{|a|}",
+     "tip": "邻根方程即 $|x_1-x_2|=1$。"
+    }
+   ],
+   "method": "由 $|x_1-x_2|=\\sqrt{\\Delta}=|m+1|=1$，得 $m=0$ 或 $-2$。",
+   "analysis": {
+    "known": [
+     "方程 $x^2-(m-1)x-m=0$",
+     "是邻根方程：$|x_1-x_2|=1$ 且有两实根"
+    ],
+    "goal": "求 $m$",
+    "associations": [
+     {
+      "trigger": "邻根（差为 1）",
+      "recall": "$|x_1-x_2|=\\sqrt{\\Delta}/|a|$",
+      "why": "这里等于 $|m+1|$"
+     },
+     {
+      "trigger": "检验",
+      "recall": "$\\Delta\\ge0$ 且两根不等",
+      "why": "$m=0,-2$ 都满足"
+     }
+    ],
+    "thinkingPath": [
+     "算 $\\Delta=(m+1)^2$。",
+     "$|m+1|=1$。",
+     "$m=0$ 或 $-2$。"
+    ],
+    "pitfalls": [
+     "只写一个值。",
+     "把差写成 $m-1$。"
+    ]
+   }
+  },
+  {
+   "id": "q16",
+   "original": "16. 某农场拟建两间矩形饲养室，一面靠现有墙（墙长 $12\\,\\mathrm{m}$），中间用一道墙隔开，并在如图所示的三处各留 $1\\,\\mathrm{m}$ 宽的门：中间隔墙一处、靠外侧底边两处。已知计划中的材料可建墙体（不包括门）总长为 $27\\,\\mathrm{m}$，建成的饲养室面积为 $63\\,\\mathrm{m}^2$。设垂直于墙的一边长为 $x\\,\\mathrm{m}$，可列方程为______。",
+   "knowledgePoints": [
+    "一元二次方程的应用",
+    "面积问题"
+   ],
+   "difficulty": 3,
+   "timeLimitSec": 150,
+   "steps": [
+    {
+     "prompt": "垂直墙的墙有 3 道（两边+隔墙），每道长 $x$，其中隔墙去掉 $1\\,\\mathrm{m}$ 门，这部分用料是？",
+     "type": "choice",
+     "answer": "A",
+     "hint": "$3x-1$。",
+     "explanation": "$3x-1$。",
+     "options": [
+      "$3x-1$",
+      "$3x$",
+      "$3x-3$",
+      "$2x-1$"
+     ]
+    },
+    {
+     "prompt": "平行于墙的底边长设为 $y$，底边去掉 2 个门，用料 $y-2$。总用料：$(3x-1)+(y-2)=27$，得 $y=$？",
+     "type": "choice",
+     "answer": "B",
+     "hint": "$3x+y=30$。",
+     "explanation": "$y=30-3x$。",
+     "options": [
+      "$27-3x$",
+      "$30-3x$",
+      "$27-x$",
+      "$12$"
+     ]
+    },
+    {
+     "prompt": "面积 $xy=63$，代入得方程？",
+     "type": "choice",
+     "answer": "A",
+     "hint": "$x(30-3x)=63$。",
+     "explanation": "$x(30-3x)=63$（或 $3x(10-x)=63$）。",
+     "options": [
+      "$x(30-3x)=63$",
+      "$x(27-3x)=63$",
+      "$12x=63$",
+      "$x(12-x)=63$"
+     ]
+    }
+   ],
+   "finalAnswer": "$x(30-3x)=63$（或 $3x^{2}-30x+63=0$ 等变形）",
+   "formulas": [
+    {
+     "name": "靠墙矩形面积",
+     "latex": "S=x(c-kx)",
+     "tip": "用材料总长表示另一边，再写成关于一边的二次函数求最值。"
+    }
+   ],
+   "method": "用料：$3x-1+y-2=27\\Rightarrow y=30-3x$；面积 $xy=63$。",
+   "analysis": {
+    "known": [
+     "靠墙建两间矩形饲养室",
+     "垂直墙边长为 $x$",
+     "三处各留 $1\\,\\mathrm{m}$ 门",
+     "墙体材料（不含门）总长 $27\\,\\mathrm{m}$",
+     "面积 $63\\,\\mathrm{m}^2$",
+     {
+      "text": "现有墙长 12m 是可用长度上界",
+      "hidden": true,
+      "why": "列方程时先用材料与面积，再检验 $y\\le12$"
+     }
+    ],
+    "goal": "列出关于 $x$ 的方程",
+    "associations": [
+     {
+      "trigger": "多门洞用料",
+      "recall": "总长减去门宽",
+      "why": "三道竖墙减 1，底边减 2"
+     },
+     {
+      "trigger": "面积",
+      "recall": "长×宽",
+      "why": "$x\\cdot y=63$"
+     }
+    ],
+    "thinkingPath": [
+     "用料得 $y=30-3x$。",
+     "面积 $x(30-3x)=63$。"
+    ],
+    "pitfalls": [
+     "忘了减门宽。",
+     "把靠墙边直接当成 12。"
+    ]
+   }
+  },
+  {
+   "id": "q17-1",
+   "original": "17.（1）解方程：$(2x+3)^2-80=1$",
+   "knowledgePoints": [
+    "直接开平方法"
+   ],
+   "difficulty": 2,
+   "timeLimitSec": 120,
+   "steps": [
+    {
+     "prompt": "移项：$(2x+3)^2=81$。开平方：$2x+3=\\pm$？",
+     "type": "number",
+     "answer": "9",
+     "hint": "$9^2=81$。",
+     "explanation": "$\\pm9$。"
+    },
+    {
+     "prompt": "$2x+3=9$ 时，$x=$？",
+     "type": "number",
+     "answer": "3",
+     "hint": "$2x=6$。",
+     "explanation": "$x=3$。"
+    },
+    {
+     "prompt": "$2x+3=-9$ 时，$x=$？",
+     "type": "number",
+     "answer": "-6",
+     "hint": "$2x=-12$。",
+     "explanation": "$x=-6$。"
+    }
+   ],
+   "finalAnswer": "$x_1=3,\\ x_2=-6$",
+   "formulas": [
+    {
+     "name": "直接开平方法",
+     "latex": "(x+m)^2=n\\ (n\\ge0)\\Rightarrow x+m=\\pm\\sqrt n",
+     "tip": "别忘了负的那个平方根。"
+    }
+   ],
+   "method": "化为 $(2x+3)^2=81$，直接开平方。",
+   "analysis": {
+    "known": [
+     "$(2x+3)^2-80=1$"
+    ],
+    "goal": "解方程",
+    "associations": [
+     {
+      "trigger": "左边含完全平方",
+      "recall": "移项后开平方",
+      "why": "(2x+3)^2=81"
+     }
+    ],
+    "thinkingPath": [
+     "$(2x+3)^2=81$。",
+     "$2x+3=\\pm9$。",
+     "$x=3$ 或 $-6$。"
+    ],
+    "pitfalls": [
+     "漏掉负根。"
+    ]
+   }
+  },
+  {
+   "id": "q17-2",
+   "original": "17.（2）用配方法解方程：$x^2-4x+2=0$",
+   "knowledgePoints": [
+    "配方法"
+   ],
+   "difficulty": 2,
+   "timeLimitSec": 120,
+   "steps": [
+    {
+     "prompt": "移项：$x^2-4x=-2$。配方加上？",
+     "type": "number",
+     "answer": "4",
+     "hint": "$(\\frac{-4}{2})^2$。",
+     "explanation": "加 4。"
+    },
+    {
+     "prompt": "得 $(x-2)^2=2$。开平方：$x-2=\\pm$？",
+     "type": "choice",
+     "answer": "A",
+     "hint": "$\\sqrt2$。",
+     "explanation": "$\\pm\\sqrt2$。",
+     "options": [
+      "$\\sqrt2$",
+      "$2$",
+      "$\\sqrt{2}/2$",
+      "1"
+     ]
+    },
+    {
+     "prompt": "所以 $x=$？",
+     "type": "choice",
+     "answer": "B",
+     "hint": "$2\\pm\\sqrt2$。",
+     "explanation": "$x_1=2+\\sqrt2,\\ x_2=2-\\sqrt2$。",
+     "options": [
+      "$\\pm\\sqrt2$",
+      "$2\\pm\\sqrt2$",
+      "$4\\pm\\sqrt2$",
+      "$-2\\pm\\sqrt2$"
+     ]
+    }
+   ],
+   "finalAnswer": "$x_1=2+\\sqrt2,\\ x_2=2-\\sqrt2$",
+   "formulas": [
+    {
+     "name": "配方法",
+     "latex": "x^2+px=\\left(x+\\dfrac p2\\right)^2-\\dfrac{p^2}{4}",
+     "tip": "加上再减去一次项系数一半的平方。"
+    },
+    {
+     "name": "直接开平方法",
+     "latex": "(x+m)^2=n\\ (n\\ge0)\\Rightarrow x+m=\\pm\\sqrt n",
+     "tip": "别忘了负的那个平方根。"
+    }
+   ],
+   "method": "配方得 $(x-2)^2=2$，再开平方。",
+   "analysis": {
+    "known": [
+     "$x^2-4x+2=0$",
+     "要求用配方法"
+    ],
+    "goal": "解方程",
+    "associations": [
+     {
+      "trigger": "配方法",
+      "recall": "加一次项一半的平方",
+      "why": "得 $(x-2)^2=2$"
+     }
+    ],
+    "thinkingPath": [
+     "配方：$(x-2)^2=2$。",
+     "$x=2\\pm\\sqrt2$。"
+    ],
+    "pitfalls": [
+     "配方常数加错。",
+     "开平方漏 $\\pm$。"
+    ]
+   }
+  },
+  {
+   "id": "q17-3",
+   "original": "17.（3）用公式法解方程：$3x^2+4x-7=0$",
+   "knowledgePoints": [
+    "公式法",
+    "根的判别式"
+   ],
+   "difficulty": 2,
+   "timeLimitSec": 120,
+   "steps": [
+    {
+     "prompt": "$a=3,b=4,c=-7$。$\\Delta=16-4\\cdot3\\cdot(-7)=$？",
+     "type": "number",
+     "answer": "100",
+     "hint": "$16+84$。",
+     "explanation": "$\\Delta=100$。"
+    },
+    {
+     "prompt": "$x=\\dfrac{-4\\pm10}{6}$。较大根是？",
+     "type": "number",
+     "answer": "1",
+     "hint": "$(-4+10)/6=1$。",
+     "explanation": "$x_1=1$。"
+    },
+    {
+     "prompt": "较小根是？",
+     "type": "choice",
+     "answer": "A",
+     "hint": "$(-4-10)/6=-14/6=-7/3$。",
+     "explanation": "$x_2=-\\dfrac{7}{3}$。",
+     "options": [
+      "$-\\dfrac{7}{3}$",
+      "$-\\dfrac{7}{6}$",
+      "$\\dfrac{7}{3}$",
+      "$-1$"
+     ]
+    }
+   ],
+   "finalAnswer": "$x_1=1,\\ x_2=-\\dfrac{7}{3}$",
+   "formulas": [
+    {
+     "name": "求根公式",
+     "latex": "x=\\dfrac{-b\\pm\\sqrt{b^2-4ac}}{2a}\\ (b^2-4ac\\ge0)",
+     "tip": "先化成一般式，找准 $a,b,c$，先算 $\\Delta$。"
+    },
+    {
+     "name": "根的判别式",
+     "latex": "\\Delta=b^2-4ac",
+     "tip": "$\\Delta>0$ 两不等实根；$\\Delta=0$ 两相等实根；$\\Delta<0$ 无实根。"
+    }
+   ],
+   "method": "代入求根公式，$\\Delta=100$。",
+   "analysis": {
+    "known": [
+     "$3x^2+4x-7=0$",
+     "要求用公式法"
+    ],
+    "goal": "解方程",
+    "associations": [
+     {
+      "trigger": "公式法",
+      "recall": "先算 $\\Delta$ 再套公式",
+      "why": "x=\\frac{-b\\pm\\sqrt{\\Delta}}{2a}"
+     }
+    ],
+    "thinkingPath": [
+     "$\\Delta=100$。",
+     "$x=\\dfrac{-4\\pm10}{6}$。",
+     "$x=1$ 或 $-\\dfrac{7}{3}$。"
+    ],
+    "pitfalls": [
+     "$c=-7$ 时 $4ac$ 符号弄错。",
+     "约分错误。"
+    ]
+   }
+  },
+  {
+   "id": "q17-4",
+   "original": "17.（4）解方程：$(x+1)(x-1)=2x+4$",
+   "knowledgePoints": [
+    "因式分解法",
+    "公式法"
+   ],
+   "difficulty": 2,
+   "timeLimitSec": 120,
+   "steps": [
+    {
+     "prompt": "左边平方差：$x^2-1=2x+4$，移项得 $x^2-2x-$？$=0$",
+     "type": "number",
+     "answer": "5",
+     "hint": "$-1-4=-5$。",
+     "explanation": "$x^2-2x-5=0$。"
+    },
+    {
+     "prompt": "$\\Delta=4+20=24=4\\cdot6$。$x=\\dfrac{2\\pm2\\sqrt6}{2}=$？",
+     "type": "choice",
+     "answer": "A",
+     "hint": "约分。",
+     "explanation": "$1\\pm\\sqrt6$。",
+     "options": [
+      "$1\\pm\\sqrt6$",
+      "$2\\pm\\sqrt6$",
+      "$\\pm\\sqrt6$",
+      "$1\\pm2\\sqrt6$"
+     ]
+    }
+   ],
+   "finalAnswer": "$x_1=1+\\sqrt6,\\ x_2=1-\\sqrt6$",
+   "formulas": [
+    {
+     "name": "因式分解法",
+     "latex": "AB=0\\Rightarrow A=0\\ \\text{或}\\ B=0",
+     "tip": "右边必须是 0。"
+    },
+    {
+     "name": "求根公式",
+     "latex": "x=\\dfrac{-b\\pm\\sqrt{b^2-4ac}}{2a}\\ (b^2-4ac\\ge0)",
+     "tip": "先化成一般式，找准 $a,b,c$，先算 $\\Delta$。"
+    }
+   ],
+   "method": "展开移项后用公式法（或配方）。",
+   "analysis": {
+    "known": [
+     "$(x+1)(x-1)=2x+4$"
+    ],
+    "goal": "解方程",
+    "associations": [
+     {
+      "trigger": "左边平方差",
+      "recall": "先展开",
+      "why": "$x^2-1=2x+4$"
+     }
+    ],
+    "thinkingPath": [
+     "整理：$x^2-2x-5=0$。",
+     "$x=1\\pm\\sqrt6$。"
+    ],
+    "pitfalls": [
+     "移项变号错误。"
+    ]
+   }
+  },
+  {
+   "id": "q18-1",
+   "original": "18. 某商场某种商品平均每天可销售 $40$ 件，每件盈利 $60$ 元。经调查，每件商品每降价 $1$ 元，平均每天可多销售 $2$ 件。\n（1）当每件盈利 $50$ 元时，每天可销售多少件？",
+   "knowledgePoints": [
+    "一元二次方程的应用"
+   ],
+   "difficulty": 1,
+   "timeLimitSec": 90,
+   "steps": [
+    {
+     "prompt": "盈利从 60 降到 50，降价了多少元？",
+     "type": "number",
+     "answer": "10",
+     "hint": "$60-50$。",
+     "explanation": "降价 $10$ 元。"
+    },
+    {
+     "prompt": "每天多销售 $2\\times10=$？件，原 40 件，共销售？",
+     "type": "number",
+     "answer": "60",
+     "hint": "$40+20$。",
+     "explanation": "每天销售 $60$ 件。"
+    }
+   ],
+   "finalAnswer": "$60$ 件",
+   "formulas": [
+    {
+     "name": "降价与销量",
+     "latex": "降价 t\\ \\text{元}\\Rightarrow\\text{销量 }40+2t",
+     "tip": "每降 1 元多售 2 件。"
+    }
+   ],
+   "method": "降价 $10$ 元，多售 $20$ 件，日销量 $60$。",
+   "analysis": {
+    "known": [
+     "日销 40 件，单件盈利 60 元",
+     "每降价 1 元多销 2 件",
+     "现单件盈利 50 元"
+    ],
+    "goal": "求日销量",
+    "associations": [
+     {
+      "trigger": "盈利减少量",
+      "recall": "就是降价金额",
+      "why": "$60-50=10$"
+     }
+    ],
+    "thinkingPath": [
+     "降价 10 元。",
+     "日销 $40+20=60$ 件。"
+    ],
+    "pitfalls": [
+     "把盈利 50 当成销量。"
+    ]
+   }
+  },
+  {
+   "id": "q18-2",
+   "original": "18.（2）每件商品降价多少元时，商场日盈利可达到 $3150$ 元？",
+   "knowledgePoints": [
+    "一元二次方程的应用"
+   ],
+   "difficulty": 3,
+   "timeLimitSec": 180,
+   "steps": [
+    {
+     "prompt": "设降价 $t$ 元，则单件盈利 $60-t$，日销量 $40+2t$，日盈利 $(60-t)(40+2t)=3150$。",
+     "type": "choice",
+     "answer": "A",
+     "hint": "先确认方程。",
+     "explanation": "方程正确。",
+     "options": [
+      "方程正确，下一步求解",
+      "销量应为 $40+t$"
+     ]
+    },
+    {
+     "prompt": "解方程 $(60-t)(40+2t)=3150$。可化为 $t^2-40t+375=0$，因式分解 $(t-15)(t-25)=0$。所以 $t=$？",
+     "type": "choice",
+     "answer": "C",
+     "hint": "两根都使盈利为正，都合理。",
+     "explanation": "$t=15$ 或 $t=25$。",
+     "options": [
+      "$15$",
+      "$25$",
+      "$15$ 或 $25$",
+      "$20$"
+     ]
+    }
+   ],
+   "finalAnswer": "$15$ 元或 $25$ 元",
+   "formulas": [
+    {
+     "name": "因式分解法",
+     "latex": "AB=0\\Rightarrow A=0\\ \\text{或}\\ B=0",
+     "tip": "右边必须是 0。"
+    },
+    {
+     "name": "日盈利",
+     "latex": "(60-t)(40+2t)",
+     "tip": "单件盈利乘日销量。"
+    }
+   ],
+   "method": "列方程 $(60-t)(40+2t)=3150$，解得 $t=15$ 或 $25$。",
+   "analysis": {
+    "known": [
+     "降价 $t$ 元",
+     "日盈利 $3150$ 元"
+    ],
+    "goal": "求降价金额",
+    "associations": [
+     {
+      "trigger": "日盈利=单价盈利×销量",
+      "recall": "$(60-t)(40+2t)=3150$",
+      "why": "注意销量随 $t$ 线性增加"
+     }
+    ],
+    "thinkingPath": [
+     "列方程。",
+     "整理：$t^2-40t+375=0$。",
+     "$t=15$ 或 $25$。"
+    ],
+    "pitfalls": [
+     "只写一个根。",
+     "销量写成 $40+t$。"
+    ]
+   }
+  },
+  {
+   "id": "q18-3",
+   "original": "18.（3）商场日盈利能否达到 $3300$ 元？说明理由。",
+   "knowledgePoints": [
+    "根的判别式",
+    "二次函数最值思想"
+   ],
+   "difficulty": 3,
+   "timeLimitSec": 150,
+   "steps": [
+    {
+     "prompt": "令 $(60-t)(40+2t)=3300$，整理得 $t^2-40t+450=0$。$\\Delta=1600-1800=$？",
+     "type": "number",
+     "answer": "-200",
+     "hint": "$40^2-4\\cdot450$。",
+     "explanation": "$\\Delta=-200<0$。"
+    },
+    {
+     "prompt": "$\\Delta<0$ 意味着？",
+     "type": "choice",
+     "answer": "B",
+     "hint": "无实数 $t$。",
+     "explanation": "不能达到 3300 元。",
+     "options": [
+      "能达到",
+      "不能达到，方程无实数根"
+     ]
+    }
+   ],
+   "finalAnswer": "不能。因为方程 $(60-t)(40+2t)=3300$ 的判别式 $\\Delta=-200<0$，无实数解。",
+   "formulas": [
+    {
+     "name": "根的判别式",
+     "latex": "\\Delta=b^2-4ac",
+     "tip": "$\\Delta>0$ 两不等实根；$\\Delta=0$ 两相等实根；$\\Delta<0$ 无实根。"
+    }
+   ],
+   "method": "列方程后算 $\\Delta<0$，说明日盈利无法达到 3300 元。（也可配方看最大日盈利为 $3200$ 元。）",
+   "analysis": {
+    "known": [
+     "目标日盈利 $3300$ 元"
+    ],
+    "goal": "判断能否达到",
+    "associations": [
+     {
+      "trigger": "能否达到某个值",
+      "recall": "对应方程有无实根",
+      "why": "看 $\\Delta$",
+      "latex": "\\Delta=b^2-4ac"
+     }
+    ],
+    "thinkingPath": [
+     "列方程算 $\\Delta=-200<0$。",
+     "结论：不能。"
+    ],
+    "pitfalls": [
+     "不列方程只凭感觉。"
+    ]
+   }
+  },
+  {
+   "id": "q19-1",
+   "original": "19. 如果两个一元二次方程有且只有一个公共的实数根，那么称这两个方程为“同根方程”。例如：$x^2=9$ 与 $(x-2)(x+3)=0$ 只有公共实根 $x=-3$，它们是同根方程。\n（1）判断：$(x-1)^2=16$ 与 $x^2-4x-5=0$ 是不是“同根方程”？说明理由。",
+   "knowledgePoints": [
+    "因式分解法",
+    "新定义"
+   ],
+   "difficulty": 2,
+   "timeLimitSec": 150,
+   "steps": [
+    {
+     "prompt": "第一个方程：$(x-1)^2=16$，$x-1=\\pm4$，根为？",
+     "type": "choice",
+     "answer": "A",
+     "hint": "$x=5$ 或 $x=-3$。",
+     "explanation": "$5$ 和 $-3$。",
+     "options": [
+      "$5$ 和 $-3$",
+      "$4$ 和 $-4$",
+      "$17$ 和 $-15$",
+      "$1\\pm4$"
+     ]
+    },
+    {
+     "prompt": "第二个方程：$x^2-4x-5=(x-5)(x+1)=0$，根为？",
+     "type": "choice",
+     "answer": "B",
+     "hint": "$x=5$ 或 $x=-1$。",
+     "explanation": "$5$ 和 $-1$。",
+     "options": [
+      "$5$ 和 $1$",
+      "$5$ 和 $-1$",
+      "$-5$ 和 $1$"
+     ]
+    },
+    {
+     "prompt": "公共根只有？因此是不是同根方程？",
+     "type": "choice",
+     "answer": "A",
+     "hint": "只有 $x=5$。",
+     "explanation": "是同根方程（唯一公共根 $x=5$）。",
+     "options": [
+      "是，公共根为 $x=5$",
+      "不是，有两个公共根",
+      "不是，没有公共根"
+     ]
+    }
+   ],
+   "finalAnswer": "是同根方程。第一个方程根为 $5,-3$，第二个根为 $5,-1$，有且只有一个公共实根 $x=5$。",
+   "formulas": [
+    {
+     "name": "因式分解法",
+     "latex": "AB=0\\Rightarrow A=0\\ \\text{或}\\ B=0",
+     "tip": "右边必须是 0。"
+    },
+    {
+     "name": "直接开平方法",
+     "latex": "(x+m)^2=n\\ (n\\ge0)\\Rightarrow x+m=\\pm\\sqrt n",
+     "tip": "别忘了负的那个平方根。"
+    }
+   ],
+   "method": "分别求两方程的根，看公共根是否恰有一个。",
+   "analysis": {
+    "known": [
+     "同根方程定义：有且只有一个公共实根",
+     "两方程 $(x-1)^2=16$ 与 $x^2-4x-5=0$"
+    ],
+    "goal": "判断并说明理由",
+    "associations": [
+     {
+      "trigger": "同根方程",
+      "recall": "分别求根再找交集",
+      "why": "恰有一个公共根"
+     }
+    ],
+    "thinkingPath": [
+     "解第一个：$5,-3$。",
+     "解第二个：$5,-1$。",
+     "公共根只有 5，是同根方程。"
+    ],
+    "pitfalls": [
+     "算错根导致判断失误。"
+    ]
+   }
+  },
+  {
+   "id": "q19-2",
+   "original": "19.（2）已知 $x^2-3x+2=0$ 与 $x^2-m=0$ 是“同根方程”，求 $m$ 的值。",
+   "knowledgePoints": [
+    "因式分解法",
+    "新定义"
+   ],
+   "difficulty": 3,
+   "timeLimitSec": 150,
+   "steps": [
+    {
+     "prompt": "第一个方程：$(x-1)(x-2)=0$，根为？",
+     "type": "choice",
+     "answer": "A",
+     "hint": "$1$ 和 $2$。",
+     "explanation": "$1,2$。",
+     "options": [
+      "$1$ 和 $2$",
+      "$-1$ 和 $-2$",
+      "$1$ 和 $-2$"
+     ]
+    },
+    {
+     "prompt": "第二个方程根为 $\\pm\\sqrt{m}$（需 $m\\ge0$）。要恰有一个公共根：若公共根为 1，则 $m=$？",
+     "type": "number",
+     "answer": "1",
+     "hint": "$1^2=m$。",
+     "explanation": "$m=1$（此时根 $\\pm1$，与 $\\{1,2\\}$ 只交于 1）。"
+    },
+    {
+     "prompt": "若公共根为 2，则 $m=$？",
+     "type": "number",
+     "answer": "4",
+     "hint": "$2^2=m$。",
+     "explanation": "$m=4$（根 $\\pm2$，与 $\\{1,2\\}$ 只交于 2）。"
+    }
+   ],
+   "finalAnswer": "$m=1$ 或 $m=4$",
+   "formulas": [
+    {
+     "name": "因式分解法",
+     "latex": "AB=0\\Rightarrow A=0\\ \\text{或}\\ B=0",
+     "tip": "右边必须是 0。"
+    },
+    {
+     "name": "直接开平方法",
+     "latex": "(x+m)^2=n\\ (n\\ge0)\\Rightarrow x+m=\\pm\\sqrt n",
+     "tip": "别忘了负的那个平方根。"
+    }
+   ],
+   "method": "第一方程根为 $1,2$；第二方程根 $\\pm\\sqrt{m}$。恰交一个：取 $m=1$ 或 $m=4$。",
+   "analysis": {
+    "known": [
+     "两方程是同根方程",
+     "$x^2-3x+2=0$",
+     "$x^2-m=0$"
+    ],
+    "goal": "求 $m$",
+    "associations": [
+     {
+      "trigger": "同根方程",
+      "recall": "恰有一个公共根",
+      "why": "分别讨论公共根是 1 还是 2"
+     }
+    ],
+    "thinkingPath": [
+     "根为 1、2。",
+     "$m=1$ 或 $4$。"
+    ],
+    "pitfalls": [
+     "漏掉一个取值。"
+    ]
+   }
+  },
+  {
+   "id": "q20-1",
+   "original": "20. 学完配方法后，小明发现二次三项式也能配方求最值。例如：$x^2-6x+10=(x-3)^2+1$，当 $x=3$ 时有最小值 $1$。\n（1）代数式 $2x^2-x-1$ 有最大值还是最小值？最值是多少？此时 $x$ 等于多少？",
+   "knowledgePoints": [
+    "配方法",
+    "二次函数最值"
+   ],
+   "difficulty": 3,
+   "timeLimitSec": 150,
+   "steps": [
+    {
+     "prompt": "二次项系数 $2>0$，抛物线开口向上，有？",
+     "type": "choice",
+     "answer": "A",
+     "hint": "开口向上。",
+     "explanation": "最小值。",
+     "options": [
+      "最小值",
+      "最大值"
+     ]
+    },
+    {
+     "prompt": "配方：$2x^2-x-1=2\\left(x-\\dfrac14\\right)^2-\\dfrac98$。最小值是？",
+     "type": "choice",
+     "answer": "B",
+     "hint": "$-\\dfrac98$。",
+     "explanation": "$-\\dfrac{9}{8}$。",
+     "options": [
+      "$-\\dfrac18$",
+      "$-\\dfrac98$",
+      "$\\dfrac98$",
+      "$-1$"
+     ]
+    },
+    {
+     "prompt": "此时 $x=$？",
+     "type": "choice",
+     "answer": "A",
+     "hint": "$x=\\dfrac14$。",
+     "explanation": "$x=\\dfrac14$。",
+     "options": [
+      "$\\dfrac14$",
+      "$-\\dfrac14$",
+      "$\\dfrac12$",
+      "$1$"
+     ]
+    }
+   ],
+   "finalAnswer": "有最小值；最小值为 $-\\dfrac{9}{8}$，此时 $x=\\dfrac{1}{4}$",
+   "formulas": [
+    {
+     "name": "配方法",
+     "latex": "x^2+px=\\left(x+\\dfrac p2\\right)^2-\\dfrac{p^2}{4}",
+     "tip": "加上再减去一次项系数一半的平方。"
+    },
+    {
+     "name": "二次式最值",
+     "latex": "a>0\\Rightarrow\\text{有最小值};\\ a<0\\Rightarrow\\text{有最大值}",
+     "tip": "看二次项系数符号。"
+    }
+   ],
+   "method": "开口向上有最小值；配方得 $2(x-\\frac14)^2-\\frac98$。",
+   "analysis": {
+    "known": [
+     "代数式 $2x^2-x-1$",
+     {
+      "text": "$a=2>0$ 有最小值",
+      "hidden": true,
+      "why": "二次项系数决定开口"
+     }
+    ],
+    "goal": "判断最值类型并求出",
+    "associations": [
+     {
+      "trigger": "二次式最值",
+      "recall": "配方或公式 $x=-\\dfrac{b}{2a}$",
+      "why": "配方更贴合本课"
+     }
+    ],
+    "thinkingPath": [
+     "判断有最小值。",
+     "配方求最值 $-\\dfrac98$。",
+     "$x=\\dfrac14$。"
+    ],
+    "pitfalls": [
+     "最值分数算错。",
+     "开口方向判断反了。"
+    ]
+   }
+  },
+  {
+   "id": "q20-2",
+   "original": "20.（2）小明爸爸用总长 $14\\,\\mathrm{m}$、高 $1.5\\,\\mathrm{m}$ 的木条围一块靠墙的矩形自行车停车区 $ABCD$（墙长 $10\\,\\mathrm{m}$，墙作一边 $CD$）。$AB$、$BC$ 上各留 $1\\,\\mathrm{m}$ 宽的门洞（门洞不用木条）。\n① 停车区面积能否等于 $14\\,\\mathrm{m}^2$？若能，说明如何围；若不能，说明理由。",
+   "knowledgePoints": [
+    "配方法",
+    "一元二次方程的应用",
+    "面积最值"
+   ],
+   "difficulty": 3,
+   "timeLimitSec": 180,
+   "steps": [
+    {
+     "prompt": "设 $AD=x\\,\\mathrm{m}$（垂直于墙，则 $BC=x$），$AB=y\\,\\mathrm{m}$（$y\\le10$）。木条：$x+(y-1)+(x-1)=14$，得 $y=$？",
+     "type": "choice",
+     "answer": "A",
+     "hint": "$2x+y=16$。",
+     "explanation": "$y=16-2x$。",
+     "options": [
+      "$16-2x$",
+      "$14-2x$",
+      "$14-x$",
+      "$12-2x$"
+     ]
+    },
+    {
+     "prompt": "面积 $S=x(16-2x)=14$，即 $x^2-8x+7=0$，$(x-1)(x-7)=0$。$x=1$ 时 $y=14>10$（超墙长）且门洞占满 $BC$，舍去。$x=7$ 时 $y=$？",
+     "type": "number",
+     "answer": "2",
+     "hint": "$16-14$。",
+     "explanation": "$y=2\\le10$，且 $AB=2>1$、$BC=7>1$，可行。"
+    },
+    {
+     "prompt": "结论？",
+     "type": "choice",
+     "answer": "A",
+     "hint": "能，当 $AD=7\\,\\mathrm{m}$，$AB=2\\,\\mathrm{m}$。",
+     "explanation": "能。",
+     "options": [
+      "能；取 $AD=7\\mathrm{m}$，$AB=2\\mathrm{m}$",
+      "不能"
+     ]
+    }
+   ],
+   "finalAnswer": "能。当 $AD=7\\,\\mathrm{m}$、$AB=2\\,\\mathrm{m}$ 时，面积为 $14\\,\\mathrm{m}^2$（$x=1$ 因 $AB=14>10$ 舍去）。",
+   "formulas": [
+    {
+     "name": "靠墙矩形面积",
+     "latex": "S=x(c-kx)",
+     "tip": "用材料总长表示另一边，再写成关于一边的二次函数求最值。"
+    },
+    {
+     "name": "因式分解法",
+     "latex": "AB=0\\Rightarrow A=0\\ \\text{或}\\ B=0",
+     "tip": "右边必须是 0。"
+    }
+   ],
+   "method": "由用料得 $y=16-2x$，令 $x(16-2x)=14$，取合理根 $x=7$。",
+   "analysis": {
+    "known": [
+     "木条总长 14m",
+     "靠墙，墙长 10m",
+     "AB、BC 各留 1m 门洞",
+     "面积是否可为 14"
+    ],
+    "goal": "判断并说明",
+    "associations": [
+     {
+      "trigger": "靠墙三边围栏+门洞",
+      "recall": "用料方程",
+      "why": "竖边两条 + 底边减门"
+     },
+     {
+      "trigger": "墙长限制",
+      "recall": "$y\\le10$",
+      "why": "舍去超界的根"
+     }
+    ],
+    "thinkingPath": [
+     "列 $y=16-2x$。",
+     "解 $x(16-2x)=14$。",
+     "取 $x=7,y=2$。"
+    ],
+    "pitfalls": [
+     "忘记门洞减 2m。",
+     "不检验墙长。"
+    ]
+   }
+  },
+  {
+   "id": "q20-3",
+   "original": "20.（2）② 当边 $AD$ 为多少米时，停车区面积最大？最大面积是多少？",
+   "knowledgePoints": [
+    "配方法",
+    "面积最值"
+   ],
+   "difficulty": 3,
+   "timeLimitSec": 150,
+   "steps": [
+    {
+     "prompt": "由上，$S=x(16-2x)=16x-2x^2=-2(x-4)^2+32$。顶点 $x=4$。此时还要满足 $y=16-2x\\le10$，即 $x\\ge$？",
+     "type": "number",
+     "answer": "3",
+     "hint": "$16-2x\\le10\\Rightarrow x\\ge3$。",
+     "explanation": "$x\\ge3$，而 $x=4\\ge3$，在范围内。"
+    },
+    {
+     "prompt": "最大面积是？",
+     "type": "number",
+     "answer": "32",
+     "hint": "$-2(0)+32$。",
+     "explanation": "$32\\,\\mathrm{m}^2$。"
+    }
+   ],
+   "finalAnswer": "当 $AD=4\\,\\mathrm{m}$ 时，面积最大，最大面积为 $32\\,\\mathrm{m}^2$。",
+   "formulas": [
+    {
+     "name": "配方法",
+     "latex": "x^2+px=\\left(x+\\dfrac p2\\right)^2-\\dfrac{p^2}{4}",
+     "tip": "加上再减去一次项系数一半的平方。"
+    },
+    {
+     "name": "靠墙矩形面积",
+     "latex": "S=x(c-kx)",
+     "tip": "用材料总长表示另一边，再写成关于一边的二次函数求最值。"
+    }
+   ],
+   "method": "配方 $S=-2(x-4)^2+32$，在约束 $3\\le x<7.5$ 内于 $x=4$ 取到最大 $32$。",
+   "analysis": {
+    "known": [
+     "$S=16x-2x^2$",
+     "$y=16-2x\\le10$",
+     "门洞可安装"
+    ],
+    "goal": "求最大面积及对应 $AD$",
+    "associations": [
+     {
+      "trigger": "二次函数最值",
+      "recall": "配方看顶点",
+      "why": "再检验是否在定义域内"
+     }
+    ],
+    "thinkingPath": [
+     "配方得顶点 $(4,32)$。",
+     "检验 $x=4$ 合法。",
+     "最大面积 $32\\,\\mathrm{m}^2$。"
+    ],
+    "pitfalls": [
+     "忽略墙长约束。",
+     "最大面积算成 16。"
+    ]
+   }
+  }
+ ]
+}

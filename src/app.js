@@ -11,7 +11,7 @@ const dayDiff = (a,b) => { const [y1,m1,d1]=a.split('-').map(Number),[y2,m2,d2]=
 const fmtTime = sec => { sec=Math.max(0,Math.round(sec)); return pad(Math.floor(sec/60))+':'+pad(sec%60); };
 const pick = arr => arr[Math.floor(Math.random()*arr.length)];
 const INTERVALS = [1,2,4,7,15];
-const BUILTIN_RAW = [['demo-pack','内置示例'],['builtin-pack-2','试卷原题'],['builtin-pack-3','试卷原题'],['builtin-pack-4','课后练习']].map(([id,tag])=>{ try{ const o = JSON.parse(document.getElementById(id).textContent); o.__tag = tag; return o; }catch(e){ return null; } }).filter(Boolean);
+const BUILTIN_RAW = [['demo-pack','内置示例'],['builtin-pack-2','试卷原题'],['builtin-pack-3','试卷原题'],['builtin-pack-4','课后练习'],['builtin-pack-5','营养餐']].map(([id,tag])=>{ try{ const o = JSON.parse(document.getElementById(id).textContent); o.__tag = tag; return o; }catch(e){ return null; } }).filter(Boolean);
 let BUILTINS = [];
 function initBuiltins(){ BUILTINS = BUILTIN_RAW.map(o=>{ try{ const {pack} = validatePack(o); pack.builtin = true; pack.tag = o.__tag; pack.importedAt = 0; return pack; }catch(e){ console.warn('内置题包校验失败', e.message); return null; } }).filter(Boolean); }
 const DEMO = {id:'demo-pack-v1'};

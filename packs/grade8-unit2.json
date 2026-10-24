@@ -1,2726 +1,2945 @@
 {
- "id": "grade8-unit2-2026-10-17",
- "title": "八年级数学单元学习巩固二（二次根式 · 一元二次方程）",
- "date": "2026-10-17",
- "source": "试卷第1-3页照片（第4页及第29、30题未提供）",
- "questions": [
-  {
-   "id": "q1",
-   "original": "在实数 $3.14$，$1.\\dot{2}\\dot{3}$，$\\sqrt8$，$1.1010010001\\cdots$（每两个 1 之间依次增加一个 0），$\\dfrac{\\pi}{2}$，$\\dfrac{22}{7}$，$\\sqrt{\\dfrac49}$ 中，无理数有（　）\nA. 0 个　B. 1 个　C. 2 个　D. 3 个",
-   "knowledgePoints": [
-    "无理数的概念",
-    "实数的分类"
-   ],
-   "difficulty": 2,
-   "timeLimitSec": 90,
-   "steps": [
+  "id": "grade8-unit2-2026-10-17",
+  "title": "八年级数学单元学习巩固二（二次根式 · 一元二次方程）",
+  "date": "2026-10-17",
+  "source": "试卷第1-3页照片（第4页及第29、30题未提供）",
+  "questions": [
     {
-     "prompt": "$\\sqrt{\\dfrac49}$ 化简后等于多少？它是有理数还是无理数？",
-     "type": "choice",
-     "answer": "A",
-     "hint": "$\\dfrac49$ 是哪个分数的平方？",
-     "explanation": "$\\sqrt{\\dfrac49}=\\dfrac23$，是分数，所以是有理数。",
-     "options": [
-      "$\\dfrac23$，有理数",
-      "$\\dfrac23$，无理数",
-      "$\\dfrac49$，有理数",
-      "开不尽，无理数"
-     ]
+      "id": "q1",
+      "original": "在实数 $3.14$，$1.\\dot{2}\\dot{3}$，$\\sqrt8$，$1.1010010001\\cdots$（每两个 1 之间依次增加一个 0），$\\dfrac{\\pi}{2}$，$\\dfrac{22}{7}$，$\\sqrt{\\dfrac49}$ 中，无理数有（　）\nA. 0 个　B. 1 个　C. 2 个　D. 3 个",
+      "knowledgePoints": [
+        "无理数的概念",
+        "实数的分类"
+      ],
+      "difficulty": 2,
+      "timeLimitSec": 90,
+      "steps": [
+        {
+          "prompt": "$\\sqrt{\\dfrac49}$ 化简后等于多少？它是有理数还是无理数？",
+          "type": "choice",
+          "answer": "A",
+          "hint": "$\\dfrac49$ 是哪个分数的平方？",
+          "explanation": "$\\sqrt{\\dfrac49}=\\dfrac23$，是分数，所以是有理数。",
+          "options": [
+            "$\\dfrac23$，有理数",
+            "$\\dfrac23$，无理数",
+            "$\\dfrac49$，有理数",
+            "开不尽，无理数"
+          ]
+        },
+        {
+          "prompt": "$1.\\dot2\\dot3$（无限循环小数）和 $\\dfrac{22}{7}$ 是有理数还是无理数？",
+          "type": "choice",
+          "answer": "A",
+          "hint": "无限**循环**小数都能化成分数。",
+          "explanation": "无限循环小数和分数都是有理数，$\\dfrac{22}{7}$ 只是 π 的近似值，本身是有理数。",
+          "options": [
+            "都是有理数",
+            "都是无理数",
+            "$1.\\dot2\\dot3$ 是无理数",
+            "$\\dfrac{22}{7}$ 是无理数"
+          ]
+        },
+        {
+          "prompt": "数一数：无理数一共有几个？",
+          "type": "number",
+          "answer": "3",
+          "hint": "无理数＝无限**不循环**小数：开方开不尽的数、含 π 的数、有规律但不循环的小数。",
+          "explanation": "$\\sqrt8$、$1.1010010001\\cdots$、$\\dfrac\\pi2$ 共 3 个，选 D。"
+        }
+      ],
+      "finalAnswer": "D（3 个：$\\sqrt8$，$1.1010010001\\cdots$，$\\dfrac{\\pi}{2}$）",
+      "formulas": [
+        {
+          "name": "无理数",
+          "latex": "\\text{无理数}=\\text{无限不循环小数}",
+          "tip": "常见三类：开方开不尽的数、含 π 的数、构造的不循环小数。"
+        }
+      ],
+      "method": "逐个判断：先把能化简的（如 $\\sqrt{4/9}$）化简，再看是不是无限不循环小数。分数、有限小数、循环小数都是有理数。",
+      "analysis": {
+        "known": [
+          "7 个实数：$3.14$，$1.\\dot2\\dot3$，$\\sqrt8$，$1.1010010001\\cdots$，$\\dfrac\\pi2$，$\\dfrac{22}7$，$\\sqrt{\\dfrac49}$",
+          {
+            "text": "带根号的数要先化简再判断",
+            "hidden": true,
+            "why": "$\\sqrt{\\frac49}=\\frac23$ 开得尽，是有理数；“带根号”不等于“无理数”"
+          }
+        ],
+        "goal": "数出其中无理数的个数",
+        "associations": [
+          {
+            "trigger": "判断“无理数”",
+            "recall": "无理数 = 无限不循环小数",
+            "why": "有限小数、循环小数、分数都是有理数，只有“无限且不循环”才是无理数"
+          },
+          {
+            "trigger": "$\\pi$ 和开不尽的根号",
+            "recall": "常见无理数的三类：含 $\\pi$ 的数、开方开不尽的数、有规律但不循环的小数",
+            "why": "记住这三类，逐个对号入座最快"
+          }
+        ],
+        "thinkingPath": [
+          "看到“无理数有几个”，先回忆定义：无限不循环小数。",
+          "能化简的先化简：$\\sqrt{\\frac49}=\\frac23$ 是有理数。",
+          "逐个归类：$3.14$ 有限小数、$1.\\dot2\\dot3$ 循环小数、$\\frac{22}7$ 分数 → 都是有理数。",
+          "剩下 $\\sqrt8$（开不尽）、$1.1010010001\\cdots$（不循环）、$\\frac\\pi2$（含 $\\pi$）→ 3 个无理数，选 D。"
+        ],
+        "pitfalls": [
+          "看到根号就当无理数，把 $\\sqrt{\\frac49}$ 也算进去。",
+          "把 $\\frac{22}7$ 当成 $\\pi$ 的近似值而误判为无理数——它是分数，是有理数。"
+        ]
+      }
     },
     {
-     "prompt": "$1.\\dot2\\dot3$（无限循环小数）和 $\\dfrac{22}{7}$ 是有理数还是无理数？",
-     "type": "choice",
-     "answer": "A",
-     "hint": "无限**循环**小数都能化成分数。",
-     "explanation": "无限循环小数和分数都是有理数，$\\dfrac{22}{7}$ 只是 π 的近似值，本身是有理数。",
-     "options": [
-      "都是有理数",
-      "都是无理数",
-      "$1.\\dot2\\dot3$ 是无理数",
-      "$\\dfrac{22}{7}$ 是无理数"
-     ]
+      "id": "q2",
+      "original": "实数 $\\sqrt{64}$ 的平方根是（　）\nA. $\\pm8$　B. $\\pm4$　C. $4$　D. $\\pm\\sqrt8$",
+      "knowledgePoints": [
+        "平方根",
+        "算术平方根"
+      ],
+      "difficulty": 2,
+      "timeLimitSec": 60,
+      "steps": [
+        {
+          "prompt": "先算 $\\sqrt{64}=$ ？",
+          "type": "number",
+          "answer": "8",
+          "hint": "哪个正数的平方是 64？",
+          "explanation": "$\\sqrt{64}=8$（算术平方根只取正的）。"
+        },
+        {
+          "prompt": "那么题目其实是在问“8 的平方根”。8 的平方根是？",
+          "type": "choice",
+          "answer": "C",
+          "hint": "正数的平方根有两个，互为相反数。",
+          "explanation": "8 的平方根是 $\\pm\\sqrt8$（也就是 $\\pm2\\sqrt2$），选 D。",
+          "options": [
+            "$\\pm8$",
+            "$\\pm4$",
+            "$\\pm\\sqrt8$",
+            "$\\sqrt8$"
+          ]
+        }
+      ],
+      "finalAnswer": "D",
+      "formulas": [
+        {
+          "name": "平方根",
+          "latex": "x^2=a\\ (a>0)\\Rightarrow x=\\pm\\sqrt a",
+          "tip": "正数有两个平方根，算术平方根是其中正的那个。"
+        }
+      ],
+      "method": "陷阱题：先求 $\\sqrt{64}=8$，再求 8 的平方根 $\\pm\\sqrt8$，别直接回答 64 的平方根 ±8。",
+      "analysis": {
+        "known": [
+          "要求的是“$\\sqrt{64}$ 的平方根”",
+          {
+            "text": "$\\sqrt{64}$ 本身已经开过一次方",
+            "hidden": true,
+            "why": "题目问的不是 64 的平方根，而是 $\\sqrt{64}=8$ 的平方根，要开两次"
+          }
+        ],
+        "goal": "求 $\\sqrt{64}$ 的平方根",
+        "associations": [
+          {
+            "trigger": "$\\sqrt{64}$",
+            "recall": "算术平方根（只取非负的那个）",
+            "why": "$\\sqrt{\\ }$ 符号表示算术平方根，$\\sqrt{64}=8$，不是 $\\pm8$"
+          },
+          {
+            "trigger": "“……的平方根”",
+            "recall": "正数的平方根有两个，互为相反数",
+            "why": "8 的平方根是 $\\pm\\sqrt8$，别漏了负的",
+            "latex": "x^2=a\\ (a>0)\\Rightarrow x=\\pm\\sqrt a"
+          }
+        ],
+        "thinkingPath": [
+          "看到“$\\sqrt{64}$ 的平方根”，先把 $\\sqrt{64}$ 算出来：8。",
+          "题目就变成“8 的平方根”。",
+          "正数有两个平方根：$\\pm\\sqrt8$，选 D。"
+        ],
+        "pitfalls": [
+          "直接回答 64 的平方根 $\\pm8$（这是最常见的陷阱）。",
+          "只写 $\\sqrt8$，漏掉负的那个。"
+        ]
+      }
     },
     {
-     "prompt": "数一数：无理数一共有几个？",
-     "type": "number",
-     "answer": "3",
-     "hint": "无理数＝无限**不循环**小数：开方开不尽的数、含 π 的数、有规律但不循环的小数。",
-     "explanation": "$\\sqrt8$、$1.1010010001\\cdots$、$\\dfrac\\pi2$ 共 3 个，选 D。"
+      "id": "q3",
+      "original": "下列说法正确的是（　）\nA. 0 的平方根与立方根相同\nB. 对于实数 $a$，若 $\\sqrt{a^2}=a$，则 $a>0$\nC. 两个无理数的和还是无理数\nD. 无理数与数轴上的点一一对应",
+      "knowledgePoints": [
+        "平方根与立方根",
+        "二次根式的性质",
+        "实数与数轴"
+      ],
+      "difficulty": 2,
+      "timeLimitSec": 90,
+      "steps": [
+        {
+          "prompt": "0 的平方根是 0，0 的立方根是多少？",
+          "type": "number",
+          "answer": "0",
+          "hint": "$0^3=?$",
+          "explanation": "0 的平方根和立方根都是 0，所以 A 正确。"
+        },
+        {
+          "prompt": "$\\sqrt{a^2}=a$ 成立时，$a$ 的范围应该是？",
+          "type": "choice",
+          "answer": "B",
+          "hint": "$\\sqrt{a^2}=|a|$，什么时候 $|a|=a$？",
+          "explanation": "$|a|=a\\iff a\\ge0$，$a=0$ 也可以，所以 B 中“$a>0$”错误。",
+          "options": [
+            "$a>0$",
+            "$a\\ge0$",
+            "$a<0$",
+            "任意实数"
+          ]
+        },
+        {
+          "prompt": "$\\sqrt2+(-\\sqrt2)=$ ？这说明 C 对不对？",
+          "type": "number",
+          "answer": "0",
+          "hint": "两个互为相反数的无理数相加。",
+          "explanation": "和是 0，是有理数，所以 C 错。D 也错：与数轴上的点一一对应的是**实数**。答案 A。"
+        }
+      ],
+      "finalAnswer": "A",
+      "formulas": [
+        {
+          "name": "二次根式的性质",
+          "latex": "\\sqrt{a^2}=|a|=\\begin{cases}a,&a\\ge0\\\\-a,&a<0\\end{cases}",
+          "tip": "开方出来先加绝对值，再根据正负去掉绝对值。"
+        }
+      ],
+      "method": "逐项判断，找反例：B 漏了 $a=0$；C 用互为相反数的无理数作反例；D 应为“实数与数轴上的点一一对应”。",
+      "analysis": {
+        "known": [
+          "四个关于实数的说法，选出正确的一个",
+          {
+            "text": "“$\\sqrt{a^2}=a$”隐含 $a\\ge0$，包括 0",
+            "hidden": true,
+            "why": "$\\sqrt{a^2}=|a|$，只要 $a$ 非负就成立，$a=0$ 也可以"
+          }
+        ],
+        "goal": "判断哪个说法正确",
+        "associations": [
+          {
+            "trigger": "判断“说法正确”的选择题",
+            "recall": "举反例",
+            "why": "只要找到一个反例，这个说法就是错的"
+          },
+          {
+            "trigger": "$\\sqrt{a^2}$",
+            "recall": "$\\sqrt{a^2}=|a|$",
+            "why": "根号运算结果一定非负，所以等于 $a$ 的绝对值",
+            "latex": "\\sqrt{a^2}=|a|"
+          },
+          {
+            "trigger": "“与数轴上的点一一对应”",
+            "recall": "实数与数轴上的点一一对应",
+            "why": "有理数和无理数合起来（实数）才能填满数轴"
+          }
+        ],
+        "thinkingPath": [
+          "逐项判断，能找到反例就排除。",
+          "A：0 的平方根是 0，立方根也是 0，相同 ✓。",
+          "B：$a=0$ 时 $\\sqrt{0^2}=0$ 也成立，应该是 $a\\ge0$ ✗。",
+          "C：$\\sqrt2+(-\\sqrt2)=0$ 是有理数 ✗；D：应是“实数”与数轴一一对应 ✗。所以选 A。"
+        ],
+        "pitfalls": [
+          "B 漏掉 $a=0$ 的情况。",
+          "C 只想到 $\\sqrt2+\\sqrt3$ 这类例子，没想到相反数相加。"
+        ]
+      }
+    },
+    {
+      "id": "q4",
+      "original": "下列二次根式中，最简二次根式有（　）个。\n① $\\sqrt{0.8}$，② $\\sqrt{\\dfrac15}$，③ $\\sqrt7$，④ $\\sqrt{\\dfrac{2x+1}{x}}$，⑤ $\\sqrt{a^2+b^2}$，⑥ $-\\dfrac2a\\sqrt{ab}$\nA. 1　B. 2　C. 3　D. 4",
+      "knowledgePoints": [
+        "最简二次根式"
+      ],
+      "difficulty": 3,
+      "timeLimitSec": 120,
+      "steps": [
+        {
+          "prompt": "最简二次根式要满足两个条件，下面哪个是正确的？",
+          "type": "choice",
+          "answer": "A",
+          "hint": "想想 $\\sqrt{\\dfrac15}$ 和 $\\sqrt{8}$ 为什么不是最简。",
+          "explanation": "①被开方数不含分母；②被开方数不含能开得尽方的因数或因式。",
+          "options": [
+            "被开方数不含分母，且不含能开得尽方的因数（式）",
+            "被开方数是整数就行",
+            "根号前面不能有系数",
+            "被开方数必须是质数"
+          ]
+        },
+        {
+          "prompt": "①$\\sqrt{0.8}$、②$\\sqrt{\\frac15}$、④$\\sqrt{\\frac{2x+1}{x}}$ 为什么都不是最简？",
+          "type": "choice",
+          "answer": "B",
+          "hint": "小数可以化成分数。",
+          "explanation": "$0.8=\\dfrac45$，三个被开方数都含分母，所以都不是最简。",
+          "options": [
+            "被开方数是负数",
+            "被开方数含分母（小数也算）",
+            "根号前没有系数",
+            "它们都能开尽方"
+          ]
+        },
+        {
+          "prompt": "③$\\sqrt7$、⑤$\\sqrt{a^2+b^2}$、⑥$-\\dfrac2a\\sqrt{ab}$ 中的根号都满足条件吗？最简二次根式一共几个？",
+          "type": "number",
+          "answer": "3",
+          "hint": "注意 $a^2+b^2$ 是**和**，不能开方成 $a+b$。",
+          "explanation": "③⑤⑥ 的被开方数 $7$、$a^2+b^2$、$ab$ 都不含分母、不含开得尽方的因式，共 3 个，选 C。"
+        }
+      ],
+      "finalAnswer": "C（③⑤⑥）",
+      "formulas": [
+        {
+          "name": "最简二次根式",
+          "latex": "\\sqrt{a}\\ \\text{中 }a\\text{ 不含分母、不含能开尽方的因数}",
+          "tip": "小数要先化成分数再判断；$\\sqrt{a^2+b^2}$ 不能化简。"
+        }
+      ],
+      "method": "按两条标准逐个检查被开方数：有没有分母（小数也算）、有没有平方因数。",
+      "analysis": {
+        "known": [
+          "6 个二次根式 ①~⑥",
+          {
+            "text": "②④⑥ 中字母在分母里，隐含分母 $\\ne0$",
+            "hidden": true,
+            "why": "④中 $x\\ne0$，⑥中 $a\\ne0$；判断最简时只看根号里面"
+          }
+        ],
+        "goal": "数出最简二次根式的个数",
+        "associations": [
+          {
+            "trigger": "“最简二次根式”",
+            "recall": "最简的两个条件：被开方数不含分母；不含能开得尽方的因数（式）",
+            "why": "两条都满足才是最简，逐条检查"
+          },
+          {
+            "trigger": "$\\sqrt{0.8}$ 这种小数",
+            "recall": "小数可以化成分数",
+            "why": "$0.8=\\frac45$，相当于根号里有分母，所以不是最简"
+          }
+        ],
+        "thinkingPath": [
+          "先回忆最简二次根式的两个条件。",
+          "①$\\sqrt{0.8}=\\sqrt{\\frac45}$、②$\\sqrt{\\frac15}$、④$\\sqrt{\\frac{2x+1}x}$ 根号里有分母 → 不是最简。",
+          "③$\\sqrt7$、⑤$\\sqrt{a^2+b^2}$、⑥中的 $\\sqrt{ab}$：没有分母、开不尽 → 是最简。",
+          "共 3 个，选 C。"
+        ],
+        "pitfalls": [
+          "把 $\\sqrt{a^2+b^2}$ 化成 $a+b$（错！和的平方根不能拆开）。",
+          "看到⑥根号外有分母 $\\frac2a$ 就判为不是最简——只看根号里面。"
+        ]
+      }
+    },
+    {
+      "id": "q5",
+      "original": "若关于 $x$ 的方程 $\\dfrac12x^2-2kx-4k+1=0$ 有两个相等的实数根，则代数式 $2026-2k^2-4k$ 的值为（　）\nA. 2023　B. 2024　C. 2025　D. 2026",
+      "knowledgePoints": [
+        "根的判别式",
+        "整体代入"
+      ],
+      "difficulty": 3,
+      "timeLimitSec": 150,
+      "steps": [
+        {
+          "prompt": "“有两个相等的实数根”说明判别式 $\\Delta$ 满足什么？",
+          "type": "choice",
+          "answer": "B",
+          "hint": "回忆 Δ 的三种情况。",
+          "explanation": "两个相等实根 ⟺ $\\Delta=0$。",
+          "options": [
+            "$\\Delta>0$",
+            "$\\Delta=0$",
+            "$\\Delta<0$",
+            "$\\Delta\\ge0$"
+          ]
+        },
+        {
+          "prompt": "这里 $a=\\dfrac12,\\ b=-2k,\\ c=-4k+1$。$\\Delta=b^2-4ac=4k^2+8k-2=0$，两边同除以 2，得 $2k^2+4k=$ ？",
+          "type": "number",
+          "answer": "1",
+          "hint": "$4k^2+8k-2=0\\Rightarrow 2k^2+4k-1=0$。",
+          "explanation": "$(-2k)^2-4\\times\\dfrac12\\times(-4k+1)=4k^2+8k-2=0$，所以 $2k^2+4k=1$。"
+        },
+        {
+          "prompt": "整体代入：$2026-2k^2-4k=2026-(2k^2+4k)=$ ？",
+          "type": "number",
+          "answer": "2025",
+          "hint": "不用求出 k，把 $2k^2+4k$ 当作一个整体。",
+          "explanation": "$2026-1=2025$，选 C。"
+        }
+      ],
+      "finalAnswer": "C（2025）",
+      "formulas": [
+        {
+          "name": "根的判别式",
+          "latex": "\\Delta=b^2-4ac",
+          "tip": "Δ>0 两个不等实根；Δ=0 两个相等实根；Δ<0 没有实根。"
+        },
+        {
+          "name": "整体代入",
+          "latex": "2026-2k^2-4k=2026-(2k^2+4k)",
+          "tip": "求值题常常不需要解出字母，凑出整体直接代入。"
+        }
+      ],
+      "method": "由 Δ=0 得到关于 k 的等式 $2k^2+4k=1$，再把所求式变形为 $2026-(2k^2+4k)$ 整体代入。",
+      "analysis": {
+        "known": [
+          "关于 $x$ 的方程 $\\frac12x^2-2kx-4k+1=0$",
+          "有两个相等的实数根",
+          {
+            "text": "二次项系数 $\\frac12\\ne0$，确实是一元二次方程",
+            "hidden": true,
+            "why": "可以放心用判别式"
+          }
+        ],
+        "goal": "求代数式 $2026-2k^2-4k$ 的值",
+        "associations": [
+          {
+            "trigger": "“有两个相等的实数根”",
+            "recall": "根的判别式 $\\Delta=0$",
+            "why": "判别式决定根的情况：$>0$ 两个不等根，$=0$ 两个相等根，$<0$ 无实根",
+            "latex": "\\Delta=b^2-4ac"
+          },
+          {
+            "trigger": "所求式里有 $2k^2+4k$，但 $k$ 不好求",
+            "recall": "整体代入",
+            "why": "不必求出 $k$，把 $2k^2+4k$ 当作一个整体直接代入"
+          }
+        ],
+        "thinkingPath": [
+          "看到“两个相等的实数根”，立刻想到 $\\Delta=0$。",
+          "找准 $a=\\frac12$，$b=-2k$，$c=-4k+1$，代入得 $4k^2+8k-2=0$，即 $2k^2+4k=1$。",
+          "看所求式，发现正好含有 $2k^2+4k$，想到整体代入。",
+          "$2026-(2k^2+4k)=2026-1=2025$，选 C。"
+        ],
+        "pitfalls": [
+          "$c$ 漏了符号，写成 $4k+1$。",
+          "非要把 $k$ 解出来，计算繁琐容易错。"
+        ]
+      }
+    },
+    {
+      "id": "q6",
+      "original": "若两个方程 $x^2+ax+b=0$ 和 $x^2+bx+a=0$ 只有一个公共根，则（　）\nA. $a=b$　B. $a+b=0$　C. $a+b=1$　D. $a+b=-1$",
+      "knowledgePoints": [
+        "一元二次方程的根",
+        "公共根问题"
+      ],
+      "difficulty": 4,
+      "timeLimitSec": 180,
+      "steps": [
+        {
+          "prompt": "设公共根为 $x_0$，把两个方程相减，得到 $(a-b)x_0+(b-a)=0$，也就是 $(a-b)(x_0-1)=0$。如果 $a=b$，两个方程会怎样？",
+          "type": "choice",
+          "answer": "A",
+          "hint": "$a=b$ 时两个方程完全一样。",
+          "explanation": "$a=b$ 时两个方程相同，公共根就不止一个（或者全部相同），与“只有一个公共根”矛盾，所以 $a\\ne b$。",
+          "options": [
+            "完全相同，公共根不止一个，不符合题意",
+            "没有影响",
+            "无解",
+            "一定只有一个公共根"
+          ]
+        },
+        {
+          "prompt": "既然 $a\\ne b$，那么公共根 $x_0=$ ？",
+          "type": "number",
+          "answer": "1",
+          "hint": "$(a-b)(x_0-1)=0$ 且 $a-b\\ne0$。",
+          "explanation": "$x_0-1=0$，$x_0=1$。"
+        },
+        {
+          "prompt": "把 $x=1$ 代入 $x^2+ax+b=0$，得 $1+a+b=0$，所以 $a+b=$ ？",
+          "type": "number",
+          "answer": "-1",
+          "hint": "移项。",
+          "explanation": "$a+b=-1$，选 D。"
+        }
+      ],
+      "finalAnswer": "D",
+      "formulas": [
+        {
+          "name": "方程的根",
+          "latex": "x_0\\text{ 是方程的根}\\iff \\text{代入后等式成立}",
+          "tip": "公共根同时满足两个方程，常用两式相减消去二次项。"
+        }
+      ],
+      "method": "设公共根代入两方程，相减消去 $x^2$，因式分解得 $(a-b)(x-1)=0$，排除 $a=b$ 后得公共根为 1，再代回。",
+      "analysis": {
+        "known": [
+          "两个方程 $x^2+ax+b=0$ 和 $x^2+bx+a=0$",
+          "它们“只有一个”公共根",
+          {
+            "text": "“只有一个”公共根隐含 $a\\ne b$",
+            "hidden": true,
+            "why": "如果 $a=b$，两个方程完全一样，公共根就不止一个了"
+          }
+        ],
+        "goal": "求 $a$、$b$ 满足的关系",
+        "associations": [
+          {
+            "trigger": "“公共根”",
+            "recall": "设公共根为 $x_0$，代入两个方程",
+            "why": "公共根同时满足两个方程，可以列出两个等式"
+          },
+          {
+            "trigger": "两个方程 $x^2$ 系数相同",
+            "recall": "两式相减消去 $x^2$",
+            "why": "相减后剩一次式，容易解出公共根"
+          }
+        ],
+        "thinkingPath": [
+          "看到公共根，设它为 $x_0$，代入两个方程。",
+          "两式相减消去 $x_0^2$：$(a-b)(x_0-1)=0$。",
+          "“只有一个公共根”说明 $a\\ne b$，所以 $x_0=1$。",
+          "把 $x=1$ 代回：$1+a+b=0$，即 $a+b=-1$，选 D。"
+        ],
+        "pitfalls": [
+          "没有排除 $a=b$ 就直接选 A。",
+          "相减时符号出错，得到 $(a-b)(x_0+1)=0$。"
+        ]
+      }
+    },
+    {
+      "id": "q7",
+      "original": "已知 $a<0$，那么 $\\sqrt{9a^2}$ 可化简为______。",
+      "knowledgePoints": [
+        "二次根式的性质"
+      ],
+      "difficulty": 2,
+      "timeLimitSec": 60,
+      "steps": [
+        {
+          "prompt": "$\\sqrt{9a^2}=3\\sqrt{a^2}=3|a|$。因为 $a<0$，$|a|=$ ？",
+          "type": "choice",
+          "answer": "B",
+          "hint": "负数的绝对值是它的相反数。",
+          "explanation": "$a<0$ 时 $|a|=-a$。",
+          "options": [
+            "$a$",
+            "$-a$",
+            "$\\pm a$",
+            "$a^2$"
+          ]
+        },
+        {
+          "prompt": "所以 $\\sqrt{9a^2}=$ ？",
+          "type": "choice",
+          "answer": "C",
+          "hint": "$3\\times(-a)$。",
+          "explanation": "$\\sqrt{9a^2}=3|a|=-3a$（因为 $a<0$，$-3a$ 是正数，符合算术平方根非负）。",
+          "options": [
+            "$3a$",
+            "$\\pm3a$",
+            "$-3a$",
+            "$9a$"
+          ]
+        }
+      ],
+      "finalAnswer": "$-3a$",
+      "formulas": [
+        {
+          "name": "二次根式的性质",
+          "latex": "\\sqrt{a^2}=|a|=\\begin{cases}a,&a\\ge0\\\\-a,&a<0\\end{cases}",
+          "tip": "开方出来先加绝对值，再根据正负去掉绝对值。"
+        }
+      ],
+      "method": "$\\sqrt{a^2}=|a|$，再根据 $a<0$ 去绝对值。结果必须是非负的，可以用来检查。",
+      "analysis": {
+        "known": [
+          "$a<0$",
+          "要化简 $\\sqrt{9a^2}$"
+        ],
+        "goal": "化简 $\\sqrt{9a^2}$",
+        "associations": [
+          {
+            "trigger": "$\\sqrt{a^2}$",
+            "recall": "$\\sqrt{a^2}=|a|$",
+            "why": "开方结果必须非负，要先写成绝对值",
+            "latex": "\\sqrt{a^2}=|a|"
+          },
+          {
+            "trigger": "已知 $a<0$",
+            "recall": "负数的绝对值是它的相反数",
+            "why": "$a<0$ 时 $|a|=-a$"
+          }
+        ],
+        "thinkingPath": [
+          "看到平方开方，先想到 $\\sqrt{a^2}=|a|$：$\\sqrt{9a^2}=3|a|$。",
+          "再看已知 $a<0$，所以 $|a|=-a$。",
+          "结果 $-3a$。检查：$a<0$ 时 $-3a>0$，符合根号结果非负。"
+        ],
+        "pitfalls": [
+          "直接写 $3a$（是负数，不可能是根号的结果）。",
+          "写成 $\\pm3a$。"
+        ]
+      }
+    },
+    {
+      "id": "q8",
+      "original": "比较大小：$-\\sqrt{15}$ ____ $-4$。（填“>”“=”或“<”）",
+      "knowledgePoints": [
+        "实数大小比较"
+      ],
+      "difficulty": 1,
+      "timeLimitSec": 45,
+      "steps": [
+        {
+          "prompt": "先比较正数：$4=\\sqrt{?}$",
+          "type": "number",
+          "answer": "16",
+          "hint": "$4^2=?$",
+          "explanation": "$4=\\sqrt{16}$，而 $15<16$，所以 $\\sqrt{15}<4$。"
+        },
+        {
+          "prompt": "两个负数比较，绝对值大的反而小。$-\\sqrt{15}$ ___ $-4$？",
+          "type": "choice",
+          "answer": "A",
+          "hint": "$\\sqrt{15}<4$，加负号后不等号方向改变。",
+          "explanation": "$-\\sqrt{15}>-4$。",
+          "options": [
+            ">",
+            "=",
+            "<"
+          ]
+        }
+      ],
+      "finalAnswer": "$>$",
+      "formulas": [
+        {
+          "name": "负数比较",
+          "latex": "a>b>0\\Rightarrow -a<-b",
+          "tip": "两个负数，绝对值大的反而小。"
+        }
+      ],
+      "method": "把 4 写成 $\\sqrt{16}$，比较被开方数，再根据负数比较法则变号。",
+      "analysis": {
+        "known": [
+          "比较 $-\\sqrt{15}$ 和 $-4$ 的大小",
+          "两个都是负数"
+        ],
+        "goal": "填 >、= 或 <",
+        "associations": [
+          {
+            "trigger": "一个带根号、一个整数",
+            "recall": "把整数写成根号形式比较",
+            "why": "$4=\\sqrt{16}$，比较被开方数即可"
+          },
+          {
+            "trigger": "两个负数比大小",
+            "recall": "两个负数，绝对值大的反而小",
+            "why": "在数轴上越往左越小"
+          }
+        ],
+        "thinkingPath": [
+          "先比较绝对值：$4=\\sqrt{16}$，$\\sqrt{15}<\\sqrt{16}$，所以 $\\sqrt{15}<4$。",
+          "看到是两个负数，想到“绝对值大的反而小”。",
+          "所以 $-\\sqrt{15}>-4$。"
+        ],
+        "pitfalls": [
+          "比较完绝对值忘记变号，填成 <。"
+        ]
+      }
+    },
+    {
+      "id": "q9",
+      "original": "写出 $\\sqrt{3-a}$ 的一个有理化因式：______。",
+      "knowledgePoints": [
+        "有理化因式"
+      ],
+      "difficulty": 2,
+      "timeLimitSec": 45,
+      "steps": [
+        {
+          "prompt": "什么叫有理化因式？两个含根号的式子相乘，结果______。",
+          "type": "choice",
+          "answer": "A",
+          "hint": "比如 $\\sqrt2\\times\\sqrt2=2$。",
+          "explanation": "相乘后不再含二次根式，就叫互为有理化因式。",
+          "options": [
+            "不含二次根式",
+            "等于 1",
+            "等于 0",
+            "还是二次根式"
+          ]
+        },
+        {
+          "prompt": "$\\sqrt{3-a}$ 乘以下面哪个，结果不含根号？",
+          "type": "choice",
+          "answer": "C",
+          "hint": "$\\sqrt{m}\\cdot\\sqrt m=m$。",
+          "explanation": "$\\sqrt{3-a}\\cdot\\sqrt{3-a}=3-a$，所以 $\\sqrt{3-a}$ 本身就是它的一个有理化因式（答案不唯一）。",
+          "options": [
+            "$\\sqrt3$",
+            "$\\sqrt3-\\sqrt a$",
+            "$\\sqrt{3-a}$",
+            "$3-a$"
+          ]
+        }
+      ],
+      "finalAnswer": "$\\sqrt{3-a}$（答案不唯一）",
+      "formulas": [
+        {
+          "name": "有理化因式",
+          "latex": "\\sqrt a\\cdot\\sqrt a=a,\\ (\\sqrt a+\\sqrt b)(\\sqrt a-\\sqrt b)=a-b",
+          "tip": "单项根式的有理化因式是它本身；两项的用平方差。"
+        }
+      ],
+      "method": "整个 $3-a$ 在同一个根号下，是单项二次根式，乘它自己即可去掉根号。注意不要写成 $\\sqrt3+\\sqrt a$。",
+      "analysis": {
+        "known": [
+          "式子 $\\sqrt{3-a}$",
+          {
+            "text": "$3-a\\ge0$",
+            "hidden": true,
+            "why": "根号要有意义，被开方数必须非负"
+          }
+        ],
+        "goal": "写出一个有理化因式",
+        "associations": [
+          {
+            "trigger": "“有理化因式”",
+            "recall": "两个含根号的式子相乘，结果不含二次根式",
+            "why": "找一个“搭档”，相乘后根号消失"
+          },
+          {
+            "trigger": "整个 $3-a$ 在一个根号下",
+            "recall": "$\\sqrt A\\cdot\\sqrt A=A$",
+            "why": "单项根式乘它自己就能去掉根号",
+            "latex": "\\sqrt A\\cdot\\sqrt A=A\\ (A\\ge0)"
+          }
+        ],
+        "thinkingPath": [
+          "先回忆有理化因式的意思：相乘后不含根号。",
+          "$\\sqrt{3-a}$ 是一个整体在根号下，乘它自己：$\\sqrt{3-a}\\cdot\\sqrt{3-a}=3-a$。",
+          "所以有理化因式可以写 $\\sqrt{3-a}$。"
+        ],
+        "pitfalls": [
+          "把 $\\sqrt{3-a}$ 拆成 $\\sqrt3-\\sqrt a$（根号下的差不能拆开）。"
+        ]
+      }
+    },
+    {
+      "id": "q10",
+      "original": "已知 $\\sqrt{x^3+4x^2}=-x\\sqrt{x+4}$，则 $x$ 的取值范围是______。",
+      "knowledgePoints": [
+        "二次根式的性质",
+        "二次根式有意义的条件"
+      ],
+      "difficulty": 3,
+      "timeLimitSec": 120,
+      "steps": [
+        {
+          "prompt": "左边：$\\sqrt{x^3+4x^2}=\\sqrt{x^2(x+4)}=|x|\\sqrt{x+4}$。要等于 $-x\\sqrt{x+4}$，需要 $|x|=-x$，即 $x$ ___ 0？",
+          "type": "choice",
+          "answer": "D",
+          "hint": "什么时候绝对值等于相反数？",
+          "explanation": "$|x|=-x\\iff x\\le0$。",
+          "options": [
+            ">",
+            "≥",
+            "<",
+            "≤"
+          ]
+        },
+        {
+          "prompt": "根号要有意义，$x+4\\ge0$，即 $x\\ge$ ？",
+          "type": "number",
+          "answer": "-4",
+          "hint": "被开方数非负。",
+          "explanation": "$x\\ge-4$。"
+        },
+        {
+          "prompt": "综合起来，$x$ 的范围是？",
+          "type": "choice",
+          "answer": "B",
+          "hint": "把两个条件取公共部分。",
+          "explanation": "$-4\\le x\\le0$。",
+          "options": [
+            "$x\\le0$",
+            "$-4\\le x\\le0$",
+            "$x\\ge-4$",
+            "$-4<x<0$"
+          ]
+        }
+      ],
+      "finalAnswer": "$-4\\le x\\le0$",
+      "formulas": [
+        {
+          "name": "二次根式的性质",
+          "latex": "\\sqrt{a^2}=|a|=\\begin{cases}a,&a\\ge0\\\\-a,&a<0\\end{cases}",
+          "tip": "开方出来先加绝对值，再根据正负去掉绝对值。"
+        },
+        {
+          "name": "有意义条件",
+          "latex": "\\sqrt a\\ \\text{有意义}\\iff a\\ge0",
+          "tip": "被开方数必须非负。"
+        }
+      ],
+      "method": "提出 $x^2$ 变成 $|x|\\sqrt{x+4}$，由 $|x|=-x$ 得 $x\\le0$，再加上 $x+4\\ge0$。",
+      "analysis": {
+        "known": [
+          "等式 $\\sqrt{x^3+4x^2}=-x\\sqrt{x+4}$",
+          {
+            "text": "被开方数 $x+4\\ge0$",
+            "hidden": true,
+            "why": "根号有意义的条件，常常是第二个限制"
+          },
+          {
+            "text": "$\\sqrt{x^2}=|x|$",
+            "hidden": true,
+            "why": "提出 $x^2$ 时得到的是 $|x|$，不是 $x$"
+          }
+        ],
+        "goal": "求 $x$ 的取值范围",
+        "associations": [
+          {
+            "trigger": "根号里能提出公因式 $x^2$",
+            "recall": "$\\sqrt{x^2(x+4)}=|x|\\sqrt{x+4}$",
+            "why": "把左边整理成和右边相似的形式再比较",
+            "latex": "\\sqrt{a^2b}=|a|\\sqrt b"
+          },
+          {
+            "trigger": "$|x|=-x$",
+            "recall": "绝对值等于相反数 ⇔ $x\\le0$",
+            "why": "非正数的绝对值才等于它的相反数（0 也可以）"
+          }
+        ],
+        "thinkingPath": [
+          "看到根号里有 $x^2$，想到提出来：左边 $=|x|\\sqrt{x+4}$。",
+          "和右边比较得 $|x|=-x$，所以 $x\\le0$。",
+          "别忘了根号有意义：$x+4\\ge0$，$x\\ge-4$。",
+          "合起来：$-4\\le x\\le0$。"
+        ],
+        "pitfalls": [
+          "只得到 $x\\le0$，漏了 $x+4\\ge0$。",
+          "写成 $x<0$，漏掉 $x=0$。"
+        ]
+      }
+    },
+    {
+      "id": "q11",
+      "original": "石墨烯是已知强度最高的材料之一，同时还具有很好的韧性，石墨烯的理论厚度为 $0.00000000034$ m，这个数据用科学记数法可表示为______。",
+      "knowledgePoints": [
+        "科学记数法"
+      ],
+      "difficulty": 1,
+      "timeLimitSec": 60,
+      "steps": [
+        {
+          "prompt": "科学记数法写成 $a\\times10^n$，其中 $1\\le a<10$。这里 $a=$ ？",
+          "type": "number",
+          "answer": "3.4",
+          "hint": "把小数点移到第一个非零数字后面。",
+          "explanation": "$a=3.4$。"
+        },
+        {
+          "prompt": "小数点向右移动了几位？那么 $n=$ ？",
+          "type": "number",
+          "answer": "-10",
+          "hint": "数一数：从原来的小数点到 3 后面一共移动了几位。",
+          "explanation": "小数点向右移 10 位到 3 后面，所以 $n=-10$，结果 $3.4\\times10^{-10}$。"
+        }
+      ],
+      "finalAnswer": "$3.4\\times10^{-10}$ m",
+      "formulas": [
+        {
+          "name": "科学记数法（小数）",
+          "latex": "0.\\underbrace{0\\cdots0}_{k\\text{个}0}a=a\\times10^{-(k+1)}",
+          "tip": "第一个非零数字前（含小数点前那个 0）有几个 0，指数就是负几。"
+        }
+      ],
+      "method": "绝对值小于 1 的数：$n$ 为负，$|n|$ 等于第一个非零数字前所有 0 的个数（含整数位的 0）。本题请孩子再对照原卷数一数 0 的个数。",
+      "analysis": {
+        "known": [
+          "厚度 $0.00000000034$ m",
+          "要用科学记数法表示"
+        ],
+        "goal": "写成 $a\\times10^n$ 的形式",
+        "associations": [
+          {
+            "trigger": "很小的数（小于 1）",
+            "recall": "科学记数法 $a\\times10^n$，$1\\le|a|<10$，$n$ 为负整数",
+            "why": "小数点向右移几位，$n$ 就是负几",
+            "latex": "a\\times10^{n},\\ 1\\le|a|<10"
+          },
+          {
+            "trigger": "数 0 的个数",
+            "recall": "$|n|$ = 第一个非零数字前所有 0 的个数（含整数位的 0）",
+            "why": "这样数最不容易错"
+          }
+        ],
+        "thinkingPath": [
+          "先确定 $a$：把小数点移到第一个非零数字 3 后面，$a=3.4$。",
+          "数一数 3 前面一共有几个 0（含整数位那个 0）：10 个。",
+          "所以 $n=-10$，结果 $3.4\\times10^{-10}$ m。"
+        ],
+        "pitfalls": [
+          "0 数漏或多数一个，写成 $10^{-9}$ 或 $10^{-11}$。",
+          "$a$ 写成 $34$ 或 $0.34$，不满足 $1\\le a<10$。"
+        ]
+      }
+    },
+    {
+      "id": "q12",
+      "original": "如果 $\\sqrt{0.1521}=0.39$，$\\sqrt x=3.9$，那么 $x$ 的值是______。",
+      "knowledgePoints": [
+        "算术平方根",
+        "被开方数与算术平方根的小数点移动规律"
+      ],
+      "difficulty": 2,
+      "timeLimitSec": 60,
+      "steps": [
+        {
+          "prompt": "$3.9$ 是 $0.39$ 的几倍？",
+          "type": "number",
+          "answer": "10",
+          "hint": "小数点向右移动了 1 位。",
+          "explanation": "$3.9=0.39\\times10$。"
+        },
+        {
+          "prompt": "算术平方根扩大 10 倍，被开方数扩大多少倍？",
+          "type": "number",
+          "answer": "100",
+          "hint": "$\\sqrt{100x}=10\\sqrt x$。",
+          "explanation": "被开方数要扩大 $10^2=100$ 倍（小数点右移 2 位）。"
+        },
+        {
+          "prompt": "所以 $x=$ ？",
+          "type": "number",
+          "answer": "15.21",
+          "hint": "$0.1521\\times100$。",
+          "explanation": "$x=15.21$。"
+        }
+      ],
+      "finalAnswer": "$15.21$",
+      "formulas": [
+        {
+          "name": "移位规律",
+          "latex": "\\sqrt{100a}=10\\sqrt a",
+          "tip": "被开方数小数点每移 2 位，算术平方根小数点同向移 1 位。"
+        }
+      ],
+      "method": "利用“被开方数移两位，平方根移一位”的规律。",
+      "analysis": {
+        "known": [
+          "$\\sqrt{0.1521}=0.39$",
+          "$\\sqrt x=3.9$"
+        ],
+        "goal": "求 $x$",
+        "associations": [
+          {
+            "trigger": "两个算术平方根只差小数点位置",
+            "recall": "被开方数小数点移动两位，算术平方根小数点移动一位（同方向）",
+            "why": "因为 $\\sqrt{100a}=10\\sqrt a$",
+            "latex": "\\sqrt{100a}=10\\sqrt a"
+          }
+        ],
+        "thinkingPath": [
+          "看到 $0.39$ 和 $3.9$ 只差小数点，想到小数点移动规律。",
+          "$3.9$ 是 $0.39$ 的 10 倍（右移一位）。",
+          "被开方数就要扩大 100 倍（右移两位）：$x=15.21$。"
+        ],
+        "pitfalls": [
+          "以为平方根扩大 10 倍，被开方数也只扩大 10 倍，写成 $1.521$。"
+        ]
+      }
+    },
+    {
+      "id": "q13",
+      "original": "关于 $x$ 的一元二次方程 $(m-3)x^2+x+(m^2-9)=0$ 的一个根是 0，则 $m$ 的值是______。",
+      "knowledgePoints": [
+        "一元二次方程的定义",
+        "方程的根"
+      ],
+      "difficulty": 2,
+      "timeLimitSec": 90,
+      "steps": [
+        {
+          "prompt": "把 $x=0$ 代入方程，得 $m^2-9=0$，所以 $m=$ ？",
+          "type": "choice",
+          "answer": "C",
+          "hint": "平方等于 9 的数有两个。",
+          "explanation": "$m^2=9\\Rightarrow m=\\pm3$。",
+          "options": [
+            "$3$",
+            "$-3$",
+            "$\\pm3$",
+            "$9$"
+          ]
+        },
+        {
+          "prompt": "别忘了：是**一元二次**方程，二次项系数 $m-3$ 必须满足？",
+          "type": "choice",
+          "answer": "B",
+          "hint": "二次项系数不能为 0。",
+          "explanation": "$m-3\\ne0$，所以 $m\\ne3$。",
+          "options": [
+            "$m-3=0$",
+            "$m-3\\ne0$",
+            "$m-3>0$",
+            "没有要求"
+          ]
+        },
+        {
+          "prompt": "综合起来 $m=$ ？",
+          "type": "number",
+          "answer": "-3",
+          "hint": "从 $\\pm3$ 中去掉 3。",
+          "explanation": "$m=-3$。"
+        }
+      ],
+      "finalAnswer": "$m=-3$",
+      "formulas": [
+        {
+          "name": "一元二次方程定义",
+          "latex": "ax^2+bx+c=0\\ (a\\ne0)",
+          "tip": "题目说“一元二次方程”时一定要检查 $a\\ne0$。"
+        }
+      ],
+      "method": "代入根得 $m^2-9=0$，再用二次项系数不为 0 排除 $m=3$。",
+      "analysis": {
+        "known": [
+          "方程 $(m-3)x^2+x+(m^2-9)=0$ 是关于 $x$ 的一元二次方程",
+          "它的一个根是 $0$",
+          {
+            "text": "二次项系数 $m-3\\ne0$",
+            "hidden": true,
+            "why": "题目说是“一元二次方程”，如果 $m-3=0$，$x^2$ 项就没了，变成一次方程"
+          }
+        ],
+        "goal": "求 $m$ 的值",
+        "associations": [
+          {
+            "trigger": "“方程的一个根是 0”",
+            "recall": "根的定义：把根代入方程，等式成立",
+            "why": "代入 $x=0$，含 $x$ 的项全变成 0，马上得到关于 $m$ 的方程"
+          },
+          {
+            "trigger": "题目强调“一元二次方程”，而二次项系数含字母",
+            "recall": "二次项系数 $\\ne0$",
+            "why": "这是隐藏条件，用来检验、排除不合适的 $m$",
+            "latex": "ax^2+bx+c=0\\ (a\\ne0)"
+          }
+        ],
+        "thinkingPath": [
+          "看到“一个根是 0”，先把 $x=0$ 代入：$m^2-9=0$，得 $m=\\pm3$。",
+          "再看题目说的是“一元二次方程”，想到二次项系数不能为 0：$m-3\\ne0$，$m\\ne3$。",
+          "把 $m=3$ 舍去，所以 $m=-3$。",
+          "检查：$m=-3$ 时方程是 $-6x^2+x=0$，确实有根 0，而且是二次方程。"
+        ],
+        "pitfalls": [
+          "只算到 $m=\\pm3$ 就写答案，忘了二次项系数 $m-3\\ne0$。",
+          "以为 $m^2-9=0$ 只有 $m=3$ 一个解，漏了 $m=-3$。"
+        ]
+      }
+    },
+    {
+      "id": "q14",
+      "original": "把 $(a-b)\\sqrt{-\\dfrac{1}{a-b}}$ 根号外面的因式移到根号里面，化成最简二次根式，正确的结果是______。",
+      "knowledgePoints": [
+        "二次根式有意义的条件",
+        "二次根式的性质",
+        "根号外因式移入根号"
+      ],
+      "difficulty": 4,
+      "timeLimitSec": 180,
+      "steps": [
+        {
+          "prompt": "根号要有意义，$-\\dfrac1{a-b}\\ge0$（且分母不为 0），所以 $a-b$ ___ 0？",
+          "type": "choice",
+          "answer": "C",
+          "hint": "负的分之一要非负，分母必须是负数。",
+          "explanation": "$-\\dfrac{1}{a-b}>0\\Rightarrow a-b<0$。",
+          "options": [
+            ">",
+            "=",
+            "<",
+            "≥"
+          ]
+        },
+        {
+          "prompt": "$a-b<0$ 是负数，移进根号前要先把负号留在外面：$(a-b)=-\\sqrt{?}$",
+          "type": "choice",
+          "answer": "A",
+          "hint": "负数 $=-|$负数$|$。",
+          "explanation": "$a-b=-(b-a)=-\\sqrt{(b-a)^2}$。",
+          "options": [
+            "$(b-a)^2$",
+            "$a-b$",
+            "$b-a$",
+            "$-(a-b)^2$"
+          ]
+        },
+        {
+          "prompt": "所以原式 $=-\\sqrt{(b-a)^2\\cdot\\dfrac{1}{b-a}}=$ ？",
+          "type": "choice",
+          "answer": "D",
+          "hint": "$(b-a)^2\\div(b-a)=b-a$。",
+          "explanation": "原式 $=-\\sqrt{b-a}$。",
+          "options": [
+            "$\\sqrt{b-a}$",
+            "$\\sqrt{a-b}$",
+            "$-\\sqrt{a-b}$",
+            "$-\\sqrt{b-a}$"
+          ]
+        }
+      ],
+      "finalAnswer": "$-\\sqrt{b-a}$",
+      "formulas": [
+        {
+          "name": "二次根式的性质",
+          "latex": "\\sqrt{a^2}=|a|=\\begin{cases}a,&a\\ge0\\\\-a,&a<0\\end{cases}",
+          "tip": "开方出来先加绝对值，再根据正负去掉绝对值。"
+        },
+        {
+          "name": "负因式移入根号",
+          "latex": "a<0\\Rightarrow a\\sqrt m=-\\sqrt{a^2m}",
+          "tip": "负号必须留在根号外面，只把正的部分平方移进去。"
+        }
+      ],
+      "method": "先由有意义条件判断 $a-b<0$，负号留在外面，再把 $(b-a)$ 平方后移入根号约分。",
+      "analysis": {
+        "known": [
+          "式子 $(a-b)\\sqrt{-\\dfrac1{a-b}}$",
+          {
+            "text": "$-\\dfrac1{a-b}\\ge0$ 且 $a-b\\ne0$，所以 $a-b<0$",
+            "hidden": true,
+            "why": "被开方数非负、分母不为 0，两个条件合起来决定了根号外因式的正负"
+          }
+        ],
+        "goal": "把根号外的因式移到根号内并化简",
+        "associations": [
+          {
+            "trigger": "根号外的因式要移进根号",
+            "recall": "只有非负数才能直接“平方后移进去”",
+            "why": "$a\\ge0$ 时 $a\\sqrt b=\\sqrt{a^2b}$；负数要先把负号留在外面",
+            "latex": "a\\sqrt b=\\sqrt{a^2b}\\ (a\\ge0)"
+          },
+          {
+            "trigger": "根号里有分式 $-\\frac1{a-b}$",
+            "recall": "被开方数 $\\ge0$，分母 $\\ne0$",
+            "why": "从这里判断出 $a-b<0$，是整题的关键"
+          }
+        ],
+        "thinkingPath": [
+          "先看根号有意义：$-\\frac1{a-b}\\ge0$，分母又不为 0，所以 $a-b<0$。",
+          "$a-b$ 是负数，写成 $-(b-a)$，其中 $b-a>0$。",
+          "把正数 $(b-a)$ 平方后移进去：$-\\sqrt{(b-a)^2\\cdot\\frac1{b-a}}$。",
+          "约分得 $-\\sqrt{b-a}$。检查：原式外面是负数乘非负数，结果应为非正，符合。"
+        ],
+        "pitfalls": [
+          "没判断符号，直接把 $(a-b)^2$ 移进去，得到 $\\sqrt{b-a}$（丢了负号）。",
+          "得到 $-\\sqrt{a-b}$——但 $a-b<0$，这个根号无意义。"
+        ]
+      }
+    },
+    {
+      "id": "q15",
+      "original": "若 $n$ 为正整数，且满足 $n<3\\sqrt3<n+1$，则 $n=$______。",
+      "knowledgePoints": [
+        "无理数的估算"
+      ],
+      "difficulty": 2,
+      "timeLimitSec": 60,
+      "steps": [
+        {
+          "prompt": "$3\\sqrt3=\\sqrt{?}$",
+          "type": "number",
+          "answer": "27",
+          "hint": "把 3 移进根号要平方：$3=\\sqrt9$。",
+          "explanation": "$3\\sqrt3=\\sqrt{9\\times3}=\\sqrt{27}$。"
+        },
+        {
+          "prompt": "$\\sqrt{25}<\\sqrt{27}<\\sqrt{36}$，所以 $n=$ ？",
+          "type": "number",
+          "answer": "5",
+          "hint": "$\\sqrt{25}=5,\\sqrt{36}=6$。",
+          "explanation": "$5<3\\sqrt3<6$，$n=5$。"
+        }
+      ],
+      "finalAnswer": "$5$",
+      "formulas": [
+        {
+          "name": "估算",
+          "latex": "\\sqrt{k^2}<\\sqrt m<\\sqrt{(k+1)^2}\\Rightarrow k<\\sqrt m<k+1",
+          "tip": "找夹住被开方数的两个相邻完全平方数。"
+        }
+      ],
+      "method": "把系数移入根号变成 $\\sqrt{27}$，再找相邻完全平方数。",
+      "analysis": {
+        "known": [
+          "$n$ 为正整数",
+          "$n<3\\sqrt3<n+1$"
+        ],
+        "goal": "求 $n$",
+        "associations": [
+          {
+            "trigger": "夹在两个相邻整数之间",
+            "recall": "无理数的估算：找相邻的完全平方数",
+            "why": "$\\sqrt{25}<\\sqrt{27}<\\sqrt{36}$"
+          },
+          {
+            "trigger": "根号前有系数 3",
+            "recall": "系数移进根号：$3\\sqrt3=\\sqrt{9\\times3}$",
+            "why": "变成一个根号才好估算",
+            "latex": "a\\sqrt b=\\sqrt{a^2b}\\ (a\\ge0)"
+          }
+        ],
+        "thinkingPath": [
+          "看到“夹在 $n$ 和 $n+1$ 之间”，想到估算无理数。",
+          "先把系数移进根号：$3\\sqrt3=\\sqrt{27}$。",
+          "找相邻完全平方数：$25<27<36$，所以 $5<\\sqrt{27}<6$，$n=5$。"
+        ],
+        "pitfalls": [
+          "系数移进根号时忘了平方，写成 $\\sqrt{3\\times3}=\\sqrt9$（应是 $\\sqrt{3^2\\times3}=\\sqrt{27}$）。",
+          "用 $\\sqrt3\\approx1.7$ 估算得 $5.1$ 没问题，但估得太粗时容易判断错，用平方比较最稳。"
+        ]
+      }
+    },
+    {
+      "id": "q16",
+      "original": "一元二次方程 $(3-x)=(3-x)^2$ 的解是______。",
+      "knowledgePoints": [
+        "因式分解法解一元二次方程"
+      ],
+      "difficulty": 2,
+      "timeLimitSec": 90,
+      "steps": [
+        {
+          "prompt": "能不能两边同时除以 $(3-x)$？",
+          "type": "choice",
+          "answer": "B",
+          "hint": "如果 $3-x=0$ 呢？",
+          "explanation": "不能！$3-x$ 可能为 0，除掉会丢根。应移项后提公因式。",
+          "options": [
+            "可以",
+            "不可以，会丢根"
+          ]
+        },
+        {
+          "prompt": "移项：$(3-x)-(3-x)^2=0$，提公因式得 $(3-x)(1-3+x)=0$，即 $(3-x)(x-2)=0$。较小的根是？",
+          "type": "number",
+          "answer": "2",
+          "hint": "每个因式分别等于 0。",
+          "explanation": "$x-2=0\\Rightarrow x=2$。"
+        },
+        {
+          "prompt": "较大的根是？",
+          "type": "number",
+          "answer": "3",
+          "hint": "$3-x=0$。",
+          "explanation": "$x_1=2,\\ x_2=3$。"
+        }
+      ],
+      "finalAnswer": "$x_1=2,\\ x_2=3$",
+      "formulas": [
+        {
+          "name": "因式分解法",
+          "latex": "AB=0\\Rightarrow A=0\\text{ 或 }B=0",
+          "tip": "不要两边约去含未知数的式子，会丢根。"
+        }
+      ],
+      "method": "移项后提取公因式 $(3-x)$，转化为两个一次方程。",
+      "analysis": {
+        "known": [
+          "方程 $(3-x)=(3-x)^2$",
+          "两边都有相同的因式 $(3-x)$"
+        ],
+        "goal": "解这个一元二次方程",
+        "associations": [
+          {
+            "trigger": "两边有相同因式",
+            "recall": "移项后提公因式（因式分解法）",
+            "why": "转化成“两个因式乘积为 0”"
+          },
+          {
+            "trigger": "想两边同时除以 $(3-x)$",
+            "recall": "不能除以可能为 0 的式子",
+            "why": "$3-x$ 可能等于 0，一除就把 $x=3$ 这个根丢了"
+          },
+          {
+            "trigger": "$AB=0$",
+            "recall": "$A=0$ 或 $B=0$",
+            "why": "乘积为 0，至少一个因式为 0",
+            "latex": "AB=0\\Rightarrow A=0\\ \\text{或}\\ B=0"
+          }
+        ],
+        "thinkingPath": [
+          "看到两边都有 $(3-x)$，忍住不要除！想到移项提公因式。",
+          "$(3-x)-(3-x)^2=0$，提出 $(3-x)$：$(3-x)[1-(3-x)]=0$，即 $(3-x)(x-2)=0$。",
+          "所以 $x_1=2$，$x_2=3$。"
+        ],
+        "pitfalls": [
+          "两边同除以 $(3-x)$，只得到 $x=2$，丢根 $x=3$。",
+          "提公因式后括号里符号写错：$1-(3-x)=x-2$。"
+        ]
+      }
+    },
+    {
+      "id": "q17",
+      "original": "一元二次方程 $(2x-1)^2=(3-x)^2$ 的解是______。",
+      "knowledgePoints": [
+        "直接开平方法",
+        "因式分解法解一元二次方程"
+      ],
+      "difficulty": 3,
+      "timeLimitSec": 120,
+      "steps": [
+        {
+          "prompt": "由 $A^2=B^2$ 可得？",
+          "type": "choice",
+          "answer": "C",
+          "hint": "平方相等的两个数，可能相等也可能互为相反数。",
+          "explanation": "$A^2=B^2\\Rightarrow A=B$ 或 $A=-B$。",
+          "options": [
+            "只有 $A=B$",
+            "只有 $A=-B$",
+            "$A=B$ 或 $A=-B$",
+            "$A=B=0$"
+          ]
+        },
+        {
+          "prompt": "情况一：$2x-1=3-x$，解得 $x=$ ？",
+          "type": "number",
+          "answer": "4/3",
+          "hint": "移项得 $3x=4$。",
+          "explanation": "$3x=4\\Rightarrow x=\\dfrac43$。（常见错误：算成 $x=4$，忘了除以 3）",
+          "acceptable": [
+            "4/3",
+            "1又1/3"
+          ]
+        },
+        {
+          "prompt": "情况二：$2x-1=-(3-x)=x-3$，解得 $x=$ ？",
+          "type": "number",
+          "answer": "-2",
+          "hint": "移项得 $2x-x=-3+1$。",
+          "explanation": "$x=-2$。所以 $x_1=\\dfrac43,\\ x_2=-2$。"
+        }
+      ],
+      "finalAnswer": "$x_1=\\dfrac43,\\ x_2=-2$",
+      "formulas": [
+        {
+          "name": "平方差因式分解",
+          "latex": "A^2-B^2=(A+B)(A-B)",
+          "tip": "也可以移项后用平方差：$(2x-1+3-x)(2x-1-3+x)=0$。"
+        }
+      ],
+      "method": "$A^2=B^2$ 转化为 $A=\\pm B$ 两个一次方程，解完代回检验。",
+      "analysis": {
+        "known": [
+          "方程 $(2x-1)^2=(3-x)^2$",
+          "两边都是完全平方"
+        ],
+        "goal": "解方程",
+        "associations": [
+          {
+            "trigger": "$A^2=B^2$",
+            "recall": "直接开平方：$A=\\pm B$",
+            "why": "两个数平方相等，它们相等或互为相反数",
+            "latex": "A^2=B^2\\Rightarrow A=B\\ \\text{或}\\ A=-B"
+          },
+          {
+            "trigger": "也可以移项",
+            "recall": "平方差公式分解 $(A+B)(A-B)=0$",
+            "why": "两种方法结果一样，可以互相检验",
+            "latex": "A^2-B^2=(A+B)(A-B)"
+          }
+        ],
+        "thinkingPath": [
+          "看到两边都是平方，想到 $A=\\pm B$。",
+          "情况一：$2x-1=3-x$，$x=\\frac43$。",
+          "情况二：$2x-1=-(3-x)$，$x=-2$。",
+          "代回检验，两个都成立。"
+        ],
+        "pitfalls": [
+          "只写 $2x-1=3-x$，漏掉“互为相反数”的情况。",
+          "$-(3-x)$ 去括号写成 $-3-x$。"
+        ]
+      }
+    },
+    {
+      "id": "q18",
+      "original": "有一件商品，由原售价连续两次降价，每次降价的百分率相同。已知原售价是 800 元，降价两次后的售价是 578 元，若每次下降的百分率是 $x$，由题意列出关于 $x$ 的方程：______。",
+      "knowledgePoints": [
+        "一元二次方程的应用",
+        "增长率（降低率）问题"
+      ],
+      "difficulty": 2,
+      "timeLimitSec": 90,
+      "steps": [
+        {
+          "prompt": "第一次降价后，售价是？",
+          "type": "choice",
+          "answer": "B",
+          "hint": "降低 $x$，剩下原来的 $(1-x)$。",
+          "explanation": "$800(1-x)$。",
+          "options": [
+            "$800x$",
+            "$800(1-x)$",
+            "$800-x$",
+            "$800(1+x)$"
+          ]
+        },
+        {
+          "prompt": "第二次在新价格基础上再降 $x$，两次后的售价是？",
+          "type": "choice",
+          "answer": "A",
+          "hint": "在 $800(1-x)$ 基础上再乘 $(1-x)$。",
+          "explanation": "$800(1-x)^2$，所以方程为 $800(1-x)^2=578$。",
+          "options": [
+            "$800(1-x)^2$",
+            "$800(1-2x)$",
+            "$800-2x$",
+            "$800(1-x^2)$"
+          ]
+        }
+      ],
+      "finalAnswer": "$800(1-x)^2=578$",
+      "formulas": [
+        {
+          "name": "降低率公式",
+          "latex": "a(1-x)^n=b",
+          "tip": "$a$ 原量，$b$ 降低 $n$ 次后的量；增长率则用 $(1+x)$。"
+        }
+      ],
+      "method": "连续两次按相同百分率降低，用 $a(1-x)^2=b$。注意不是 $1-2x$。",
+      "analysis": {
+        "known": [
+          "原价 800 元",
+          "连续两次降价，每次降价百分率相同，设为 $x$",
+          "两次后售价 578 元",
+          {
+            "text": "$0<x<1$",
+            "hidden": true,
+            "why": "降价百分率在 0 和 100% 之间，解出后可用来检验"
+          }
+        ],
+        "goal": "列出关于 $x$ 的方程",
+        "associations": [
+          {
+            "trigger": "“连续两次”“百分率相同”",
+            "recall": "增长率/降低率模型 $a(1\\pm x)^2=b$",
+            "why": "每次都是在上一次的基础上变化，所以是乘两次 $(1-x)$",
+            "latex": "a(1-x)^2=b"
+          }
+        ],
+        "thinkingPath": [
+          "看到“连续两次按相同百分率降价”，想到 $a(1-x)^2=b$ 模型。",
+          "第一次后：$800(1-x)$；第二次是在新价格上再降：$800(1-x)(1-x)$。",
+          "所以方程是 $800(1-x)^2=578$。"
+        ],
+        "pitfalls": [
+          "写成 $800(1-2x)=578$——第二次降价的基数已经变了。",
+          "写成 $800(1-x^2)=578$。"
+        ]
+      }
+    },
+    {
+      "id": "q19",
+      "original": "若关于 $x$ 的一元二次方程 $(m-1)x^2-2mx+(m+2)=0$ 有两个不等的实数根，则 $m$ 的取值范围是______。",
+      "knowledgePoints": [
+        "根的判别式",
+        "一元二次方程的定义"
+      ],
+      "difficulty": 3,
+      "timeLimitSec": 150,
+      "steps": [
+        {
+          "prompt": "“两个不等的实数根”要求判别式满足？",
+          "type": "choice",
+          "answer": "A",
+          "hint": "不需要用求根公式，只看 Δ。",
+          "explanation": "$\\Delta>0$。",
+          "options": [
+            "$\\Delta>0$",
+            "$\\Delta=0$",
+            "$\\Delta<0$",
+            "$\\Delta\\ge0$"
+          ]
+        },
+        {
+          "prompt": "$\\Delta=(-2m)^2-4(m-1)(m+2)=4m^2-4(m^2+m-2)=8-4m>0$，解得 $m<$ ？",
+          "type": "number",
+          "answer": "2",
+          "hint": "$8-4m>0\\Rightarrow 4m<8$。",
+          "explanation": "$m<2$。"
+        },
+        {
+          "prompt": "还要满足二次项系数 $m-1\\ne0$，即 $m\\ne$ ？",
+          "type": "number",
+          "answer": "1",
+          "hint": "一元二次方程的 $a\\ne0$。",
+          "explanation": "$m\\ne1$。所以答案是 $m<2$ 且 $m\\ne1$。"
+        }
+      ],
+      "finalAnswer": "$m<2$ 且 $m\\ne1$",
+      "formulas": [
+        {
+          "name": "根的判别式",
+          "latex": "\\Delta=b^2-4ac",
+          "tip": "Δ>0 两个不等实根；Δ=0 两个相等实根；Δ<0 没有实根。"
+        },
+        {
+          "name": "一元二次方程定义",
+          "latex": "a\\ne0",
+          "tip": "求参数范围时，“判别式”和“二次项系数不为 0”两个条件都要写。"
+        }
+      ],
+      "method": "只需判别式 $\\Delta>0$ 加上 $m-1\\ne0$，不必代入求根公式。",
+      "analysis": {
+        "known": [
+          "$(m-1)x^2-2mx+(m+2)=0$ 是关于 $x$ 的一元二次方程",
+          "方程有两个不相等的实数根",
+          {
+            "text": "二次项系数 $m-1\\ne0$",
+            "hidden": true,
+            "why": "题目说“一元二次方程”，而且只有二次方程才谈得上“两个根”，所以 $m\\ne1$"
+          }
+        ],
+        "goal": "求 $m$ 的取值范围",
+        "associations": [
+          {
+            "trigger": "“两个不相等的实数根”",
+            "recall": "根的判别式 $\\Delta>0$",
+            "why": "$\\Delta>0$ 两个不等实根；$\\Delta=0$ 两个相等实根；$\\Delta<0$ 没有实根",
+            "latex": "\\Delta=b^2-4ac>0"
+          },
+          {
+            "trigger": "二次项系数里有字母 $m$",
+            "recall": "二次项系数 $\\ne0$",
+            "why": "这是最容易漏的隐藏条件，答案要和 $\\Delta$ 的结果合在一起"
+          }
+        ],
+        "thinkingPath": [
+          "看到“两个不相等的实数根”，想到 $\\Delta>0$。",
+          "找准 $a=m-1$，$b=-2m$，$c=m+2$：$\\Delta=4m^2-4(m-1)(m+2)=8-4m>0$，得 $m<2$。",
+          "再看二次项系数含字母，想到 $m-1\\ne0$，即 $m\\ne1$。",
+          "合起来：$m<2$ 且 $m\\ne1$。"
+        ],
+        "pitfalls": [
+          "只写 $m<2$，忘记 $m\\ne1$（最常见的失分点）。",
+          "展开 $(m-1)(m+2)$ 出错，应为 $m^2+m-2$。"
+        ]
+      }
+    },
+    {
+      "id": "q20",
+      "original": "已知 $m$、$n$ 是有理数，方程 $x^2+mx+n=0$ 有一个根是 $\\sqrt5-2$，则 $m+n$ 的值为______。",
+      "knowledgePoints": [
+        "方程的根",
+        "有理数与无理数的性质"
+      ],
+      "difficulty": 4,
+      "timeLimitSec": 180,
+      "steps": [
+        {
+          "prompt": "把 $x=\\sqrt5-2$ 代入：$(\\sqrt5-2)^2=$ ？",
+          "type": "choice",
+          "answer": "B",
+          "hint": "$(a-b)^2=a^2-2ab+b^2$。",
+          "explanation": "$(\\sqrt5-2)^2=5-4\\sqrt5+4=9-4\\sqrt5$。",
+          "options": [
+            "$1$",
+            "$9-4\\sqrt5$",
+            "$9+4\\sqrt5$",
+            "$5-4\\sqrt5$"
+          ]
+        },
+        {
+          "prompt": "代入后整理：$(9-2m+n)+(m-4)\\sqrt5=0$。因为 $m,n$ 是有理数，$\\sqrt5$ 是无理数，必须 $m-4=0$，所以 $m=$ ？",
+          "type": "number",
+          "answer": "4",
+          "hint": "有理数 + 有理数×√5 = 0，只能两部分都为 0。",
+          "explanation": "$m=4$。"
+        },
+        {
+          "prompt": "再由 $9-2m+n=0$ 求 $n$，那么 $m+n=$ ？",
+          "type": "number",
+          "answer": "3",
+          "hint": "$9-8+n=0$。",
+          "explanation": "$n=-1$，$m+n=4+(-1)=3$。"
+        }
+      ],
+      "finalAnswer": "$3$",
+      "formulas": [
+        {
+          "name": "有理数与无理数",
+          "latex": "p+q\\sqrt5=0\\ (p,q\\in\\mathbb Q)\\Rightarrow p=q=0",
+          "tip": "利用“有理部分、无理部分分别为 0”列方程。"
+        }
+      ],
+      "method": "代入根后按“有理部分 + 无理部分×√5”整理，利用 m、n 为有理数，令两部分都为 0。（另一法：$x+2=\\sqrt5$ 两边平方得 $x^2+4x-1=0$。）",
+      "analysis": {
+        "known": [
+          "$m$、$n$ 是有理数",
+          "方程 $x^2+mx+n=0$ 有一个根是 $\\sqrt5-2$",
+          {
+            "text": "$\\sqrt5$ 是无理数",
+            "hidden": true,
+            "why": "有理数 + 有理数 $\\times\\sqrt5=0$ 时，两部分必须都为 0"
+          }
+        ],
+        "goal": "求 $m+n$",
+        "associations": [
+          {
+            "trigger": "已知方程的一个根",
+            "recall": "把根代入方程",
+            "why": "代入后得到关于 $m$、$n$ 的等式"
+          },
+          {
+            "trigger": "$m,n$ 有理数，式子里有 $\\sqrt5$",
+            "recall": "若 $p+q\\sqrt5=0$（$p,q$ 有理数），则 $p=q=0$",
+            "why": "一个方程里能拆出两个方程，正好求两个未知数",
+            "latex": "p+q\\sqrt5=0\\Rightarrow p=0,\\ q=0"
+          }
+        ],
+        "thinkingPath": [
+          "看到已知根，代入：$(\\sqrt5-2)^2+m(\\sqrt5-2)+n=0$。",
+          "展开整理成“有理部分 + 无理部分”：$(9-2m+n)+(m-4)\\sqrt5=0$。",
+          "想到 $m,n$ 是有理数，所以 $m-4=0$，$9-2m+n=0$，得 $m=4$，$n=-1$。",
+          "$m+n=3$。"
+        ],
+        "pitfalls": [
+          "$(\\sqrt5-2)^2$ 算成 $5-4=1$，漏掉中间项 $-4\\sqrt5$。",
+          "不会用“有理数”这个条件，卡在一个方程两个未知数上。"
+        ]
+      }
+    },
+    {
+      "id": "q21",
+      "original": "已知关于 $x$ 的方程 $(a-1)x^2+2x-a-1=0$ 的根都是整数，那么符合条件的整数 $a$ 有______个。",
+      "knowledgePoints": [
+        "分类讨论",
+        "因式分解法解一元二次方程",
+        "整数根问题"
+      ],
+      "difficulty": 5,
+      "timeLimitSec": 240,
+      "steps": [
+        {
+          "prompt": "先看特殊情况：$a=1$ 时方程变成 $2x-2=0$，根 $x=1$ 是整数吗？$a=1$ 符合吗？",
+          "type": "choice",
+          "answer": "A",
+          "hint": "题目只说“方程”，没说“一元二次方程”。",
+          "explanation": "$a=1$ 时是一元一次方程，根 $x=1$ 是整数，符合条件。",
+          "options": [
+            "符合",
+            "不符合"
+          ]
+        },
+        {
+          "prompt": "$a\\ne1$ 时，因式分解：$(a-1)x^2+2x-(a+1)=[(a-1)x+(a+1)](x-1)=0$，一个根是 $x=1$，另一个根是 $x=-\\dfrac{a+1}{a-1}=-1-\\dfrac{2}{a-1}$。要使它是整数，$a-1$ 必须是哪个数的约数？",
+          "type": "number",
+          "answer": "2",
+          "hint": "$\\dfrac{2}{a-1}$ 要是整数。",
+          "explanation": "$a-1$ 是 2 的约数：$\\pm1,\\pm2$。"
+        },
+        {
+          "prompt": "$a-1=\\pm1,\\pm2$ 得 $a=2,0,3,-1$，再加上 $a=1$，共几个？",
+          "type": "number",
+          "answer": "5",
+          "hint": "别漏了 $a=1$ 的情况。",
+          "explanation": "$a=-1,0,1,2,3$，共 5 个。"
+        }
+      ],
+      "finalAnswer": "5 个（$a=-1,0,1,2,3$）",
+      "formulas": [
+        {
+          "name": "十字相乘",
+          "latex": "(a-1)x^2+2x-(a+1)=[(a-1)x+(a+1)](x-1)",
+          "tip": "系数和为 0 时 $x=1$ 是一个根：$(a-1)+2-(a+1)=0$。"
+        }
+      ],
+      "method": "分 $a=1$（一次方程）和 $a\\ne1$（二次方程）讨论；二次时发现 $x=1$ 是根，分解后让另一根为整数，转化为约数问题。",
+      "analysis": {
+        "known": [
+          "关于 $x$ 的方程 $(a-1)x^2+2x-a-1=0$",
+          "方程的根都是整数",
+          "$a$ 是整数",
+          {
+            "text": "没说是“一元二次”方程，$a-1$ 可以为 0",
+            "hidden": true,
+            "why": "$a=1$ 时是一次方程，也要单独讨论"
+          }
+        ],
+        "goal": "求符合条件的整数 $a$ 的个数",
+        "associations": [
+          {
+            "trigger": "二次项系数含字母，又没说是二次方程",
+            "recall": "分类讨论：系数为 0 和不为 0",
+            "why": "系数为 0 时是一次方程，不能直接用二次方程的方法"
+          },
+          {
+            "trigger": "系数之和 $(a-1)+2+(-a-1)=0$",
+            "recall": "各项系数之和为 0 ⇒ $x=1$ 是一个根",
+            "why": "知道一个根就能因式分解"
+          },
+          {
+            "trigger": "$-1-\\frac2{a-1}$ 是整数",
+            "recall": "整除问题：$a-1$ 是 2 的约数",
+            "why": "分数是整数 ⇔ 分母整除分子"
+          }
+        ],
+        "thinkingPath": [
+          "看到二次项系数含字母，先分类：$a=1$ 时，$2x-2=0$，$x=1$ 是整数，符合。",
+          "$a\\ne1$ 时，发现 $x=1$ 是根，分解：$[(a-1)x+(a+1)](x-1)=0$。",
+          "另一根 $x=-\\frac{a+1}{a-1}=-1-\\frac2{a-1}$，要是整数，$a-1=\\pm1,\\pm2$，得 $a=2,0,3,-1$。",
+          "加上 $a=1$，共 5 个。"
+        ],
+        "pitfalls": [
+          "漏掉 $a=1$（一次方程）的情况，答成 4 个。",
+          "约数只取正的 $1,2$，漏了 $-1,-2$。"
+        ]
+      }
+    },
+    {
+      "id": "q22",
+      "original": "我们在学习“有理数的小数形式”这一节课时，学习了如何将无限循环小数化成分数形式的方法，感受了“将无限化为有限”的思想，请类比同样的方法和思想，化简 $\\sqrt{42+\\sqrt{42+\\sqrt{42+\\cdots}}}=$______。",
+      "knowledgePoints": [
+        "整体思想",
+        "一元二次方程的解法"
+      ],
+      "difficulty": 4,
+      "timeLimitSec": 150,
+      "steps": [
+        {
+          "prompt": "设 $x=\\sqrt{42+\\sqrt{42+\\cdots}}$，注意根号里面的“$\\sqrt{42+\\cdots}$”也等于 $x$，所以 $x=$ ？",
+          "type": "choice",
+          "answer": "B",
+          "hint": "无限嵌套，去掉最外层还是同样的东西。",
+          "explanation": "$x=\\sqrt{42+x}$。",
+          "options": [
+            "$\\sqrt{42}$",
+            "$\\sqrt{42+x}$",
+            "$42+x$",
+            "$x^2$"
+          ]
+        },
+        {
+          "prompt": "两边平方得 $x^2-x-42=0$，因式分解 $(x-7)(x+6)=0$。正的根是？",
+          "type": "number",
+          "answer": "7",
+          "hint": "$x$ 是算术平方根，必须为正。",
+          "explanation": "$x=7$（$x=-6$ 舍去）。"
+        }
+      ],
+      "finalAnswer": "$7$",
+      "formulas": [
+        {
+          "name": "整体换元",
+          "latex": "x=\\sqrt{a+x}\\Rightarrow x^2-x-a=0",
+          "tip": "无限循环/嵌套的结构，设为 x 后用“自相似”列方程。"
+        }
+      ],
+      "method": "设整体为 x，利用自相似得 $x=\\sqrt{42+x}$，平方后解一元二次方程，舍去负根。",
+      "analysis": {
+        "known": [
+          "式子 $\\sqrt{42+\\sqrt{42+\\sqrt{42+\\cdots}}}$ 无限嵌套",
+          {
+            "text": "这个式子的值是正数",
+            "hidden": true,
+            "why": "它是算术平方根，一定大于 0，用来舍根"
+          }
+        ],
+        "goal": "求它的值",
+        "associations": [
+          {
+            "trigger": "无限循环/无限嵌套",
+            "recall": "设整体为 $x$，利用“自相似”列方程",
+            "why": "像化循环小数为分数一样，把无限化为有限"
+          },
+          {
+            "trigger": "$x=\\sqrt{42+x}$",
+            "recall": "两边平方后解一元二次方程",
+            "why": "平方去根号，再因式分解",
+            "latex": "x^2-x-42=(x-7)(x+6)"
+          }
+        ],
+        "thinkingPath": [
+          "看到无限嵌套，类比循环小数：设 $x=\\sqrt{42+\\sqrt{42+\\cdots}}$。",
+          "发现根号里那部分还是 $x$，所以 $x=\\sqrt{42+x}$。",
+          "两边平方：$x^2-x-42=0$，$(x-7)(x+6)=0$。",
+          "因为 $x>0$，舍去 $-6$，答案 7。"
+        ],
+        "pitfalls": [
+          "忘记舍去负根 $-6$。"
+        ]
+      }
+    },
+    {
+      "id": "q23-1",
+      "original": "23.（1）化简与计算：$\\sqrt{75}-\\dfrac23\\sqrt{27}-(\\sqrt3-1)^0+\\dfrac{3}{\\sqrt3+1}$",
+      "knowledgePoints": [
+        "二次根式的化简",
+        "零指数幂",
+        "分母有理化",
+        "二次根式的加减"
+      ],
+      "difficulty": 3,
+      "timeLimitSec": 240,
+      "steps": [
+        {
+          "prompt": "$\\sqrt{75}=$ ？",
+          "type": "number",
+          "answer": "5√3",
+          "hint": "$75=25\\times3$。",
+          "explanation": "$\\sqrt{75}=5\\sqrt3$。",
+          "acceptable": [
+            "5sqrt(3)",
+            "5*√3",
+            "5√(3)"
+          ]
+        },
+        {
+          "prompt": "$\\dfrac23\\sqrt{27}=$ ？（$\\sqrt{27}=3\\sqrt3$）",
+          "type": "number",
+          "answer": "2√3",
+          "hint": "$\\dfrac23\\times3\\sqrt3$。",
+          "explanation": "$\\dfrac23\\times3\\sqrt3=2\\sqrt3$。",
+          "acceptable": [
+            "2sqrt(3)",
+            "2*√3"
+          ]
+        },
+        {
+          "prompt": "$(\\sqrt3-1)^0=$ ？　$\\dfrac{3}{\\sqrt3+1}$ 分母有理化后等于？",
+          "type": "choice",
+          "answer": "A",
+          "hint": "任何非零数的 0 次幂是 1；分子分母同乘 $\\sqrt3-1$。",
+          "explanation": "$(\\sqrt3-1)^0=1$；$\\dfrac{3(\\sqrt3-1)}{(\\sqrt3+1)(\\sqrt3-1)}=\\dfrac{3\\sqrt3-3}{2}$。",
+          "options": [
+            "$1$；$\\dfrac{3\\sqrt3-3}{2}$",
+            "$0$；$\\dfrac{3\\sqrt3-3}{2}$",
+            "$1$；$3\\sqrt3-3$",
+            "$0$；$\\dfrac{3\\sqrt3+3}{4}$"
+          ]
+        },
+        {
+          "prompt": "合并：$5\\sqrt3-2\\sqrt3-1+\\dfrac{3\\sqrt3-3}{2}=$ ？",
+          "type": "choice",
+          "answer": "C",
+          "hint": "先通分成分母 2：$\\dfrac{6\\sqrt3-2+3\\sqrt3-3}{2}$。",
+          "explanation": "$3\\sqrt3-1+\\dfrac{3\\sqrt3}{2}-\\dfrac32=\\dfrac{9\\sqrt3-5}{2}$。",
+          "options": [
+            "$\\dfrac{9\\sqrt3-3}{2}$",
+            "$3\\sqrt3$",
+            "$\\dfrac{9\\sqrt3-5}{2}$",
+            "$\\dfrac{3\\sqrt3-5}{2}$"
+          ]
+        }
+      ],
+      "finalAnswer": "$\\dfrac{9\\sqrt3-5}{2}$",
+      "formulas": [
+        {
+          "name": "分母有理化",
+          "latex": "\\dfrac{1}{\\sqrt a+\\sqrt b}=\\dfrac{\\sqrt a-\\sqrt b}{a-b}",
+          "tip": "分子分母同乘分母的“有理化因式”（平方差）。"
+        },
+        {
+          "name": "零指数幂",
+          "latex": "a^0=1\\ (a\\ne0)",
+          "tip": "$\\sqrt3-1\\ne0$，所以等于 1。"
+        },
+        {
+          "name": "二次根式的性质",
+          "latex": "\\sqrt{a^2}=|a|=\\begin{cases}a,&a\\ge0\\\\-a,&a<0\\end{cases}",
+          "tip": "开方出来先加绝对值，再根据正负去掉绝对值。"
+        }
+      ],
+      "method": "先把每一项化成最简二次根式、算零次幂、分母有理化，最后合并同类二次根式。",
+      "analysis": {
+        "known": [
+          "算式 $\\sqrt{75}-\\frac23\\sqrt{27}-(\\sqrt3-1)^0+\\frac3{\\sqrt3+1}$",
+          {
+            "text": "$(\\sqrt3-1)^0=1$，因为底数 $\\sqrt3-1\\ne0$",
+            "hidden": true,
+            "why": "零指数幂要求底数不为 0"
+          }
+        ],
+        "goal": "化简并计算",
+        "associations": [
+          {
+            "trigger": "$\\sqrt{75}$、$\\sqrt{27}$",
+            "recall": "化成最简二次根式（提出平方因数）",
+            "why": "化简后才能看出是不是同类二次根式",
+            "latex": "\\sqrt{a^2b}=a\\sqrt b\\ (a\\ge0)"
+          },
+          {
+            "trigger": "$a^0$",
+            "recall": "零指数幂：$a^0=1\\ (a\\ne0)$",
+            "why": "不是 0！"
+          },
+          {
+            "trigger": "分母是 $\\sqrt3+1$",
+            "recall": "分母有理化：乘共轭式 $\\sqrt3-1$",
+            "why": "利用平方差去掉分母的根号",
+            "latex": "(\\sqrt3+1)(\\sqrt3-1)=2"
+          }
+        ],
+        "thinkingPath": [
+          "四项分别处理：$\\sqrt{75}=5\\sqrt3$，$\\frac23\\sqrt{27}=2\\sqrt3$。",
+          "$(\\sqrt3-1)^0=1$。",
+          "$\\frac3{\\sqrt3+1}=\\frac{3(\\sqrt3-1)}2$。",
+          "合并：$3\\sqrt3-1+\\frac{3\\sqrt3-3}2=\\frac{9\\sqrt3-5}2$。"
+        ],
+        "pitfalls": [
+          "把 $(\\sqrt3-1)^0$ 当成 0。",
+          "有理化时分子忘记乘 $(\\sqrt3-1)$，或分母算成 $3-1$ 以外的数。"
+        ]
+      }
+    },
+    {
+      "id": "q23-2",
+      "original": "23.（2）化简与计算：$\\dfrac12x\\sqrt{4x}+6x\\sqrt{\\dfrac x9}-2x^2\\sqrt{\\dfrac1x}$",
+      "knowledgePoints": [
+        "二次根式的化简",
+        "同类二次根式",
+        "二次根式的加减"
+      ],
+      "difficulty": 3,
+      "timeLimitSec": 180,
+      "steps": [
+        {
+          "prompt": "$\\dfrac12x\\sqrt{4x}=$ ？",
+          "type": "choice",
+          "answer": "A",
+          "hint": "$\\sqrt{4x}=2\\sqrt x$。",
+          "explanation": "$\\dfrac12x\\cdot2\\sqrt x=x\\sqrt x$。",
+          "options": [
+            "$x\\sqrt x$",
+            "$2x\\sqrt x$",
+            "$\\dfrac12x\\sqrt x$",
+            "$x^2$"
+          ]
+        },
+        {
+          "prompt": "$6x\\sqrt{\\dfrac x9}=$ ？",
+          "type": "choice",
+          "answer": "B",
+          "hint": "$\\sqrt{\\dfrac x9}=\\dfrac{\\sqrt x}{3}$。",
+          "explanation": "$6x\\cdot\\dfrac{\\sqrt x}3=2x\\sqrt x$。",
+          "options": [
+            "$x\\sqrt x$",
+            "$2x\\sqrt x$",
+            "$6x\\sqrt x$",
+            "$\\dfrac{2}{3}x\\sqrt x$"
+          ]
+        },
+        {
+          "prompt": "$2x^2\\sqrt{\\dfrac1x}=$ ？（由题意 $x>0$）",
+          "type": "choice",
+          "answer": "B",
+          "hint": "$\\sqrt{\\dfrac1x}=\\dfrac{\\sqrt x}{x}$。",
+          "explanation": "$2x^2\\cdot\\dfrac{\\sqrt x}{x}=2x\\sqrt x$。",
+          "options": [
+            "$2x^2\\sqrt x$",
+            "$2x\\sqrt x$",
+            "$\\dfrac{2x}{\\sqrt x}$",
+            "$2\\sqrt x$"
+          ]
+        },
+        {
+          "prompt": "合并：$x\\sqrt x+2x\\sqrt x-2x\\sqrt x=$ ？",
+          "type": "choice",
+          "answer": "D",
+          "hint": "都是 $x\\sqrt x$ 的同类项，系数相加。",
+          "explanation": "$(1+2-2)x\\sqrt x=x\\sqrt x$。",
+          "options": [
+            "$5x\\sqrt x$",
+            "$3x\\sqrt x$",
+            "$0$",
+            "$x\\sqrt x$"
+          ]
+        }
+      ],
+      "finalAnswer": "$x\\sqrt x$",
+      "formulas": [
+        {
+          "name": "二次根式乘除",
+          "latex": "\\sqrt{a}\\cdot\\sqrt{b}=\\sqrt{ab},\\ \\dfrac{\\sqrt a}{\\sqrt b}=\\sqrt{\\dfrac ab}\\ (a\\ge0,b>0)",
+          "tip": "根号里的数可以合在一起乘除。"
+        },
+        {
+          "name": "化去分母",
+          "latex": "\\sqrt{\\dfrac1x}=\\dfrac{\\sqrt x}{x}\\ (x>0)",
+          "tip": "被开方数有分母时，分子分母同乘使分母成为完全平方。"
+        }
+      ],
+      "method": "每一项都化成最简二次根式（都变成 $x\\sqrt x$ 的倍数），再合并同类二次根式。",
+      "analysis": {
+        "known": [
+          "算式 $\\frac12x\\sqrt{4x}+6x\\sqrt{\\frac x9}-2x^2\\sqrt{\\frac1x}$",
+          {
+            "text": "$x>0$",
+            "hidden": true,
+            "why": "$\\sqrt{\\frac1x}$ 要求 $x\\ne0$ 且 $\\frac1x\\ge0$，所以 $x>0$；这样 $\\sqrt{x^2}=x$ 才能直接写"
+          }
+        ],
+        "goal": "化简",
+        "associations": [
+          {
+            "trigger": "根号里有平方因数或分母",
+            "recall": "化成最简二次根式",
+            "why": "都化成 $x\\sqrt x$ 的形式，才能合并"
+          },
+          {
+            "trigger": "化简后被开方数相同",
+            "recall": "合并同类二次根式（系数相加）",
+            "why": "像合并同类项一样，根式部分不变"
+          }
+        ],
+        "thinkingPath": [
+          "先找隐藏条件：$x>0$。",
+          "逐项化简：$\\frac12x\\cdot2\\sqrt x=x\\sqrt x$；$6x\\cdot\\frac{\\sqrt x}3=2x\\sqrt x$；$2x^2\\cdot\\frac{\\sqrt x}x=2x\\sqrt x$。",
+          "合并：$x\\sqrt x+2x\\sqrt x-2x\\sqrt x=x\\sqrt x$。"
+        ],
+        "pitfalls": [
+          "$\\sqrt{\\frac1x}$ 化简错，写成 $\\frac1{\\sqrt x}$ 后不再处理，或写成 $\\sqrt x$。"
+        ]
+      }
+    },
+    {
+      "id": "q23-3",
+      "original": "23.（3）化简与计算：$\\dfrac2b\\sqrt{ab}\\times\\left(-\\dfrac32\\sqrt{a^3b}\\right)\\div\\sqrt{\\dfrac{b}{9a}}\\ (a>0)$",
+      "knowledgePoints": [
+        "二次根式的乘除",
+        "二次根式的化简"
+      ],
+      "difficulty": 4,
+      "timeLimitSec": 240,
+      "steps": [
+        {
+          "prompt": "先算系数和根号的乘法：$\\dfrac2b\\times\\left(-\\dfrac32\\right)=-\\dfrac3b$，$\\sqrt{ab}\\cdot\\sqrt{a^3b}=\\sqrt{a^4b^2}=$ ？（由题意 $a>0,b>0$）",
+          "type": "choice",
+          "answer": "C",
+          "hint": "$a^4b^2=(a^2b)^2$。",
+          "explanation": "$\\sqrt{a^4b^2}=a^2b$，所以前两项相乘得 $-\\dfrac3b\\cdot a^2b=-3a^2$。",
+          "options": [
+            "$a^2\\sqrt b$",
+            "$a^4b^2$",
+            "$a^2b$",
+            "$ab$"
+          ]
+        },
+        {
+          "prompt": "除以 $\\sqrt{\\dfrac b{9a}}$ 等于乘以 $\\sqrt{\\dfrac{9a}{b}}$，它化简为？",
+          "type": "choice",
+          "answer": "A",
+          "hint": "$\\sqrt{\\dfrac{9a}{b}}=\\dfrac{3\\sqrt a}{\\sqrt b}$，分子分母同乘 $\\sqrt b$。",
+          "explanation": "$\\sqrt{\\dfrac{9a}b}=\\dfrac{3\\sqrt{ab}}{b}$。",
+          "options": [
+            "$\\dfrac{3\\sqrt{ab}}{b}$",
+            "$\\dfrac{9a}{b}$",
+            "$3\\sqrt{ab}$",
+            "$\\dfrac{\\sqrt{ab}}{3b}$"
+          ]
+        },
+        {
+          "prompt": "结果 $-3a^2\\cdot\\dfrac{3\\sqrt{ab}}{b}=$ ？",
+          "type": "choice",
+          "answer": "D",
+          "hint": "系数 $-3\\times3$。",
+          "explanation": "$-\\dfrac{9a^2\\sqrt{ab}}{b}$。",
+          "options": [
+            "$-9a^2\\sqrt{ab}$",
+            "$\\dfrac{9a^2\\sqrt{ab}}{b}$",
+            "$-\\dfrac{a^2\\sqrt{ab}}{b}$",
+            "$-\\dfrac{9a^2\\sqrt{ab}}{b}$"
+          ]
+        }
+      ],
+      "finalAnswer": "$-\\dfrac{9a^2\\sqrt{ab}}{b}$",
+      "formulas": [
+        {
+          "name": "二次根式乘除",
+          "latex": "\\sqrt{a}\\cdot\\sqrt{b}=\\sqrt{ab},\\ \\dfrac{\\sqrt a}{\\sqrt b}=\\sqrt{\\dfrac ab}\\ (a\\ge0,b>0)",
+          "tip": "根号里的数可以合在一起乘除。"
+        },
+        {
+          "name": "除法变乘法",
+          "latex": "\\div\\sqrt{\\dfrac mn}=\\times\\sqrt{\\dfrac nm}",
+          "tip": "除以一个根式等于乘它的倒数。"
+        }
+      ],
+      "method": "系数与系数相乘、被开方数与被开方数相乘；除法改成乘倒数；最后化成最简二次根式（分母中不含根号）。",
+      "analysis": {
+        "known": [
+          "算式 $\\frac2b\\sqrt{ab}\\times\\left(-\\frac32\\sqrt{a^3b}\\right)\\div\\sqrt{\\frac b{9a}}$，$a>0$",
+          {
+            "text": "$b>0$",
+            "hidden": true,
+            "why": "$b$ 在分母上不为 0，又 $\\sqrt{ab}\\ge0$ 需 $ab\\ge0$，配合 $a>0$ 得 $b>0$"
+          }
+        ],
+        "goal": "化简",
+        "associations": [
+          {
+            "trigger": "根式的乘除",
+            "recall": "系数乘系数，被开方数乘被开方数",
+            "why": "乘法可以合成一个根号；除以一个根式，改成乘它的倒数",
+            "latex": "\\sqrt a\\cdot\\sqrt b=\\sqrt{ab}\\ (a,b\\ge0)"
+          },
+          {
+            "trigger": "结果分母里有根号或根号里有分母",
+            "recall": "化成最简（分母有理化）",
+            "why": "最终结果分母中不能含根号"
+          }
+        ],
+        "thinkingPath": [
+          "先确认 $a>0$，$b>0$。",
+          "系数相乘：$\\frac2b\\times(-\\frac32)=-\\frac3b$；根式相乘：$\\sqrt{a^4b^2}=a^2b$，得 $-3a^2$。",
+          "除以 $\\sqrt{\\frac b{9a}}$ 变成乘 $\\sqrt{\\frac{9a}b}=\\frac{3\\sqrt{ab}}b$。",
+          "结果 $-\\frac{9a^2\\sqrt{ab}}b$。"
+        ],
+        "pitfalls": [
+          "除法不改成乘倒数，直接把根号里相除时分子分母颠倒。",
+          "最后符号丢失（有一个负号）。"
+        ]
+      }
+    },
+    {
+      "id": "q23-4",
+      "original": "23.（4）化简与计算：$\\left(\\sqrt{\\dfrac52}-\\sqrt{\\dfrac25}\\right)\\div\\left(\\dfrac1{\\sqrt2}-\\dfrac1{\\sqrt5}\\right)$",
+      "knowledgePoints": [
+        "二次根式的除法",
+        "分母有理化"
+      ],
+      "difficulty": 4,
+      "timeLimitSec": 240,
+      "steps": [
+        {
+          "prompt": "把被除式通分：$\\sqrt{\\dfrac52}-\\sqrt{\\dfrac25}=\\dfrac{\\sqrt5}{\\sqrt2}-\\dfrac{\\sqrt2}{\\sqrt5}=\\dfrac{5-2}{\\sqrt{10}}=$ ？",
+          "type": "choice",
+          "answer": "B",
+          "hint": "通分的公分母是 $\\sqrt{10}$。",
+          "explanation": "$\\dfrac{3}{\\sqrt{10}}$。",
+          "options": [
+            "$\\dfrac{3}{10}$",
+            "$\\dfrac{3}{\\sqrt{10}}$",
+            "$\\sqrt3$",
+            "$\\dfrac{7}{\\sqrt{10}}$"
+          ]
+        },
+        {
+          "prompt": "除式通分：$\\dfrac1{\\sqrt2}-\\dfrac1{\\sqrt5}=$ ？",
+          "type": "choice",
+          "answer": "A",
+          "hint": "公分母 $\\sqrt{10}$：$\\dfrac{\\sqrt5}{\\sqrt{10}}-\\dfrac{\\sqrt2}{\\sqrt{10}}$。",
+          "explanation": "$\\dfrac{\\sqrt5-\\sqrt2}{\\sqrt{10}}$。",
+          "options": [
+            "$\\dfrac{\\sqrt5-\\sqrt2}{\\sqrt{10}}$",
+            "$\\dfrac{\\sqrt2-\\sqrt5}{\\sqrt{10}}$",
+            "$\\dfrac{1}{\\sqrt3}$",
+            "$\\dfrac{3}{\\sqrt{10}}$"
+          ]
+        },
+        {
+          "prompt": "相除得 $\\dfrac{3}{\\sqrt5-\\sqrt2}$，分母有理化后等于？",
+          "type": "choice",
+          "answer": "C",
+          "hint": "分子分母同乘 $\\sqrt5+\\sqrt2$，分母变成 $5-2=3$。",
+          "explanation": "$\\dfrac{3(\\sqrt5+\\sqrt2)}{3}=\\sqrt5+\\sqrt2$。",
+          "options": [
+            "$\\sqrt5-\\sqrt2$",
+            "$3(\\sqrt5+\\sqrt2)$",
+            "$\\sqrt5+\\sqrt2$",
+            "$1$"
+          ]
+        }
+      ],
+      "finalAnswer": "$\\sqrt5+\\sqrt2$",
+      "formulas": [
+        {
+          "name": "分母有理化",
+          "latex": "\\dfrac{1}{\\sqrt a+\\sqrt b}=\\dfrac{\\sqrt a-\\sqrt b}{a-b}",
+          "tip": "分子分母同乘分母的“有理化因式”（平方差）。"
+        },
+        {
+          "name": "平方差公式",
+          "latex": "(a+b)(a-b)=a^2-b^2",
+          "tip": "含根号的和差相乘可以消掉根号。"
+        }
+      ],
+      "method": "两个括号分别通分（公分母 $\\sqrt{10}$），$\\sqrt{10}$ 约掉后再分母有理化。",
+      "analysis": {
+        "known": [
+          "算式 $\\left(\\sqrt{\\frac52}-\\sqrt{\\frac25}\\right)\\div\\left(\\frac1{\\sqrt2}-\\frac1{\\sqrt5}\\right)$"
+        ],
+        "goal": "化简计算",
+        "associations": [
+          {
+            "trigger": "两个括号里都是分式型根式",
+            "recall": "通分（公分母 $\\sqrt{10}$）",
+            "why": "通分后 $\\sqrt{10}$ 能约掉，计算变简单"
+          },
+          {
+            "trigger": "结果 $\\frac3{\\sqrt5-\\sqrt2}$",
+            "recall": "分母有理化：乘 $\\sqrt5+\\sqrt2$",
+            "why": "$(\\sqrt5-\\sqrt2)(\\sqrt5+\\sqrt2)=3$，正好和分子约掉",
+            "latex": "(\\sqrt a-\\sqrt b)(\\sqrt a+\\sqrt b)=a-b"
+          }
+        ],
+        "thinkingPath": [
+          "被除式：$\\frac{\\sqrt5}{\\sqrt2}-\\frac{\\sqrt2}{\\sqrt5}=\\frac{5-2}{\\sqrt{10}}=\\frac3{\\sqrt{10}}$。",
+          "除式：$\\frac{\\sqrt5-\\sqrt2}{\\sqrt{10}}$。",
+          "相除 $\\sqrt{10}$ 约掉：$\\frac3{\\sqrt5-\\sqrt2}$，有理化得 $\\sqrt5+\\sqrt2$。"
+        ],
+        "pitfalls": [
+          "除法当作“分配律”：$a\\div(b-c)\\ne a\\div b-a\\div c$。",
+          "通分时 $\\frac1{\\sqrt2}=\\frac{\\sqrt5}{\\sqrt{10}}$ 写错位置。"
+        ]
+      }
+    },
+    {
+      "id": "q24",
+      "original": "解不等式：$\\sqrt2(x-\\sqrt2)<\\sqrt3(x+\\sqrt3)$",
+      "knowledgePoints": [
+        "一元一次不等式",
+        "分母有理化"
+      ],
+      "difficulty": 4,
+      "timeLimitSec": 240,
+      "steps": [
+        {
+          "prompt": "去括号：$\\sqrt2x-2<\\sqrt3x+3$，移项合并得 $(\\sqrt2-\\sqrt3)x<$ ？",
+          "type": "number",
+          "answer": "5",
+          "hint": "把常数移到右边：$3+2$。",
+          "explanation": "$(\\sqrt2-\\sqrt3)x<5$。"
+        },
+        {
+          "prompt": "$\\sqrt2-\\sqrt3$ 是正数还是负数？两边除以它时不等号方向怎么变？",
+          "type": "choice",
+          "answer": "B",
+          "hint": "$\\sqrt2<\\sqrt3$。",
+          "explanation": "$\\sqrt2-\\sqrt3<0$，除以负数不等号要改变方向：$x>\\dfrac{5}{\\sqrt2-\\sqrt3}$。",
+          "options": [
+            "正数，方向不变",
+            "负数，方向改变",
+            "负数，方向不变",
+            "正数，方向改变"
+          ]
+        },
+        {
+          "prompt": "$\\dfrac{5}{\\sqrt2-\\sqrt3}$ 分母有理化后等于？",
+          "type": "choice",
+          "answer": "D",
+          "hint": "分子分母同乘 $\\sqrt2+\\sqrt3$，分母 $2-3=-1$。",
+          "explanation": "$\\dfrac{5(\\sqrt2+\\sqrt3)}{-1}=-5\\sqrt2-5\\sqrt3$，所以 $x>-5\\sqrt2-5\\sqrt3$。",
+          "options": [
+            "$5\\sqrt2+5\\sqrt3$",
+            "$5\\sqrt3-5\\sqrt2$",
+            "$-5$",
+            "$-5\\sqrt2-5\\sqrt3$"
+          ]
+        }
+      ],
+      "finalAnswer": "$x>-5\\sqrt2-5\\sqrt3$",
+      "formulas": [
+        {
+          "name": "不等式性质 3",
+          "latex": "a<b,\\ c<0\\Rightarrow ac>bc",
+          "tip": "两边乘或除以同一个负数，不等号方向改变。"
+        },
+        {
+          "name": "分母有理化",
+          "latex": "\\dfrac{1}{\\sqrt a+\\sqrt b}=\\dfrac{\\sqrt a-\\sqrt b}{a-b}",
+          "tip": "分子分母同乘分母的“有理化因式”（平方差）。"
+        }
+      ],
+      "method": "按解一元一次不等式的步骤做；关键是判断系数 $\\sqrt2-\\sqrt3$ 为负，除过去要变号，最后分母有理化。",
+      "analysis": {
+        "known": [
+          "不等式 $\\sqrt2(x-\\sqrt2)<\\sqrt3(x+\\sqrt3)$",
+          {
+            "text": "$\\sqrt2-\\sqrt3<0$",
+            "hidden": true,
+            "why": "两边除以负数，不等号方向要改变——这是本题关键"
+          }
+        ],
+        "goal": "求不等式的解集",
+        "associations": [
+          {
+            "trigger": "一元一次不等式",
+            "recall": "解法步骤：去括号 → 移项 → 合并 → 系数化为 1",
+            "why": "和解方程一样，只是最后一步要看系数正负"
+          },
+          {
+            "trigger": "系数 $\\sqrt2-\\sqrt3$",
+            "recall": "不等式两边除以负数，不等号变向",
+            "why": "$\\sqrt2<\\sqrt3$，所以系数是负数"
+          },
+          {
+            "trigger": "$\\frac5{\\sqrt2-\\sqrt3}$",
+            "recall": "分母有理化",
+            "why": "乘 $\\sqrt2+\\sqrt3$，分母变成 $2-3=-1$"
+          }
+        ],
+        "thinkingPath": [
+          "去括号：$\\sqrt2x-2<\\sqrt3x+3$，移项合并：$(\\sqrt2-\\sqrt3)x<5$。",
+          "看到系数 $\\sqrt2-\\sqrt3$，先判断正负：负数！除过去要变号。",
+          "$x>\\frac5{\\sqrt2-\\sqrt3}=-5\\sqrt2-5\\sqrt3$。"
+        ],
+        "pitfalls": [
+          "除以负数忘记变号，写成 $x<\\cdots$。",
+          "有理化时分母 $2-3=-1$ 的负号丢了。"
+        ]
+      }
+    },
+    {
+      "id": "q25",
+      "original": "用配方法解方程：$2x^2-3x-4=0$",
+      "knowledgePoints": [
+        "配方法"
+      ],
+      "difficulty": 3,
+      "timeLimitSec": 240,
+      "steps": [
+        {
+          "prompt": "先把二次项系数化为 1 并移项：$x^2-\\dfrac32x=$ ？",
+          "type": "number",
+          "answer": "2",
+          "hint": "两边同除以 2，常数项移到右边。",
+          "explanation": "$x^2-\\dfrac32x=2$。"
+        },
+        {
+          "prompt": "两边加上一次项系数一半的平方，即 $\\left(\\dfrac34\\right)^2=$ ？",
+          "type": "number",
+          "answer": "9/16",
+          "hint": "一次项系数 $-\\dfrac32$ 的一半是 $-\\dfrac34$。",
+          "explanation": "加 $\\dfrac9{16}$，得 $\\left(x-\\dfrac34\\right)^2=2+\\dfrac9{16}=\\dfrac{41}{16}$。",
+          "acceptable": [
+            "0.5625"
+          ]
+        },
+        {
+          "prompt": "开平方解得 $x=$ ？",
+          "type": "choice",
+          "answer": "A",
+          "hint": "$x-\\dfrac34=\\pm\\dfrac{\\sqrt{41}}{4}$。",
+          "explanation": "$x_1=\\dfrac{3+\\sqrt{41}}4,\\ x_2=\\dfrac{3-\\sqrt{41}}4$。",
+          "options": [
+            "$\\dfrac{3\\pm\\sqrt{41}}{4}$",
+            "$\\dfrac{3\\pm\\sqrt{41}}{2}$",
+            "$\\dfrac{-3\\pm\\sqrt{41}}{4}$",
+            "$\\dfrac34\\pm\\sqrt{41}$"
+          ]
+        }
+      ],
+      "finalAnswer": "$x_1=\\dfrac{3+\\sqrt{41}}{4},\\ x_2=\\dfrac{3-\\sqrt{41}}{4}$",
+      "formulas": [
+        {
+          "name": "配方法",
+          "latex": "x^2+px=q\\Rightarrow\\left(x+\\dfrac p2\\right)^2=q+\\dfrac{p^2}{4}",
+          "tip": "先化二次项系数为 1，再两边同加“一次项系数一半的平方”。"
+        }
+      ],
+      "method": "化 1 → 移项 → 配方（加一次项系数一半的平方）→ 开平方 → 求解。",
+      "analysis": {
+        "known": [
+          "方程 $2x^2-3x-4=0$",
+          "要求用配方法"
+        ],
+        "goal": "用配方法解方程",
+        "associations": [
+          {
+            "trigger": "“配方法”",
+            "recall": "化 1 → 移项 → 两边加一次项系数一半的平方 → 开平方",
+            "why": "目的是凑出完全平方式 $(x+m)^2=n$",
+            "latex": "x^2+px+\\left(\\tfrac p2\\right)^2=\\left(x+\\tfrac p2\\right)^2"
+          },
+          {
+            "trigger": "$(x+m)^2=n$",
+            "recall": "$n\\ge0$ 才有实数解",
+            "why": "$n=\\frac{41}{16}>0$，有两个解"
+          }
+        ],
+        "thinkingPath": [
+          "二次项系数化为 1：$x^2-\\frac32x-2=0$，移项 $x^2-\\frac32x=2$。",
+          "一次项系数 $-\\frac32$ 的一半是 $-\\frac34$，两边加 $\\frac9{16}$：$(x-\\frac34)^2=\\frac{41}{16}$。",
+          "开平方：$x-\\frac34=\\pm\\frac{\\sqrt{41}}4$，$x=\\frac{3\\pm\\sqrt{41}}4$。"
+        ],
+        "pitfalls": [
+          "没先化 1 就配方。",
+          "只在左边加 $\\frac9{16}$，右边忘了加。"
+        ]
+      }
+    },
+    {
+      "id": "q26",
+      "original": "解关于 $x$ 的方程：$x^2-|x|-1=0$",
+      "knowledgePoints": [
+        "含绝对值的方程",
+        "换元法",
+        "公式法"
+      ],
+      "difficulty": 4,
+      "timeLimitSec": 240,
+      "steps": [
+        {
+          "prompt": "因为 $x^2=|x|^2$，设 $t=|x|$，方程变成 $t^2-t-1=0$。$t$ 必须满足？",
+          "type": "choice",
+          "answer": "B",
+          "hint": "绝对值是什么样的数？",
+          "explanation": "$t=|x|\\ge0$。",
+          "options": [
+            "$t>1$",
+            "$t\\ge0$",
+            "$t<0$",
+            "任意实数"
+          ]
+        },
+        {
+          "prompt": "用求根公式：$t=\\dfrac{1\\pm\\sqrt5}{2}$。哪个根要舍去？",
+          "type": "choice",
+          "answer": "B",
+          "hint": "$\\sqrt5\\approx2.24$。",
+          "explanation": "$\\dfrac{1-\\sqrt5}2<0$ 舍去，所以 $|x|=\\dfrac{1+\\sqrt5}{2}$。",
+          "options": [
+            "$\\dfrac{1+\\sqrt5}{2}$",
+            "$\\dfrac{1-\\sqrt5}{2}$",
+            "都不舍去"
+          ]
+        },
+        {
+          "prompt": "所以 $x=$ ？",
+          "type": "choice",
+          "answer": "C",
+          "hint": "绝对值等于正数 $m$ 的数是 $\\pm m$。",
+          "explanation": "$x_1=\\dfrac{1+\\sqrt5}{2},\\ x_2=-\\dfrac{1+\\sqrt5}{2}$。",
+          "options": [
+            "$\\dfrac{1+\\sqrt5}{2}$",
+            "$\\dfrac{1\\pm\\sqrt5}{2}$",
+            "$\\pm\\dfrac{1+\\sqrt5}{2}$",
+            "$\\pm\\dfrac{1-\\sqrt5}{2}$"
+          ]
+        }
+      ],
+      "finalAnswer": "$x_1=\\dfrac{1+\\sqrt5}{2},\\ x_2=-\\dfrac{1+\\sqrt5}{2}$",
+      "formulas": [
+        {
+          "name": "绝对值的平方",
+          "latex": "x^2=|x|^2",
+          "tip": "可以把 $|x|$ 当成新的未知数。"
+        },
+        {
+          "name": "求根公式",
+          "latex": "x=\\dfrac{-b\\pm\\sqrt{b^2-4ac}}{2a}\\ (b^2-4ac\\ge0)",
+          "tip": "先算 Δ，再代入公式。"
+        }
+      ],
+      "method": "把 $|x|$ 看成整体换元，解出后舍去负值，再由绝对值得到两个解。（也可分 $x\\ge0$、$x<0$ 讨论。）",
+      "analysis": {
+        "known": [
+          "方程 $x^2-|x|-1=0$",
+          {
+            "text": "$x^2=|x|^2$",
+            "hidden": true,
+            "why": "这让我们可以把 $|x|$ 看成一个整体"
+          },
+          {
+            "text": "$|x|\\ge0$",
+            "hidden": true,
+            "why": "换元后 $t=|x|\\ge0$，负根要舍"
+          }
+        ],
+        "goal": "解方程",
+        "associations": [
+          {
+            "trigger": "方程里同时有 $x^2$ 和 $|x|$",
+            "recall": "换元：设 $t=|x|$",
+            "why": "变成普通的一元二次方程 $t^2-t-1=0$"
+          },
+          {
+            "trigger": "$t^2-t-1=0$ 不好分解",
+            "recall": "求根公式",
+            "why": "$\\Delta=5>0$，用公式最稳",
+            "latex": "x=\\frac{-b\\pm\\sqrt{b^2-4ac}}{2a}"
+          },
+          {
+            "trigger": "$|x|=t$",
+            "recall": "绝对值方程：$x=\\pm t$",
+            "why": "绝对值等于正数，原数有两个"
+          }
+        ],
+        "thinkingPath": [
+          "看到 $x^2$ 和 $|x|$，想到 $x^2=|x|^2$，设 $t=|x|$（$t\\ge0$）。",
+          "解 $t^2-t-1=0$：$t=\\frac{1\\pm\\sqrt5}2$。",
+          "$\\frac{1-\\sqrt5}2<0$，舍去；$t=\\frac{1+\\sqrt5}2$。",
+          "所以 $x=\\pm\\frac{1+\\sqrt5}2$。"
+        ],
+        "pitfalls": [
+          "忘了 $t\\ge0$，没有舍去负根。",
+          "最后只写 $x=\\frac{1+\\sqrt5}2$，漏了负的。"
+        ]
+      }
+    },
+    {
+      "id": "q27",
+      "original": "解关于 $x$ 的方程：$(p+1)x^2-2px+p-2=0$",
+      "knowledgePoints": [
+        "分类讨论",
+        "根的判别式",
+        "公式法",
+        "一元二次方程的定义"
+      ],
+      "difficulty": 5,
+      "timeLimitSec": 300,
+      "steps": [
+        {
+          "prompt": "先讨论 $p+1=0$（即 $p=-1$）：方程变成 $2x-3=0$，$x=$ ？",
+          "type": "number",
+          "answer": "1.5",
+          "hint": "$p=-1$ 时 $-2px=2x$，$p-2=-3$。",
+          "explanation": "$x=\\dfrac32$。",
+          "acceptable": [
+            "3/2"
+          ]
+        },
+        {
+          "prompt": "$p\\ne-1$ 时是一元二次方程，$\\Delta=(-2p)^2-4(p+1)(p-2)=$ ？",
+          "type": "choice",
+          "answer": "A",
+          "hint": "$4p^2-4(p^2-p-2)$。",
+          "explanation": "$\\Delta=4p+8$。",
+          "options": [
+            "$4p+8$",
+            "$8-4p$",
+            "$4p-8$",
+            "$8$"
+          ]
+        },
+        {
+          "prompt": "当 $\\Delta<0$ 即 $p<-2$ 时方程无实根；当 $p=-2$ 时 $\\Delta=0$，$x=\\dfrac{2p}{2(p+1)}=$ ？",
+          "type": "number",
+          "answer": "2",
+          "hint": "代入 $p=-2$：$\\dfrac{-2}{-1}$。",
+          "explanation": "$p=-2$ 时 $x_1=x_2=2$。"
+        },
+        {
+          "prompt": "当 $p>-2$ 且 $p\\ne-1$ 时，用求根公式得 $x=$ ？",
+          "type": "choice",
+          "answer": "C",
+          "hint": "$x=\\dfrac{2p\\pm\\sqrt{4p+8}}{2(p+1)}$，$\\sqrt{4p+8}=2\\sqrt{p+2}$。",
+          "explanation": "$x=\\dfrac{p\\pm\\sqrt{p+2}}{p+1}$。",
+          "options": [
+            "$\\dfrac{2p\\pm\\sqrt{p+2}}{p+1}$",
+            "$\\dfrac{p\\pm\\sqrt{p-2}}{p+1}$",
+            "$\\dfrac{p\\pm\\sqrt{p+2}}{p+1}$",
+            "$\\dfrac{-p\\pm\\sqrt{p+2}}{p+1}$"
+          ]
+        }
+      ],
+      "finalAnswer": "$p=-1$ 时 $x=\\dfrac32$；$p<-2$ 时无实数根；$p=-2$ 时 $x_1=x_2=2$；$p>-2$ 且 $p\\ne-1$ 时 $x=\\dfrac{p\\pm\\sqrt{p+2}}{p+1}$",
+      "formulas": [
+        {
+          "name": "根的判别式",
+          "latex": "\\Delta=b^2-4ac",
+          "tip": "Δ>0 两个不等实根；Δ=0 两个相等实根；Δ<0 没有实根。"
+        },
+        {
+          "name": "求根公式",
+          "latex": "x=\\dfrac{-b\\pm\\sqrt{b^2-4ac}}{2a}\\ (b^2-4ac\\ge0)",
+          "tip": "先算 Δ，再代入公式。"
+        }
+      ],
+      "method": "二次项系数含字母时必须分类：先讨论系数为 0（一次方程），再按 Δ 的正负/零讨论二次方程的根。",
+      "analysis": {
+        "known": [
+          "关于 $x$ 的方程 $(p+1)x^2-2px+p-2=0$",
+          {
+            "text": "没说是一元二次方程，$p+1$ 可能为 0",
+            "hidden": true,
+            "why": "$p=-1$ 时变成一次方程，要单独讨论"
+          },
+          {
+            "text": "$\\Delta$ 的正负决定有没有实数根",
+            "hidden": true,
+            "why": "$p\\ne-1$ 时还要按 $\\Delta>0$、$=0$、$<0$ 分情况"
+          }
+        ],
+        "goal": "解方程（对 $p$ 分类讨论）",
+        "associations": [
+          {
+            "trigger": "二次项系数含字母",
+            "recall": "分类讨论：系数为 0 / 不为 0",
+            "why": "系数为 0 就是一次方程"
+          },
+          {
+            "trigger": "二次方程根的情况",
+            "recall": "根的判别式",
+            "why": "$\\Delta=4p+8$，按正、零、负讨论",
+            "latex": "\\Delta=b^2-4ac"
+          },
+          {
+            "trigger": "$\\Delta>0$",
+            "recall": "求根公式",
+            "why": "直接写出两个根",
+            "latex": "x=\\frac{-b\\pm\\sqrt{\\Delta}}{2a}"
+          }
+        ],
+        "thinkingPath": [
+          "先看 $p+1=0$：$p=-1$ 时 $2x-3=0$，$x=\\frac32$。",
+          "$p\\ne-1$ 时算 $\\Delta=(-2p)^2-4(p+1)(p-2)=4p+8$。",
+          "$p<-2$：$\\Delta<0$，无实根；$p=-2$：$x_1=x_2=2$。",
+          "$p>-2$ 且 $p\\ne-1$：$x=\\frac{p\\pm\\sqrt{p+2}}{p+1}$。"
+        ],
+        "pitfalls": [
+          "漏掉 $p=-1$ 的一次方程情况。",
+          "求根公式里 $\\sqrt{4p+8}=2\\sqrt{p+2}$ 约分出错。",
+          "$p>-2$ 时忘记写“且 $p\\ne-1$”。"
+        ]
+      }
+    },
+    {
+      "id": "q28",
+      "original": "先化简，后求值：$\\dfrac{a-b}{\\sqrt a+\\sqrt b}-\\dfrac{a-4\\sqrt{ab}+4b}{2\\sqrt b-\\sqrt a}$，其中 $a=\\dfrac12$，$b=\\dfrac18$。",
+      "knowledgePoints": [
+        "二次根式的化简求值",
+        "平方差公式",
+        "完全平方公式"
+      ],
+      "difficulty": 4,
+      "timeLimitSec": 300,
+      "steps": [
+        {
+          "prompt": "把 $a$ 看成 $(\\sqrt a)^2$，$b$ 看成 $(\\sqrt b)^2$：$\\dfrac{a-b}{\\sqrt a+\\sqrt b}=$ ？",
+          "type": "choice",
+          "answer": "B",
+          "hint": "$a-b=(\\sqrt a+\\sqrt b)(\\sqrt a-\\sqrt b)$。",
+          "explanation": "约分得 $\\sqrt a-\\sqrt b$。",
+          "options": [
+            "$\\sqrt a+\\sqrt b$",
+            "$\\sqrt a-\\sqrt b$",
+            "$a-b$",
+            "$1$"
+          ]
+        },
+        {
+          "prompt": "$a-4\\sqrt{ab}+4b=(\\sqrt a-2\\sqrt b)^2=(2\\sqrt b-\\sqrt a)^2$，所以第二个分式 $=$ ？",
+          "type": "choice",
+          "answer": "A",
+          "hint": "分子是分母的平方。",
+          "explanation": "$\\dfrac{(2\\sqrt b-\\sqrt a)^2}{2\\sqrt b-\\sqrt a}=2\\sqrt b-\\sqrt a$。",
+          "options": [
+            "$2\\sqrt b-\\sqrt a$",
+            "$\\sqrt a-2\\sqrt b$",
+            "$\\sqrt a+2\\sqrt b$",
+            "$1$"
+          ]
+        },
+        {
+          "prompt": "原式 $=(\\sqrt a-\\sqrt b)-(2\\sqrt b-\\sqrt a)=$ ？",
+          "type": "choice",
+          "answer": "D",
+          "hint": "去括号要变号。",
+          "explanation": "$2\\sqrt a-3\\sqrt b$。",
+          "options": [
+            "$-3\\sqrt b$",
+            "$2\\sqrt a-\\sqrt b$",
+            "$-\\sqrt b$",
+            "$2\\sqrt a-3\\sqrt b$"
+          ]
+        },
+        {
+          "prompt": "代入 $\\sqrt a=\\sqrt{\\dfrac12}=\\dfrac{\\sqrt2}{2}$，$\\sqrt b=\\sqrt{\\dfrac18}=\\dfrac{\\sqrt2}{4}$，$2\\sqrt a-3\\sqrt b=$ ？",
+          "type": "choice",
+          "answer": "C",
+          "hint": "$\\sqrt2-\\dfrac{3\\sqrt2}{4}$。",
+          "explanation": "$\\sqrt2-\\dfrac{3\\sqrt2}4=\\dfrac{\\sqrt2}4$。⚠️ 细心的同学会发现：此时 $2\\sqrt b=\\dfrac{\\sqrt2}{2}=\\sqrt a$，原式第二个分母 $2\\sqrt b-\\sqrt a=0$，严格来说原式无意义，原卷数值可能有印刷问题，请以老师答案为准。",
+          "options": [
+            "$\\dfrac{\\sqrt2}{2}$",
+            "$-\\dfrac{\\sqrt2}{2}$",
+            "$\\dfrac{\\sqrt2}{4}$",
+            "$\\dfrac{7\\sqrt2}{4}$"
+          ]
+        }
+      ],
+      "finalAnswer": "化简得 $2\\sqrt a-3\\sqrt b$，代入得 $\\dfrac{\\sqrt2}{4}$（注意：给定数值使原式分母 $2\\sqrt b-\\sqrt a=0$，严格说原式无意义，疑为题目数值有误）",
+      "formulas": [
+        {
+          "name": "平方差公式",
+          "latex": "(a+b)(a-b)=a^2-b^2",
+          "tip": "含根号的和差相乘可以消掉根号。"
+        },
+        {
+          "name": "完全平方公式",
+          "latex": "a\\mp2ab+b^2=(a\\mp b)^2",
+          "tip": "$a-4\\sqrt{ab}+4b=(\\sqrt a-2\\sqrt b)^2$。"
+        }
+      ],
+      "method": "把 $a,b$ 看作 $(\\sqrt a)^2,(\\sqrt b)^2$，用平方差、完全平方分解后约分，化简成 $2\\sqrt a-3\\sqrt b$ 再代入。代入前应检查分母不为 0。",
+      "analysis": {
+        "known": [
+          "代数式 $\\frac{a-b}{\\sqrt a+\\sqrt b}-\\frac{a-4\\sqrt{ab}+4b}{2\\sqrt b-\\sqrt a}$",
+          "$a=\\frac12$，$b=\\frac18$",
+          {
+            "text": "$a\\ge0$，$b\\ge0$，且两个分母都不为 0",
+            "hidden": true,
+            "why": "有根号要非负，有分母要非零；代入前必须检查"
+          }
+        ],
+        "goal": "先化简，再求值",
+        "associations": [
+          {
+            "trigger": "$a-b$ 和 $\\sqrt a+\\sqrt b$",
+            "recall": "把 $a$ 看作 $(\\sqrt a)^2$，用平方差公式",
+            "why": "$a-b=(\\sqrt a+\\sqrt b)(\\sqrt a-\\sqrt b)$，可以约分",
+            "latex": "a-b=(\\sqrt a+\\sqrt b)(\\sqrt a-\\sqrt b)"
+          },
+          {
+            "trigger": "$a-4\\sqrt{ab}+4b$",
+            "recall": "完全平方公式",
+            "why": "$(\\sqrt a)^2-2\\cdot\\sqrt a\\cdot2\\sqrt b+(2\\sqrt b)^2=(\\sqrt a-2\\sqrt b)^2$",
+            "latex": "(x-y)^2=x^2-2xy+y^2"
+          },
+          {
+            "trigger": "“先化简，再求值”且有分母",
+            "recall": "代入前检查分母 $\\ne0$",
+            "why": "分母为 0 时原式没有意义"
+          }
+        ],
+        "thinkingPath": [
+          "看到 $a-b$ 配 $\\sqrt a+\\sqrt b$，想到平方差：第一项 $=\\sqrt a-\\sqrt b$。",
+          "看到 $a-4\\sqrt{ab}+4b$，想到完全平方：$(2\\sqrt b-\\sqrt a)^2$，第二项 $=2\\sqrt b-\\sqrt a$。",
+          "原式 $=2\\sqrt a-3\\sqrt b$。",
+          "代入前检查分母：$\\sqrt a=\\frac{\\sqrt2}2$，$2\\sqrt b=\\frac{\\sqrt2}2$，$2\\sqrt b-\\sqrt a=0$！按化简式算得 $\\frac{\\sqrt2}4$，但要知道原题条件有问题。"
+        ],
+        "pitfalls": [
+          "⚠️ 本题给的数值有问题：$a=\\frac12$，$b=\\frac18$ 时 $2\\sqrt b-\\sqrt a=0$，原式第二个分母为 0，原式其实没有意义。考试中遇到要先检查分母，必要时注明。",
+          "约分第二项时符号弄反，得到 $\\sqrt a-2\\sqrt b$。"
+        ]
+      }
     }
-   ],
-   "finalAnswer": "D（3 个：$\\sqrt8$，$1.1010010001\\cdots$，$\\dfrac{\\pi}{2}$）",
-   "formulas": [
+  ],
+  "childPerformance": [
     {
-     "name": "无理数",
-     "latex": "\\text{无理数}=\\text{无限不循环小数}",
-     "tip": "常见三类：开方开不尽的数、含 π 的数、构造的不循环小数。"
+      "id": "q1",
+      "attempted": false,
+      "childAnswer": null,
+      "likelyCorrect": "unknown",
+      "note": "选择题括号内未见作答痕迹，无法判断。"
+    },
+    {
+      "id": "q2",
+      "attempted": false,
+      "childAnswer": null,
+      "likelyCorrect": "unknown",
+      "note": "括号内未见作答痕迹（易错：$\\sqrt{64}=8$ 后再求 8 的平方根 $\\pm\\sqrt8$）。"
+    },
+    {
+      "id": "q3",
+      "attempted": true,
+      "childAnswer": null,
+      "likelyCorrect": "unknown",
+      "note": "题旁有黑笔分析（$\\sqrt{a^2}=|a|$ 分段、C 旁写“互为相反数”反例、D 旁把“无理数”改为“实数”），说明逐项分析过，但括号内未见选项字母；不确定是孩子还是家长所写。"
+    },
+    {
+      "id": "q4",
+      "attempted": false,
+      "childAnswer": null,
+      "likelyCorrect": "unknown",
+      "note": "未见作答痕迹。"
+    },
+    {
+      "id": "q5",
+      "attempted": true,
+      "childAnswer": "C",
+      "likelyCorrect": true,
+      "note": "括号内写 C，绿笔有完整的 Δ=0 推导：$4k^2+8k-2=0\\Rightarrow 2k^2+4k=1$，$2026-1=2025$。正确。"
+    },
+    {
+      "id": "q6",
+      "attempted": false,
+      "childAnswer": null,
+      "likelyCorrect": "unknown",
+      "note": "未见作答痕迹（公共根问题）。"
+    },
+    {
+      "id": "q7",
+      "attempted": false,
+      "childAnswer": null,
+      "likelyCorrect": "unknown",
+      "note": "横线上未见答案（正确答案 $-3a$）。"
+    },
+    {
+      "id": "q8",
+      "attempted": true,
+      "childAnswer": ">",
+      "likelyCorrect": true,
+      "note": "横线上未填，但左侧绿笔草稿写了 $\\sqrt{15}<\\sqrt{16}$、$-\\sqrt{15}>-4$，思路正确，可能漏填到横线上。"
+    },
+    {
+      "id": "q9",
+      "attempted": false,
+      "childAnswer": null,
+      "likelyCorrect": "unknown",
+      "note": "横线未填（正确答案如 $\\sqrt{3-a}$）。"
+    },
+    {
+      "id": "q10",
+      "attempted": true,
+      "childAnswer": "-4≤x≤0",
+      "likelyCorrect": true,
+      "note": "绿笔写 $-4\\le x\\le0$（写在第 9 题横线附近），并有 $\\sqrt{x^2(x+4)}=|x|\\sqrt{x+4}$、$x+4\\ge0$ 的推导。正确。"
+    },
+    {
+      "id": "q11",
+      "attempted": false,
+      "childAnswer": null,
+      "likelyCorrect": "unknown",
+      "note": "横线未填（科学记数法 $3.4\\times10^{-10}$）。"
+    },
+    {
+      "id": "q12",
+      "attempted": true,
+      "childAnswer": "15.21",
+      "likelyCorrect": true,
+      "note": "写 15.21，左侧有 $3.9=\\sqrt{100\\times0.1521}$ 的推导。正确。"
+    },
+    {
+      "id": "q13",
+      "attempted": true,
+      "childAnswer": "m=±3",
+      "likelyCorrect": false,
+      "note": "绿笔写 $m^2-9=0,\\ m=\\pm3$，漏掉了二次项系数 $m-3\\ne0$ 的条件，正确答案 $m=-3$。"
+    },
+    {
+      "id": "q14",
+      "attempted": true,
+      "childAnswer": "-√(b-a)（写作 $-\\sqrt{-a+b}$）",
+      "likelyCorrect": true,
+      "note": "绿笔推导得 $-\\sqrt{-a+b}$，与正确答案 $-\\sqrt{b-a}$ 一致；横线上只写了开头 $\\sqrt{(a-b)^2}$，最终是否誊写到横线不确定。"
+    },
+    {
+      "id": "q15",
+      "attempted": true,
+      "childAnswer": "5",
+      "likelyCorrect": true,
+      "note": "写 5，草稿 $\\sqrt{25}<\\sqrt{27}<\\sqrt{36}$。正确。"
+    },
+    {
+      "id": "q16",
+      "attempted": true,
+      "childAnswer": "x1=2, x2=3",
+      "likelyCorrect": true,
+      "note": "正确。"
+    },
+    {
+      "id": "q17",
+      "attempted": true,
+      "childAnswer": "x1=-2, x2=4",
+      "likelyCorrect": false,
+      "note": "$x=-2$ 正确，但另一根写成 4，应为 $\\dfrac43$（解 $3x=4$ 时漏除以 3）。"
+    },
+    {
+      "id": "q18",
+      "attempted": false,
+      "childAnswer": null,
+      "likelyCorrect": "unknown",
+      "note": "横线未填（应为 $800(1-x)^2=578$）。"
+    },
+    {
+      "id": "q19",
+      "attempted": true,
+      "childAnswer": null,
+      "likelyCorrect": false,
+      "note": "用求根公式硬算，写了很长一串根式没得出结果，横线未填。应只用 $\\Delta>0$ 且 $m-1\\ne0$，得 $m<2$ 且 $m\\ne1$。"
+    },
+    {
+      "id": "q20",
+      "attempted": false,
+      "childAnswer": null,
+      "likelyCorrect": "unknown",
+      "note": "未见作答痕迹。"
+    },
+    {
+      "id": "q21",
+      "attempted": false,
+      "childAnswer": null,
+      "likelyCorrect": "unknown",
+      "note": "未见作答痕迹。"
+    },
+    {
+      "id": "q22",
+      "attempted": false,
+      "childAnswer": null,
+      "likelyCorrect": "unknown",
+      "note": "未见作答痕迹。"
+    },
+    {
+      "id": "q23-1",
+      "attempted": false,
+      "childAnswer": null,
+      "likelyCorrect": "unknown",
+      "note": "答题空白处没有书写。"
+    },
+    {
+      "id": "q23-2",
+      "attempted": false,
+      "childAnswer": null,
+      "likelyCorrect": "unknown",
+      "note": "答题空白处没有书写。"
+    },
+    {
+      "id": "q23-3",
+      "attempted": false,
+      "childAnswer": null,
+      "likelyCorrect": "unknown",
+      "note": "第 3 页整页无书写痕迹。"
+    },
+    {
+      "id": "q23-4",
+      "attempted": false,
+      "childAnswer": null,
+      "likelyCorrect": "unknown",
+      "note": "第 3 页整页无书写痕迹。"
+    },
+    {
+      "id": "q24",
+      "attempted": false,
+      "childAnswer": null,
+      "likelyCorrect": "unknown",
+      "note": "无书写痕迹。"
+    },
+    {
+      "id": "q25",
+      "attempted": false,
+      "childAnswer": null,
+      "likelyCorrect": "unknown",
+      "note": "无书写痕迹。"
+    },
+    {
+      "id": "q26",
+      "attempted": false,
+      "childAnswer": null,
+      "likelyCorrect": "unknown",
+      "note": "无书写痕迹。"
+    },
+    {
+      "id": "q27",
+      "attempted": false,
+      "childAnswer": null,
+      "likelyCorrect": "unknown",
+      "note": "无书写痕迹。"
+    },
+    {
+      "id": "q28",
+      "attempted": false,
+      "childAnswer": null,
+      "likelyCorrect": "unknown",
+      "note": "无书写痕迹。"
     }
-   ],
-   "method": "逐个判断：先把能化简的（如 $\\sqrt{4/9}$）化简，再看是不是无限不循环小数。分数、有限小数、循环小数都是有理数。",
-   "analysis": {
-    "known": [
-     "7 个实数：$3.14$，$1.\\dot2\\dot3$，$\\sqrt8$，$1.1010010001\\cdots$，$\\dfrac\\pi2$，$\\dfrac{22}7$，$\\sqrt{\\dfrac49}$",
-     {
-      "text": "带根号的数要先化简再判断",
-      "hidden": true,
-      "why": "$\\sqrt{\\frac49}=\\frac23$ 开得尽，是有理数；“带根号”不等于“无理数”"
-     }
-    ],
-    "goal": "数出其中无理数的个数",
-    "associations": [
-     {
-      "trigger": "判断“无理数”",
-      "recall": "无理数 = 无限不循环小数",
-      "why": "有限小数、循环小数、分数都是有理数，只有“无限且不循环”才是无理数"
-     },
-     {
-      "trigger": "$\\pi$ 和开不尽的根号",
-      "recall": "常见无理数的三类：含 $\\pi$ 的数、开方开不尽的数、有规律但不循环的小数",
-      "why": "记住这三类，逐个对号入座最快"
-     }
-    ],
-    "thinkingPath": [
-     "看到“无理数有几个”，先回忆定义：无限不循环小数。",
-     "能化简的先化简：$\\sqrt{\\frac49}=\\frac23$ 是有理数。",
-     "逐个归类：$3.14$ 有限小数、$1.\\dot2\\dot3$ 循环小数、$\\frac{22}7$ 分数 → 都是有理数。",
-     "剩下 $\\sqrt8$（开不尽）、$1.1010010001\\cdots$（不循环）、$\\frac\\pi2$（含 $\\pi$）→ 3 个无理数，选 D。"
-    ],
-    "pitfalls": [
-     "看到根号就当无理数，把 $\\sqrt{\\frac49}$ 也算进去。",
-     "把 $\\frac{22}7$ 当成 $\\pi$ 的近似值而误判为无理数——它是分数，是有理数。"
-    ]
-   }
-  },
-  {
-   "id": "q2",
-   "original": "实数 $\\sqrt{64}$ 的平方根是（　）\nA. $\\pm8$　B. $\\pm4$　C. $4$　D. $\\pm\\sqrt8$",
-   "knowledgePoints": [
-    "平方根",
-    "算术平方根"
-   ],
-   "difficulty": 2,
-   "timeLimitSec": 60,
-   "steps": [
-    {
-     "prompt": "先算 $\\sqrt{64}=$ ？",
-     "type": "number",
-     "answer": "8",
-     "hint": "哪个正数的平方是 64？",
-     "explanation": "$\\sqrt{64}=8$（算术平方根只取正的）。"
-    },
-    {
-     "prompt": "那么题目其实是在问“8 的平方根”。8 的平方根是？",
-     "type": "choice",
-     "answer": "C",
-     "hint": "正数的平方根有两个，互为相反数。",
-     "explanation": "8 的平方根是 $\\pm\\sqrt8$（也就是 $\\pm2\\sqrt2$），选 D。",
-     "options": [
-      "$\\pm8$",
-      "$\\pm4$",
-      "$\\pm\\sqrt8$",
-      "$\\sqrt8$"
-     ]
-    }
-   ],
-   "finalAnswer": "D",
-   "formulas": [
-    {
-     "name": "平方根",
-     "latex": "x^2=a\\ (a>0)\\Rightarrow x=\\pm\\sqrt a",
-     "tip": "正数有两个平方根，算术平方根是其中正的那个。"
-    }
-   ],
-   "method": "陷阱题：先求 $\\sqrt{64}=8$，再求 8 的平方根 $\\pm\\sqrt8$，别直接回答 64 的平方根 ±8。",
-   "analysis": {
-    "known": [
-     "要求的是“$\\sqrt{64}$ 的平方根”",
-     {
-      "text": "$\\sqrt{64}$ 本身已经开过一次方",
-      "hidden": true,
-      "why": "题目问的不是 64 的平方根，而是 $\\sqrt{64}=8$ 的平方根，要开两次"
-     }
-    ],
-    "goal": "求 $\\sqrt{64}$ 的平方根",
-    "associations": [
-     {
-      "trigger": "$\\sqrt{64}$",
-      "recall": "算术平方根（只取非负的那个）",
-      "why": "$\\sqrt{\\ }$ 符号表示算术平方根，$\\sqrt{64}=8$，不是 $\\pm8$"
-     },
-     {
-      "trigger": "“……的平方根”",
-      "recall": "正数的平方根有两个，互为相反数",
-      "why": "8 的平方根是 $\\pm\\sqrt8$，别漏了负的",
-      "latex": "x^2=a\\ (a>0)\\Rightarrow x=\\pm\\sqrt a"
-     }
-    ],
-    "thinkingPath": [
-     "看到“$\\sqrt{64}$ 的平方根”，先把 $\\sqrt{64}$ 算出来：8。",
-     "题目就变成“8 的平方根”。",
-     "正数有两个平方根：$\\pm\\sqrt8$，选 D。"
-    ],
-    "pitfalls": [
-     "直接回答 64 的平方根 $\\pm8$（这是最常见的陷阱）。",
-     "只写 $\\sqrt8$，漏掉负的那个。"
-    ]
-   }
-  },
-  {
-   "id": "q3",
-   "original": "下列说法正确的是（　）\nA. 0 的平方根与立方根相同\nB. 对于实数 $a$，若 $\\sqrt{a^2}=a$，则 $a>0$\nC. 两个无理数的和还是无理数\nD. 无理数与数轴上的点一一对应",
-   "knowledgePoints": [
-    "平方根与立方根",
-    "二次根式的性质",
-    "实数与数轴"
-   ],
-   "difficulty": 2,
-   "timeLimitSec": 90,
-   "steps": [
-    {
-     "prompt": "0 的平方根是 0，0 的立方根是多少？",
-     "type": "number",
-     "answer": "0",
-     "hint": "$0^3=?$",
-     "explanation": "0 的平方根和立方根都是 0，所以 A 正确。"
-    },
-    {
-     "prompt": "$\\sqrt{a^2}=a$ 成立时，$a$ 的范围应该是？",
-     "type": "choice",
-     "answer": "B",
-     "hint": "$\\sqrt{a^2}=|a|$，什么时候 $|a|=a$？",
-     "explanation": "$|a|=a\\iff a\\ge0$，$a=0$ 也可以，所以 B 中“$a>0$”错误。",
-     "options": [
-      "$a>0$",
-      "$a\\ge0$",
-      "$a<0$",
-      "任意实数"
-     ]
-    },
-    {
-     "prompt": "$\\sqrt2+(-\\sqrt2)=$ ？这说明 C 对不对？",
-     "type": "number",
-     "answer": "0",
-     "hint": "两个互为相反数的无理数相加。",
-     "explanation": "和是 0，是有理数，所以 C 错。D 也错：与数轴上的点一一对应的是**实数**。答案 A。"
-    }
-   ],
-   "finalAnswer": "A",
-   "formulas": [
-    {
-     "name": "二次根式的性质",
-     "latex": "\\sqrt{a^2}=|a|=\\begin{cases}a,&a\\ge0\\\\-a,&a<0\\end{cases}",
-     "tip": "开方出来先加绝对值，再根据正负去掉绝对值。"
-    }
-   ],
-   "method": "逐项判断，找反例：B 漏了 $a=0$；C 用互为相反数的无理数作反例；D 应为“实数与数轴上的点一一对应”。",
-   "analysis": {
-    "known": [
-     "四个关于实数的说法，选出正确的一个",
-     {
-      "text": "“$\\sqrt{a^2}=a$”隐含 $a\\ge0$，包括 0",
-      "hidden": true,
-      "why": "$\\sqrt{a^2}=|a|$，只要 $a$ 非负就成立，$a=0$ 也可以"
-     }
-    ],
-    "goal": "判断哪个说法正确",
-    "associations": [
-     {
-      "trigger": "判断“说法正确”的选择题",
-      "recall": "举反例",
-      "why": "只要找到一个反例，这个说法就是错的"
-     },
-     {
-      "trigger": "$\\sqrt{a^2}$",
-      "recall": "$\\sqrt{a^2}=|a|$",
-      "why": "根号运算结果一定非负，所以等于 $a$ 的绝对值",
-      "latex": "\\sqrt{a^2}=|a|"
-     },
-     {
-      "trigger": "“与数轴上的点一一对应”",
-      "recall": "实数与数轴上的点一一对应",
-      "why": "有理数和无理数合起来（实数）才能填满数轴"
-     }
-    ],
-    "thinkingPath": [
-     "逐项判断，能找到反例就排除。",
-     "A：0 的平方根是 0，立方根也是 0，相同 ✓。",
-     "B：$a=0$ 时 $\\sqrt{0^2}=0$ 也成立，应该是 $a\\ge0$ ✗。",
-     "C：$\\sqrt2+(-\\sqrt2)=0$ 是有理数 ✗；D：应是“实数”与数轴一一对应 ✗。所以选 A。"
-    ],
-    "pitfalls": [
-     "B 漏掉 $a=0$ 的情况。",
-     "C 只想到 $\\sqrt2+\\sqrt3$ 这类例子，没想到相反数相加。"
-    ]
-   }
-  },
-  {
-   "id": "q4",
-   "original": "下列二次根式中，最简二次根式有（　）个。\n① $\\sqrt{0.8}$，② $\\sqrt{\\dfrac15}$，③ $\\sqrt7$，④ $\\sqrt{\\dfrac{2x+1}{x}}$，⑤ $\\sqrt{a^2+b^2}$，⑥ $-\\dfrac2a\\sqrt{ab}$\nA. 1　B. 2　C. 3　D. 4",
-   "knowledgePoints": [
-    "最简二次根式"
-   ],
-   "difficulty": 3,
-   "timeLimitSec": 120,
-   "steps": [
-    {
-     "prompt": "最简二次根式要满足两个条件，下面哪个是正确的？",
-     "type": "choice",
-     "answer": "A",
-     "hint": "想想 $\\sqrt{\\dfrac15}$ 和 $\\sqrt{8}$ 为什么不是最简。",
-     "explanation": "①被开方数不含分母；②被开方数不含能开得尽方的因数或因式。",
-     "options": [
-      "被开方数不含分母，且不含能开得尽方的因数（式）",
-      "被开方数是整数就行",
-      "根号前面不能有系数",
-      "被开方数必须是质数"
-     ]
-    },
-    {
-     "prompt": "①$\\sqrt{0.8}$、②$\\sqrt{\\frac15}$、④$\\sqrt{\\frac{2x+1}{x}}$ 为什么都不是最简？",
-     "type": "choice",
-     "answer": "B",
-     "hint": "小数可以化成分数。",
-     "explanation": "$0.8=\\dfrac45$，三个被开方数都含分母，所以都不是最简。",
-     "options": [
-      "被开方数是负数",
-      "被开方数含分母（小数也算）",
-      "根号前没有系数",
-      "它们都能开尽方"
-     ]
-    },
-    {
-     "prompt": "③$\\sqrt7$、⑤$\\sqrt{a^2+b^2}$、⑥$-\\dfrac2a\\sqrt{ab}$ 中的根号都满足条件吗？最简二次根式一共几个？",
-     "type": "number",
-     "answer": "3",
-     "hint": "注意 $a^2+b^2$ 是**和**，不能开方成 $a+b$。",
-     "explanation": "③⑤⑥ 的被开方数 $7$、$a^2+b^2$、$ab$ 都不含分母、不含开得尽方的因式，共 3 个，选 C。"
-    }
-   ],
-   "finalAnswer": "C（③⑤⑥）",
-   "formulas": [
-    {
-     "name": "最简二次根式",
-     "latex": "\\sqrt{a}\\ \\text{中 }a\\text{ 不含分母、不含能开尽方的因数}",
-     "tip": "小数要先化成分数再判断；$\\sqrt{a^2+b^2}$ 不能化简。"
-    }
-   ],
-   "method": "按两条标准逐个检查被开方数：有没有分母（小数也算）、有没有平方因数。",
-   "analysis": {
-    "known": [
-     "6 个二次根式 ①~⑥",
-     {
-      "text": "②④⑥ 中字母在分母里，隐含分母 $\\ne0$",
-      "hidden": true,
-      "why": "④中 $x\\ne0$，⑥中 $a\\ne0$；判断最简时只看根号里面"
-     }
-    ],
-    "goal": "数出最简二次根式的个数",
-    "associations": [
-     {
-      "trigger": "“最简二次根式”",
-      "recall": "最简的两个条件：被开方数不含分母；不含能开得尽方的因数（式）",
-      "why": "两条都满足才是最简，逐条检查"
-     },
-     {
-      "trigger": "$\\sqrt{0.8}$ 这种小数",
-      "recall": "小数可以化成分数",
-      "why": "$0.8=\\frac45$，相当于根号里有分母，所以不是最简"
-     }
-    ],
-    "thinkingPath": [
-     "先回忆最简二次根式的两个条件。",
-     "①$\\sqrt{0.8}=\\sqrt{\\frac45}$、②$\\sqrt{\\frac15}$、④$\\sqrt{\\frac{2x+1}x}$ 根号里有分母 → 不是最简。",
-     "③$\\sqrt7$、⑤$\\sqrt{a^2+b^2}$、⑥中的 $\\sqrt{ab}$：没有分母、开不尽 → 是最简。",
-     "共 3 个，选 C。"
-    ],
-    "pitfalls": [
-     "把 $\\sqrt{a^2+b^2}$ 化成 $a+b$（错！和的平方根不能拆开）。",
-     "看到⑥根号外有分母 $\\frac2a$ 就判为不是最简——只看根号里面。"
-    ]
-   }
-  },
-  {
-   "id": "q5",
-   "original": "若关于 $x$ 的方程 $\\dfrac12x^2-2kx-4k+1=0$ 有两个相等的实数根，则代数式 $2026-2k^2-4k$ 的值为（　）\nA. 2023　B. 2024　C. 2025　D. 2026",
-   "knowledgePoints": [
-    "根的判别式",
-    "整体代入"
-   ],
-   "difficulty": 3,
-   "timeLimitSec": 150,
-   "steps": [
-    {
-     "prompt": "“有两个相等的实数根”说明判别式 $\\Delta$ 满足什么？",
-     "type": "choice",
-     "answer": "B",
-     "hint": "回忆 Δ 的三种情况。",
-     "explanation": "两个相等实根 ⟺ $\\Delta=0$。",
-     "options": [
-      "$\\Delta>0$",
-      "$\\Delta=0$",
-      "$\\Delta<0$",
-      "$\\Delta\\ge0$"
-     ]
-    },
-    {
-     "prompt": "这里 $a=\\dfrac12,\\ b=-2k,\\ c=-4k+1$。$\\Delta=b^2-4ac=4k^2+8k-2=0$，两边同除以 2，得 $2k^2+4k=$ ？",
-     "type": "number",
-     "answer": "1",
-     "hint": "$4k^2+8k-2=0\\Rightarrow 2k^2+4k-1=0$。",
-     "explanation": "$(-2k)^2-4\\times\\dfrac12\\times(-4k+1)=4k^2+8k-2=0$，所以 $2k^2+4k=1$。"
-    },
-    {
-     "prompt": "整体代入：$2026-2k^2-4k=2026-(2k^2+4k)=$ ？",
-     "type": "number",
-     "answer": "2025",
-     "hint": "不用求出 k，把 $2k^2+4k$ 当作一个整体。",
-     "explanation": "$2026-1=2025$，选 C。"
-    }
-   ],
-   "finalAnswer": "C（2025）",
-   "formulas": [
-    {
-     "name": "根的判别式",
-     "latex": "\\Delta=b^2-4ac",
-     "tip": "Δ>0 两个不等实根；Δ=0 两个相等实根；Δ<0 没有实根。"
-    },
-    {
-     "name": "整体代入",
-     "latex": "2026-2k^2-4k=2026-(2k^2+4k)",
-     "tip": "求值题常常不需要解出字母，凑出整体直接代入。"
-    }
-   ],
-   "method": "由 Δ=0 得到关于 k 的等式 $2k^2+4k=1$，再把所求式变形为 $2026-(2k^2+4k)$ 整体代入。",
-   "analysis": {
-    "known": [
-     "关于 $x$ 的方程 $\\frac12x^2-2kx-4k+1=0$",
-     "有两个相等的实数根",
-     {
-      "text": "二次项系数 $\\frac12\\ne0$，确实是一元二次方程",
-      "hidden": true,
-      "why": "可以放心用判别式"
-     }
-    ],
-    "goal": "求代数式 $2026-2k^2-4k$ 的值",
-    "associations": [
-     {
-      "trigger": "“有两个相等的实数根”",
-      "recall": "根的判别式 $\\Delta=0$",
-      "why": "判别式决定根的情况：$>0$ 两个不等根，$=0$ 两个相等根，$<0$ 无实根",
-      "latex": "\\Delta=b^2-4ac"
-     },
-     {
-      "trigger": "所求式里有 $2k^2+4k$，但 $k$ 不好求",
-      "recall": "整体代入",
-      "why": "不必求出 $k$，把 $2k^2+4k$ 当作一个整体直接代入"
-     }
-    ],
-    "thinkingPath": [
-     "看到“两个相等的实数根”，立刻想到 $\\Delta=0$。",
-     "找准 $a=\\frac12$，$b=-2k$，$c=-4k+1$，代入得 $4k^2+8k-2=0$，即 $2k^2+4k=1$。",
-     "看所求式，发现正好含有 $2k^2+4k$，想到整体代入。",
-     "$2026-(2k^2+4k)=2026-1=2025$，选 C。"
-    ],
-    "pitfalls": [
-     "$c$ 漏了符号，写成 $4k+1$。",
-     "非要把 $k$ 解出来，计算繁琐容易错。"
-    ]
-   }
-  },
-  {
-   "id": "q6",
-   "original": "若两个方程 $x^2+ax+b=0$ 和 $x^2+bx+a=0$ 只有一个公共根，则（　）\nA. $a=b$　B. $a+b=0$　C. $a+b=1$　D. $a+b=-1$",
-   "knowledgePoints": [
-    "一元二次方程的根",
-    "公共根问题"
-   ],
-   "difficulty": 4,
-   "timeLimitSec": 180,
-   "steps": [
-    {
-     "prompt": "设公共根为 $x_0$，把两个方程相减，得到 $(a-b)x_0+(b-a)=0$，也就是 $(a-b)(x_0-1)=0$。如果 $a=b$，两个方程会怎样？",
-     "type": "choice",
-     "answer": "A",
-     "hint": "$a=b$ 时两个方程完全一样。",
-     "explanation": "$a=b$ 时两个方程相同，公共根就不止一个（或者全部相同），与“只有一个公共根”矛盾，所以 $a\\ne b$。",
-     "options": [
-      "完全相同，公共根不止一个，不符合题意",
-      "没有影响",
-      "无解",
-      "一定只有一个公共根"
-     ]
-    },
-    {
-     "prompt": "既然 $a\\ne b$，那么公共根 $x_0=$ ？",
-     "type": "number",
-     "answer": "1",
-     "hint": "$(a-b)(x_0-1)=0$ 且 $a-b\\ne0$。",
-     "explanation": "$x_0-1=0$，$x_0=1$。"
-    },
-    {
-     "prompt": "把 $x=1$ 代入 $x^2+ax+b=0$，得 $1+a+b=0$，所以 $a+b=$ ？",
-     "type": "number",
-     "answer": "-1",
-     "hint": "移项。",
-     "explanation": "$a+b=-1$，选 D。"
-    }
-   ],
-   "finalAnswer": "D",
-   "formulas": [
-    {
-     "name": "方程的根",
-     "latex": "x_0\\text{ 是方程的根}\\iff \\text{代入后等式成立}",
-     "tip": "公共根同时满足两个方程，常用两式相减消去二次项。"
-    }
-   ],
-   "method": "设公共根代入两方程，相减消去 $x^2$，因式分解得 $(a-b)(x-1)=0$，排除 $a=b$ 后得公共根为 1，再代回。",
-   "analysis": {
-    "known": [
-     "两个方程 $x^2+ax+b=0$ 和 $x^2+bx+a=0$",
-     "它们“只有一个”公共根",
-     {
-      "text": "“只有一个”公共根隐含 $a\\ne b$",
-      "hidden": true,
-      "why": "如果 $a=b$，两个方程完全一样，公共根就不止一个了"
-     }
-    ],
-    "goal": "求 $a$、$b$ 满足的关系",
-    "associations": [
-     {
-      "trigger": "“公共根”",
-      "recall": "设公共根为 $x_0$，代入两个方程",
-      "why": "公共根同时满足两个方程，可以列出两个等式"
-     },
-     {
-      "trigger": "两个方程 $x^2$ 系数相同",
-      "recall": "两式相减消去 $x^2$",
-      "why": "相减后剩一次式，容易解出公共根"
-     }
-    ],
-    "thinkingPath": [
-     "看到公共根，设它为 $x_0$，代入两个方程。",
-     "两式相减消去 $x_0^2$：$(a-b)(x_0-1)=0$。",
-     "“只有一个公共根”说明 $a\\ne b$，所以 $x_0=1$。",
-     "把 $x=1$ 代回：$1+a+b=0$，即 $a+b=-1$，选 D。"
-    ],
-    "pitfalls": [
-     "没有排除 $a=b$ 就直接选 A。",
-     "相减时符号出错，得到 $(a-b)(x_0+1)=0$。"
-    ]
-   }
-  },
-  {
-   "id": "q7",
-   "original": "已知 $a<0$，那么 $\\sqrt{9a^2}$ 可化简为______。",
-   "knowledgePoints": [
-    "二次根式的性质"
-   ],
-   "difficulty": 2,
-   "timeLimitSec": 60,
-   "steps": [
-    {
-     "prompt": "$\\sqrt{9a^2}=3\\sqrt{a^2}=3|a|$。因为 $a<0$，$|a|=$ ？",
-     "type": "choice",
-     "answer": "B",
-     "hint": "负数的绝对值是它的相反数。",
-     "explanation": "$a<0$ 时 $|a|=-a$。",
-     "options": [
-      "$a$",
-      "$-a$",
-      "$\\pm a$",
-      "$a^2$"
-     ]
-    },
-    {
-     "prompt": "所以 $\\sqrt{9a^2}=$ ？",
-     "type": "choice",
-     "answer": "C",
-     "hint": "$3\\times(-a)$。",
-     "explanation": "$\\sqrt{9a^2}=3|a|=-3a$（因为 $a<0$，$-3a$ 是正数，符合算术平方根非负）。",
-     "options": [
-      "$3a$",
-      "$\\pm3a$",
-      "$-3a$",
-      "$9a$"
-     ]
-    }
-   ],
-   "finalAnswer": "$-3a$",
-   "formulas": [
-    {
-     "name": "二次根式的性质",
-     "latex": "\\sqrt{a^2}=|a|=\\begin{cases}a,&a\\ge0\\\\-a,&a<0\\end{cases}",
-     "tip": "开方出来先加绝对值，再根据正负去掉绝对值。"
-    }
-   ],
-   "method": "$\\sqrt{a^2}=|a|$，再根据 $a<0$ 去绝对值。结果必须是非负的，可以用来检查。",
-   "analysis": {
-    "known": [
-     "$a<0$",
-     "要化简 $\\sqrt{9a^2}$"
-    ],
-    "goal": "化简 $\\sqrt{9a^2}$",
-    "associations": [
-     {
-      "trigger": "$\\sqrt{a^2}$",
-      "recall": "$\\sqrt{a^2}=|a|$",
-      "why": "开方结果必须非负，要先写成绝对值",
-      "latex": "\\sqrt{a^2}=|a|"
-     },
-     {
-      "trigger": "已知 $a<0$",
-      "recall": "负数的绝对值是它的相反数",
-      "why": "$a<0$ 时 $|a|=-a$"
-     }
-    ],
-    "thinkingPath": [
-     "看到平方开方，先想到 $\\sqrt{a^2}=|a|$：$\\sqrt{9a^2}=3|a|$。",
-     "再看已知 $a<0$，所以 $|a|=-a$。",
-     "结果 $-3a$。检查：$a<0$ 时 $-3a>0$，符合根号结果非负。"
-    ],
-    "pitfalls": [
-     "直接写 $3a$（是负数，不可能是根号的结果）。",
-     "写成 $\\pm3a$。"
-    ]
-   }
-  },
-  {
-   "id": "q8",
-   "original": "比较大小：$-\\sqrt{15}$ ____ $-4$。（填“>”“=”或“<”）",
-   "knowledgePoints": [
-    "实数大小比较"
-   ],
-   "difficulty": 1,
-   "timeLimitSec": 45,
-   "steps": [
-    {
-     "prompt": "先比较正数：$4=\\sqrt{?}$",
-     "type": "number",
-     "answer": "16",
-     "hint": "$4^2=?$",
-     "explanation": "$4=\\sqrt{16}$，而 $15<16$，所以 $\\sqrt{15}<4$。"
-    },
-    {
-     "prompt": "两个负数比较，绝对值大的反而小。$-\\sqrt{15}$ ___ $-4$？",
-     "type": "choice",
-     "answer": "A",
-     "hint": "$\\sqrt{15}<4$，加负号后不等号方向改变。",
-     "explanation": "$-\\sqrt{15}>-4$。",
-     "options": [
-      ">",
-      "=",
-      "<"
-     ]
-    }
-   ],
-   "finalAnswer": "$>$",
-   "formulas": [
-    {
-     "name": "负数比较",
-     "latex": "a>b>0\\Rightarrow -a<-b",
-     "tip": "两个负数，绝对值大的反而小。"
-    }
-   ],
-   "method": "把 4 写成 $\\sqrt{16}$，比较被开方数，再根据负数比较法则变号。",
-   "analysis": {
-    "known": [
-     "比较 $-\\sqrt{15}$ 和 $-4$ 的大小",
-     "两个都是负数"
-    ],
-    "goal": "填 >、= 或 <",
-    "associations": [
-     {
-      "trigger": "一个带根号、一个整数",
-      "recall": "把整数写成根号形式比较",
-      "why": "$4=\\sqrt{16}$，比较被开方数即可"
-     },
-     {
-      "trigger": "两个负数比大小",
-      "recall": "两个负数，绝对值大的反而小",
-      "why": "在数轴上越往左越小"
-     }
-    ],
-    "thinkingPath": [
-     "先比较绝对值：$4=\\sqrt{16}$，$\\sqrt{15}<\\sqrt{16}$，所以 $\\sqrt{15}<4$。",
-     "看到是两个负数，想到“绝对值大的反而小”。",
-     "所以 $-\\sqrt{15}>-4$。"
-    ],
-    "pitfalls": [
-     "比较完绝对值忘记变号，填成 <。"
-    ]
-   }
-  },
-  {
-   "id": "q9",
-   "original": "写出 $\\sqrt{3-a}$ 的一个有理化因式：______。",
-   "knowledgePoints": [
-    "有理化因式"
-   ],
-   "difficulty": 2,
-   "timeLimitSec": 45,
-   "steps": [
-    {
-     "prompt": "什么叫有理化因式？两个含根号的式子相乘，结果______。",
-     "type": "choice",
-     "answer": "A",
-     "hint": "比如 $\\sqrt2\\times\\sqrt2=2$。",
-     "explanation": "相乘后不再含二次根式，就叫互为有理化因式。",
-     "options": [
-      "不含二次根式",
-      "等于 1",
-      "等于 0",
-      "还是二次根式"
-     ]
-    },
-    {
-     "prompt": "$\\sqrt{3-a}$ 乘以下面哪个，结果不含根号？",
-     "type": "choice",
-     "answer": "C",
-     "hint": "$\\sqrt{m}\\cdot\\sqrt m=m$。",
-     "explanation": "$\\sqrt{3-a}\\cdot\\sqrt{3-a}=3-a$，所以 $\\sqrt{3-a}$ 本身就是它的一个有理化因式（答案不唯一）。",
-     "options": [
-      "$\\sqrt3$",
-      "$\\sqrt3-\\sqrt a$",
-      "$\\sqrt{3-a}$",
-      "$3-a$"
-     ]
-    }
-   ],
-   "finalAnswer": "$\\sqrt{3-a}$（答案不唯一）",
-   "formulas": [
-    {
-     "name": "有理化因式",
-     "latex": "\\sqrt a\\cdot\\sqrt a=a,\\ (\\sqrt a+\\sqrt b)(\\sqrt a-\\sqrt b)=a-b",
-     "tip": "单项根式的有理化因式是它本身；两项的用平方差。"
-    }
-   ],
-   "method": "整个 $3-a$ 在同一个根号下，是单项二次根式，乘它自己即可去掉根号。注意不要写成 $\\sqrt3+\\sqrt a$。",
-   "analysis": {
-    "known": [
-     "式子 $\\sqrt{3-a}$",
-     {
-      "text": "$3-a\\ge0$",
-      "hidden": true,
-      "why": "根号要有意义，被开方数必须非负"
-     }
-    ],
-    "goal": "写出一个有理化因式",
-    "associations": [
-     {
-      "trigger": "“有理化因式”",
-      "recall": "两个含根号的式子相乘，结果不含二次根式",
-      "why": "找一个“搭档”，相乘后根号消失"
-     },
-     {
-      "trigger": "整个 $3-a$ 在一个根号下",
-      "recall": "$\\sqrt A\\cdot\\sqrt A=A$",
-      "why": "单项根式乘它自己就能去掉根号",
-      "latex": "\\sqrt A\\cdot\\sqrt A=A\\ (A\\ge0)"
-     }
-    ],
-    "thinkingPath": [
-     "先回忆有理化因式的意思：相乘后不含根号。",
-     "$\\sqrt{3-a}$ 是一个整体在根号下，乘它自己：$\\sqrt{3-a}\\cdot\\sqrt{3-a}=3-a$。",
-     "所以有理化因式可以写 $\\sqrt{3-a}$。"
-    ],
-    "pitfalls": [
-     "把 $\\sqrt{3-a}$ 拆成 $\\sqrt3-\\sqrt a$（根号下的差不能拆开）。"
-    ]
-   }
-  },
-  {
-   "id": "q10",
-   "original": "已知 $\\sqrt{x^3+4x^2}=-x\\sqrt{x+4}$，则 $x$ 的取值范围是______。",
-   "knowledgePoints": [
-    "二次根式的性质",
-    "二次根式有意义的条件"
-   ],
-   "difficulty": 3,
-   "timeLimitSec": 120,
-   "steps": [
-    {
-     "prompt": "左边：$\\sqrt{x^3+4x^2}=\\sqrt{x^2(x+4)}=|x|\\sqrt{x+4}$。要等于 $-x\\sqrt{x+4}$，需要 $|x|=-x$，即 $x$ ___ 0？",
-     "type": "choice",
-     "answer": "D",
-     "hint": "什么时候绝对值等于相反数？",
-     "explanation": "$|x|=-x\\iff x\\le0$。",
-     "options": [
-      ">",
-      "≥",
-      "<",
-      "≤"
-     ]
-    },
-    {
-     "prompt": "根号要有意义，$x+4\\ge0$，即 $x\\ge$ ？",
-     "type": "number",
-     "answer": "-4",
-     "hint": "被开方数非负。",
-     "explanation": "$x\\ge-4$。"
-    },
-    {
-     "prompt": "综合起来，$x$ 的范围是？",
-     "type": "choice",
-     "answer": "B",
-     "hint": "把两个条件取公共部分。",
-     "explanation": "$-4\\le x\\le0$。",
-     "options": [
-      "$x\\le0$",
-      "$-4\\le x\\le0$",
-      "$x\\ge-4$",
-      "$-4<x<0$"
-     ]
-    }
-   ],
-   "finalAnswer": "$-4\\le x\\le0$",
-   "formulas": [
-    {
-     "name": "二次根式的性质",
-     "latex": "\\sqrt{a^2}=|a|=\\begin{cases}a,&a\\ge0\\\\-a,&a<0\\end{cases}",
-     "tip": "开方出来先加绝对值，再根据正负去掉绝对值。"
-    },
-    {
-     "name": "有意义条件",
-     "latex": "\\sqrt a\\ \\text{有意义}\\iff a\\ge0",
-     "tip": "被开方数必须非负。"
-    }
-   ],
-   "method": "提出 $x^2$ 变成 $|x|\\sqrt{x+4}$，由 $|x|=-x$ 得 $x\\le0$，再加上 $x+4\\ge0$。",
-   "analysis": {
-    "known": [
-     "等式 $\\sqrt{x^3+4x^2}=-x\\sqrt{x+4}$",
-     {
-      "text": "被开方数 $x+4\\ge0$",
-      "hidden": true,
-      "why": "根号有意义的条件，常常是第二个限制"
-     },
-     {
-      "text": "$\\sqrt{x^2}=|x|$",
-      "hidden": true,
-      "why": "提出 $x^2$ 时得到的是 $|x|$，不是 $x$"
-     }
-    ],
-    "goal": "求 $x$ 的取值范围",
-    "associations": [
-     {
-      "trigger": "根号里能提出公因式 $x^2$",
-      "recall": "$\\sqrt{x^2(x+4)}=|x|\\sqrt{x+4}$",
-      "why": "把左边整理成和右边相似的形式再比较",
-      "latex": "\\sqrt{a^2b}=|a|\\sqrt b"
-     },
-     {
-      "trigger": "$|x|=-x$",
-      "recall": "绝对值等于相反数 ⇔ $x\\le0$",
-      "why": "非正数的绝对值才等于它的相反数（0 也可以）"
-     }
-    ],
-    "thinkingPath": [
-     "看到根号里有 $x^2$，想到提出来：左边 $=|x|\\sqrt{x+4}$。",
-     "和右边比较得 $|x|=-x$，所以 $x\\le0$。",
-     "别忘了根号有意义：$x+4\\ge0$，$x\\ge-4$。",
-     "合起来：$-4\\le x\\le0$。"
-    ],
-    "pitfalls": [
-     "只得到 $x\\le0$，漏了 $x+4\\ge0$。",
-     "写成 $x<0$，漏掉 $x=0$。"
-    ]
-   }
-  },
-  {
-   "id": "q11",
-   "original": "石墨烯是已知强度最高的材料之一，同时还具有很好的韧性，石墨烯的理论厚度为 $0.00000000034$ m，这个数据用科学记数法可表示为______。",
-   "knowledgePoints": [
-    "科学记数法"
-   ],
-   "difficulty": 1,
-   "timeLimitSec": 60,
-   "steps": [
-    {
-     "prompt": "科学记数法写成 $a\\times10^n$，其中 $1\\le a<10$。这里 $a=$ ？",
-     "type": "number",
-     "answer": "3.4",
-     "hint": "把小数点移到第一个非零数字后面。",
-     "explanation": "$a=3.4$。"
-    },
-    {
-     "prompt": "小数点向右移动了几位？那么 $n=$ ？",
-     "type": "number",
-     "answer": "-10",
-     "hint": "数一数：从原来的小数点到 3 后面一共移动了几位。",
-     "explanation": "小数点向右移 10 位到 3 后面，所以 $n=-10$，结果 $3.4\\times10^{-10}$。"
-    }
-   ],
-   "finalAnswer": "$3.4\\times10^{-10}$ m",
-   "formulas": [
-    {
-     "name": "科学记数法（小数）",
-     "latex": "0.\\underbrace{0\\cdots0}_{k\\text{个}0}a=a\\times10^{-(k+1)}",
-     "tip": "第一个非零数字前（含小数点前那个 0）有几个 0，指数就是负几。"
-    }
-   ],
-   "method": "绝对值小于 1 的数：$n$ 为负，$|n|$ 等于第一个非零数字前所有 0 的个数（含整数位的 0）。本题请孩子再对照原卷数一数 0 的个数。",
-   "analysis": {
-    "known": [
-     "厚度 $0.00000000034$ m",
-     "要用科学记数法表示"
-    ],
-    "goal": "写成 $a\\times10^n$ 的形式",
-    "associations": [
-     {
-      "trigger": "很小的数（小于 1）",
-      "recall": "科学记数法 $a\\times10^n$，$1\\le|a|<10$，$n$ 为负整数",
-      "why": "小数点向右移几位，$n$ 就是负几",
-      "latex": "a\\times10^{n},\\ 1\\le|a|<10"
-     },
-     {
-      "trigger": "数 0 的个数",
-      "recall": "$|n|$ = 第一个非零数字前所有 0 的个数（含整数位的 0）",
-      "why": "这样数最不容易错"
-     }
-    ],
-    "thinkingPath": [
-     "先确定 $a$：把小数点移到第一个非零数字 3 后面，$a=3.4$。",
-     "数一数 3 前面一共有几个 0（含整数位那个 0）：10 个。",
-     "所以 $n=-10$，结果 $3.4\\times10^{-10}$ m。"
-    ],
-    "pitfalls": [
-     "0 数漏或多数一个，写成 $10^{-9}$ 或 $10^{-11}$。",
-     "$a$ 写成 $34$ 或 $0.34$，不满足 $1\\le a<10$。"
-    ]
-   }
-  },
-  {
-   "id": "q12",
-   "original": "如果 $\\sqrt{0.1521}=0.39$，$\\sqrt x=3.9$，那么 $x$ 的值是______。",
-   "knowledgePoints": [
-    "算术平方根",
-    "被开方数与算术平方根的小数点移动规律"
-   ],
-   "difficulty": 2,
-   "timeLimitSec": 60,
-   "steps": [
-    {
-     "prompt": "$3.9$ 是 $0.39$ 的几倍？",
-     "type": "number",
-     "answer": "10",
-     "hint": "小数点向右移动了 1 位。",
-     "explanation": "$3.9=0.39\\times10$。"
-    },
-    {
-     "prompt": "算术平方根扩大 10 倍，被开方数扩大多少倍？",
-     "type": "number",
-     "answer": "100",
-     "hint": "$\\sqrt{100x}=10\\sqrt x$。",
-     "explanation": "被开方数要扩大 $10^2=100$ 倍（小数点右移 2 位）。"
-    },
-    {
-     "prompt": "所以 $x=$ ？",
-     "type": "number",
-     "answer": "15.21",
-     "hint": "$0.1521\\times100$。",
-     "explanation": "$x=15.21$。"
-    }
-   ],
-   "finalAnswer": "$15.21$",
-   "formulas": [
-    {
-     "name": "移位规律",
-     "latex": "\\sqrt{100a}=10\\sqrt a",
-     "tip": "被开方数小数点每移 2 位，算术平方根小数点同向移 1 位。"
-    }
-   ],
-   "method": "利用“被开方数移两位，平方根移一位”的规律。",
-   "analysis": {
-    "known": [
-     "$\\sqrt{0.1521}=0.39$",
-     "$\\sqrt x=3.9$"
-    ],
-    "goal": "求 $x$",
-    "associations": [
-     {
-      "trigger": "两个算术平方根只差小数点位置",
-      "recall": "被开方数小数点移动两位，算术平方根小数点移动一位（同方向）",
-      "why": "因为 $\\sqrt{100a}=10\\sqrt a$",
-      "latex": "\\sqrt{100a}=10\\sqrt a"
-     }
-    ],
-    "thinkingPath": [
-     "看到 $0.39$ 和 $3.9$ 只差小数点，想到小数点移动规律。",
-     "$3.9$ 是 $0.39$ 的 10 倍（右移一位）。",
-     "被开方数就要扩大 100 倍（右移两位）：$x=15.21$。"
-    ],
-    "pitfalls": [
-     "以为平方根扩大 10 倍，被开方数也只扩大 10 倍，写成 $1.521$。"
-    ]
-   }
-  },
-  {
-   "id": "q13",
-   "original": "关于 $x$ 的一元二次方程 $(m-3)x^2+x+(m^2-9)=0$ 的一个根是 0，则 $m$ 的值是______。",
-   "knowledgePoints": [
-    "一元二次方程的定义",
-    "方程的根"
-   ],
-   "difficulty": 2,
-   "timeLimitSec": 90,
-   "steps": [
-    {
-     "prompt": "把 $x=0$ 代入方程，得 $m^2-9=0$，所以 $m=$ ？",
-     "type": "choice",
-     "answer": "C",
-     "hint": "平方等于 9 的数有两个。",
-     "explanation": "$m^2=9\\Rightarrow m=\\pm3$。",
-     "options": [
-      "$3$",
-      "$-3$",
-      "$\\pm3$",
-      "$9$"
-     ]
-    },
-    {
-     "prompt": "别忘了：是**一元二次**方程，二次项系数 $m-3$ 必须满足？",
-     "type": "choice",
-     "answer": "B",
-     "hint": "二次项系数不能为 0。",
-     "explanation": "$m-3\\ne0$，所以 $m\\ne3$。",
-     "options": [
-      "$m-3=0$",
-      "$m-3\\ne0$",
-      "$m-3>0$",
-      "没有要求"
-     ]
-    },
-    {
-     "prompt": "综合起来 $m=$ ？",
-     "type": "number",
-     "answer": "-3",
-     "hint": "从 $\\pm3$ 中去掉 3。",
-     "explanation": "$m=-3$。"
-    }
-   ],
-   "finalAnswer": "$m=-3$",
-   "formulas": [
-    {
-     "name": "一元二次方程定义",
-     "latex": "ax^2+bx+c=0\\ (a\\ne0)",
-     "tip": "题目说“一元二次方程”时一定要检查 $a\\ne0$。"
-    }
-   ],
-   "method": "代入根得 $m^2-9=0$，再用二次项系数不为 0 排除 $m=3$。",
-   "analysis": {
-    "known": [
-     "方程 $(m-3)x^2+x+(m^2-9)=0$ 是关于 $x$ 的一元二次方程",
-     "它的一个根是 $0$",
-     {
-      "text": "二次项系数 $m-3\\ne0$",
-      "hidden": true,
-      "why": "题目说是“一元二次方程”，如果 $m-3=0$，$x^2$ 项就没了，变成一次方程"
-     }
-    ],
-    "goal": "求 $m$ 的值",
-    "associations": [
-     {
-      "trigger": "“方程的一个根是 0”",
-      "recall": "根的定义：把根代入方程，等式成立",
-      "why": "代入 $x=0$，含 $x$ 的项全变成 0，马上得到关于 $m$ 的方程"
-     },
-     {
-      "trigger": "题目强调“一元二次方程”，而二次项系数含字母",
-      "recall": "二次项系数 $\\ne0$",
-      "why": "这是隐藏条件，用来检验、排除不合适的 $m$",
-      "latex": "ax^2+bx+c=0\\ (a\\ne0)"
-     }
-    ],
-    "thinkingPath": [
-     "看到“一个根是 0”，先把 $x=0$ 代入：$m^2-9=0$，得 $m=\\pm3$。",
-     "再看题目说的是“一元二次方程”，想到二次项系数不能为 0：$m-3\\ne0$，$m\\ne3$。",
-     "把 $m=3$ 舍去，所以 $m=-3$。",
-     "检查：$m=-3$ 时方程是 $-6x^2+x=0$，确实有根 0，而且是二次方程。"
-    ],
-    "pitfalls": [
-     "只算到 $m=\\pm3$ 就写答案，忘了二次项系数 $m-3\\ne0$。",
-     "以为 $m^2-9=0$ 只有 $m=3$ 一个解，漏了 $m=-3$。"
-    ]
-   }
-  },
-  {
-   "id": "q14",
-   "original": "把 $(a-b)\\sqrt{-\\dfrac{1}{a-b}}$ 根号外面的因式移到根号里面，化成最简二次根式，正确的结果是______。",
-   "knowledgePoints": [
-    "二次根式有意义的条件",
-    "二次根式的性质",
-    "根号外因式移入根号"
-   ],
-   "difficulty": 4,
-   "timeLimitSec": 180,
-   "steps": [
-    {
-     "prompt": "根号要有意义，$-\\dfrac1{a-b}\\ge0$（且分母不为 0），所以 $a-b$ ___ 0？",
-     "type": "choice",
-     "answer": "C",
-     "hint": "负的分之一要非负，分母必须是负数。",
-     "explanation": "$-\\dfrac{1}{a-b}>0\\Rightarrow a-b<0$。",
-     "options": [
-      ">",
-      "=",
-      "<",
-      "≥"
-     ]
-    },
-    {
-     "prompt": "$a-b<0$ 是负数，移进根号前要先把负号留在外面：$(a-b)=-\\sqrt{?}$",
-     "type": "choice",
-     "answer": "A",
-     "hint": "负数 $=-|$负数$|$。",
-     "explanation": "$a-b=-(b-a)=-\\sqrt{(b-a)^2}$。",
-     "options": [
-      "$(b-a)^2$",
-      "$a-b$",
-      "$b-a$",
-      "$-(a-b)^2$"
-     ]
-    },
-    {
-     "prompt": "所以原式 $=-\\sqrt{(b-a)^2\\cdot\\dfrac{1}{b-a}}=$ ？",
-     "type": "choice",
-     "answer": "D",
-     "hint": "$(b-a)^2\\div(b-a)=b-a$。",
-     "explanation": "原式 $=-\\sqrt{b-a}$。",
-     "options": [
-      "$\\sqrt{b-a}$",
-      "$\\sqrt{a-b}$",
-      "$-\\sqrt{a-b}$",
-      "$-\\sqrt{b-a}$"
-     ]
-    }
-   ],
-   "finalAnswer": "$-\\sqrt{b-a}$",
-   "formulas": [
-    {
-     "name": "二次根式的性质",
-     "latex": "\\sqrt{a^2}=|a|=\\begin{cases}a,&a\\ge0\\\\-a,&a<0\\end{cases}",
-     "tip": "开方出来先加绝对值，再根据正负去掉绝对值。"
-    },
-    {
-     "name": "负因式移入根号",
-     "latex": "a<0\\Rightarrow a\\sqrt m=-\\sqrt{a^2m}",
-     "tip": "负号必须留在根号外面，只把正的部分平方移进去。"
-    }
-   ],
-   "method": "先由有意义条件判断 $a-b<0$，负号留在外面，再把 $(b-a)$ 平方后移入根号约分。",
-   "analysis": {
-    "known": [
-     "式子 $(a-b)\\sqrt{-\\dfrac1{a-b}}$",
-     {
-      "text": "$-\\dfrac1{a-b}\\ge0$ 且 $a-b\\ne0$，所以 $a-b<0$",
-      "hidden": true,
-      "why": "被开方数非负、分母不为 0，两个条件合起来决定了根号外因式的正负"
-     }
-    ],
-    "goal": "把根号外的因式移到根号内并化简",
-    "associations": [
-     {
-      "trigger": "根号外的因式要移进根号",
-      "recall": "只有非负数才能直接“平方后移进去”",
-      "why": "$a\\ge0$ 时 $a\\sqrt b=\\sqrt{a^2b}$；负数要先把负号留在外面",
-      "latex": "a\\sqrt b=\\sqrt{a^2b}\\ (a\\ge0)"
-     },
-     {
-      "trigger": "根号里有分式 $-\\frac1{a-b}$",
-      "recall": "被开方数 $\\ge0$，分母 $\\ne0$",
-      "why": "从这里判断出 $a-b<0$，是整题的关键"
-     }
-    ],
-    "thinkingPath": [
-     "先看根号有意义：$-\\frac1{a-b}\\ge0$，分母又不为 0，所以 $a-b<0$。",
-     "$a-b$ 是负数，写成 $-(b-a)$，其中 $b-a>0$。",
-     "把正数 $(b-a)$ 平方后移进去：$-\\sqrt{(b-a)^2\\cdot\\frac1{b-a}}$。",
-     "约分得 $-\\sqrt{b-a}$。检查：原式外面是负数乘非负数，结果应为非正，符合。"
-    ],
-    "pitfalls": [
-     "没判断符号，直接把 $(a-b)^2$ 移进去，得到 $\\sqrt{b-a}$（丢了负号）。",
-     "得到 $-\\sqrt{a-b}$——但 $a-b<0$，这个根号无意义。"
-    ]
-   }
-  },
-  {
-   "id": "q15",
-   "original": "若 $n$ 为正整数，且满足 $n<3\\sqrt3<n+1$，则 $n=$______。",
-   "knowledgePoints": [
-    "无理数的估算"
-   ],
-   "difficulty": 2,
-   "timeLimitSec": 60,
-   "steps": [
-    {
-     "prompt": "$3\\sqrt3=\\sqrt{?}$",
-     "type": "number",
-     "answer": "27",
-     "hint": "把 3 移进根号要平方：$3=\\sqrt9$。",
-     "explanation": "$3\\sqrt3=\\sqrt{9\\times3}=\\sqrt{27}$。"
-    },
-    {
-     "prompt": "$\\sqrt{25}<\\sqrt{27}<\\sqrt{36}$，所以 $n=$ ？",
-     "type": "number",
-     "answer": "5",
-     "hint": "$\\sqrt{25}=5,\\sqrt{36}=6$。",
-     "explanation": "$5<3\\sqrt3<6$，$n=5$。"
-    }
-   ],
-   "finalAnswer": "$5$",
-   "formulas": [
-    {
-     "name": "估算",
-     "latex": "\\sqrt{k^2}<\\sqrt m<\\sqrt{(k+1)^2}\\Rightarrow k<\\sqrt m<k+1",
-     "tip": "找夹住被开方数的两个相邻完全平方数。"
-    }
-   ],
-   "method": "把系数移入根号变成 $\\sqrt{27}$，再找相邻完全平方数。",
-   "analysis": {
-    "known": [
-     "$n$ 为正整数",
-     "$n<3\\sqrt3<n+1$"
-    ],
-    "goal": "求 $n$",
-    "associations": [
-     {
-      "trigger": "夹在两个相邻整数之间",
-      "recall": "无理数的估算：找相邻的完全平方数",
-      "why": "$\\sqrt{25}<\\sqrt{27}<\\sqrt{36}$"
-     },
-     {
-      "trigger": "根号前有系数 3",
-      "recall": "系数移进根号：$3\\sqrt3=\\sqrt{9\\times3}$",
-      "why": "变成一个根号才好估算",
-      "latex": "a\\sqrt b=\\sqrt{a^2b}\\ (a\\ge0)"
-     }
-    ],
-    "thinkingPath": [
-     "看到“夹在 $n$ 和 $n+1$ 之间”，想到估算无理数。",
-     "先把系数移进根号：$3\\sqrt3=\\sqrt{27}$。",
-     "找相邻完全平方数：$25<27<36$，所以 $5<\\sqrt{27}<6$，$n=5$。"
-    ],
-    "pitfalls": [
-     "系数移进根号时忘了平方，写成 $\\sqrt{3\\times3}=\\sqrt9$（应是 $\\sqrt{3^2\\times3}=\\sqrt{27}$）。",
-     "用 $\\sqrt3\\approx1.7$ 估算得 $5.1$ 没问题，但估得太粗时容易判断错，用平方比较最稳。"
-    ]
-   }
-  },
-  {
-   "id": "q16",
-   "original": "一元二次方程 $(3-x)=(3-x)^2$ 的解是______。",
-   "knowledgePoints": [
-    "因式分解法解一元二次方程"
-   ],
-   "difficulty": 2,
-   "timeLimitSec": 90,
-   "steps": [
-    {
-     "prompt": "能不能两边同时除以 $(3-x)$？",
-     "type": "choice",
-     "answer": "B",
-     "hint": "如果 $3-x=0$ 呢？",
-     "explanation": "不能！$3-x$ 可能为 0，除掉会丢根。应移项后提公因式。",
-     "options": [
-      "可以",
-      "不可以，会丢根"
-     ]
-    },
-    {
-     "prompt": "移项：$(3-x)-(3-x)^2=0$，提公因式得 $(3-x)(1-3+x)=0$，即 $(3-x)(x-2)=0$。较小的根是？",
-     "type": "number",
-     "answer": "2",
-     "hint": "每个因式分别等于 0。",
-     "explanation": "$x-2=0\\Rightarrow x=2$。"
-    },
-    {
-     "prompt": "较大的根是？",
-     "type": "number",
-     "answer": "3",
-     "hint": "$3-x=0$。",
-     "explanation": "$x_1=2,\\ x_2=3$。"
-    }
-   ],
-   "finalAnswer": "$x_1=2,\\ x_2=3$",
-   "formulas": [
-    {
-     "name": "因式分解法",
-     "latex": "AB=0\\Rightarrow A=0\\text{ 或 }B=0",
-     "tip": "不要两边约去含未知数的式子，会丢根。"
-    }
-   ],
-   "method": "移项后提取公因式 $(3-x)$，转化为两个一次方程。",
-   "analysis": {
-    "known": [
-     "方程 $(3-x)=(3-x)^2$",
-     "两边都有相同的因式 $(3-x)$"
-    ],
-    "goal": "解这个一元二次方程",
-    "associations": [
-     {
-      "trigger": "两边有相同因式",
-      "recall": "移项后提公因式（因式分解法）",
-      "why": "转化成“两个因式乘积为 0”"
-     },
-     {
-      "trigger": "想两边同时除以 $(3-x)$",
-      "recall": "不能除以可能为 0 的式子",
-      "why": "$3-x$ 可能等于 0，一除就把 $x=3$ 这个根丢了"
-     },
-     {
-      "trigger": "$AB=0$",
-      "recall": "$A=0$ 或 $B=0$",
-      "why": "乘积为 0，至少一个因式为 0",
-      "latex": "AB=0\\Rightarrow A=0\\ \\text{或}\\ B=0"
-     }
-    ],
-    "thinkingPath": [
-     "看到两边都有 $(3-x)$，忍住不要除！想到移项提公因式。",
-     "$(3-x)-(3-x)^2=0$，提出 $(3-x)$：$(3-x)[1-(3-x)]=0$，即 $(3-x)(x-2)=0$。",
-     "所以 $x_1=2$，$x_2=3$。"
-    ],
-    "pitfalls": [
-     "两边同除以 $(3-x)$，只得到 $x=2$，丢根 $x=3$。",
-     "提公因式后括号里符号写错：$1-(3-x)=x-2$。"
-    ]
-   }
-  },
-  {
-   "id": "q17",
-   "original": "一元二次方程 $(2x-1)^2=(3-x)^2$ 的解是______。",
-   "knowledgePoints": [
-    "直接开平方法",
-    "因式分解法解一元二次方程"
-   ],
-   "difficulty": 3,
-   "timeLimitSec": 120,
-   "steps": [
-    {
-     "prompt": "由 $A^2=B^2$ 可得？",
-     "type": "choice",
-     "answer": "C",
-     "hint": "平方相等的两个数，可能相等也可能互为相反数。",
-     "explanation": "$A^2=B^2\\Rightarrow A=B$ 或 $A=-B$。",
-     "options": [
-      "只有 $A=B$",
-      "只有 $A=-B$",
-      "$A=B$ 或 $A=-B$",
-      "$A=B=0$"
-     ]
-    },
-    {
-     "prompt": "情况一：$2x-1=3-x$，解得 $x=$ ？",
-     "type": "number",
-     "answer": "4/3",
-     "hint": "移项得 $3x=4$。",
-     "explanation": "$3x=4\\Rightarrow x=\\dfrac43$。（常见错误：算成 $x=4$，忘了除以 3）",
-     "acceptable": [
-      "4/3",
-      "1又1/3"
-     ]
-    },
-    {
-     "prompt": "情况二：$2x-1=-(3-x)=x-3$，解得 $x=$ ？",
-     "type": "number",
-     "answer": "-2",
-     "hint": "移项得 $2x-x=-3+1$。",
-     "explanation": "$x=-2$。所以 $x_1=\\dfrac43,\\ x_2=-2$。"
-    }
-   ],
-   "finalAnswer": "$x_1=\\dfrac43,\\ x_2=-2$",
-   "formulas": [
-    {
-     "name": "平方差因式分解",
-     "latex": "A^2-B^2=(A+B)(A-B)",
-     "tip": "也可以移项后用平方差：$(2x-1+3-x)(2x-1-3+x)=0$。"
-    }
-   ],
-   "method": "$A^2=B^2$ 转化为 $A=\\pm B$ 两个一次方程，解完代回检验。",
-   "analysis": {
-    "known": [
-     "方程 $(2x-1)^2=(3-x)^2$",
-     "两边都是完全平方"
-    ],
-    "goal": "解方程",
-    "associations": [
-     {
-      "trigger": "$A^2=B^2$",
-      "recall": "直接开平方：$A=\\pm B$",
-      "why": "两个数平方相等，它们相等或互为相反数",
-      "latex": "A^2=B^2\\Rightarrow A=B\\ \\text{或}\\ A=-B"
-     },
-     {
-      "trigger": "也可以移项",
-      "recall": "平方差公式分解 $(A+B)(A-B)=0$",
-      "why": "两种方法结果一样，可以互相检验",
-      "latex": "A^2-B^2=(A+B)(A-B)"
-     }
-    ],
-    "thinkingPath": [
-     "看到两边都是平方，想到 $A=\\pm B$。",
-     "情况一：$2x-1=3-x$，$x=\\frac43$。",
-     "情况二：$2x-1=-(3-x)$，$x=-2$。",
-     "代回检验，两个都成立。"
-    ],
-    "pitfalls": [
-     "只写 $2x-1=3-x$，漏掉“互为相反数”的情况。",
-     "$-(3-x)$ 去括号写成 $-3-x$。"
-    ]
-   }
-  },
-  {
-   "id": "q18",
-   "original": "有一件商品，由原售价连续两次降价，每次降价的百分率相同。已知原售价是 800 元，降价两次后的售价是 578 元，若每次下降的百分率是 $x$，由题意列出关于 $x$ 的方程：______。",
-   "knowledgePoints": [
-    "一元二次方程的应用",
-    "增长率（降低率）问题"
-   ],
-   "difficulty": 2,
-   "timeLimitSec": 90,
-   "steps": [
-    {
-     "prompt": "第一次降价后，售价是？",
-     "type": "choice",
-     "answer": "B",
-     "hint": "降低 $x$，剩下原来的 $(1-x)$。",
-     "explanation": "$800(1-x)$。",
-     "options": [
-      "$800x$",
-      "$800(1-x)$",
-      "$800-x$",
-      "$800(1+x)$"
-     ]
-    },
-    {
-     "prompt": "第二次在新价格基础上再降 $x$，两次后的售价是？",
-     "type": "choice",
-     "answer": "A",
-     "hint": "在 $800(1-x)$ 基础上再乘 $(1-x)$。",
-     "explanation": "$800(1-x)^2$，所以方程为 $800(1-x)^2=578$。",
-     "options": [
-      "$800(1-x)^2$",
-      "$800(1-2x)$",
-      "$800-2x$",
-      "$800(1-x^2)$"
-     ]
-    }
-   ],
-   "finalAnswer": "$800(1-x)^2=578$",
-   "formulas": [
-    {
-     "name": "降低率公式",
-     "latex": "a(1-x)^n=b",
-     "tip": "$a$ 原量，$b$ 降低 $n$ 次后的量；增长率则用 $(1+x)$。"
-    }
-   ],
-   "method": "连续两次按相同百分率降低，用 $a(1-x)^2=b$。注意不是 $1-2x$。",
-   "analysis": {
-    "known": [
-     "原价 800 元",
-     "连续两次降价，每次降价百分率相同，设为 $x$",
-     "两次后售价 578 元",
-     {
-      "text": "$0<x<1$",
-      "hidden": true,
-      "why": "降价百分率在 0 和 100% 之间，解出后可用来检验"
-     }
-    ],
-    "goal": "列出关于 $x$ 的方程",
-    "associations": [
-     {
-      "trigger": "“连续两次”“百分率相同”",
-      "recall": "增长率/降低率模型 $a(1\\pm x)^2=b$",
-      "why": "每次都是在上一次的基础上变化，所以是乘两次 $(1-x)$",
-      "latex": "a(1-x)^2=b"
-     }
-    ],
-    "thinkingPath": [
-     "看到“连续两次按相同百分率降价”，想到 $a(1-x)^2=b$ 模型。",
-     "第一次后：$800(1-x)$；第二次是在新价格上再降：$800(1-x)(1-x)$。",
-     "所以方程是 $800(1-x)^2=578$。"
-    ],
-    "pitfalls": [
-     "写成 $800(1-2x)=578$——第二次降价的基数已经变了。",
-     "写成 $800(1-x^2)=578$。"
-    ]
-   }
-  },
-  {
-   "id": "q19",
-   "original": "若关于 $x$ 的一元二次方程 $(m-1)x^2-2mx+(m+2)=0$ 有两个不等的实数根，则 $m$ 的取值范围是______。",
-   "knowledgePoints": [
-    "根的判别式",
-    "一元二次方程的定义"
-   ],
-   "difficulty": 3,
-   "timeLimitSec": 150,
-   "steps": [
-    {
-     "prompt": "“两个不等的实数根”要求判别式满足？",
-     "type": "choice",
-     "answer": "A",
-     "hint": "不需要用求根公式，只看 Δ。",
-     "explanation": "$\\Delta>0$。",
-     "options": [
-      "$\\Delta>0$",
-      "$\\Delta=0$",
-      "$\\Delta<0$",
-      "$\\Delta\\ge0$"
-     ]
-    },
-    {
-     "prompt": "$\\Delta=(-2m)^2-4(m-1)(m+2)=4m^2-4(m^2+m-2)=8-4m>0$，解得 $m<$ ？",
-     "type": "number",
-     "answer": "2",
-     "hint": "$8-4m>0\\Rightarrow 4m<8$。",
-     "explanation": "$m<2$。"
-    },
-    {
-     "prompt": "还要满足二次项系数 $m-1\\ne0$，即 $m\\ne$ ？",
-     "type": "number",
-     "answer": "1",
-     "hint": "一元二次方程的 $a\\ne0$。",
-     "explanation": "$m\\ne1$。所以答案是 $m<2$ 且 $m\\ne1$。"
-    }
-   ],
-   "finalAnswer": "$m<2$ 且 $m\\ne1$",
-   "formulas": [
-    {
-     "name": "根的判别式",
-     "latex": "\\Delta=b^2-4ac",
-     "tip": "Δ>0 两个不等实根；Δ=0 两个相等实根；Δ<0 没有实根。"
-    },
-    {
-     "name": "一元二次方程定义",
-     "latex": "a\\ne0",
-     "tip": "求参数范围时，“判别式”和“二次项系数不为 0”两个条件都要写。"
-    }
-   ],
-   "method": "只需判别式 $\\Delta>0$ 加上 $m-1\\ne0$，不必代入求根公式。",
-   "analysis": {
-    "known": [
-     "$(m-1)x^2-2mx+(m+2)=0$ 是关于 $x$ 的一元二次方程",
-     "方程有两个不相等的实数根",
-     {
-      "text": "二次项系数 $m-1\\ne0$",
-      "hidden": true,
-      "why": "题目说“一元二次方程”，而且只有二次方程才谈得上“两个根”，所以 $m\\ne1$"
-     }
-    ],
-    "goal": "求 $m$ 的取值范围",
-    "associations": [
-     {
-      "trigger": "“两个不相等的实数根”",
-      "recall": "根的判别式 $\\Delta>0$",
-      "why": "$\\Delta>0$ 两个不等实根；$\\Delta=0$ 两个相等实根；$\\Delta<0$ 没有实根",
-      "latex": "\\Delta=b^2-4ac>0"
-     },
-     {
-      "trigger": "二次项系数里有字母 $m$",
-      "recall": "二次项系数 $\\ne0$",
-      "why": "这是最容易漏的隐藏条件，答案要和 $\\Delta$ 的结果合在一起"
-     }
-    ],
-    "thinkingPath": [
-     "看到“两个不相等的实数根”，想到 $\\Delta>0$。",
-     "找准 $a=m-1$，$b=-2m$，$c=m+2$：$\\Delta=4m^2-4(m-1)(m+2)=8-4m>0$，得 $m<2$。",
-     "再看二次项系数含字母，想到 $m-1\\ne0$，即 $m\\ne1$。",
-     "合起来：$m<2$ 且 $m\\ne1$。"
-    ],
-    "pitfalls": [
-     "只写 $m<2$，忘记 $m\\ne1$（最常见的失分点）。",
-     "展开 $(m-1)(m+2)$ 出错，应为 $m^2+m-2$。"
-    ]
-   }
-  },
-  {
-   "id": "q20",
-   "original": "已知 $m$、$n$ 是有理数，方程 $x^2+mx+n=0$ 有一个根是 $\\sqrt5-2$，则 $m+n$ 的值为______。",
-   "knowledgePoints": [
-    "方程的根",
-    "有理数与无理数的性质"
-   ],
-   "difficulty": 4,
-   "timeLimitSec": 180,
-   "steps": [
-    {
-     "prompt": "把 $x=\\sqrt5-2$ 代入：$(\\sqrt5-2)^2=$ ？",
-     "type": "choice",
-     "answer": "B",
-     "hint": "$(a-b)^2=a^2-2ab+b^2$。",
-     "explanation": "$(\\sqrt5-2)^2=5-4\\sqrt5+4=9-4\\sqrt5$。",
-     "options": [
-      "$1$",
-      "$9-4\\sqrt5$",
-      "$9+4\\sqrt5$",
-      "$5-4\\sqrt5$"
-     ]
-    },
-    {
-     "prompt": "代入后整理：$(9-2m+n)+(m-4)\\sqrt5=0$。因为 $m,n$ 是有理数，$\\sqrt5$ 是无理数，必须 $m-4=0$，所以 $m=$ ？",
-     "type": "number",
-     "answer": "4",
-     "hint": "有理数 + 有理数×√5 = 0，只能两部分都为 0。",
-     "explanation": "$m=4$。"
-    },
-    {
-     "prompt": "再由 $9-2m+n=0$ 求 $n$，那么 $m+n=$ ？",
-     "type": "number",
-     "answer": "3",
-     "hint": "$9-8+n=0$。",
-     "explanation": "$n=-1$，$m+n=4+(-1)=3$。"
-    }
-   ],
-   "finalAnswer": "$3$",
-   "formulas": [
-    {
-     "name": "有理数与无理数",
-     "latex": "p+q\\sqrt5=0\\ (p,q\\in\\mathbb Q)\\Rightarrow p=q=0",
-     "tip": "利用“有理部分、无理部分分别为 0”列方程。"
-    }
-   ],
-   "method": "代入根后按“有理部分 + 无理部分×√5”整理，利用 m、n 为有理数，令两部分都为 0。（另一法：$x+2=\\sqrt5$ 两边平方得 $x^2+4x-1=0$。）",
-   "analysis": {
-    "known": [
-     "$m$、$n$ 是有理数",
-     "方程 $x^2+mx+n=0$ 有一个根是 $\\sqrt5-2$",
-     {
-      "text": "$\\sqrt5$ 是无理数",
-      "hidden": true,
-      "why": "有理数 + 有理数 $\\times\\sqrt5=0$ 时，两部分必须都为 0"
-     }
-    ],
-    "goal": "求 $m+n$",
-    "associations": [
-     {
-      "trigger": "已知方程的一个根",
-      "recall": "把根代入方程",
-      "why": "代入后得到关于 $m$、$n$ 的等式"
-     },
-     {
-      "trigger": "$m,n$ 有理数，式子里有 $\\sqrt5$",
-      "recall": "若 $p+q\\sqrt5=0$（$p,q$ 有理数），则 $p=q=0$",
-      "why": "一个方程里能拆出两个方程，正好求两个未知数",
-      "latex": "p+q\\sqrt5=0\\Rightarrow p=0,\\ q=0"
-     }
-    ],
-    "thinkingPath": [
-     "看到已知根，代入：$(\\sqrt5-2)^2+m(\\sqrt5-2)+n=0$。",
-     "展开整理成“有理部分 + 无理部分”：$(9-2m+n)+(m-4)\\sqrt5=0$。",
-     "想到 $m,n$ 是有理数，所以 $m-4=0$，$9-2m+n=0$，得 $m=4$，$n=-1$。",
-     "$m+n=3$。"
-    ],
-    "pitfalls": [
-     "$(\\sqrt5-2)^2$ 算成 $5-4=1$，漏掉中间项 $-4\\sqrt5$。",
-     "不会用“有理数”这个条件，卡在一个方程两个未知数上。"
-    ]
-   }
-  },
-  {
-   "id": "q21",
-   "original": "已知关于 $x$ 的方程 $(a-1)x^2+2x-a-1=0$ 的根都是整数，那么符合条件的整数 $a$ 有______个。",
-   "knowledgePoints": [
-    "分类讨论",
-    "因式分解法解一元二次方程",
-    "整数根问题"
-   ],
-   "difficulty": 5,
-   "timeLimitSec": 240,
-   "steps": [
-    {
-     "prompt": "先看特殊情况：$a=1$ 时方程变成 $2x-2=0$，根 $x=1$ 是整数吗？$a=1$ 符合吗？",
-     "type": "choice",
-     "answer": "A",
-     "hint": "题目只说“方程”，没说“一元二次方程”。",
-     "explanation": "$a=1$ 时是一元一次方程，根 $x=1$ 是整数，符合条件。",
-     "options": [
-      "符合",
-      "不符合"
-     ]
-    },
-    {
-     "prompt": "$a\\ne1$ 时，因式分解：$(a-1)x^2+2x-(a+1)=[(a-1)x+(a+1)](x-1)=0$，一个根是 $x=1$，另一个根是 $x=-\\dfrac{a+1}{a-1}=-1-\\dfrac{2}{a-1}$。要使它是整数，$a-1$ 必须是哪个数的约数？",
-     "type": "number",
-     "answer": "2",
-     "hint": "$\\dfrac{2}{a-1}$ 要是整数。",
-     "explanation": "$a-1$ 是 2 的约数：$\\pm1,\\pm2$。"
-    },
-    {
-     "prompt": "$a-1=\\pm1,\\pm2$ 得 $a=2,0,3,-1$，再加上 $a=1$，共几个？",
-     "type": "number",
-     "answer": "5",
-     "hint": "别漏了 $a=1$ 的情况。",
-     "explanation": "$a=-1,0,1,2,3$，共 5 个。"
-    }
-   ],
-   "finalAnswer": "5 个（$a=-1,0,1,2,3$）",
-   "formulas": [
-    {
-     "name": "十字相乘",
-     "latex": "(a-1)x^2+2x-(a+1)=[(a-1)x+(a+1)](x-1)",
-     "tip": "系数和为 0 时 $x=1$ 是一个根：$(a-1)+2-(a+1)=0$。"
-    }
-   ],
-   "method": "分 $a=1$（一次方程）和 $a\\ne1$（二次方程）讨论；二次时发现 $x=1$ 是根，分解后让另一根为整数，转化为约数问题。",
-   "analysis": {
-    "known": [
-     "关于 $x$ 的方程 $(a-1)x^2+2x-a-1=0$",
-     "方程的根都是整数",
-     "$a$ 是整数",
-     {
-      "text": "没说是“一元二次”方程，$a-1$ 可以为 0",
-      "hidden": true,
-      "why": "$a=1$ 时是一次方程，也要单独讨论"
-     }
-    ],
-    "goal": "求符合条件的整数 $a$ 的个数",
-    "associations": [
-     {
-      "trigger": "二次项系数含字母，又没说是二次方程",
-      "recall": "分类讨论：系数为 0 和不为 0",
-      "why": "系数为 0 时是一次方程，不能直接用二次方程的方法"
-     },
-     {
-      "trigger": "系数之和 $(a-1)+2+(-a-1)=0$",
-      "recall": "各项系数之和为 0 ⇒ $x=1$ 是一个根",
-      "why": "知道一个根就能因式分解"
-     },
-     {
-      "trigger": "$-1-\\frac2{a-1}$ 是整数",
-      "recall": "整除问题：$a-1$ 是 2 的约数",
-      "why": "分数是整数 ⇔ 分母整除分子"
-     }
-    ],
-    "thinkingPath": [
-     "看到二次项系数含字母，先分类：$a=1$ 时，$2x-2=0$，$x=1$ 是整数，符合。",
-     "$a\\ne1$ 时，发现 $x=1$ 是根，分解：$[(a-1)x+(a+1)](x-1)=0$。",
-     "另一根 $x=-\\frac{a+1}{a-1}=-1-\\frac2{a-1}$，要是整数，$a-1=\\pm1,\\pm2$，得 $a=2,0,3,-1$。",
-     "加上 $a=1$，共 5 个。"
-    ],
-    "pitfalls": [
-     "漏掉 $a=1$（一次方程）的情况，答成 4 个。",
-     "约数只取正的 $1,2$，漏了 $-1,-2$。"
-    ]
-   }
-  },
-  {
-   "id": "q22",
-   "original": "我们在学习“有理数的小数形式”这一节课时，学习了如何将无限循环小数化成分数形式的方法，感受了“将无限化为有限”的思想，请类比同样的方法和思想，化简 $\\sqrt{42+\\sqrt{42+\\sqrt{42+\\cdots}}}=$______。",
-   "knowledgePoints": [
-    "整体思想",
-    "一元二次方程的解法"
-   ],
-   "difficulty": 4,
-   "timeLimitSec": 150,
-   "steps": [
-    {
-     "prompt": "设 $x=\\sqrt{42+\\sqrt{42+\\cdots}}$，注意根号里面的“$\\sqrt{42+\\cdots}$”也等于 $x$，所以 $x=$ ？",
-     "type": "choice",
-     "answer": "B",
-     "hint": "无限嵌套，去掉最外层还是同样的东西。",
-     "explanation": "$x=\\sqrt{42+x}$。",
-     "options": [
-      "$\\sqrt{42}$",
-      "$\\sqrt{42+x}$",
-      "$42+x$",
-      "$x^2$"
-     ]
-    },
-    {
-     "prompt": "两边平方得 $x^2-x-42=0$，因式分解 $(x-7)(x+6)=0$。正的根是？",
-     "type": "number",
-     "answer": "7",
-     "hint": "$x$ 是算术平方根，必须为正。",
-     "explanation": "$x=7$（$x=-6$ 舍去）。"
-    }
-   ],
-   "finalAnswer": "$7$",
-   "formulas": [
-    {
-     "name": "整体换元",
-     "latex": "x=\\sqrt{a+x}\\Rightarrow x^2-x-a=0",
-     "tip": "无限循环/嵌套的结构，设为 x 后用“自相似”列方程。"
-    }
-   ],
-   "method": "设整体为 x，利用自相似得 $x=\\sqrt{42+x}$，平方后解一元二次方程，舍去负根。",
-   "analysis": {
-    "known": [
-     "式子 $\\sqrt{42+\\sqrt{42+\\sqrt{42+\\cdots}}}$ 无限嵌套",
-     {
-      "text": "这个式子的值是正数",
-      "hidden": true,
-      "why": "它是算术平方根，一定大于 0，用来舍根"
-     }
-    ],
-    "goal": "求它的值",
-    "associations": [
-     {
-      "trigger": "无限循环/无限嵌套",
-      "recall": "设整体为 $x$，利用“自相似”列方程",
-      "why": "像化循环小数为分数一样，把无限化为有限"
-     },
-     {
-      "trigger": "$x=\\sqrt{42+x}$",
-      "recall": "两边平方后解一元二次方程",
-      "why": "平方去根号，再因式分解",
-      "latex": "x^2-x-42=(x-7)(x+6)"
-     }
-    ],
-    "thinkingPath": [
-     "看到无限嵌套，类比循环小数：设 $x=\\sqrt{42+\\sqrt{42+\\cdots}}$。",
-     "发现根号里那部分还是 $x$，所以 $x=\\sqrt{42+x}$。",
-     "两边平方：$x^2-x-42=0$，$(x-7)(x+6)=0$。",
-     "因为 $x>0$，舍去 $-6$，答案 7。"
-    ],
-    "pitfalls": [
-     "忘记舍去负根 $-6$。"
-    ]
-   }
-  },
-  {
-   "id": "q23-1",
-   "original": "23.（1）化简与计算：$\\sqrt{75}-\\dfrac23\\sqrt{27}-(\\sqrt3-1)^0+\\dfrac{3}{\\sqrt3+1}$",
-   "knowledgePoints": [
-    "二次根式的化简",
-    "零指数幂",
-    "分母有理化",
-    "二次根式的加减"
-   ],
-   "difficulty": 3,
-   "timeLimitSec": 240,
-   "steps": [
-    {
-     "prompt": "$\\sqrt{75}=$ ？",
-     "type": "number",
-     "answer": "5√3",
-     "hint": "$75=25\\times3$。",
-     "explanation": "$\\sqrt{75}=5\\sqrt3$。",
-     "acceptable": [
-      "5sqrt(3)",
-      "5*√3",
-      "5√(3)"
-     ]
-    },
-    {
-     "prompt": "$\\dfrac23\\sqrt{27}=$ ？（$\\sqrt{27}=3\\sqrt3$）",
-     "type": "number",
-     "answer": "2√3",
-     "hint": "$\\dfrac23\\times3\\sqrt3$。",
-     "explanation": "$\\dfrac23\\times3\\sqrt3=2\\sqrt3$。",
-     "acceptable": [
-      "2sqrt(3)",
-      "2*√3"
-     ]
-    },
-    {
-     "prompt": "$(\\sqrt3-1)^0=$ ？　$\\dfrac{3}{\\sqrt3+1}$ 分母有理化后等于？",
-     "type": "choice",
-     "answer": "A",
-     "hint": "任何非零数的 0 次幂是 1；分子分母同乘 $\\sqrt3-1$。",
-     "explanation": "$(\\sqrt3-1)^0=1$；$\\dfrac{3(\\sqrt3-1)}{(\\sqrt3+1)(\\sqrt3-1)}=\\dfrac{3\\sqrt3-3}{2}$。",
-     "options": [
-      "$1$；$\\dfrac{3\\sqrt3-3}{2}$",
-      "$0$；$\\dfrac{3\\sqrt3-3}{2}$",
-      "$1$；$3\\sqrt3-3$",
-      "$0$；$\\dfrac{3\\sqrt3+3}{4}$"
-     ]
-    },
-    {
-     "prompt": "合并：$5\\sqrt3-2\\sqrt3-1+\\dfrac{3\\sqrt3-3}{2}=$ ？",
-     "type": "choice",
-     "answer": "C",
-     "hint": "先通分成分母 2：$\\dfrac{6\\sqrt3-2+3\\sqrt3-3}{2}$。",
-     "explanation": "$3\\sqrt3-1+\\dfrac{3\\sqrt3}{2}-\\dfrac32=\\dfrac{9\\sqrt3-5}{2}$。",
-     "options": [
-      "$\\dfrac{9\\sqrt3-3}{2}$",
-      "$3\\sqrt3$",
-      "$\\dfrac{9\\sqrt3-5}{2}$",
-      "$\\dfrac{3\\sqrt3-5}{2}$"
-     ]
-    }
-   ],
-   "finalAnswer": "$\\dfrac{9\\sqrt3-5}{2}$",
-   "formulas": [
-    {
-     "name": "分母有理化",
-     "latex": "\\dfrac{1}{\\sqrt a+\\sqrt b}=\\dfrac{\\sqrt a-\\sqrt b}{a-b}",
-     "tip": "分子分母同乘分母的“有理化因式”（平方差）。"
-    },
-    {
-     "name": "零指数幂",
-     "latex": "a^0=1\\ (a\\ne0)",
-     "tip": "$\\sqrt3-1\\ne0$，所以等于 1。"
-    },
-    {
-     "name": "二次根式的性质",
-     "latex": "\\sqrt{a^2}=|a|=\\begin{cases}a,&a\\ge0\\\\-a,&a<0\\end{cases}",
-     "tip": "开方出来先加绝对值，再根据正负去掉绝对值。"
-    }
-   ],
-   "method": "先把每一项化成最简二次根式、算零次幂、分母有理化，最后合并同类二次根式。",
-   "analysis": {
-    "known": [
-     "算式 $\\sqrt{75}-\\frac23\\sqrt{27}-(\\sqrt3-1)^0+\\frac3{\\sqrt3+1}$",
-     {
-      "text": "$(\\sqrt3-1)^0=1$，因为底数 $\\sqrt3-1\\ne0$",
-      "hidden": true,
-      "why": "零指数幂要求底数不为 0"
-     }
-    ],
-    "goal": "化简并计算",
-    "associations": [
-     {
-      "trigger": "$\\sqrt{75}$、$\\sqrt{27}$",
-      "recall": "化成最简二次根式（提出平方因数）",
-      "why": "化简后才能看出是不是同类二次根式",
-      "latex": "\\sqrt{a^2b}=a\\sqrt b\\ (a\\ge0)"
-     },
-     {
-      "trigger": "$a^0$",
-      "recall": "零指数幂：$a^0=1\\ (a\\ne0)$",
-      "why": "不是 0！"
-     },
-     {
-      "trigger": "分母是 $\\sqrt3+1$",
-      "recall": "分母有理化：乘共轭式 $\\sqrt3-1$",
-      "why": "利用平方差去掉分母的根号",
-      "latex": "(\\sqrt3+1)(\\sqrt3-1)=2"
-     }
-    ],
-    "thinkingPath": [
-     "四项分别处理：$\\sqrt{75}=5\\sqrt3$，$\\frac23\\sqrt{27}=2\\sqrt3$。",
-     "$(\\sqrt3-1)^0=1$。",
-     "$\\frac3{\\sqrt3+1}=\\frac{3(\\sqrt3-1)}2$。",
-     "合并：$3\\sqrt3-1+\\frac{3\\sqrt3-3}2=\\frac{9\\sqrt3-5}2$。"
-    ],
-    "pitfalls": [
-     "把 $(\\sqrt3-1)^0$ 当成 0。",
-     "有理化时分子忘记乘 $(\\sqrt3-1)$，或分母算成 $3-1$ 以外的数。"
-    ]
-   }
-  },
-  {
-   "id": "q23-2",
-   "original": "23.（2）化简与计算：$\\dfrac12x\\sqrt{4x}+6x\\sqrt{\\dfrac x9}-2x^2\\sqrt{\\dfrac1x}$",
-   "knowledgePoints": [
-    "二次根式的化简",
-    "同类二次根式",
-    "二次根式的加减"
-   ],
-   "difficulty": 3,
-   "timeLimitSec": 180,
-   "steps": [
-    {
-     "prompt": "$\\dfrac12x\\sqrt{4x}=$ ？",
-     "type": "choice",
-     "answer": "A",
-     "hint": "$\\sqrt{4x}=2\\sqrt x$。",
-     "explanation": "$\\dfrac12x\\cdot2\\sqrt x=x\\sqrt x$。",
-     "options": [
-      "$x\\sqrt x$",
-      "$2x\\sqrt x$",
-      "$\\dfrac12x\\sqrt x$",
-      "$x^2$"
-     ]
-    },
-    {
-     "prompt": "$6x\\sqrt{\\dfrac x9}=$ ？",
-     "type": "choice",
-     "answer": "B",
-     "hint": "$\\sqrt{\\dfrac x9}=\\dfrac{\\sqrt x}{3}$。",
-     "explanation": "$6x\\cdot\\dfrac{\\sqrt x}3=2x\\sqrt x$。",
-     "options": [
-      "$x\\sqrt x$",
-      "$2x\\sqrt x$",
-      "$6x\\sqrt x$",
-      "$\\dfrac{2}{3}x\\sqrt x$"
-     ]
-    },
-    {
-     "prompt": "$2x^2\\sqrt{\\dfrac1x}=$ ？（由题意 $x>0$）",
-     "type": "choice",
-     "answer": "B",
-     "hint": "$\\sqrt{\\dfrac1x}=\\dfrac{\\sqrt x}{x}$。",
-     "explanation": "$2x^2\\cdot\\dfrac{\\sqrt x}{x}=2x\\sqrt x$。",
-     "options": [
-      "$2x^2\\sqrt x$",
-      "$2x\\sqrt x$",
-      "$\\dfrac{2x}{\\sqrt x}$",
-      "$2\\sqrt x$"
-     ]
-    },
-    {
-     "prompt": "合并：$x\\sqrt x+2x\\sqrt x-2x\\sqrt x=$ ？",
-     "type": "choice",
-     "answer": "D",
-     "hint": "都是 $x\\sqrt x$ 的同类项，系数相加。",
-     "explanation": "$(1+2-2)x\\sqrt x=x\\sqrt x$。",
-     "options": [
-      "$5x\\sqrt x$",
-      "$3x\\sqrt x$",
-      "$0$",
-      "$x\\sqrt x$"
-     ]
-    }
-   ],
-   "finalAnswer": "$x\\sqrt x$",
-   "formulas": [
-    {
-     "name": "二次根式乘除",
-     "latex": "\\sqrt{a}\\cdot\\sqrt{b}=\\sqrt{ab},\\ \\dfrac{\\sqrt a}{\\sqrt b}=\\sqrt{\\dfrac ab}\\ (a\\ge0,b>0)",
-     "tip": "根号里的数可以合在一起乘除。"
-    },
-    {
-     "name": "化去分母",
-     "latex": "\\sqrt{\\dfrac1x}=\\dfrac{\\sqrt x}{x}\\ (x>0)",
-     "tip": "被开方数有分母时，分子分母同乘使分母成为完全平方。"
-    }
-   ],
-   "method": "每一项都化成最简二次根式（都变成 $x\\sqrt x$ 的倍数），再合并同类二次根式。",
-   "analysis": {
-    "known": [
-     "算式 $\\frac12x\\sqrt{4x}+6x\\sqrt{\\frac x9}-2x^2\\sqrt{\\frac1x}$",
-     {
-      "text": "$x>0$",
-      "hidden": true,
-      "why": "$\\sqrt{\\frac1x}$ 要求 $x\\ne0$ 且 $\\frac1x\\ge0$，所以 $x>0$；这样 $\\sqrt{x^2}=x$ 才能直接写"
-     }
-    ],
-    "goal": "化简",
-    "associations": [
-     {
-      "trigger": "根号里有平方因数或分母",
-      "recall": "化成最简二次根式",
-      "why": "都化成 $x\\sqrt x$ 的形式，才能合并"
-     },
-     {
-      "trigger": "化简后被开方数相同",
-      "recall": "合并同类二次根式（系数相加）",
-      "why": "像合并同类项一样，根式部分不变"
-     }
-    ],
-    "thinkingPath": [
-     "先找隐藏条件：$x>0$。",
-     "逐项化简：$\\frac12x\\cdot2\\sqrt x=x\\sqrt x$；$6x\\cdot\\frac{\\sqrt x}3=2x\\sqrt x$；$2x^2\\cdot\\frac{\\sqrt x}x=2x\\sqrt x$。",
-     "合并：$x\\sqrt x+2x\\sqrt x-2x\\sqrt x=x\\sqrt x$。"
-    ],
-    "pitfalls": [
-     "$\\sqrt{\\frac1x}$ 化简错，写成 $\\frac1{\\sqrt x}$ 后不再处理，或写成 $\\sqrt x$。"
-    ]
-   }
-  },
-  {
-   "id": "q23-3",
-   "original": "23.（3）化简与计算：$\\dfrac2b\\sqrt{ab}\\times\\left(-\\dfrac32\\sqrt{a^3b}\\right)\\div\\sqrt{\\dfrac{b}{9a}}\\ (a>0)$",
-   "knowledgePoints": [
-    "二次根式的乘除",
-    "二次根式的化简"
-   ],
-   "difficulty": 4,
-   "timeLimitSec": 240,
-   "steps": [
-    {
-     "prompt": "先算系数和根号的乘法：$\\dfrac2b\\times\\left(-\\dfrac32\\right)=-\\dfrac3b$，$\\sqrt{ab}\\cdot\\sqrt{a^3b}=\\sqrt{a^4b^2}=$ ？（由题意 $a>0,b>0$）",
-     "type": "choice",
-     "answer": "C",
-     "hint": "$a^4b^2=(a^2b)^2$。",
-     "explanation": "$\\sqrt{a^4b^2}=a^2b$，所以前两项相乘得 $-\\dfrac3b\\cdot a^2b=-3a^2$。",
-     "options": [
-      "$a^2\\sqrt b$",
-      "$a^4b^2$",
-      "$a^2b$",
-      "$ab$"
-     ]
-    },
-    {
-     "prompt": "除以 $\\sqrt{\\dfrac b{9a}}$ 等于乘以 $\\sqrt{\\dfrac{9a}{b}}$，它化简为？",
-     "type": "choice",
-     "answer": "A",
-     "hint": "$\\sqrt{\\dfrac{9a}{b}}=\\dfrac{3\\sqrt a}{\\sqrt b}$，分子分母同乘 $\\sqrt b$。",
-     "explanation": "$\\sqrt{\\dfrac{9a}b}=\\dfrac{3\\sqrt{ab}}{b}$。",
-     "options": [
-      "$\\dfrac{3\\sqrt{ab}}{b}$",
-      "$\\dfrac{9a}{b}$",
-      "$3\\sqrt{ab}$",
-      "$\\dfrac{\\sqrt{ab}}{3b}$"
-     ]
-    },
-    {
-     "prompt": "结果 $-3a^2\\cdot\\dfrac{3\\sqrt{ab}}{b}=$ ？",
-     "type": "choice",
-     "answer": "D",
-     "hint": "系数 $-3\\times3$。",
-     "explanation": "$-\\dfrac{9a^2\\sqrt{ab}}{b}$。",
-     "options": [
-      "$-9a^2\\sqrt{ab}$",
-      "$\\dfrac{9a^2\\sqrt{ab}}{b}$",
-      "$-\\dfrac{a^2\\sqrt{ab}}{b}$",
-      "$-\\dfrac{9a^2\\sqrt{ab}}{b}$"
-     ]
-    }
-   ],
-   "finalAnswer": "$-\\dfrac{9a^2\\sqrt{ab}}{b}$",
-   "formulas": [
-    {
-     "name": "二次根式乘除",
-     "latex": "\\sqrt{a}\\cdot\\sqrt{b}=\\sqrt{ab},\\ \\dfrac{\\sqrt a}{\\sqrt b}=\\sqrt{\\dfrac ab}\\ (a\\ge0,b>0)",
-     "tip": "根号里的数可以合在一起乘除。"
-    },
-    {
-     "name": "除法变乘法",
-     "latex": "\\div\\sqrt{\\dfrac mn}=\\times\\sqrt{\\dfrac nm}",
-     "tip": "除以一个根式等于乘它的倒数。"
-    }
-   ],
-   "method": "系数与系数相乘、被开方数与被开方数相乘；除法改成乘倒数；最后化成最简二次根式（分母中不含根号）。",
-   "analysis": {
-    "known": [
-     "算式 $\\frac2b\\sqrt{ab}\\times\\left(-\\frac32\\sqrt{a^3b}\\right)\\div\\sqrt{\\frac b{9a}}$，$a>0$",
-     {
-      "text": "$b>0$",
-      "hidden": true,
-      "why": "$b$ 在分母上不为 0，又 $\\sqrt{ab}\\ge0$ 需 $ab\\ge0$，配合 $a>0$ 得 $b>0$"
-     }
-    ],
-    "goal": "化简",
-    "associations": [
-     {
-      "trigger": "根式的乘除",
-      "recall": "系数乘系数，被开方数乘被开方数",
-      "why": "乘法可以合成一个根号；除以一个根式，改成乘它的倒数",
-      "latex": "\\sqrt a\\cdot\\sqrt b=\\sqrt{ab}\\ (a,b\\ge0)"
-     },
-     {
-      "trigger": "结果分母里有根号或根号里有分母",
-      "recall": "化成最简（分母有理化）",
-      "why": "最终结果分母中不能含根号"
-     }
-    ],
-    "thinkingPath": [
-     "先确认 $a>0$，$b>0$。",
-     "系数相乘：$\\frac2b\\times(-\\frac32)=-\\frac3b$；根式相乘：$\\sqrt{a^4b^2}=a^2b$，得 $-3a^2$。",
-     "除以 $\\sqrt{\\frac b{9a}}$ 变成乘 $\\sqrt{\\frac{9a}b}=\\frac{3\\sqrt{ab}}b$。",
-     "结果 $-\\frac{9a^2\\sqrt{ab}}b$。"
-    ],
-    "pitfalls": [
-     "除法不改成乘倒数，直接把根号里相除时分子分母颠倒。",
-     "最后符号丢失（有一个负号）。"
-    ]
-   }
-  },
-  {
-   "id": "q23-4",
-   "original": "23.（4）化简与计算：$\\left(\\sqrt{\\dfrac52}-\\sqrt{\\dfrac25}\\right)\\div\\left(\\dfrac1{\\sqrt2}-\\dfrac1{\\sqrt5}\\right)$",
-   "knowledgePoints": [
-    "二次根式的除法",
-    "分母有理化"
-   ],
-   "difficulty": 4,
-   "timeLimitSec": 240,
-   "steps": [
-    {
-     "prompt": "把被除式通分：$\\sqrt{\\dfrac52}-\\sqrt{\\dfrac25}=\\dfrac{\\sqrt5}{\\sqrt2}-\\dfrac{\\sqrt2}{\\sqrt5}=\\dfrac{5-2}{\\sqrt{10}}=$ ？",
-     "type": "choice",
-     "answer": "B",
-     "hint": "通分的公分母是 $\\sqrt{10}$。",
-     "explanation": "$\\dfrac{3}{\\sqrt{10}}$。",
-     "options": [
-      "$\\dfrac{3}{10}$",
-      "$\\dfrac{3}{\\sqrt{10}}$",
-      "$\\sqrt3$",
-      "$\\dfrac{7}{\\sqrt{10}}$"
-     ]
-    },
-    {
-     "prompt": "除式通分：$\\dfrac1{\\sqrt2}-\\dfrac1{\\sqrt5}=$ ？",
-     "type": "choice",
-     "answer": "A",
-     "hint": "公分母 $\\sqrt{10}$：$\\dfrac{\\sqrt5}{\\sqrt{10}}-\\dfrac{\\sqrt2}{\\sqrt{10}}$。",
-     "explanation": "$\\dfrac{\\sqrt5-\\sqrt2}{\\sqrt{10}}$。",
-     "options": [
-      "$\\dfrac{\\sqrt5-\\sqrt2}{\\sqrt{10}}$",
-      "$\\dfrac{\\sqrt2-\\sqrt5}{\\sqrt{10}}$",
-      "$\\dfrac{1}{\\sqrt3}$",
-      "$\\dfrac{3}{\\sqrt{10}}$"
-     ]
-    },
-    {
-     "prompt": "相除得 $\\dfrac{3}{\\sqrt5-\\sqrt2}$，分母有理化后等于？",
-     "type": "choice",
-     "answer": "C",
-     "hint": "分子分母同乘 $\\sqrt5+\\sqrt2$，分母变成 $5-2=3$。",
-     "explanation": "$\\dfrac{3(\\sqrt5+\\sqrt2)}{3}=\\sqrt5+\\sqrt2$。",
-     "options": [
-      "$\\sqrt5-\\sqrt2$",
-      "$3(\\sqrt5+\\sqrt2)$",
-      "$\\sqrt5+\\sqrt2$",
-      "$1$"
-     ]
-    }
-   ],
-   "finalAnswer": "$\\sqrt5+\\sqrt2$",
-   "formulas": [
-    {
-     "name": "分母有理化",
-     "latex": "\\dfrac{1}{\\sqrt a+\\sqrt b}=\\dfrac{\\sqrt a-\\sqrt b}{a-b}",
-     "tip": "分子分母同乘分母的“有理化因式”（平方差）。"
-    },
-    {
-     "name": "平方差公式",
-     "latex": "(a+b)(a-b)=a^2-b^2",
-     "tip": "含根号的和差相乘可以消掉根号。"
-    }
-   ],
-   "method": "两个括号分别通分（公分母 $\\sqrt{10}$），$\\sqrt{10}$ 约掉后再分母有理化。",
-   "analysis": {
-    "known": [
-     "算式 $\\left(\\sqrt{\\frac52}-\\sqrt{\\frac25}\\right)\\div\\left(\\frac1{\\sqrt2}-\\frac1{\\sqrt5}\\right)$"
-    ],
-    "goal": "化简计算",
-    "associations": [
-     {
-      "trigger": "两个括号里都是分式型根式",
-      "recall": "通分（公分母 $\\sqrt{10}$）",
-      "why": "通分后 $\\sqrt{10}$ 能约掉，计算变简单"
-     },
-     {
-      "trigger": "结果 $\\frac3{\\sqrt5-\\sqrt2}$",
-      "recall": "分母有理化：乘 $\\sqrt5+\\sqrt2$",
-      "why": "$(\\sqrt5-\\sqrt2)(\\sqrt5+\\sqrt2)=3$，正好和分子约掉",
-      "latex": "(\\sqrt a-\\sqrt b)(\\sqrt a+\\sqrt b)=a-b"
-     }
-    ],
-    "thinkingPath": [
-     "被除式：$\\frac{\\sqrt5}{\\sqrt2}-\\frac{\\sqrt2}{\\sqrt5}=\\frac{5-2}{\\sqrt{10}}=\\frac3{\\sqrt{10}}$。",
-     "除式：$\\frac{\\sqrt5-\\sqrt2}{\\sqrt{10}}$。",
-     "相除 $\\sqrt{10}$ 约掉：$\\frac3{\\sqrt5-\\sqrt2}$，有理化得 $\\sqrt5+\\sqrt2$。"
-    ],
-    "pitfalls": [
-     "除法当作“分配律”：$a\\div(b-c)\\ne a\\div b-a\\div c$。",
-     "通分时 $\\frac1{\\sqrt2}=\\frac{\\sqrt5}{\\sqrt{10}}$ 写错位置。"
-    ]
-   }
-  },
-  {
-   "id": "q24",
-   "original": "解不等式：$\\sqrt2(x-\\sqrt2)<\\sqrt3(x+\\sqrt3)$",
-   "knowledgePoints": [
-    "一元一次不等式",
-    "分母有理化"
-   ],
-   "difficulty": 4,
-   "timeLimitSec": 240,
-   "steps": [
-    {
-     "prompt": "去括号：$\\sqrt2x-2<\\sqrt3x+3$，移项合并得 $(\\sqrt2-\\sqrt3)x<$ ？",
-     "type": "number",
-     "answer": "5",
-     "hint": "把常数移到右边：$3+2$。",
-     "explanation": "$(\\sqrt2-\\sqrt3)x<5$。"
-    },
-    {
-     "prompt": "$\\sqrt2-\\sqrt3$ 是正数还是负数？两边除以它时不等号方向怎么变？",
-     "type": "choice",
-     "answer": "B",
-     "hint": "$\\sqrt2<\\sqrt3$。",
-     "explanation": "$\\sqrt2-\\sqrt3<0$，除以负数不等号要改变方向：$x>\\dfrac{5}{\\sqrt2-\\sqrt3}$。",
-     "options": [
-      "正数，方向不变",
-      "负数，方向改变",
-      "负数，方向不变",
-      "正数，方向改变"
-     ]
-    },
-    {
-     "prompt": "$\\dfrac{5}{\\sqrt2-\\sqrt3}$ 分母有理化后等于？",
-     "type": "choice",
-     "answer": "D",
-     "hint": "分子分母同乘 $\\sqrt2+\\sqrt3$，分母 $2-3=-1$。",
-     "explanation": "$\\dfrac{5(\\sqrt2+\\sqrt3)}{-1}=-5\\sqrt2-5\\sqrt3$，所以 $x>-5\\sqrt2-5\\sqrt3$。",
-     "options": [
-      "$5\\sqrt2+5\\sqrt3$",
-      "$5\\sqrt3-5\\sqrt2$",
-      "$-5$",
-      "$-5\\sqrt2-5\\sqrt3$"
-     ]
-    }
-   ],
-   "finalAnswer": "$x>-5\\sqrt2-5\\sqrt3$",
-   "formulas": [
-    {
-     "name": "不等式性质 3",
-     "latex": "a<b,\\ c<0\\Rightarrow ac>bc",
-     "tip": "两边乘或除以同一个负数，不等号方向改变。"
-    },
-    {
-     "name": "分母有理化",
-     "latex": "\\dfrac{1}{\\sqrt a+\\sqrt b}=\\dfrac{\\sqrt a-\\sqrt b}{a-b}",
-     "tip": "分子分母同乘分母的“有理化因式”（平方差）。"
-    }
-   ],
-   "method": "按解一元一次不等式的步骤做；关键是判断系数 $\\sqrt2-\\sqrt3$ 为负，除过去要变号，最后分母有理化。",
-   "analysis": {
-    "known": [
-     "不等式 $\\sqrt2(x-\\sqrt2)<\\sqrt3(x+\\sqrt3)$",
-     {
-      "text": "$\\sqrt2-\\sqrt3<0$",
-      "hidden": true,
-      "why": "两边除以负数，不等号方向要改变——这是本题关键"
-     }
-    ],
-    "goal": "求不等式的解集",
-    "associations": [
-     {
-      "trigger": "一元一次不等式",
-      "recall": "解法步骤：去括号 → 移项 → 合并 → 系数化为 1",
-      "why": "和解方程一样，只是最后一步要看系数正负"
-     },
-     {
-      "trigger": "系数 $\\sqrt2-\\sqrt3$",
-      "recall": "不等式两边除以负数，不等号变向",
-      "why": "$\\sqrt2<\\sqrt3$，所以系数是负数"
-     },
-     {
-      "trigger": "$\\frac5{\\sqrt2-\\sqrt3}$",
-      "recall": "分母有理化",
-      "why": "乘 $\\sqrt2+\\sqrt3$，分母变成 $2-3=-1$"
-     }
-    ],
-    "thinkingPath": [
-     "去括号：$\\sqrt2x-2<\\sqrt3x+3$，移项合并：$(\\sqrt2-\\sqrt3)x<5$。",
-     "看到系数 $\\sqrt2-\\sqrt3$，先判断正负：负数！除过去要变号。",
-     "$x>\\frac5{\\sqrt2-\\sqrt3}=-5\\sqrt2-5\\sqrt3$。"
-    ],
-    "pitfalls": [
-     "除以负数忘记变号，写成 $x<\\cdots$。",
-     "有理化时分母 $2-3=-1$ 的负号丢了。"
-    ]
-   }
-  },
-  {
-   "id": "q25",
-   "original": "用配方法解方程：$2x^2-3x-4=0$",
-   "knowledgePoints": [
-    "配方法"
-   ],
-   "difficulty": 3,
-   "timeLimitSec": 240,
-   "steps": [
-    {
-     "prompt": "先把二次项系数化为 1 并移项：$x^2-\\dfrac32x=$ ？",
-     "type": "number",
-     "answer": "2",
-     "hint": "两边同除以 2，常数项移到右边。",
-     "explanation": "$x^2-\\dfrac32x=2$。"
-    },
-    {
-     "prompt": "两边加上一次项系数一半的平方，即 $\\left(\\dfrac34\\right)^2=$ ？",
-     "type": "number",
-     "answer": "9/16",
-     "hint": "一次项系数 $-\\dfrac32$ 的一半是 $-\\dfrac34$。",
-     "explanation": "加 $\\dfrac9{16}$，得 $\\left(x-\\dfrac34\\right)^2=2+\\dfrac9{16}=\\dfrac{41}{16}$。",
-     "acceptable": [
-      "0.5625"
-     ]
-    },
-    {
-     "prompt": "开平方解得 $x=$ ？",
-     "type": "choice",
-     "answer": "A",
-     "hint": "$x-\\dfrac34=\\pm\\dfrac{\\sqrt{41}}{4}$。",
-     "explanation": "$x_1=\\dfrac{3+\\sqrt{41}}4,\\ x_2=\\dfrac{3-\\sqrt{41}}4$。",
-     "options": [
-      "$\\dfrac{3\\pm\\sqrt{41}}{4}$",
-      "$\\dfrac{3\\pm\\sqrt{41}}{2}$",
-      "$\\dfrac{-3\\pm\\sqrt{41}}{4}$",
-      "$\\dfrac34\\pm\\sqrt{41}$"
-     ]
-    }
-   ],
-   "finalAnswer": "$x_1=\\dfrac{3+\\sqrt{41}}{4},\\ x_2=\\dfrac{3-\\sqrt{41}}{4}$",
-   "formulas": [
-    {
-     "name": "配方法",
-     "latex": "x^2+px=q\\Rightarrow\\left(x+\\dfrac p2\\right)^2=q+\\dfrac{p^2}{4}",
-     "tip": "先化二次项系数为 1，再两边同加“一次项系数一半的平方”。"
-    }
-   ],
-   "method": "化 1 → 移项 → 配方（加一次项系数一半的平方）→ 开平方 → 求解。",
-   "analysis": {
-    "known": [
-     "方程 $2x^2-3x-4=0$",
-     "要求用配方法"
-    ],
-    "goal": "用配方法解方程",
-    "associations": [
-     {
-      "trigger": "“配方法”",
-      "recall": "化 1 → 移项 → 两边加一次项系数一半的平方 → 开平方",
-      "why": "目的是凑出完全平方式 $(x+m)^2=n$",
-      "latex": "x^2+px+\\left(\\tfrac p2\\right)^2=\\left(x+\\tfrac p2\\right)^2"
-     },
-     {
-      "trigger": "$(x+m)^2=n$",
-      "recall": "$n\\ge0$ 才有实数解",
-      "why": "$n=\\frac{41}{16}>0$，有两个解"
-     }
-    ],
-    "thinkingPath": [
-     "二次项系数化为 1：$x^2-\\frac32x-2=0$，移项 $x^2-\\frac32x=2$。",
-     "一次项系数 $-\\frac32$ 的一半是 $-\\frac34$，两边加 $\\frac9{16}$：$(x-\\frac34)^2=\\frac{41}{16}$。",
-     "开平方：$x-\\frac34=\\pm\\frac{\\sqrt{41}}4$，$x=\\frac{3\\pm\\sqrt{41}}4$。"
-    ],
-    "pitfalls": [
-     "没先化 1 就配方。",
-     "只在左边加 $\\frac9{16}$，右边忘了加。"
-    ]
-   }
-  },
-  {
-   "id": "q26",
-   "original": "解关于 $x$ 的方程：$x^2-|x|-1=0$",
-   "knowledgePoints": [
-    "含绝对值的方程",
-    "换元法",
-    "公式法"
-   ],
-   "difficulty": 4,
-   "timeLimitSec": 240,
-   "steps": [
-    {
-     "prompt": "因为 $x^2=|x|^2$，设 $t=|x|$，方程变成 $t^2-t-1=0$。$t$ 必须满足？",
-     "type": "choice",
-     "answer": "B",
-     "hint": "绝对值是什么样的数？",
-     "explanation": "$t=|x|\\ge0$。",
-     "options": [
-      "$t>1$",
-      "$t\\ge0$",
-      "$t<0$",
-      "任意实数"
-     ]
-    },
-    {
-     "prompt": "用求根公式：$t=\\dfrac{1\\pm\\sqrt5}{2}$。哪个根要舍去？",
-     "type": "choice",
-     "answer": "B",
-     "hint": "$\\sqrt5\\approx2.24$。",
-     "explanation": "$\\dfrac{1-\\sqrt5}2<0$ 舍去，所以 $|x|=\\dfrac{1+\\sqrt5}{2}$。",
-     "options": [
-      "$\\dfrac{1+\\sqrt5}{2}$",
-      "$\\dfrac{1-\\sqrt5}{2}$",
-      "都不舍去"
-     ]
-    },
-    {
-     "prompt": "所以 $x=$ ？",
-     "type": "choice",
-     "answer": "C",
-     "hint": "绝对值等于正数 $m$ 的数是 $\\pm m$。",
-     "explanation": "$x_1=\\dfrac{1+\\sqrt5}{2},\\ x_2=-\\dfrac{1+\\sqrt5}{2}$。",
-     "options": [
-      "$\\dfrac{1+\\sqrt5}{2}$",
-      "$\\dfrac{1\\pm\\sqrt5}{2}$",
-      "$\\pm\\dfrac{1+\\sqrt5}{2}$",
-      "$\\pm\\dfrac{1-\\sqrt5}{2}$"
-     ]
-    }
-   ],
-   "finalAnswer": "$x_1=\\dfrac{1+\\sqrt5}{2},\\ x_2=-\\dfrac{1+\\sqrt5}{2}$",
-   "formulas": [
-    {
-     "name": "绝对值的平方",
-     "latex": "x^2=|x|^2",
-     "tip": "可以把 $|x|$ 当成新的未知数。"
-    },
-    {
-     "name": "求根公式",
-     "latex": "x=\\dfrac{-b\\pm\\sqrt{b^2-4ac}}{2a}\\ (b^2-4ac\\ge0)",
-     "tip": "先算 Δ，再代入公式。"
-    }
-   ],
-   "method": "把 $|x|$ 看成整体换元，解出后舍去负值，再由绝对值得到两个解。（也可分 $x\\ge0$、$x<0$ 讨论。）",
-   "analysis": {
-    "known": [
-     "方程 $x^2-|x|-1=0$",
-     {
-      "text": "$x^2=|x|^2$",
-      "hidden": true,
-      "why": "这让我们可以把 $|x|$ 看成一个整体"
-     },
-     {
-      "text": "$|x|\\ge0$",
-      "hidden": true,
-      "why": "换元后 $t=|x|\\ge0$，负根要舍"
-     }
-    ],
-    "goal": "解方程",
-    "associations": [
-     {
-      "trigger": "方程里同时有 $x^2$ 和 $|x|$",
-      "recall": "换元：设 $t=|x|$",
-      "why": "变成普通的一元二次方程 $t^2-t-1=0$"
-     },
-     {
-      "trigger": "$t^2-t-1=0$ 不好分解",
-      "recall": "求根公式",
-      "why": "$\\Delta=5>0$，用公式最稳",
-      "latex": "x=\\frac{-b\\pm\\sqrt{b^2-4ac}}{2a}"
-     },
-     {
-      "trigger": "$|x|=t$",
-      "recall": "绝对值方程：$x=\\pm t$",
-      "why": "绝对值等于正数，原数有两个"
-     }
-    ],
-    "thinkingPath": [
-     "看到 $x^2$ 和 $|x|$，想到 $x^2=|x|^2$，设 $t=|x|$（$t\\ge0$）。",
-     "解 $t^2-t-1=0$：$t=\\frac{1\\pm\\sqrt5}2$。",
-     "$\\frac{1-\\sqrt5}2<0$，舍去；$t=\\frac{1+\\sqrt5}2$。",
-     "所以 $x=\\pm\\frac{1+\\sqrt5}2$。"
-    ],
-    "pitfalls": [
-     "忘了 $t\\ge0$，没有舍去负根。",
-     "最后只写 $x=\\frac{1+\\sqrt5}2$，漏了负的。"
-    ]
-   }
-  },
-  {
-   "id": "q27",
-   "original": "解关于 $x$ 的方程：$(p+1)x^2-2px+p-2=0$",
-   "knowledgePoints": [
-    "分类讨论",
-    "根的判别式",
-    "公式法",
-    "一元二次方程的定义"
-   ],
-   "difficulty": 5,
-   "timeLimitSec": 300,
-   "steps": [
-    {
-     "prompt": "先讨论 $p+1=0$（即 $p=-1$）：方程变成 $2x-3=0$，$x=$ ？",
-     "type": "number",
-     "answer": "1.5",
-     "hint": "$p=-1$ 时 $-2px=2x$，$p-2=-3$。",
-     "explanation": "$x=\\dfrac32$。",
-     "acceptable": [
-      "3/2"
-     ]
-    },
-    {
-     "prompt": "$p\\ne-1$ 时是一元二次方程，$\\Delta=(-2p)^2-4(p+1)(p-2)=$ ？",
-     "type": "choice",
-     "answer": "A",
-     "hint": "$4p^2-4(p^2-p-2)$。",
-     "explanation": "$\\Delta=4p+8$。",
-     "options": [
-      "$4p+8$",
-      "$8-4p$",
-      "$4p-8$",
-      "$8$"
-     ]
-    },
-    {
-     "prompt": "当 $\\Delta<0$ 即 $p<-2$ 时方程无实根；当 $p=-2$ 时 $\\Delta=0$，$x=\\dfrac{2p}{2(p+1)}=$ ？",
-     "type": "number",
-     "answer": "2",
-     "hint": "代入 $p=-2$：$\\dfrac{-2}{-1}$。",
-     "explanation": "$p=-2$ 时 $x_1=x_2=2$。"
-    },
-    {
-     "prompt": "当 $p>-2$ 且 $p\\ne-1$ 时，用求根公式得 $x=$ ？",
-     "type": "choice",
-     "answer": "C",
-     "hint": "$x=\\dfrac{2p\\pm\\sqrt{4p+8}}{2(p+1)}$，$\\sqrt{4p+8}=2\\sqrt{p+2}$。",
-     "explanation": "$x=\\dfrac{p\\pm\\sqrt{p+2}}{p+1}$。",
-     "options": [
-      "$\\dfrac{2p\\pm\\sqrt{p+2}}{p+1}$",
-      "$\\dfrac{p\\pm\\sqrt{p-2}}{p+1}$",
-      "$\\dfrac{p\\pm\\sqrt{p+2}}{p+1}$",
-      "$\\dfrac{-p\\pm\\sqrt{p+2}}{p+1}$"
-     ]
-    }
-   ],
-   "finalAnswer": "$p=-1$ 时 $x=\\dfrac32$；$p<-2$ 时无实数根；$p=-2$ 时 $x_1=x_2=2$；$p>-2$ 且 $p\\ne-1$ 时 $x=\\dfrac{p\\pm\\sqrt{p+2}}{p+1}$",
-   "formulas": [
-    {
-     "name": "根的判别式",
-     "latex": "\\Delta=b^2-4ac",
-     "tip": "Δ>0 两个不等实根；Δ=0 两个相等实根；Δ<0 没有实根。"
-    },
-    {
-     "name": "求根公式",
-     "latex": "x=\\dfrac{-b\\pm\\sqrt{b^2-4ac}}{2a}\\ (b^2-4ac\\ge0)",
-     "tip": "先算 Δ，再代入公式。"
-    }
-   ],
-   "method": "二次项系数含字母时必须分类：先讨论系数为 0（一次方程），再按 Δ 的正负/零讨论二次方程的根。",
-   "analysis": {
-    "known": [
-     "关于 $x$ 的方程 $(p+1)x^2-2px+p-2=0$",
-     {
-      "text": "没说是一元二次方程，$p+1$ 可能为 0",
-      "hidden": true,
-      "why": "$p=-1$ 时变成一次方程，要单独讨论"
-     },
-     {
-      "text": "$\\Delta$ 的正负决定有没有实数根",
-      "hidden": true,
-      "why": "$p\\ne-1$ 时还要按 $\\Delta>0$、$=0$、$<0$ 分情况"
-     }
-    ],
-    "goal": "解方程（对 $p$ 分类讨论）",
-    "associations": [
-     {
-      "trigger": "二次项系数含字母",
-      "recall": "分类讨论：系数为 0 / 不为 0",
-      "why": "系数为 0 就是一次方程"
-     },
-     {
-      "trigger": "二次方程根的情况",
-      "recall": "根的判别式",
-      "why": "$\\Delta=4p+8$，按正、零、负讨论",
-      "latex": "\\Delta=b^2-4ac"
-     },
-     {
-      "trigger": "$\\Delta>0$",
-      "recall": "求根公式",
-      "why": "直接写出两个根",
-      "latex": "x=\\frac{-b\\pm\\sqrt{\\Delta}}{2a}"
-     }
-    ],
-    "thinkingPath": [
-     "先看 $p+1=0$：$p=-1$ 时 $2x-3=0$，$x=\\frac32$。",
-     "$p\\ne-1$ 时算 $\\Delta=(-2p)^2-4(p+1)(p-2)=4p+8$。",
-     "$p<-2$：$\\Delta<0$，无实根；$p=-2$：$x_1=x_2=2$。",
-     "$p>-2$ 且 $p\\ne-1$：$x=\\frac{p\\pm\\sqrt{p+2}}{p+1}$。"
-    ],
-    "pitfalls": [
-     "漏掉 $p=-1$ 的一次方程情况。",
-     "求根公式里 $\\sqrt{4p+8}=2\\sqrt{p+2}$ 约分出错。",
-     "$p>-2$ 时忘记写“且 $p\\ne-1$”。"
-    ]
-   }
-  },
-  {
-   "id": "q28",
-   "original": "先化简，后求值：$\\dfrac{a-b}{\\sqrt a+\\sqrt b}-\\dfrac{a-4\\sqrt{ab}+4b}{2\\sqrt b-\\sqrt a}$，其中 $a=\\dfrac12$，$b=\\dfrac18$。",
-   "knowledgePoints": [
-    "二次根式的化简求值",
-    "平方差公式",
-    "完全平方公式"
-   ],
-   "difficulty": 4,
-   "timeLimitSec": 300,
-   "steps": [
-    {
-     "prompt": "把 $a$ 看成 $(\\sqrt a)^2$，$b$ 看成 $(\\sqrt b)^2$：$\\dfrac{a-b}{\\sqrt a+\\sqrt b}=$ ？",
-     "type": "choice",
-     "answer": "B",
-     "hint": "$a-b=(\\sqrt a+\\sqrt b)(\\sqrt a-\\sqrt b)$。",
-     "explanation": "约分得 $\\sqrt a-\\sqrt b$。",
-     "options": [
-      "$\\sqrt a+\\sqrt b$",
-      "$\\sqrt a-\\sqrt b$",
-      "$a-b$",
-      "$1$"
-     ]
-    },
-    {
-     "prompt": "$a-4\\sqrt{ab}+4b=(\\sqrt a-2\\sqrt b)^2=(2\\sqrt b-\\sqrt a)^2$，所以第二个分式 $=$ ？",
-     "type": "choice",
-     "answer": "A",
-     "hint": "分子是分母的平方。",
-     "explanation": "$\\dfrac{(2\\sqrt b-\\sqrt a)^2}{2\\sqrt b-\\sqrt a}=2\\sqrt b-\\sqrt a$。",
-     "options": [
-      "$2\\sqrt b-\\sqrt a$",
-      "$\\sqrt a-2\\sqrt b$",
-      "$\\sqrt a+2\\sqrt b$",
-      "$1$"
-     ]
-    },
-    {
-     "prompt": "原式 $=(\\sqrt a-\\sqrt b)-(2\\sqrt b-\\sqrt a)=$ ？",
-     "type": "choice",
-     "answer": "D",
-     "hint": "去括号要变号。",
-     "explanation": "$2\\sqrt a-3\\sqrt b$。",
-     "options": [
-      "$-3\\sqrt b$",
-      "$2\\sqrt a-\\sqrt b$",
-      "$-\\sqrt b$",
-      "$2\\sqrt a-3\\sqrt b$"
-     ]
-    },
-    {
-     "prompt": "代入 $\\sqrt a=\\sqrt{\\dfrac12}=\\dfrac{\\sqrt2}{2}$，$\\sqrt b=\\sqrt{\\dfrac18}=\\dfrac{\\sqrt2}{4}$，$2\\sqrt a-3\\sqrt b=$ ？",
-     "type": "choice",
-     "answer": "C",
-     "hint": "$\\sqrt2-\\dfrac{3\\sqrt2}{4}$。",
-     "explanation": "$\\sqrt2-\\dfrac{3\\sqrt2}4=\\dfrac{\\sqrt2}4$。⚠️ 细心的同学会发现：此时 $2\\sqrt b=\\dfrac{\\sqrt2}{2}=\\sqrt a$，原式第二个分母 $2\\sqrt b-\\sqrt a=0$，严格来说原式无意义，原卷数值可能有印刷问题，请以老师答案为准。",
-     "options": [
-      "$\\dfrac{\\sqrt2}{2}$",
-      "$-\\dfrac{\\sqrt2}{2}$",
-      "$\\dfrac{\\sqrt2}{4}$",
-      "$\\dfrac{7\\sqrt2}{4}$"
-     ]
-    }
-   ],
-   "finalAnswer": "化简得 $2\\sqrt a-3\\sqrt b$，代入得 $\\dfrac{\\sqrt2}{4}$（注意：给定数值使原式分母 $2\\sqrt b-\\sqrt a=0$，严格说原式无意义，疑为题目数值有误）",
-   "formulas": [
-    {
-     "name": "平方差公式",
-     "latex": "(a+b)(a-b)=a^2-b^2",
-     "tip": "含根号的和差相乘可以消掉根号。"
-    },
-    {
-     "name": "完全平方公式",
-     "latex": "a\\mp2ab+b^2=(a\\mp b)^2",
-     "tip": "$a-4\\sqrt{ab}+4b=(\\sqrt a-2\\sqrt b)^2$。"
-    }
-   ],
-   "method": "把 $a,b$ 看作 $(\\sqrt a)^2,(\\sqrt b)^2$，用平方差、完全平方分解后约分，化简成 $2\\sqrt a-3\\sqrt b$ 再代入。代入前应检查分母不为 0。",
-   "analysis": {
-    "known": [
-     "代数式 $\\frac{a-b}{\\sqrt a+\\sqrt b}-\\frac{a-4\\sqrt{ab}+4b}{2\\sqrt b-\\sqrt a}$",
-     "$a=\\frac12$，$b=\\frac18$",
-     {
-      "text": "$a\\ge0$，$b\\ge0$，且两个分母都不为 0",
-      "hidden": true,
-      "why": "有根号要非负，有分母要非零；代入前必须检查"
-     }
-    ],
-    "goal": "先化简，再求值",
-    "associations": [
-     {
-      "trigger": "$a-b$ 和 $\\sqrt a+\\sqrt b$",
-      "recall": "把 $a$ 看作 $(\\sqrt a)^2$，用平方差公式",
-      "why": "$a-b=(\\sqrt a+\\sqrt b)(\\sqrt a-\\sqrt b)$，可以约分",
-      "latex": "a-b=(\\sqrt a+\\sqrt b)(\\sqrt a-\\sqrt b)"
-     },
-     {
-      "trigger": "$a-4\\sqrt{ab}+4b$",
-      "recall": "完全平方公式",
-      "why": "$(\\sqrt a)^2-2\\cdot\\sqrt a\\cdot2\\sqrt b+(2\\sqrt b)^2=(\\sqrt a-2\\sqrt b)^2$",
-      "latex": "(x-y)^2=x^2-2xy+y^2"
-     },
-     {
-      "trigger": "“先化简，再求值”且有分母",
-      "recall": "代入前检查分母 $\\ne0$",
-      "why": "分母为 0 时原式没有意义"
-     }
-    ],
-    "thinkingPath": [
-     "看到 $a-b$ 配 $\\sqrt a+\\sqrt b$，想到平方差：第一项 $=\\sqrt a-\\sqrt b$。",
-     "看到 $a-4\\sqrt{ab}+4b$，想到完全平方：$(2\\sqrt b-\\sqrt a)^2$，第二项 $=2\\sqrt b-\\sqrt a$。",
-     "原式 $=2\\sqrt a-3\\sqrt b$。",
-     "代入前检查分母：$\\sqrt a=\\frac{\\sqrt2}2$，$2\\sqrt b=\\frac{\\sqrt2}2$，$2\\sqrt b-\\sqrt a=0$！按化简式算得 $\\frac{\\sqrt2}4$，但要知道原题条件有问题。"
-    ],
-    "pitfalls": [
-     "⚠️ 本题给的数值有问题：$a=\\frac12$，$b=\\frac18$ 时 $2\\sqrt b-\\sqrt a=0$，原式第二个分母为 0，原式其实没有意义。考试中遇到要先检查分母，必要时注明。",
-     "约分第二项时符号弄反，得到 $\\sqrt a-2\\sqrt b$。"
-    ]
-   }
-  }
- ]
+  ]
 }
